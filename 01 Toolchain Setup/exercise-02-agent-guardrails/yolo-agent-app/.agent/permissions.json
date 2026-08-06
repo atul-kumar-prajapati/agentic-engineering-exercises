@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "defaultPolicy": "deny",
+  "scope": {
+    "workspaceOnly": true,
+    "followSymlinks": false,
+    "networkAccess": "approval-required"
+  },
+  "paths": {
+    "readWrite": [
+      "src/**",
+      "scripts/**",
+      "index.html",
+      "package.json",
+      "tsconfig.json",
+      "vite.config.ts",
+      "lab-contract.json",
+      ".agent/**"
+    ],
+    "readOnly": [
+      "generated/**",
+      "db/migrations/**",
+      "legacy/**",
+      "config/production.json"
+    ],
+    "deny": [
+      "secrets/**",
+      "**/.env",
+      "**/.env.*",
+      "**/*credential*",
+      "**/*secret*",
+      "**/*.pem",
+      "**/*.key",
+      ".git/**"
+    ]
+  },
+  "commands": {
+    "allow": [
+      "npm ci",
+      "npm run dev",
+      "npm run build",
+      "npm run preview",
+      "npm run typecheck",
+      "npm run test",
+      "npm run lint",
+      "npm run format",
+      "npm run agent:check",
+      "git status",
+      "git diff",
+      "git log",
+      "git show"
+    ],
+    "approvalRequired": [
+      "dependency installation or updates that change lockfiles",
+      "network access or commands that contact external services",
+      "git add, commit, push, branch deletion, merge, rebase, or tag",
+      "schema generation that replaces generated/**",
+      "creation of a new database migration",
+      "any production, deploy, release, rollback, or infrastructure action"
+    ],
+    "deny": [
+      "deploy-prod",
+      "rollback-prod",
+      "purge-release-cache",
+      "destructive database commands",
+      "destructive filesystem commands",
+      "history-rewriting or force-push commands",
+      "commands that print, copy, upload, or decode secrets"
+    ]
+  }
+}
