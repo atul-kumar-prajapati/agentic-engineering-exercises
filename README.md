@@ -63,3 +63,9 @@ Use the index below to choose an exercise, then read the local exercise README f
 ## Repository Rule
 
 Keep solutions scoped to the selected exercise. Do not change unrelated exercise folders.
+
+## Submission and Review Standard
+
+All exercises use the same completion contract, evidence rules, and supported toolchain. Read [the submission standard](./docs/SUBMISSION_STANDARD.md) before starting and use [the evaluation rubrics](./docs/EVALUATION_RUBRICS.md) when reviewing a submission.
+
+From the repository root, run `npm ci` and `npm run verify:contracts` to detect missing README contracts and required starter artifacts.

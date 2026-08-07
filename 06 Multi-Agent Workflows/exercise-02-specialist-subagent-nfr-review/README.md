@@ -1,25 +1,56 @@
-# Exercise 02 : Specialist Subagent NFR Review
+# Exercise 02: Specialist Subagent NFR Review
 
-## Your Mission
+## Objective
 
-Your mission is to use specialist subagent passes for security, accessibility, performance, and testability.
+Run security, accessibility, performance, and testability reviews against the mounted access-review workflow, integrate selected fixes, and recheck the final code.
 
-You are given a repository with a feature that looks complete but has hidden non-functional risk.
+## Starting Point
 
-The duration for this challenge is 30 min or less.
+The workflow contains deliberate risk: reviewer HTML rendering, non-keyboard queue rows, expensive render work, and a server-simulation policy that trusts the UI. Shared report and decision templates plus a baseline measurement command are supplied.
 
-## Project
+## Required Implementation Changes
 
-[nfr-swarm-app](./nfr-swarm-app) contains the NFR review workflow for this exercise.
+- Give each specialist the same commit SHA and report schema.
+- Require exact file/line and reproduction evidence for every finding.
+- Include keyboard or assistive-technology evidence for accessibility.
+- Record comparable before and after performance measurements.
+- Triage every finding as fix, defer, or dismiss with owner and residual risk.
+- Re-run affected specialist reviews after fixes are integrated.
 
-## How To Go About It
+## Allowed Changes
 
-Use [Superpowers](https://github.com/obra/superpowers) planning and review skills for the specialist passes.
+Change the access-review workflow, focused tests, specialist reports, decision log, and evidence. Do not replace the workflow with the generic lab screen or remove risky behavior without recording the finding and decision.
 
-Ask your coding agent to inspect `nfr-swarm-app/`, run focused specialist reviews, choose fixes, implement them, and verify the result.
+## Required Commands
 
-## Evidence
+Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Produce the specialist findings, fix/defer/dismiss table, implementation change, and verification output.
+From `nfr-swarm-app`:
 
-Raise the completed work as a PR for getting verified with our team.
+```text
+npm ci
+npm run measure:baseline
+npm run agent:check
+```
+
+Add and record focused commands for every implemented fix, then rerun affected specialists on the final SHA.
+
+## Acceptance Criteria
+
+- Four specialist reports use the shared schema and severity calibration.
+- Findings describe the final submitted code or clearly identify pre-fix evidence.
+- Performance and accessibility claims have the required measurements.
+- The server authorization/evidence boundary is reviewed.
+- The decision log records owner, rationale, evidence, trigger, and residual risk.
+
+## Evidence Contract
+
+Commit reports under `evidence/specialists/`, the completed decision log, before/after performance JSON, accessibility evidence, final SHA, and final check output.
+
+## Incomplete When
+
+Reports review different unexplained SHAs, findings lack evidence, performance is subjective, keyboard behavior is not exercised, triage decisions lack owners, or no final-state recheck occurs.
+
+## Evaluation Rubric
+
+See [Specialist NFR Review](../../docs/EVALUATION_RUBRICS.md#specialist-nfr-review).

@@ -1,9 +1,25 @@
+diff --git a/src/components/WorkQueue.tsx b/src/components/WorkQueue.tsx
+index 41510ba..b621e62 100644
+--- a/src/components/WorkQueue.tsx
++++ b/src/components/WorkQueue.tsx
+@@ -8,9 +8,11 @@ interface WorkQueueProps {
+ }
+ 
+ export function WorkQueue({ items, selectedId, onSelect }: WorkQueueProps) {
++  const visibleItems = items.slice(0, 5);
++
+   return (
+     <section className="queue" aria-label="Work queue">
+-      {items.map((item) => {
++      {visibleItems.map((item) => {
+         const risk = calculateRisk(item);
+         return (
+           <button
 diff --git a/src/utils/filters.ts b/src/utils/filters.ts
-index d7c4011..5e8ac70 100644
+index 8ed0c02..9bb7afa 100644
 --- a/src/utils/filters.ts
 +++ b/src/utils/filters.ts
-@@ -11,20 +11,24 @@ export const defaultFilters: Filters = {
-   status: "All",
+@@ -13,17 +13,19 @@ export const defaultFilters: Filters = {
  };
  
  export function filterItems(items: WorkItem[], filters: Filters): WorkItem[] {
@@ -29,10 +45,10 @@ index d7c4011..5e8ac70 100644
 +    .sort((left, right) => left.name.localeCompare(right.name));
  }
 diff --git a/src/utils/scoring.ts b/src/utils/scoring.ts
-index 29861bf..3a34cb8 100644
+index 0e43a6f..4c152ba 100644
 --- a/src/utils/scoring.ts
 +++ b/src/utils/scoring.ts
-@@ -6,15 +6,15 @@ const priorityWeight = {
+@@ -7,9 +7,9 @@ const priorityWeight = {
  } as const;
  
  export function calculateRisk(item: WorkItem): number {
@@ -43,26 +59,14 @@ index 29861bf..3a34cb8 100644
 +  const statusPenalty = item.status === "Escalated" ? 12 : 0;
 +  return Math.min(100, item.score + priorityWeight[item.priority] * 4 + urgency + statusPenalty);
  }
-@@ -22,7 +22,7 @@ export function summarizePortfolio(items: WorkItem[]) {
+ 
+ export function riskLabel(score: number): "Watch" | "Needs review" | "Critical" {
+@@ -20,7 +20,7 @@ export function riskLabel(score: number): "Watch" | "Needs review" | "Critical"
+ 
+ export function summarizePortfolio(items: WorkItem[]) {
    const critical = items.filter((item) => calculateRisk(item) >= 90).length;
 -  const blocked = items.filter((item) => item.status === "Blocked" || item.status === "Escalated").length;
 +  const blocked = items.filter((item) => item.status === "Escalated").length;
    const averageRisk = Math.round(items.reduce((sum, item) => sum + calculateRisk(item), 0) / items.length);
  
    return {
-diff --git a/src/components/WorkQueue.tsx b/src/components/WorkQueue.tsx
-index 2e98a42..e24da09 100644
---- a/src/components/WorkQueue.tsx
-+++ b/src/components/WorkQueue.tsx
-@@ -8,9 +8,14 @@ interface WorkQueueProps {
- }
- 
- export function WorkQueue({ items, selectedId, onSelect }: WorkQueueProps) {
-+  const visibleItems = items.slice(0, 5);
-+
-   return (
-     <section className="queue" aria-label="Work queue">
--      {items.map((item) => {
-+      {visibleItems.map((item) => {
-         const risk = calculateRisk(item);
-         return (

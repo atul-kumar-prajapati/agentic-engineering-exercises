@@ -1,25 +1,59 @@
-# Exercise 01 : Playwright MCP Checkout Rescue
+# Exercise 01: Playwright MCP Checkout Rescue
 
-## Your Mission
+## Objective
 
-Your mission is to turn flaky checkout coverage into reliable browser evidence.
+Stabilize a real checkout flow that includes cart totals, a tax quote, payment authorization, confirmation, and decline recovery.
 
-You are given a repository with brittle checkout tests and an intermittent failure that hides real regressions.
+## Starting Point
 
-The duration for this challenge is 30 min or less.
+The starter is mounted and has three intentional weaknesses: a fixed wait, a selector tied to a generated class, and payment mock state shared across tests. Confirm the stable smoke test before investigating the flaky suite.
 
-## Project
+## Required Implementation Changes
 
-[checkout-e2e-app](./checkout-e2e-app) contains the checkout workflow for this exercise.
+- Replace fixed waits with observable readiness.
+- Replace generated-class selectors with resilient user-facing locators.
+- Isolate payment mock state for every test and worker.
+- Assert tax and authorization request payloads.
+- Cover successful confirmation and decline recovery.
 
-## How To Go About It
+## Allowed Changes
 
-Use [Playwright MCP](https://playwright.dev/docs/getting-started-mcp) or Playwright traces to inspect and stabilize the flow.
+Change `checkout-e2e-app/tests/**`, test fixtures, mock middleware, and narrowly required accessibility hooks in the checkout UI. Do not replace the checkout application or remove decline behavior.
 
-Ask your coding agent to inspect `checkout-e2e-app/`, replace brittle selectors with resilient checks, and verify the checkout path.
+## Required Commands
 
-## Evidence
+Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Produce the updated tests, passing run output, and browser evidence.
+From `checkout-e2e-app`:
 
-Raise the completed work as a PR for getting verified with our team.
+```text
+npm ci
+npx playwright install chromium
+npm run test:smoke
+npm run test:e2e:reproduce
+npm run agent:check
+```
+
+The reproduction command uses four repeats for a quick investigation loop. Before submission, run the repaired suite with `npx playwright test --repeat-each=20 --workers=2`.
+
+The repeated command is expected to expose the starter failure and must pass after the fix.
+
+## Acceptance Criteria
+
+- The starter smoke remains green.
+- No `waitForTimeout` or generated-class locator remains in final checkout coverage.
+- Tests pass with `--repeat-each=20 --workers=2`.
+- Payment isolation and request payloads are proven, not assumed.
+- Confirmation and decline retry are both covered.
+
+## Evidence Contract
+
+Commit `evidence/checkout-rescue.md`, repeated-run console output, and one `trace.zip` for the original failure or final proof. Keep the trace below 10 MB; do not commit the full Playwright report directory.
+
+## Incomplete When
+
+The flow is rewritten to avoid the seeded problem, only a single run is shown, the shared mock remains, payloads are untested, or evidence does not connect failure to root cause.
+
+## Evaluation Rubric
+
+See [Playwright Checkout Rescue](../../docs/EVALUATION_RUBRICS.md#playwright-checkout-rescue).

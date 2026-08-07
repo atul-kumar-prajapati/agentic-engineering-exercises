@@ -13,6 +13,9 @@
     "format": "node ./scripts/format-check.mjs",
     "agent:check": "npm run lint && npm run test && npm run format && npm run typecheck && npm run build"
   },
+  "engines": {
+    "node": ">=22.12.0 <25"
+  },
   "dependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"

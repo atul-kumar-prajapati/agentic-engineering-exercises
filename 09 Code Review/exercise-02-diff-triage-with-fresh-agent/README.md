@@ -1,25 +1,56 @@
-# Exercise 02 : Superpowers Fresh-Agent Diff Triage
+# Exercise 02: Fresh-Agent Diff Triage
 
-## Your Mission
+## Objective
 
-Your mission is to use a fresh review pass to find what the implementing agent missed.
+Use an independent review pass on an exact implementation range, fix supported blockers, and reject seeded reviewer noise with evidence.
 
-You are given a repository with an implementation diff and incomplete self-review notes.
+## Starting Point
 
-The duration for this challenge is 30 min or less.
+`fixtures/review-target.bundle` contains the exact base and head SHAs in `fixtures/manifest.json`; `pr/review-target.diff` is the equivalent applicable patch. The change adds workflow caching and contains multiple real defects. `docs/reviewer-noise.md` supplies one plausible but unsupported claim.
 
-## Project
+## Required Implementation Changes
 
-[fresh-review-app](./fresh-review-app) contains the fresh review workflow for this exercise.
+- Review `review-base..review-head` with a fresh agent/session.
+- Classify every finding as blocker, non-blocker, or unsupported.
+- Check mutable sorting, cache updates after save, filter-triggered clearing, JSON parsing, and evidence side effects.
+- Confirm or dismiss the seeded claim from code evidence.
+- Fix merge blockers and add focused regression tests.
 
-## How To Go About It
+## Allowed Changes
 
-Use the [Superpowers requesting-code-review skill](https://github.com/obra/superpowers/blob/main/skills/requesting-code-review/SKILL.md) or an equivalent fresh-agent review workflow.
+Change blocker fixes, focused tests, review/evidence files, and no unrelated application areas. Do not edit the bundle, manifest, or seeded claim.
 
-Ask your coding agent to inspect `fresh-review-app/`, run the fresh review, classify findings, fix merge blockers, and verify the result.
+## Required Commands
 
-## Evidence
+Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Produce the review report, blocker fixes, and verification output.
+From the exercise directory and app:
 
-Raise the completed work as a PR for getting verified with our team.
+```text
+node scripts/verify-review-fixture.mjs
+cd fresh-review-app
+npm ci
+npm run agent:check
+```
+
+Run focused tests added for each blocker.
+
+## Acceptance Criteria
+
+- The exact manifest comparison is reproducible.
+- Real state, mutation, and error-handling defects are supported by scenarios.
+- The unsupported claim is explicitly confirmed or dismissed.
+- Blockers are fixed without unrelated refactors.
+- Evidence records the independent review context and verification.
+
+## Evidence Contract
+
+Commit `evidence/fresh-review.md` with base/head SHA, reviewer/session, severity, file/line, scenario, decision, fix, and command result. Include focused test output.
+
+## Incomplete When
+
+The reviewer shares implementation context, uses a different diff, repeats seeded noise without checking, fixes unsupported findings, or leaves a supported blocker untested.
+
+## Evaluation Rubric
+
+See [Fresh-Agent Diff Triage](../../docs/EVALUATION_RUBRICS.md#fresh-agent-diff-triage).

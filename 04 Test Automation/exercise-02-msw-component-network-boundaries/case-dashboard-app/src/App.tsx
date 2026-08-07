@@ -1,74 +1,58 @@
-import { calculateReadiness, groupByRisk } from "./domainReadiness";
-import { labContract } from "./labContract";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import "./styles.css";
 
+export interface SupportCase {
+  id: string;
+  customer: string;
+  owner: string;
+  summary: string;
+  status: "new" | "investigating" | "waiting";
+}
+
 export default function App() {
-  const readiness = calculateReadiness(labContract);
-  const groupedRisks = groupByRisk(labContract.seededDefects);
+  const [cases, setCases] = useState<SupportCase[] | null>(null);
+  const [error, setError] = useState("");
+  const [query, setQuery] = useState("");
+
+  const loadCases = useCallback(async () => {
+    setCases(null);
+    setError("");
+    try {
+      const response = await fetch("/api/cases");
+      if (!response.ok) throw new Error(`Cases request failed with ${response.status}`);
+      setCases((await response.json()) as SupportCase[]);
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "Unable to load cases");
+    }
+  }, []);
+
+  useEffect(() => { void loadCases(); }, [loadCases]);
+
+  const filteredCases = useMemo(() => {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized || !cases) return cases ?? [];
+    return cases.filter((item) => [item.id, item.customer, item.owner, item.summary].join(" ").toLowerCase().includes(normalized));
+  }, [cases, query]);
 
   return (
-    <main className="app-shell">
-      <section className="page-header">
-        <div>
-          <p className="eyebrow">{labContract.competency}</p>
-          <h1>{labContract.title}</h1>
-          <p>{labContract.domain}</p>
-        </div>
-        <div className="metric-card">
-          <span>Readiness</span>
-          <strong>{readiness.score}%</strong>
-          <small>{readiness.status}</small>
-        </div>
-      </section>
+    <main className="dashboard-shell">
+      <header><p className="eyebrow">Support Operations</p><h1>Case dashboard</h1></header>
+      <label className="search-label">Filter cases<input aria-label="Filter cases" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
 
-      <section className="workspace-grid">
-        <article className="panel">
-          <h2>Domain Model</h2>
-          <ul>
-            {labContract.entities.map((entity) => (
-              <li key={entity}>{entity}</li>
-            ))}
-          </ul>
-        </article>
-
-        <article className="panel">
-          <h2>Seeded Defects</h2>
-          <ul>
-            {labContract.seededDefects.map((defect) => (
-              <li key={defect}>{defect}</li>
-            ))}
-          </ul>
-        </article>
-
-        <article className="panel">
-          <h2>Verification Gates</h2>
-          <ul>
-            {labContract.verificationGates.map((gate) => (
-              <li key={gate}>{gate}</li>
-            ))}
-          </ul>
-        </article>
-      </section>
-
-      <section className="workspace-grid">
-        <article className="panel wide">
-          <h2>Agent Workflow</h2>
-          <ol>
-            {labContract.agentWorkflow.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
-        </article>
-
-        <article className="panel">
-          <h2>Risk Groups</h2>
-          {Object.entries(groupedRisks).map(([risk, items]) => (
-            <p key={risk}>
-              <strong>{risk}</strong>: {items.length}
-            </p>
+      {cases === null && !error && <p role="status">Loading cases...</p>}
+      {error && <section role="alert"><p>We could not load cases. {error}</p><button onClick={() => void loadCases()}>Retry</button></section>}
+      {cases?.length === 0 && <p>No cases are assigned yet.</p>}
+      {cases && cases.length > 0 && filteredCases.length === 0 && <p>No cases match "{query}".</p>}
+      {filteredCases.length > 0 && (
+        <ul className="case-list" aria-label="Cases">
+          {filteredCases.map((item) => (
+            <li key={item.id}>
+              <div><strong>{item.customer}</strong><span>{item.id} · {item.owner}</span></div>
+              <p>{item.summary}</p><span className="status">{item.status}</span>
+            </li>
           ))}
-        </article>
-      </section>
+        </ul>
+      )}
     </main>
   );
 }

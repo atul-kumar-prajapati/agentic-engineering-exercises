@@ -1,0 +1,7 @@
+rules:
+  - id: react-dangerous-html-review
+    message: Review HTML source before using dangerouslySetInnerHTML
+    severity: WARNING
+    languages: [typescript]
+    patterns:
+      - pattern: <... dangerouslySetInnerHTML={{ __html: $SOURCE }} ... />

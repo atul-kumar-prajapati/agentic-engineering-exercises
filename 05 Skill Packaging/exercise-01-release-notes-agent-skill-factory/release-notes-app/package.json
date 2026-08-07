@@ -9,9 +9,14 @@
                     "preview":  "vite preview --host 127.0.0.1",
                     "typecheck":  "tsc -b --pretty false",
                     "test":  "node ./scripts/agent-check.mjs",
+                    "fixture:smoke":  "node ./scripts/verify-fixture.mjs",
+                    "release:verify":  "node ./scripts/verify-release-notes.mjs",
                     "lint":  "node ./scripts/lint-check.mjs",
                     "format":  "node ./scripts/format-check.mjs",
                     "agent:check":  "npm run lint \u0026\u0026 npm run test \u0026\u0026 npm run format \u0026\u0026 npm run typecheck \u0026\u0026 npm run build"
+                },
+    "engines":  {
+                    "node":  ">=22.12.0 <25"
                 },
     "dependencies":  {
                          "react":  "^19.2.0",

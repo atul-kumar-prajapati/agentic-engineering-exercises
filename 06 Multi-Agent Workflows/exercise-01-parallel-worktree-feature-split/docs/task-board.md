@@ -1,31 +1,33 @@
-# Task Board
+# Three-Lane Product Task Board
 
-This is a seeded lab input for Parallel Worktree Feature Split. It gives the learner concrete constraints to inspect, implement, test, and verify.
+All lanes start from the same recorded base SHA. Do not invent replacement tasks.
 
-## Operating Context
+## Lane A: Saved queue filters
 
-Three-lane worktree plan for independent UI improvements
+Add a named saved-filter preset for High-priority Blocked work. The preset must use the existing filter behavior and remain searchable.
 
-## Concrete Inputs
+- Owned paths: `src/components/FilterBar.tsx`, `src/utils/filters.ts`, related filter tests.
+- Focused verification: `npm test -- filters` or the equivalent test file command added by the lane.
+- Shared-file request: add `FilterPreset` to `src/types.ts` through the integration owner.
 
-- worktree lane
-- branch owner
-- file ownership
-- integration gate
+## Lane B: SLA risk indicator
 
-## Seeded Risks
+Show a distinct metric for work due today and ensure due-today Blocked work remains critical.
 
-- two lanes claim the same shared filter file
-- one lane lacks a verification command
-- integration owner is not assigned
+- Owned paths: `src/utils/scoring.ts`, `src/components/MetricStrip.tsx`, related scoring tests.
+- Focused verification: `npm test -- scoring` or the equivalent test file command added by the lane.
+- No shared-file ownership.
 
-## Verification Expectations
+## Lane C: Evidence export
 
-- file ownership audit
-- lane verification reports
-- merge-order simulation
-- final integration check
+Add an export action that produces a JSON evidence bundle for the selected work item, including its ID, owner, status, risk, and collected evidence.
 
-## Agent Workflow Constraint
+- Owned paths: `src/components/EvidencePanel.tsx`, `src/services/workflowApi.ts`, related evidence tests.
+- Focused verification: `npm test -- evidence` or the equivalent test file command added by the lane.
+- Shared-file request: add `EvidenceBundle` to `src/types.ts` through the integration owner.
 
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+## Controlled Conflict
+
+Lanes A and C both need `src/types.ts`, but neither owns it. Each lane must record its requested type change without editing that file. The integration owner applies both requests in one documented shared-file commit after the lane commits are ready.
+
+Integration order is B, A, C, then the shared-file resolution. If a lane cannot pass its focused check, mark it blocked and do not cherry-pick it.

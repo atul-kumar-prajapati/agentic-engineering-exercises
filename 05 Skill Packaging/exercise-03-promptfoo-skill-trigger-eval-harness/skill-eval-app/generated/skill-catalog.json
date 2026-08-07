@@ -1,0 +1,17 @@
+[
+  {
+    "name": "incident-summary",
+    "description": "Turn incident timelines, remediation pull requests, impact evidence, and follow-up actions into an operational incident summary for technical or leadership audiences. Do not use for routine release notes or code review.",
+    "source": "skills/incident-summary/SKILL.md"
+  },
+  {
+    "name": "release-notes",
+    "description": "Generate customer-facing release notes from a real Git comparison, merged pull requests, and available verification evidence. Flag breaking changes and missing evidence, and exclude internal-only refactors. Do not use for incident summaries or general change explanations.",
+    "source": "skills/release-notes/SKILL.md"
+  },
+  {
+    "name": "security-review",
+    "description": "Review a concrete code change for exploitable security defects, unsafe authorization boundaries, secret exposure, injection, and security-relevant accessibility regressions. Use when a diff, branch, or pull request needs evidence-backed security findings. Do not use for conceptual security explanations without code.",
+    "source": "skills/security-review/SKILL.md"
+  }
+]

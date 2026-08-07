@@ -1,73 +1,59 @@
-import { calculateReadiness, groupByRisk } from "./domainReadiness";
-import { labContract } from "./labContract";
+import { useEffect, useMemo, useState } from "react";
+import { ActionComposer } from "./components/ActionComposer";
+import { EvidencePanel } from "./components/EvidencePanel";
+import { FilterBar } from "./components/FilterBar";
+import { MetricStrip } from "./components/MetricStrip";
+import { PageHeader } from "./components/PageHeader";
+import { WorkQueue } from "./components/WorkQueue";
+import { collectEvidence, fetchWorkItems, saveAction } from "./services/workflowApi";
+import type { ActionDraft, WorkItem } from "./types";
+import { defaultFilters, filterItems } from "./utils/filters";
+import { summarizePortfolio } from "./utils/scoring";
 import "./styles.css";
 
-export default function App() {
-  const readiness = calculateReadiness(labContract);
-  const groupedRisks = groupByRisk(labContract.seededDefects);
+export default function DiffTriageWithFreshAgentApp() {
+  const [items, setItems] = useState<WorkItem[]>([]);
+  const [selectedId, setSelectedId] = useState("");
+  const [filters, setFilters] = useState(defaultFilters);
+  const [evidence, setEvidence] = useState<string[]>([]);
+
+  useEffect(() => {
+    void fetchWorkItems().then((loaded) => {
+      setItems(loaded);
+      setSelectedId(loaded[0]?.id ?? "");
+    });
+  }, []);
+
+  const visibleItems = useMemo(() => filterItems(items, filters), [items, filters]);
+  const selected = items.find((item) => item.id === selectedId) ?? items[0];
+  const summary = summarizePortfolio(items);
+
+  async function handleSave(draft: ActionDraft) {
+    const updated = await saveAction(selected.id, draft);
+    setItems((current) => current.map((item) => item.id === updated.id ? updated : item));
+  }
+
+  async function handleCollectEvidence() {
+    setEvidence(await collectEvidence(selected));
+  }
+
+  if (!selected) return <main className="app-shell">Loading workspace...</main>;
 
   return (
     <main className="app-shell">
-      <section className="page-header">
-        <div>
-          <p className="eyebrow">{labContract.competency}</p>
-          <h1>{labContract.title}</h1>
-          <p>{labContract.domain}</p>
-        </div>
-        <div className="metric-card">
-          <span>Readiness</span>
-          <strong>{readiness.score}%</strong>
-          <small>{readiness.status}</small>
-        </div>
-      </section>
-
+      <PageHeader title="Fresh-agent review queue" subtitle="Inspect cached workflow changes before merge." competency="Code Review" />
+      <MetricStrip metrics={[
+        { label: "Critical", value: summary.critical, hint: "risk score 90+" },
+        { label: "Blocked", value: summary.blocked, hint: "needs intervention" },
+        { label: "Average risk", value: summary.averageRisk, hint: "all work" },
+      ]} />
+      <FilterBar filters={filters} onChange={setFilters} />
       <section className="workspace-grid">
-        <article className="panel">
-          <h2>Domain Model</h2>
-          <ul>
-            {labContract.entities.map((entity) => (
-              <li key={entity}>{entity}</li>
-            ))}
-          </ul>
-        </article>
-
-        <article className="panel">
-          <h2>Seeded Defects</h2>
-          <ul>
-            {labContract.seededDefects.map((defect) => (
-              <li key={defect}>{defect}</li>
-            ))}
-          </ul>
-        </article>
-
-        <article className="panel">
-          <h2>Verification Gates</h2>
-          <ul>
-            {labContract.verificationGates.map((gate) => (
-              <li key={gate}>{gate}</li>
-            ))}
-          </ul>
-        </article>
-      </section>
-
-      <section className="workspace-grid">
-        <article className="panel wide">
-          <h2>Agent Workflow</h2>
-          <ol>
-            {labContract.agentWorkflow.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
-        </article>
-
-        <article className="panel">
-          <h2>Risk Groups</h2>
-          {Object.entries(groupedRisks).map(([risk, items]) => (
-            <p key={risk}>
-              <strong>{risk}</strong>: {items.length}
-            </p>
-          ))}
-        </article>
+        <WorkQueue items={visibleItems} selectedId={selected.id} onSelect={(item) => { setSelectedId(item.id); setEvidence([]); }} />
+        <section>
+          <ActionComposer key={selected.id} item={selected} onSave={handleSave} />
+          <EvidencePanel item={selected} evidence={evidence} onCollect={handleCollectEvidence} />
+        </section>
       </section>
     </main>
   );

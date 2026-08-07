@@ -11,6 +11,11 @@ public class WorkflowRepository {
   private final Map<String, WorkflowItem> items = new LinkedHashMap<>();
 
   public WorkflowRepository() {
+    reset();
+  }
+
+  public void reset() {
+    items.clear();
     items.put("wf-101", new WorkflowItem("wf-101", "Atlas Co", "Blocked", 91, "Asha", "Evidence missing"));
     items.put("wf-102", new WorkflowItem("wf-102", "Brightline", "In Review", 74, "Mateo", "Waiting on approval"));
     items.put("wf-103", new WorkflowItem("wf-103", "Cedar Labs", "Ready", 48, "Rina", "Ready for release"));

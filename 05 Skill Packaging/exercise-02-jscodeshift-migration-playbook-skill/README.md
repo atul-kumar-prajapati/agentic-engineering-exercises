@@ -1,25 +1,56 @@
-# Exercise 02 : jscodeshift Migration Playbook Skill
+# Exercise 02: jscodeshift Migration Playbook Skill
 
-## Your Mission
+## Objective
 
-Your mission is to package a repeatable migration playbook and prove it on one migration slice.
+Package a bounded migration skill and transform the supplied class-based `LegacyAction` component without changing stateful or already-modern components.
 
-You are given a repository with legacy component patterns that should be migrated in small safe batches.
+## Starting Point
 
-The duration for this challenge is 30 min or less.
+The app includes the genuine legacy component, input and expected fixtures, a stateful stop fixture, an unrelated modern component, and an identity transform that intentionally fails the migration verifier.
 
-## Project
+## Required Implementation Changes
 
-[migration-playbook-app](./migration-playbook-app) contains the migration workflow for this exercise.
+- Implement `transform/legacy-action.cjs` with jscodeshift.
+- Create the migration skill at `migration-playbook-app/.agents/skills/jscodeshift-migration/SKILL.md`.
+- Preserve click, Enter, Space, label, class, and button type behavior.
+- Stop on stateful class components and leave unrelated modern components unchanged.
+- Document dry run, batch boundary, rollback, and when not to use the skill.
 
-## How To Go About It
+## Allowed Changes
 
-Use [jscodeshift](https://jscodeshift.com/) inside a skill-guided migration workflow.
+Change the transform, target legacy component, skill, migration tests, and evidence. Do not edit expected, stop, or unchanged fixtures merely to make verification pass.
 
-Ask your coding agent to inspect `migration-playbook-app/`, package the migration skill, run one codemod slice, and verify behavior.
+## Required Commands
 
-## Evidence
+Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Produce the skill package, codemod or migration helper, migrated slice, and verification output.
+From `migration-playbook-app`:
 
-Raise the completed work as a PR for getting verified with our team.
+```text
+npm ci
+npm run test:starter
+npm run test:migration
+npm run agent:check
+```
+
+Also include the jscodeshift dry-run command in evidence.
+
+## Acceptance Criteria
+
+- The real legacy pattern matches the expected output.
+- A second transform run is identical.
+- The stateful stop fixture and modern component do not change.
+- Behavior invariants have focused tests.
+- Rollback and batch stop conditions are usable.
+
+## Evidence Contract
+
+Commit the skill, transform, migrated slice, behavior tests, dry-run output, and `evidence/migration.md` containing idempotence and unrelated-file proof.
+
+## Incomplete When
+
+The component receives only cosmetic edits, expected fixtures are altered to match a weak transform, keyboard behavior is lost, a second run changes code, or stop cases transform.
+
+## Evaluation Rubric
+
+See [jscodeshift Migration Playbook](../../docs/EVALUATION_RUBRICS.md#jscodeshift-migration-playbook).

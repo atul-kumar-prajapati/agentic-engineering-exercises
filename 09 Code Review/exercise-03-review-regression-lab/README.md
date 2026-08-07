@@ -1,25 +1,57 @@
-# Exercise 03 : Promptfoo Review Regression Lab
+# Exercise 03: Promptfoo Review Regression Lab
 
-## Your Mission
+## Objective
 
-Your mission is to measure whether a review prompt catches regressions before trusting it.
+Measure whether a review prompt catches real historical defects without creating false blockers on harmless look-alike changes.
 
-You are given a repository with historical bad diffs and a review prompt that misses important issues.
+## Starting Point
 
-The duration for this challenge is 30 min or less.
+The harness includes a valid historical bad diff, a multi-bug case, a clean control, baseline and candidate prompts, a structural sanity check, model-graded Promptfoo configuration, and explicit adoption thresholds.
 
-## Project
+## Required Implementation Changes
 
-[regression-review-app](./regression-review-app) contains the review regression workflow for this exercise.
+- Run the same cases against the baseline and candidate prompt with the model used for real review.
+- Use at least three samples per case.
+- Report historical recall, multi-bug recall, clean-control precision, and regression against baseline.
+- Improve the prompt without naming case-specific defects or keywords.
+- Apply the adoption thresholds and record limitations and decision.
 
-## How To Go About It
+## Allowed Changes
 
-Use [Promptfoo](https://www.promptfoo.dev/docs/intro/) to evaluate review behavior on regression cases.
+Change prompts, eval cases, scoring/report logic, and evidence. Do not encode expected findings, case IDs, exact diff tokens, or assertion answers into the provider or candidate prompt.
 
-Ask your coding agent to inspect `regression-review-app/`, build the eval cases, improve the review prompt, and verify the score change.
+## Required Commands
 
-## Evidence
+Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Produce the eval config, before/after results, improved review prompt, and verification notes.
+From `regression-review-app`:
 
-Raise the completed work as a PR for getting verified with our team.
+```text
+npm ci
+npm run eval:smoke
+set REVIEW_EVAL_MODEL=<provider:model>
+npm run eval:model
+npm run agent:check
+```
+
+Use shell-appropriate environment syntax and repeat the model run to reach the declared sample count.
+
+## Acceptance Criteria
+
+- The real review model and full diffs are evaluated.
+- Multi-bug and clean controls affect adoption.
+- Adding checklist words alone cannot guarantee success.
+- Recall and precision meet `docs/adoption-thresholds.md`.
+- Model, configuration, sample count, scores, and limitations are recorded.
+
+## Evidence Contract
+
+Commit raw Promptfoo outputs plus a completed `docs/report-template.md` under `evidence/review-eval.md`. Include baseline/candidate prompt SHAs and adoption decision.
+
+## Incomplete When
+
+Only deterministic keyword checks run, provider logic contains answers, clean controls are absent, model/configuration/sample count is missing, or the candidate improves recall by increasing false blockers.
+
+## Evaluation Rubric
+
+See [Review Regression Lab](../../docs/EVALUATION_RUBRICS.md#review-regression-lab).

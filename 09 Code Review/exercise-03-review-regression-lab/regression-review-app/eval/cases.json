@@ -1,0 +1,5 @@
+[
+  { "id": "historical-filter-risk-regression", "diff": "../../pr/review-target.diff", "kind": "historical-bad", "rubric": "The review identifies that partial search no longer searches owner or note, All status hides Blocked work, due-today Blocked risk is reduced, and the queue truncates without an explicit product requirement. Findings need behavior evidence, not checklist words." },
+  { "id": "multi-bug-cache-and-auth", "diff": "./diffs/multi-bug.diff", "kind": "multi-bug", "rubric": "The review identifies both unsafe JSON parsing and the authorization bypass. Missing either independent blocker is a recall failure." },
+  { "id": "clean-immutable-sort", "diff": "./diffs/clean-control.diff", "kind": "clean-control", "rubric": "The review does not invent a blocker. Copying before sort is intentional and preserves the shared input. Suggestions may be non-blocking only." }
+]

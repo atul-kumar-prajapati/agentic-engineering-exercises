@@ -1,9 +1,32 @@
+diff --git a/src/App.tsx b/src/App.tsx
+index 0371886..8476baf 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -5,7 +5,7 @@ import { FilterBar } from "./components/FilterBar";
+ import { MetricStrip } from "./components/MetricStrip";
+ import { PageHeader } from "./components/PageHeader";
+ import { WorkQueue } from "./components/WorkQueue";
+-import { collectEvidence, fetchWorkItems, saveAction } from "./services/workflowApi";
++import { clearCachedWorkflowItems, collectEvidence, fetchWorkItems, saveAction } from "./services/workflowApi";
+ import type { ActionDraft, WorkItem } from "./types";
+ import { defaultFilters, filterItems } from "./utils/filters";
+ import { summarizePortfolio } from "./utils/scoring";
+@@ -37,6 +37,10 @@ export default function DiffTriageWithFreshAgentApp() {
+     setEvidence(await collectEvidence(selected));
+   }
+ 
++  useEffect(() => {
++    clearCachedWorkflowItems();
++  }, [filters.priority, filters.status]);
++
+   if (!selected) return <main className="app-shell">Loading workspace...</main>;
+ 
+   return (
 diff --git a/src/services/workflowApi.ts b/src/services/workflowApi.ts
-index 74fb2ac..1e60f81 100644
+index 148a083..d6814ed 100644
 --- a/src/services/workflowApi.ts
 +++ b/src/services/workflowApi.ts
-@@ -3,10 +3,21 @@ import { workItems } from "../data/workItems";
- const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
+@@ -5,7 +5,16 @@ const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve,
  
  export async function fetchWorkItems(): Promise<WorkItem[]> {
    await wait(220);
@@ -14,23 +37,14 @@ index 74fb2ac..1e60f81 100644
 +  }
 +
 +  return workItems.sort((left, right) => left.dueInDays - right.dueInDays);
- }
- 
- export async function saveAction(itemId: string, draft: ActionDraft): Promise<WorkItem> {
-   await wait(180);
-   const item = workItems.find((candidate) => candidate.id === itemId);
-@@ -17,11 +28,19 @@ export async function saveAction(itemId: string, draft: ActionDraft): Promise<Wo
-   return {
-     ...item,
-     status: draft.status,
-     owner: draft.owner,
-     note: draft.note,
-   };
- }
++}
 +
 +export function clearCachedWorkflowItems() {
 +  window.localStorage.removeItem("workflow-items");
-+}
+ }
+ 
+ export async function saveAction(itemId: string, draft: ActionDraft): Promise<WorkItem> {
+@@ -25,6 +34,7 @@ export async function saveAction(itemId: string, draft: ActionDraft): Promise<Wo
  
  export async function collectEvidence(item: WorkItem): Promise<string[]> {
    await wait(140);
@@ -38,27 +52,3 @@ index 74fb2ac..1e60f81 100644
    return [
      `Risk score: ${item.score}`,
      `Owner: ${item.owner}`,
-diff --git a/src/App.tsx b/src/App.tsx
-index 8fcf97a..2db4db1 100644
---- a/src/App.tsx
-+++ b/src/App.tsx
-@@ -10,7 +10,7 @@ import { PageHeader } from "./components/PageHeader";
- import { ScenarioBoard } from "./components/ScenarioBoard";
- import { WorkQueue } from "./components/WorkQueue";
- import { activityEvents } from "./data/workItems";
--import { collectEvidence, fetchWorkItems, saveAction } from "./services/workflowApi";
-+import { clearCachedWorkflowItems, collectEvidence, fetchWorkItems, saveAction } from "./services/workflowApi";
- import type { ActionDraft, WorkItem } from "./types";
- import { defaultFilters, filterItems } from "./utils/filters";
- import { summarizePortfolio } from "./utils/scoring";
-@@ -43,6 +43,11 @@ export default function DiffTriageWithFreshAgentApp() {
-     setEvidence(await collectEvidence(selected));
-   }
- 
-+  useEffect(() => {
-+    clearCachedWorkflowItems();
-+  }, [filters.priority, filters.status]);
-+
-   if (!selected) {
-     return <main className="app-shell">Loading workspace...</main>;
-   }

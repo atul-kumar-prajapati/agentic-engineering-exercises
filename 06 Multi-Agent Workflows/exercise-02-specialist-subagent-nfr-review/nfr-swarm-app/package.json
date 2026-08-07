@@ -11,7 +11,11 @@
     "test": "node ./scripts/agent-check.mjs",
     "lint": "node ./scripts/lint-check.mjs",
     "format": "node ./scripts/format-check.mjs",
+    "measure:baseline": "node ./scripts/measure-baseline.mjs",
     "agent:check": "npm run lint && npm run test && npm run format && npm run typecheck && npm run build"
+  },
+  "engines": {
+    "node": ">=22.12.0 <25"
   },
   "dependencies": {
     "react": "^19.2.0",

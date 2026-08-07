@@ -1,25 +1,54 @@
-# Exercise 02 : MSW Component Network Boundary Tests
+# Exercise 02: MSW Component Network Boundary Tests
 
-## Your Mission
+## Objective
 
-Your mission is to test UI states without coupling tests to real network behavior.
+Strengthen component coverage for the mounted case dashboard at the real `GET /api/cases` boundary.
 
-You are given a repository with a case dashboard that has loading, empty, error, and filtered states but weak coverage.
+## Starting Point
 
-The duration for this challenge is 30 min or less.
+The dashboard already renders loading, success, server-empty, filtered-empty, error, and retry behavior. MSW and one intentionally weak success test are supplied. The starter setup warns on unhandled requests and does not reset handlers.
 
-## Project
+## Required Implementation Changes
 
-[case-dashboard-app](./case-dashboard-app) contains the case dashboard workflow for this exercise.
+- Add focused tests for all six UI states.
+- Make server-empty and filter-empty assertions use distinct messages.
+- Prove retry issues a new request and recovers.
+- Change MSW to fail on unhandled requests.
+- Reset handlers after every test and prevent state leakage.
 
-## How To Go About It
+## Allowed Changes
 
-Use [Mock Service Worker](https://mswjs.io/docs/) to create network boundaries around component tests.
+Change component tests, `src/test/**`, and narrowly required dashboard accessibility or state code. Do not replace `fetch` with an in-memory repository or remove `GET /api/cases`.
 
-Ask your coding agent to inspect `case-dashboard-app/`, add useful state coverage, and verify the tests.
+## Required Commands
 
-## Evidence
+Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Produce the component tests, MSW handlers, covered UI states, and verification output.
+From `case-dashboard-app`:
 
-Raise the completed work as a PR for getting verified with our team.
+```text
+npm ci
+npm run test:smoke
+npm run test:component
+npm run agent:check
+```
+
+## Acceptance Criteria
+
+- Loading, success, server-empty, filtered-empty, error, and retry are independently asserted.
+- An unexpected request fails a test.
+- A handler override cannot leak into the following test.
+- Retry visibly recovers from a server failure.
+- Tests assert user-observable states rather than implementation details.
+
+## Evidence Contract
+
+Commit tests and `evidence/msw-boundaries.md` with command output and a table mapping each required state to its test name. Evidence must note strict unhandled-request and reset behavior.
+
+## Incomplete When
+
+The real request boundary is bypassed, empty states share one ambiguous assertion, retry is not exercised, handlers leak, or only the supplied weak test passes.
+
+## Evaluation Rubric
+
+See [MSW Network Boundaries](../../docs/EVALUATION_RUBRICS.md#msw-network-boundaries).

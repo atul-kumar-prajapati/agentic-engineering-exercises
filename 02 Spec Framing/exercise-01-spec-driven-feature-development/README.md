@@ -1,25 +1,51 @@
-# Exercise 01 : Spec Driven Feature Development
+# Exercise 01: Spec-Driven Feature Development
 
-## Your Mission
+## Objective
 
-Your mission is to convert a feature request into a complete engineering specification before implementation.
+Turn the ambiguous subscription request into a traceable specification, but first identify the decisions that the request does not answer.
 
-You are given a repository that contains an incomplete feature requirement. Use Spec Kit to create a specification that can guide the implementation.
+## Starting Point
 
-The duration for this challenge is 45 min or less.
+Read `subscription-management-app/docs/feature-request.md` and inspect current subscription behavior. Use the supplied clarification template before Spec Kit artifacts are created.
 
-## Project
+## Required Implementation Changes
 
-[subscription-management-app](./subscription-management-app) contains the feature requirement for this exercise.
+- Create `subscription-management-app/specs/clarifications.md` with three to five important questions.
+- For every unavailable answer, state the assumption and its consequence.
+- Cover authorization, billing or proration, failure and recovery, and an explicit scope boundary.
+- Create `specs/spec.md`, `specs/plan.md`, and `specs/tasks.md` with traceable acceptance criteria and risks.
 
-## How To Go About It
+## Allowed Changes
 
-Use [GitHub Spec Kit](https://github.com/github/spec-kit) on the provided feature request.
+Change only `subscription-management-app/specs/**` and `evidence/**`. Application implementation is outside this exercise.
 
-Ask your coding agent to analyze the repository and create the specification using the Spec Kit workflow.
+## Required Commands
 
-## Evidence
+Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Produce the Spec Kit generated artifacts in a `specs` folder.
+From `subscription-management-app`:
 
-Raise the completed work as a PR for getting verified with our team.
+```text
+npm ci
+npm run agent:check
+npm run spec:verify
+```
+
+## Acceptance Criteria
+
+- Clarifications precede the specification and contain three to five real decisions.
+- Assumptions are explicit rather than silently invented.
+- Authorization, billing, failure, and scope consequences appear in the specification.
+- Plan and tasks trace back to acceptance criteria and identify dependencies.
+
+## Evidence Contract
+
+Commit the four spec artifacts and `evidence/spec-review.md` containing the validation output, unanswered questions, final assumptions, and a brief trace from each major requirement to plan/task entries.
+
+## Incomplete When
+
+Clarifications are generic, required boundaries are absent, the template contains placeholders, tasks cannot be traced to the spec, or implementation begins before framing is complete.
+
+## Evaluation Rubric
+
+See [Spec-Driven Feature Development](../../docs/EVALUATION_RUBRICS.md#spec-driven-feature-development).

@@ -1,5 +1,6 @@
 import type { ActionDraft, WorkItem } from "../types";
 import { workItems } from "../data/workItems";
+import { assertAllowedTransition } from "../server/reviewPolicy";
 
 const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
@@ -14,6 +15,7 @@ export async function saveAction(itemId: string, draft: ActionDraft): Promise<Wo
   if (!item) {
     throw new Error("Work item was not found");
   }
+  assertAllowedTransition(item, draft);
 
   return {
     ...item,

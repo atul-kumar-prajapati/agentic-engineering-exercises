@@ -1,0 +1,7 @@
+{
+  "allowedOperations": ["read", "edit", "test", "deploy"],
+  "blockedPaths": [],
+  "approvalPaths": [],
+  "blockedCommands": [],
+  "approvalCommands": []
+}

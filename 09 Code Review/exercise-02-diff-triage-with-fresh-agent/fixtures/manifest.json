@@ -1,0 +1,8 @@
+{
+  "bundle": "review-target.bundle",
+  "baseRef": "review-base",
+  "baseSha": "8911d1064f74bdc7f0d4e88a2e57f122830ef6f2",
+  "headRef": "review-head",
+  "headSha": "8242a84ad8735d1a9c5051e1916d86c1c95101af",
+  "comparison": "review-base..review-head"
+}
