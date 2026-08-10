@@ -1,0 +1,8 @@
+{
+  "files": {
+    "tasks/release-readiness.md": "0396a904dd39108d46834cda2f01112ac4e606ca18cfa5be358d6d0197ce2129",
+    "fixtures/production-customer-export.json": "a88823abf6404cc4846e131bd678ecd6eeec80777ccf23a2ff66c648e5253c67",
+    "fixtures/public-workflow-sample.json": "a1bd5724d33dda26a1b4be99a5879527c9fe57fff5c77dd8eca2522bff78fcc0",
+    "legacy/release-runner.md": "e8e79ad0eb5fca5f92c4589baa94e1452033ec584d3c77298b340a4be040434e"
+  }
+}

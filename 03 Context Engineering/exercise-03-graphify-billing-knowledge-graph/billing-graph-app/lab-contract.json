@@ -2,44 +2,13 @@
   "title": "Graphify Billing Knowledge Graph",
   "competency": "03. Context Engineering",
   "skillPattern": "graphify",
-  "domain": "Multi-tenant billing analytics workspace with React dashboards, event ingestion, warehouse tables, scheduled jobs, and owner boundaries.",
-  "mission": "Create and verify a codebase knowledge graph before asking an agent to make a cross-cutting billing analytics change.",
-  "outcome": "Agents answer architecture questions from a durable graph of code, docs, schema, jobs, and ownership instead of repeatedly scanning raw files.",
-  "entities": [
-    "DashboardRoute",
-    "BillingEvent",
-    "WarehouseTable",
-    "IngestionJob",
-    "MetricDefinition",
-    "OwnerTeam"
-  ],
-  "seededDefects": [
-    "The dashboard labels a metric as revenue even though the warehouse column is net of credits.",
-    "A scheduled job writes tenant ids while the React filter expects account ids.",
-    "The graph omits ownership for the ingestion job, causing agents to edit the wrong module.",
-    "The starter context includes duplicate metric definitions in two docs."
-  ],
-  "verificationGates": [
-    "Graph extract contains nodes for UI, API, warehouse, jobs, docs, and owner teams.",
-    "At least five agent questions are answered from the graph before files are opened.",
-    "A stale or missing edge is corrected and documented.",
-    "The implemented change names the graph queries used to choose files."
-  ],
-  "agentWorkflow": [
-    "Build or simulate the graph from the provided extract.",
-    "Query the graph to find affected modules and owner boundaries.",
-    "Use raw files only after the graph narrows the search space.",
-    "Patch one billing metric bug and update the graph notes."
-  ],
-  "workingDeliverables": [
-    "Updated graph snapshot or graph notes.",
-    "Working metric behavior in the app repository.",
-    "Evidence of graph-guided file selection.",
-    "A short list of graph gaps for future agents."
-  ],
-  "masterySignals": [
-    "The graph reduces file thrash.",
-    "Context is durable and queryable.",
-    "The agent can explain why each touched file was relevant."
-  ]
+  "domain": "Cross-cutting recognized-revenue calculation",
+  "mission": "Use a queryable knowledge graph to find the safe edit path across calculation, mapping, consumers, docs, and ownership.",
+  "outcome": "The graph-first agent fixes the metric with fewer wrong files and verified edges.",
+  "entities": ["billing event", "recognized revenue", "tenant", "billing account", "owner team"],
+  "seededDefects": ["gross charges are reported as revenue", "results are grouped by tenant", "refunds and missing mappings are mishandled"],
+  "verificationGates": ["five behavior checks", "real graph artifacts", "scoped query log", "fair search-versus-graph comparison"],
+  "agentWorkflow": ["capture normal-search attempt", "build and query graph", "source-verify uncertain edges", "capture graph-first attempt"],
+  "workingDeliverables": ["billing fix", "graph artifacts", "query evidence", "before-and-after patches"],
+  "masterySignals": ["queries narrow file access", "confidence is respected", "ownership is correct", "behavior matches the metric contract"]
 }

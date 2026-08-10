@@ -2,58 +2,42 @@
 
 ## Your Mission
 
-Your mission is to build a Graphify codebase knowledge graph before making a cross-cutting billing change.
+Your mission is to use a codebase knowledge graph to complete a billing change that crosses UI, calculation, tenant mapping, scheduled jobs, documentation, and team ownership.
 
-You are given a repository where billing behavior crosses UI, services, fixtures, and tests. Use graph context to choose the safe edit path.
+You are given an incomplete implementation that reports gross charges as revenue and groups results by tenant ID instead of billing account. Search results also point to a stale metric document and the wrong owner.
+
+Use Graphify to identify the real dependency path, correct the implementation, and record any missing or ambiguous graph edges you had to verify in source.
+
+Prove whether graph-first context reduced wrong files and unsupported assumptions compared with a normal repository search.
 
 The duration for this challenge is 30 min or less.
 
 ## Project
 
-[billing-graph-app](./billing-graph-app) contains the billing workflow for this exercise.
+[billing-graph-app](./billing-graph-app) contains the billing workflow. [graph questions](./docs/graph-questions.md) defines the questions both agent runs must answer before editing.
 
 ## How To Go About It
 
-Use [Graphify](https://github.com/Graphify-Labs/graphify) on the provided billing project.
+First, ask a fresh agent to answer the graph questions using normal repository search and implement the change. Save its first patch and file-access summary, then revert it.
 
-Ask your coding agent to inspect `billing-graph-app/`, create the graph view, implement the billing change, and verify affected paths.
+Install [Graphify](https://github.com/Graphify-Labs/graphify), build a code-only graph, and use scoped `graphify query`, `graphify path`, and `graphify explain` commands before opening source files.
+
+Start a fresh agent with the same conditions and a graph-first instruction. It may inspect raw files only after a graph query narrows the path. Do not treat inferred or ambiguous edges as facts without checking their source.
 
 ## Evidence
 
-Produce the graph artifact, selected graph queries, billing change, and verification output.
+Submit the billing fix and tests, `graphify-out/graph.json`, `graphify-out/GRAPH_REPORT.md`, `evidence/graph-queries.md`, `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, `evidence/after.patch`, and `evidence/comparison.md`.
 
-Raise the completed work as a PR for getting verified with our team.
+Run `npm run test:billing`, `npm run test:submission`, and `npm run agent:check` from `billing-graph-app`. Record every graph command and the source file used to confirm each important edge.
 
+Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-## Required Implementation Changes
+## Evaluation
 
-Complete the mission and deliverables described above against the supplied starter. Keep the named workflow working and address the stated exercise problem instead of replacing it with an unrelated example.
+Reviewers will check that graph queries identified the calculation, tenant-to-account mapping, downstream consumers, and owning team before the edit.
 
-## Allowed Changes
+The final implementation must calculate net recognized revenue, group it by billing account, preserve unrelated metrics, and pass the protected behavior checks.
 
-Change files inside this exercise directory only. Do not edit another exercise, generated dependency directories, or repository-wide policy files. Keep unrelated starter behavior unchanged.
+The exercise is incomplete if the graph is fabricated, only the report is read, inferred edges are accepted without verification, the comparison is unfair, protected inputs are changed, or required checks fail.
 
-## Required Commands
-
-In each supplied Node project, run `npm ci` followed by `npm run agent:check`. Run every additional exercise-specific verification command described above. Java projects must also run `./mvnw test` on macOS/Linux or `mvnw.cmd test` on Windows.
-
-Use the versions declared in the repository root and follow the clean setup sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
-
-## Acceptance Criteria
-
-- All mission deliverables above are present and operate against the supplied starter.
-- Required commands pass from a clean dependency installation.
-- The change is limited to the stated exercise and preserves unrelated behavior.
-- Claims in the submission can be traced to code, tests, generated artifacts, or command output.
-
-## Evidence Contract
-
-Add `evidence/README.md` containing each required command, its result, and links to the relevant output or artifact. Put requested reports, screenshots, traces, diagrams, or generated files under `evidence/`. Keep normal evidence below 10 MB and explain any larger trace or report.
-
-## Incomplete When
-
-The submission is incomplete if the starter no longer runs, a required command or deliverable is missing, evidence cannot be reproduced, expected output is self-declared instead of derived from the supplied input, or unrelated exercise files were changed.
-
-## Evaluation Rubric
-
-Use [the repository evaluation rules](../../docs/EVALUATION_RUBRICS.md). Score this exercise as 30 points for correct behavior, 25 for coverage of the mission deliverables, 20 for reproducible verification and evidence, 15 for scope control, and 10 for clear reasoning and maintainability.
+See the [Graphify Billing Knowledge Graph rubric](../../docs/EVALUATION_RUBRICS.md#graphify-billing-knowledge-graph).

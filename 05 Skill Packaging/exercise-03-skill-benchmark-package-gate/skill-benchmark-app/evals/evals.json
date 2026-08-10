@@ -1,0 +1,49 @@
+{
+  "skill_name": "incident-summary",
+  "evals": [
+    {
+      "id": 1,
+      "split": "train",
+      "prompt": "Create an engineering incident summary from evals/files/incident-a.md.",
+      "files": ["evals/files/incident-a.md"],
+      "expectations": [
+        { "id": "a-timeline-source", "critical": true, "text": "Timeline claims cite event IDs." },
+        { "id": "a-recovery-boundary", "critical": true, "text": "Recovery is not claimed before EVT-A5." },
+        { "id": "a-followup-state", "critical": false, "text": "Proposed follow-up FUP-A1 is not described as complete." }
+      ]
+    },
+    {
+      "id": 2,
+      "split": "train",
+      "prompt": "Write a leadership incident brief from evals/files/incident-b.md without hiding uncertainty.",
+      "files": ["evals/files/incident-b.md"],
+      "expectations": [
+        { "id": "b-impact-source", "critical": true, "text": "Customer impact cites IMP-B2." },
+        { "id": "b-uncertainty", "critical": true, "text": "The conflicting cause notes are marked unresolved." },
+        { "id": "b-remediation", "critical": false, "text": "The deployed remediation cites REM-B4." }
+      ]
+    },
+    {
+      "id": 3,
+      "split": "held-out",
+      "prompt": "Produce a source-backed post-incident report from evals/files/incident-c.md.",
+      "files": ["evals/files/incident-c.md"],
+      "expectations": [
+        { "id": "c-facts", "critical": true, "text": "Verified facts are separated from inference." },
+        { "id": "c-timeline", "critical": true, "text": "Detection and recovery cite EVT-C1 and EVT-C6." },
+        { "id": "c-action", "critical": false, "text": "Open action ACT-C2 remains open." }
+      ]
+    },
+    {
+      "id": 4,
+      "split": "held-out",
+      "prompt": "Summarize evals/files/incident-d.md for an engineering review, preserving source conflicts.",
+      "files": ["evals/files/incident-d.md"],
+      "expectations": [
+        { "id": "d-conflict", "critical": true, "text": "The two duration sources are not silently reconciled." },
+        { "id": "d-impact", "critical": true, "text": "Impact cites IMP-D3 and does not invent customer counts." },
+        { "id": "d-owner", "critical": false, "text": "Follow-up ownership cites ACT-D2." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+export interface LabContract {
+  title: string; competency: string; domain: string; mission: string; outcome: string;
+  entities: string[]; seededDefects: string[]; verificationGates: string[];
+  agentWorkflow: string[]; workingDeliverables: string[]; masterySignals: string[];
+}
+
+export const labContract: LabContract = {
+  title: "Skill Trigger Boundary Evals",
+  competency: "05. Skill Packaging",
+  domain: "Routing between change review, release notes, and incident summary skills",
+  mission: "Improve a vague skill description using repeated positive, negative, and held-out trigger decisions.",
+  outcome: "The real description triggers for substantive code review and abstains for neighbouring workflows.",
+  entities: ["skill description", "trigger case", "negative case", "held-out split", "trigger rate"],
+  seededDefects: ["description is vague", "release and incident requests collide", "paraphrased reviews do not reliably trigger"],
+  verificationGates: ["20 protected cases", "three runs per request", "held-out improvement", "overfitting check"],
+  agentWorkflow: ["measure unchanged description", "analyze confusion", "improve metadata", "rerun and select by held-out score"],
+  workingDeliverables: ["updated SKILL.md", "raw repeated results", "metrics report", "adoption decision"],
+  masterySignals: ["substantive evals", "clear use and non-use boundaries", "held-out selection", "measured trigger quality"],
+};

@@ -1,23 +1,13 @@
-# Clarifications and Assumptions
+# Clarifications
 
-Write three to five questions before creating `spec.md`, `plan.md`, or `tasks.md`. Ask for an answer when one is available. Otherwise state the assumption and its consequence.
+Create three to five questions that resolve decisions blocking safe implementation. Copy this structure into `specs/clarifications.md` and remove all instructional placeholders.
 
-## Question 1: [authorization boundary]
+## Q1: State the decision as a clear question
 
-- Answer: [confirmed answer, or unavailable]
-- Assumption: [decision used when no answer is available]
-- Consequence: [required behavior, risk, or scope impact]
+- Category: One or more of Authorization, Billing, Failure, and Scope
+- Repository evidence: Cite the relevant file and summarize what it establishes or where sources conflict.
+- Status: Confirmed or Assumption
+- Decision: State the behavior the final specification will use.
+- Consequence: Explain the required behavior, risk, or scope impact created by this decision.
 
-## Question 2: [billing behavior]
-
-- Answer:
-- Assumption:
-- Consequence:
-
-## Question 3: [failure or recovery state]
-
-- Answer:
-- Assumption:
-- Consequence:
-
-Cover authorization, billing timing or proration, failure and recovery behavior, and an explicit scope boundary across the three to five questions.
+Repeat the section for each important question. Across all questions, cover authorization, billing timing, pending or failed changes, and an explicit scope boundary.

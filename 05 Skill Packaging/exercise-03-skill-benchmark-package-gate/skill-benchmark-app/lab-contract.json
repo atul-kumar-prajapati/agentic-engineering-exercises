@@ -1,0 +1,14 @@
+{
+  "title": "Skill Benchmark and Package Gate",
+  "competency": "05. Skill Packaging",
+  "skillPattern": "skill-creator quality evaluation and packaging",
+  "domain": "Source-backed incident summaries",
+  "mission": "Benchmark baseline and with-skill task quality before distributing an installable skill.",
+  "outcome": "Only an evaluated skill with improved held-out quality and no critical regression is packaged.",
+  "entities": ["eval task", "assertion", "baseline run", "skill run", "variance", ".skill archive"],
+  "seededDefects": ["facts lack source IDs", "inference is presented as fact", "open follow-ups appear complete"],
+  "verificationGates": ["four protected evals", "three runs per lane", "held-out and critical checks", "archive validation"],
+  "agentWorkflow": ["measure baseline and unchanged skill", "grade evidence-backed assertions", "improve and rerun", "package passing version"],
+  "workingDeliverables": ["improved skill", "raw run results", "benchmark report", "installable archive"],
+  "masterySignals": ["quality is measured", "variance and cost are visible", "held-out tasks decide", "package matches evaluated version"]
+}

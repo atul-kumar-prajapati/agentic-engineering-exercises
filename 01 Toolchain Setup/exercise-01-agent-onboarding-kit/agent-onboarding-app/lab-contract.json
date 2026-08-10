@@ -3,37 +3,38 @@
   "competency": "01. Toolchain Setup - Project rules, hooks, guardrails, and CLI or MCP wiring",
   "mission": "Configure a coding agent so it can understand and work on a repository like a new engineering teammate.",
   "domain": "Internal support case router with limited documentation, mixed data-access patterns, hidden ownership rules, and missing onboarding instructions.",
-  "outcome": "A fresh coding agent can inspect the repository, follow documented boundaries, run the correct checks, and produce a reviewable change without repeated human re-explanation.",
+  "outcome": "Before-and-after evidence shows whether concise repository onboarding helps a fresh coding agent implement a correct, maintainable feature without copying existing bad practices.",
   "entities": [
     "Support case queue",
     "Escalation routing policy",
     "Customer segment ownership",
-    "Agent setup documentation"
+    "Before-and-after agent evidence"
   ],
   "seededDefects": [
     "The repository has no agent rules or architecture map.",
-    "The data and routing layers use different naming conventions.",
-    "Testing and review expectations are spread across package scripts and sparse notes.",
-    "Ownership rules are only implied by code and sample data."
+    "Routing thresholds are copied in the data and service layers.",
+    "Sorting can use different rules from the routing details shown in the interface.",
+    "Testing and review expectations are spread across package scripts and sparse notes."
   ],
   "verificationGates": [
-    "Agent setup files exist in .agent with concrete repository guidance.",
-    "AGENTS.md or CLAUDE.md explains safe commands, avoided commands, and PR expectations.",
-    "Architecture notes name the app, service, data, and ownership boundaries.",
-    "Testing notes tell a fresh agent which commands prove the work."
+    "AGENTS.md links concise safe-start guidance to the required .agent documents.",
+    "Before and after sessions use the same feature request and working conditions.",
+    "The final Needs Attention filter derives its decisions and sorting from one set of business rules.",
+    "Evidence includes both patches, session results, comparison, and passing checks."
   ],
   "agentWorkflow": [
-    "Inspect package scripts, src folders, services, data, and docs before writing rules.",
-    "Map architecture boundaries from code rather than inventing a generic template.",
-    "Document safe commands and risky commands with repository-specific reasons.",
-    "Create the onboarding layer without refactoring unrelated application behavior."
+    "Run the feature request once without onboarding and preserve the result.",
+    "Inspect package scripts, source folders, services, data, and docs before writing rules.",
+    "Create concise AGENTS.md guidance with deeper architecture, workflow, and testing documents.",
+    "Repeat the feature request in a fresh session and compare both results without reruns."
   ],
   "workingDeliverables": [
-    ".agent/rules.md",
     ".agent/architecture.md",
-    ".agent/workflows.md",
+    ".agent/development-workflow.md",
     ".agent/testing.md",
-    ".agent/conventions.md",
-    "AGENTS.md or CLAUDE.md"
+    "AGENTS.md",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
   ]
 }

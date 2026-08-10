@@ -1,59 +1,41 @@
-# Exercise 01: Playwright MCP Checkout Rescue
+# Exercise 01 : Playwright MCP Checkout Rescue
 
-## Objective
+## Your Mission
 
-Stabilize a real checkout flow that includes cart totals, a tax quote, payment authorization, confirmation, and decline recovery.
+Your mission is to turn a misleading green checkout test into a reliable test gate.
 
-## Starting Point
+You are given a real checkout flow with delayed tax, changing CSS classes, shared payment state, decline recovery, and request payload requirements. The supplied smoke test can pass while important behaviour is still broken.
 
-The starter is mounted and has three intentional weaknesses: a fixed wait, a selector tied to a generated class, and payment mock state shared across tests. Confirm the stable smoke test before investigating the flaky suite.
+Use Playwright MCP to inspect the live accessibility tree and network behaviour, find the real failure causes, and replace the flaky coverage with independent tests.
 
-## Required Implementation Changes
+The duration for this challenge is 30 min or less.
 
-- Replace fixed waits with observable readiness.
-- Replace generated-class selectors with resilient user-facing locators.
-- Isolate payment mock state for every test and worker.
-- Assert tax and authorization request payloads.
-- Cover successful confirmation and decline recovery.
+## Project
 
-## Allowed Changes
+[checkout-e2e-app](./checkout-e2e-app) contains the checkout application, API fixture, stable smoke test, and intentionally flaky tests.
 
-Change `checkout-e2e-app/tests/**`, test fixtures, mock middleware, and narrowly required accessibility hooks in the checkout UI. Do not replace the checkout application or remove decline behavior.
+## How To Go About It
 
-## Required Commands
+Configure the official [Playwright MCP server](https://github.com/microsoft/playwright-mcp) for your coding agent. Use accessibility snapshots and network inspection to understand the flow before changing tests.
 
-Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
+Keep the application behaviour. Replace fixed waits and generated-class selectors with user-facing locators and observable readiness. Isolate API state per test, prove the tax and authorization payloads, and cover approval, decline, retry, and duplicate-submit protection.
 
-From `checkout-e2e-app`:
+Run the repaired suite twenty times with two workers. Keep a trace from a real failure or final proof.
 
-```text
-npm ci
-npx playwright install chromium
-npm run test:smoke
-npm run test:e2e:reproduce
-npm run agent:check
-```
+## Evidence
 
-The reproduction command uses four repeats for a quick investigation loop. Before submission, run the repaired suite with `npx playwright test --repeat-each=20 --workers=2`.
+Submit the repaired tests and fixtures, `evidence/mcp-investigation.md`, `evidence/checkout-rescue.md`, repeated-run output, and one `trace.zip` below 10 MB.
 
-The repeated command is expected to expose the starter failure and must pass after the fix.
+Run `npm run test:smoke`, `npm run test:e2e:reproduce`, `npm run test:submission`, `npm run agent:check`, and `npx playwright test --repeat-each=20 --workers=2` from `checkout-e2e-app`.
 
-## Acceptance Criteria
+Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-- The starter smoke remains green.
-- No `waitForTimeout` or generated-class locator remains in final checkout coverage.
-- Tests pass with `--repeat-each=20 --workers=2`.
-- Payment isolation and request payloads are proven, not assumed.
-- Confirmation and decline retry are both covered.
+## Evaluation
 
-## Evidence Contract
+Reviewers will check that MCP evidence comes from the mounted flow, tests use accessible user-facing locators, and readiness is observed instead of delayed by a fixed time.
 
-Commit `evidence/checkout-rescue.md`, repeated-run console output, and one `trace.zip` for the original failure or final proof. Keep the trace below 10 MB; do not commit the full Playwright report directory.
+Approval and decline tests must be independent, request bodies must be asserted, retry must send a new authorization, and repeated parallel execution must pass.
 
-## Incomplete When
+The exercise is incomplete if checkout is simplified, a single run is shown, shared state remains, payloads are assumed, protected inputs are changed, or required checks fail.
 
-The flow is rewritten to avoid the seeded problem, only a single run is shown, the shared mock remains, payloads are untested, or evidence does not connect failure to root cause.
-
-## Evaluation Rubric
-
-See [Playwright Checkout Rescue](../../docs/EVALUATION_RUBRICS.md#playwright-checkout-rescue).
+See the [Playwright MCP Checkout Rescue rubric](../../docs/EVALUATION_RUBRICS.md#playwright-mcp-checkout-rescue).

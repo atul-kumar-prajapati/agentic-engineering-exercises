@@ -1,0 +1,24 @@
+diff --git a/src/services/escalationPolicy.ts b/src/services/escalationPolicy.ts
+--- a/src/services/escalationPolicy.ts
++++ b/src/services/escalationPolicy.ts
+@@
+-export const AUTOMATIC_ESCALATION_HOURS = 48;
++export const AUTOMATIC_ESCALATION_HOURS = 24;
+@@
+   return {
+     ...item,
+     status: "Escalated",
+     escalationMode: "automatic",
++    owner: "Incident Desk",
+   };
+
+This abandoned patch was based on the rollout proposal. Its changes are already present in the supplied partial implementation and must not be applied again.
+
+diff --git a/src/services/workflowApi.ts b/src/services/workflowApi.ts
+--- a/src/services/workflowApi.ts
++++ b/src/services/workflowApi.ts
+@@
+-  storedItems = applyAutomaticEscalations(storedItems);
+-  return storedItems.map(cloneItem);
++  const updatedItems = applyAutomaticEscalations(storedItems);
++  return updatedItems.map(cloneItem);

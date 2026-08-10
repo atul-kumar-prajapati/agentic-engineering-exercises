@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const roots = ["src", "scripts", "generated"];
+const roots = ["src", "scripts", "generated", "guardrails"];
 const failures = [];
 
 function walk(dir) {

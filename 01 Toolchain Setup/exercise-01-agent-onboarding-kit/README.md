@@ -1,53 +1,63 @@
-# Exercise 01: Agent Onboarding Kit
+# Exercise 01 : Agent Onboarding Kit
 
-## Objective
+## Your Mission
 
-Create concise onboarding guidance that lets a fresh coding agent work safely in `agent-onboarding-app`, then prove the guidance with the supplied follow-up task.
+Your mission is to configure a coding agent so it can understand and work on a repository like a new engineering teammate.
 
-## Starting Point
+You are given a repository that contains a working application with limited documentation, mixed coding patterns, hidden conventions, and missing onboarding instructions.
 
-The app has duplicated routing policy, representative case data, hidden support conventions, and working checks. Read `agent-onboarding-app/docs/support-notes.md` and inspect the code before writing guidance.
+Create the complete agent setup by documenting the project rules, architecture, workflows, testing process, and coding conventions.
 
-## Required Implementation Changes
+You must also prove that your setup improves how the agent works by comparing its behaviour before and after adding the onboarding instructions.
 
-- Create `agent-onboarding-app/AGENTS.md` with the minimum safe-start instructions.
-- Put deeper architecture, testing, ownership, and coding guidance under `agent-onboarding-app/.agent/`; link to it only when the task touches that area.
-- Run the fresh-agent task in `docs/follow-up-task.md` after the guidance is complete.
-- Record the independent result at `evidence/fresh-agent-result.md` using the supplied template.
+The duration for this challenge is 30 min or less.
 
-## Allowed Changes
+## Project
 
-During onboarding authoring, change only `AGENTS.md`, `.agent/**`, and `evidence/**`. During the fresh-agent stage, also allow the exact routing-policy and sample-data paths named by the discovered ownership guidance.
+[agent-onboarding-app](./agent-onboarding-app) contains the application code for this exercise.
 
-## Required Commands
+The application contains an intentional bad practice: important business rules are copied in multiple files. Without proper guidance, a coding agent may copy the same rules again while implementing a feature.
 
-Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
+Use the following feature request to test the agent:
 
-From `agent-onboarding-app`:
+> Add a Needs Attention filter that shows cases that have waited too long or have high customer revenue risk. Use the existing business rules and keep the filter count, displayed results, and sorting consistent.
 
-```text
-npm ci
-npm run agent:check
-npm run test:follow-up
-```
+## How To Go About It
 
-The final command is expected to fail before the fresh-agent change and pass afterward.
+First, run the feature request in a fresh agent session without creating `AGENTS.md` or any `.agent` documents. Record how the agent approached and implemented the feature. Revert its changes after collecting the evidence.
 
-## Acceptance Criteria
+Next, ask your coding agent to inspect `agent-onboarding-app/` and understand the codebase structure, existing patterns, commands, and development workflow.
 
-- A new agent can locate both policy copies without prior conversation.
-- Guidance distinguishes safe-start rules from task-specific deeper documents.
-- Both policy values agree, representative data remains valid, and unrelated files are untouched.
-- The clean check and follow-up verifier pass.
+Create an agent configuration layer using:
 
-## Evidence Contract
+- `agent-onboarding-app/AGENTS.md`
+- `agent-onboarding-app/.agent/architecture.md`
+- `agent-onboarding-app/.agent/development-workflow.md`
+- `agent-onboarding-app/.agent/testing.md`
 
-Commit `evidence/fresh-agent-result.md` with starting and final SHAs, guidance read, changed paths, commands, results, and unresolved risks. Include focused command output as text if it does not fit the note.
+The setup should explain where shared business rules belong, how to avoid copying bad patterns, and which checks must be run before completing a change.
 
-## Incomplete When
+Finally, start another fresh agent session and give it the same feature request. Compare this result with the first run and keep the improved implementation.
 
-The submission has only documentation, the same agent/session performs both stages, one policy copy is missed, checks are unrecorded, or unrelated files change.
+Use the same model, tools, permissions, and time limit for both runs. Do not rerun a session to obtain a preferred result.
 
-## Evaluation Rubric
+## Evidence
 
-See [Agent Onboarding Kit](../../docs/EVALUATION_RUBRICS.md#agent-onboarding-kit).
+Submit:
+
+- `AGENTS.md` and the required files inside `.agent/`.
+- `evidence/before.md` describing the agent's behaviour before onboarding.
+- `evidence/before.patch` containing the first implementation.
+- `evidence/after.md` describing the agent's behaviour after onboarding.
+- `evidence/after.patch` containing the final implementation.
+- `evidence/comparison.md` explaining what improved and which instructions influenced the agent.
+- Output from `npm run agent:check` and `npm run test:follow-up`.
+- A focused pull request containing only the exercise changes.
+
+Use the supplied [evidence template](./docs/evidence-template.md) and follow the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
+
+## Evaluation
+
+Reviewers will check that the comparison is fair, the onboarding guidance is clear, the evidence is accurate, and the final implementation avoids copying business rules while keeping the filter count, displayed results, and sorting consistent.
+
+See the [Agent Onboarding Kit evaluation rubric](../../docs/EVALUATION_RUBRICS.md#agent-onboarding-kit).

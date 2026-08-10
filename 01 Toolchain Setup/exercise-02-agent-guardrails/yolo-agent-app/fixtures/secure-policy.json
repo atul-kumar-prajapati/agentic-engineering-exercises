@@ -1,7 +1,0 @@
-{
-  "allowedOperations": ["read", "edit", "test"],
-  "blockedPaths": ["secrets/**", ".env", "**/*.env", "config/production.json"],
-  "approvalPaths": ["db/migrations/**", "generated/**"],
-  "blockedCommands": ["deploy-prod", "rollback-prod", "purge-release-cache", "release"],
-  "approvalCommands": ["migrate", "migration"]
-}
