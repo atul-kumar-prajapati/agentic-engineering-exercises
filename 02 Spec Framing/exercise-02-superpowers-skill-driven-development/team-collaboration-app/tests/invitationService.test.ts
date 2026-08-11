@@ -60,6 +60,19 @@ test("an active admin listed in inviteRoles may create an invitation", () => {
   assert.equal(result.ok, true);
 });
 
+test("an otherwise active admin excluded by inviteRoles cannot create or revoke", () => {
+  const state = makeState([makeInvitation()]);
+  state.policy.inviteRoles = ["owner"];
+  const snapshot = structuredClone(state);
+
+  expectRejected(createInvitation(state, createInput({ actorId: "USR-228" })), "UNAUTHORIZED", snapshot);
+  expectRejected(
+    revokeInvitation(state, { invitationId: "INV-401", actorId: "USR-228", now: NOW }),
+    "UNAUTHORIZED",
+    snapshot
+  );
+});
+
 test("members and suspended actors cannot create invitations", () => {
   const memberState = makeState();
   expectRejected(createInvitation(memberState, createInput({ actorId: "USR-244" })), "UNAUTHORIZED", memberState);
@@ -139,6 +152,15 @@ test("accepting a pending invitation adds one member and finalizes the invitatio
     }
   );
   assert.equal(result.invitation?.status, "accepted");
+});
+
+test("accepting a guest invitation creates an active guest", () => {
+  const state = makeState([makeInvitation({ role: "guest" })]);
+  const result = acceptInvitation(state, { invitationId: "INV-401", memberId: "USR-500", now: NOW });
+
+  assert.equal(result.ok, true);
+  assert.equal(result.state.members.at(-1)?.role, "guest");
+  assert.equal(result.state.members.at(-1)?.status, "active");
 });
 
 test("expired invitations cannot be accepted", () => {
