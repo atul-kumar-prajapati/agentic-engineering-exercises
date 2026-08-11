@@ -8,7 +8,6 @@ import type {
   TeamInvitation,
   TeamMember
 } from "../types";
-import { canManageInvitations } from "./teamPolicy.ts";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DAY_IN_MILLISECONDS = 86_400_000;
@@ -27,7 +26,7 @@ function isExpired(expiresAt: string, now: string) {
 
 function actorCanManage(state: InvitationState, actorId: string) {
   const actor = state.members.find((member) => member.id === actorId);
-  return actor !== undefined && canManageInvitations(actor, state.policy);
+  return actor !== undefined && actor.status === "active" && state.policy.inviteRoles.includes(actor.role);
 }
 
 export function createInvitation(state: InvitationState, input: CreateInvitationInput): InvitationActionResult {

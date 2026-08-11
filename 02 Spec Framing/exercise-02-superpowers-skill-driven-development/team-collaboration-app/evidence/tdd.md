@@ -1,6 +1,6 @@
 # Team Invitations TDD Evidence
 
-## Failing result
+## Red
 
 - Date: 2026-08-11T16:28:02+05:30
 - Command: `npm.cmd run test:invitations`
@@ -15,7 +15,7 @@
 Invitation tests failed: implement createInvitation, acceptInvitation, and revokeInvitation in src/services/invitationService.ts.
 ```
 
-## Passing result
+## Green
 
 - Date: 2026-08-11T16:31:57+05:30
 - Command: `npm.cmd run test:invitations`
