@@ -35,10 +35,16 @@ function createInput(overrides: Record<string, unknown> = {}) {
   };
 }
 
-function expectRejected(result: InvitationActionResult, code: string, original: InvitationState) {
+function expectRejected(
+  result: InvitationActionResult,
+  code: string,
+  original: InvitationState,
+  snapshot: InvitationState = original
+) {
   assert.equal(result.ok, false);
   assert.equal(result.code, code);
-  assert.deepEqual(result.state, original, "a rejected action must not mutate state");
+  assert.equal(result.state, original, "a rejected action must return the original state object");
+  assert.deepEqual(result.state, snapshot, "a rejected action must not mutate state");
 }
 
 test("authorized creation normalizes email and uses the configured expiry", () => {
@@ -65,10 +71,11 @@ test("an otherwise active admin excluded by inviteRoles cannot create or revoke"
   state.policy.inviteRoles = ["owner"];
   const snapshot = structuredClone(state);
 
-  expectRejected(createInvitation(state, createInput({ actorId: "USR-228" })), "UNAUTHORIZED", snapshot);
+  expectRejected(createInvitation(state, createInput({ actorId: "USR-228" })), "UNAUTHORIZED", state, snapshot);
   expectRejected(
     revokeInvitation(state, { invitationId: "INV-401", actorId: "USR-228", now: NOW }),
     "UNAUTHORIZED",
+    state,
     snapshot
   );
 });
@@ -80,7 +87,7 @@ test("members and suspended actors cannot create invitations", () => {
   const suspendedState = makeState();
   suspendedState.members[0].status = "suspended";
   const snapshot = structuredClone(suspendedState);
-  expectRejected(createInvitation(suspendedState, createInput()), "UNAUTHORIZED", snapshot);
+  expectRejected(createInvitation(suspendedState, createInput()), "UNAUTHORIZED", suspendedState, snapshot);
 });
 
 test("target roles and the guest policy are enforced", () => {
@@ -210,6 +217,15 @@ test("an authorized actor may revoke a pending invitation only once", () => {
     acceptInvitation(revoked.state, { invitationId: "INV-401", memberId: "USR-500", now: NOW }),
     "INVITATION_FINAL",
     revoked.state
+  );
+});
+
+test("an accepted invitation cannot be revoked", () => {
+  const state = makeState([makeInvitation({ status: "accepted" })]);
+  expectRejected(
+    revokeInvitation(state, { invitationId: "INV-401", actorId: "USR-201", now: NOW }),
+    "INVITATION_FINAL",
+    state
   );
 });
 

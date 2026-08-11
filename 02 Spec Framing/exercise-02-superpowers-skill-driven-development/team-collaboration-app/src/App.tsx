@@ -94,7 +94,7 @@ export default function App() {
               </div>
               <div>
                 <dt>Can manage invites</dt>
-                <dd>{canManageInvitations(member, workspacePolicy) ? "yes" : "no"}</dd>
+                <dd>{canManageInvitations(member, state.policy) ? "yes" : "no"}</dd>
               </div>
               <div>
                 <dt>Status</dt>
