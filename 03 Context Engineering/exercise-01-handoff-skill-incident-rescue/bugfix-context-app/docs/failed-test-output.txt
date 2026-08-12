@@ -1,0 +1,21 @@
+Run: npm run test:incident
+Recorded: 2026-08-08 18:44
+
+FAIL keeps a high-priority case queued at 47 waiting hours
+  expected status: Queued
+  received status: Escalated
+
+FAIL escalates a high-priority case at 48 waiting hours without changing its owner
+  expected owner: Asha
+  received owner: Incident Desk
+
+PASS leaves an existing manual escalation unchanged
+
+FAIL persists the escalated queue returned by a later fetch
+  expected automatic case ids: INC-2047-A, INC-2047-E
+  received automatic case ids: none
+
+UNRELATED evidence export snapshot
+  EACCES: output directory is read-only
+
+Summary: 3 incident checks failed, 1 passed, 1 unrelated tool error was also printed.
