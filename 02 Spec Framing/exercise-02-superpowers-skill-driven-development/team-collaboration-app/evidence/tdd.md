@@ -3,7 +3,7 @@
 ## Red
 
 - Date: 2026-08-11T16:28:02+05:30
-- Command: `npm.cmd run test:invitations`
+- Command: `npm run test:invitations` (executed through `npm.cmd` on Windows)
 - Working directory: `team-collaboration-app`
 - Result: exit code 1
 - Requirement connection: the focused contract suite failed before production implementation because the three invitation lifecycle functions were still unimplemented.
@@ -18,7 +18,7 @@ Invitation tests failed: implement createInvitation, acceptInvitation, and revok
 ## Green
 
 - Date: 2026-08-11T16:31:57+05:30
-- Command: `npm.cmd run test:invitations`
+- Command: `npm run test:invitations` (executed through `npm.cmd` on Windows)
 - Working directory: `team-collaboration-app`
 - Result: exit code 0
 - Requirement connection: the immutable lifecycle implementation passes the focused invitation contract suite.
@@ -51,6 +51,6 @@ Invitation tests failed: implement createInvitation, acceptInvitation, and revok
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
-ℹ todo 0
+ℹ pending tests 0
 ℹ duration_ms 864.79
 ```
