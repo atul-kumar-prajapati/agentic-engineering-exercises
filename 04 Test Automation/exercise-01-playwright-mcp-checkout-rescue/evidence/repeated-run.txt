@@ -1,0 +1,14 @@
+Date: 2026-08-13
+Command: npx playwright test --repeat-each=20 --workers=2 --reporter=line
+Environment: PLAYWRIGHT_EXECUTABLE_PATH=C:\Program Files\Google\Chrome\Application\chrome.exe
+
+Running 80 tests using 2 workers
+
+The run executed 20 repetitions of all four checkout tests:
+- approves checkout and sends the quoted total
+- recovers from decline with a fresh authorization
+- disables submission while authorization is pending
+- the documented checkout workflow is mounted and reachable
+
+80 passed (1.3m)
+Exit code: 0
