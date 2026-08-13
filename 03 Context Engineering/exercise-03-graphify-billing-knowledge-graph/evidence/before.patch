@@ -1,0 +1,20 @@
+diff --git a/03 Context Engineering/exercise-03-graphify-billing-knowledge-graph/billing-graph-app/src/billing/recognizedRevenue.ts b/03 Context Engineering/exercise-03-graphify-billing-knowledge-graph/billing-graph-app/src/billing/recognizedRevenue.ts
+index 084ec0a..a67ce6d 100644
+--- a/03 Context Engineering/exercise-03-graphify-billing-knowledge-graph/billing-graph-app/src/billing/recognizedRevenue.ts
++++ b/03 Context Engineering/exercise-03-graphify-billing-knowledge-graph/billing-graph-app/src/billing/recognizedRevenue.ts
+@@ -13,2 +13,3 @@ export interface TenantAccountLink {
+-/** Seeded shortcut: it ignores credits, refunds, and the tenant-to-account edge. */
+-export function recognizedRevenueByAccount(events: BillingEvent[], _links: TenantAccountLink[]) {
++export function recognizedRevenueByAccount(events: BillingEvent[], links: TenantAccountLink[]) {
++  const accountByTenant = new Map(links.map((link) => [link.tenantId, link.billingAccountId]));
++
+@@ -16 +17,8 @@ export function recognizedRevenueByAccount(events: BillingEvent[], _links: Tenan
+-    totals[event.tenantId] = (totals[event.tenantId] ?? 0) + event.grossAmount;
++    const billingAccountId = accountByTenant.get(event.tenantId);
++
++    if (billingAccountId === undefined) {
++      throw new Error(`Missing billing account mapping for tenant ${event.tenantId}`);
++    }
++
++    const recognizedRevenue = event.kind === "refund" ? -event.grossAmount : event.grossAmount - event.credits;
++    totals[billingAccountId] = (totals[billingAccountId] ?? 0) + recognizedRevenue;

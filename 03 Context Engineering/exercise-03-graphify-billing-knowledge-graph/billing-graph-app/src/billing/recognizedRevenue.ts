@@ -10,10 +10,17 @@ export interface TenantAccountLink {
   billingAccountId: string;
 }
 
-/** Seeded shortcut: it ignores credits, refunds, and the tenant-to-account edge. */
-export function recognizedRevenueByAccount(events: BillingEvent[], _links: TenantAccountLink[]) {
+export function recognizedRevenueByAccount(events: BillingEvent[], links: TenantAccountLink[]) {
+  const accountByTenant = new Map(links.map((link) => [link.tenantId, link.billingAccountId]));
+
   return events.reduce<Record<string, number>>((totals, event) => {
-    totals[event.tenantId] = (totals[event.tenantId] ?? 0) + event.grossAmount;
+    const billingAccountId = accountByTenant.get(event.tenantId);
+    if (!billingAccountId) {
+      throw new Error(`Missing billing account mapping for tenant ${event.tenantId}`);
+    }
+
+    const recognizedRevenue = event.kind === "refund" ? -event.grossAmount : event.grossAmount - event.credits;
+    totals[billingAccountId] = (totals[billingAccountId] ?? 0) + recognizedRevenue;
     return totals;
   }, {});
 }
