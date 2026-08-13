@@ -1,0 +1,18 @@
+diff --git a/product-rules-app/src/services/aiHistoryExportPolicy.ts b/product-rules-app/src/services/aiHistoryExportPolicy.ts
+index 009bc5b..23630f0 100644
+--- a/product-rules-app/src/services/aiHistoryExportPolicy.ts
++++ b/product-rules-app/src/services/aiHistoryExportPolicy.ts
+@@ -15,4 +14,0 @@
+-/**
+- * Seeded previous-agent implementation. It follows the legacy `account owner`
+- * vocabulary and therefore omits important workspace boundaries.
+- */
+@@ -20 +16,7 @@
+-  return workspace.plan !== "Starter" && membership.role === "admin";
++  return (
++    workspace.plan === "Enterprise" &&
++    workspace.dataResidency === "standard" &&
++    membership.workspaceId === workspace.id &&
++    membership.status === "active" &&
++    membership.role === "admin"
++  );

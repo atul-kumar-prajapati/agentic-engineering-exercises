@@ -12,10 +12,15 @@ export interface WorkspaceMembership {
   status: "active" | "suspended";
 }
 
-/**
- * Seeded previous-agent implementation. It follows the legacy `account owner`
- * vocabulary and therefore omits important workspace boundaries.
- */
-export function canExportAIHistory(workspace: Workspace, membership: WorkspaceMembership) {
-  return workspace.plan !== "Starter" && membership.role === "admin";
+export function canExportAIHistory(
+  workspace: Workspace,
+  membership: WorkspaceMembership | null | undefined,
+): boolean {
+  return (
+    workspace.plan === "Enterprise" &&
+    workspace.dataResidency === "standard" &&
+    membership?.workspaceId === workspace.id &&
+    membership.status === "active" &&
+    membership.role === "admin"
+  );
 }
