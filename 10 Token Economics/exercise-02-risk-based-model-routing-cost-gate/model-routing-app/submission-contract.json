@@ -1,0 +1,10 @@
+{
+  "name": "Risk-Based Model Routing Cost Gate",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "evidence/routing-policy.md", "minCharacters": 500, "includeAll": ["fast", "balanced", "reasoning", "clarify", "escalation"] },
+    { "path": "evidence/cost-model.json", "validJson": true, "includeAll": ["firstCall", "retry", "escalation", "total"] },
+    { "path": "evidence/adoption.md", "minCharacters": 500, "includeAll": ["quality", "cost", "latency", "variance", "three", "held-out"] },
+    { "path": "evidence/raw-runs.json", "validJson": true, "includeAll": ["model", "route", "tokens", "latency", "assertions"] }
+  ]
+}

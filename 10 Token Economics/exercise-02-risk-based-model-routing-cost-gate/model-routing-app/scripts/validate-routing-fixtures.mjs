@@ -1,0 +1,10 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+const root = path.resolve(import.meta.dirname, "..", "..");
+const cases = JSON.parse(fs.readFileSync(path.join(root, "evals", "routing-cases.json"), "utf8"));
+const pricing = JSON.parse(fs.readFileSync(path.join(root, "evals", "pricing.json"), "utf8"));
+assert.ok(cases.length >= 6, "at least six protected routing cases are required");
+for (const route of ["fast", "balanced", "reasoning"]) assert.ok(pricing[route], `missing pricing for ${route}`);
+assert.ok(cases.some((item) => item.expectedRoute === "clarify"), "clarification route must be represented");
+console.log("Routing cases and pricing fixtures verified.");

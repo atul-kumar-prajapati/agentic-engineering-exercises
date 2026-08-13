@@ -13,7 +13,7 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "Review Regression Lab",
+  "title": "Code Review Regression Gate",
   "competency": "09. Code Review - Code quality and risk review for merge confidence",
   "domain": "Regression review for filtering, risk scoring, and hidden work",
   "mission": "Find subtle regressions in a large agent-written UI diff that appears clean at first glance.",

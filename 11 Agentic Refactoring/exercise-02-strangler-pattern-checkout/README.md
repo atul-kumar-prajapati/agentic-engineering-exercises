@@ -1,59 +1,37 @@
-# Exercise 02 : jscodeshift Strangler Checkout Slice
+# Exercise 02 : Strangler Checkout Route
 
 ## Your Mission
 
-Your mission is to replace one checkout path with a new module while preserving external behavior.
+Your mission is to move card checkout to a new implementation without rewriting gift-card and invoice checkout paths.
 
-You are given a repository with tangled checkout code and repeated copy-paste patterns.
+You are given a legacy checkout entry point used by all payment types. A big-bang replacement risks changing totals, error codes, and unsupported payment behavior.
+
+Introduce one routing seam, send only card checkout through the new slice, and preserve the public result for every protected case.
 
 The duration for this challenge is 30 min or less.
 
 ## Project
 
-[checkout-strangler-app](./checkout-strangler-app) contains the checkout strangler workflow for this exercise.
+[checkout-strangler-app](./checkout-strangler-app) contains the legacy entry point and seeded all-legacy router. [checkout contract](./docs/checkout-contract.md) defines routing and observable behavior.
 
 ## How To Go About It
 
-Use [jscodeshift](https://jscodeshift.com/) where a codemod can safely move repeated call sites.
+Characterize the legacy public contract first. Create a card-specific module and route only eligible card requests through it using an explicit seam or flag.
 
-Ask your coding agent to inspect `checkout-strangler-app/`, create the strangler slice, apply any safe codemod, and verify behavior.
+Keep gift-card and invoice calls on the legacy implementation. Record fallback and rollback behavior, and do not delete the old path while it still has consumers.
 
 ## Evidence
 
-Produce the strangler change, old/new behavior comparison, codemod notes, and verification output.
+Submit the new slice, router, and tests, `evidence/route-matrix.md`, `evidence/contract-comparison.md`, and `evidence/rollback.md`.
 
-Raise the completed work as a PR for getting verified with our team.
+Run `npm run test:checkout`, `npm run test:submission`, and `npm run agent:check` from `checkout-strangler-app`.
 
+Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-## Required Implementation Changes
+## Evaluation
 
-Complete the mission and deliverables described above against the supplied starter. Keep the named workflow working and address the stated exercise problem instead of replacing it with an unrelated example.
+Reviewers will check one explicit routing seam, new-card routing, legacy gift-card and invoice routing, unchanged public results, failure fallback, and rollback.
 
-## Allowed Changes
+The exercise is incomplete if all checkout paths are rewritten, the legacy path is deleted, behavior changes are hidden as refactoring, or route selection is untested.
 
-Change files inside this exercise directory only. Do not edit another exercise, generated dependency directories, or repository-wide policy files. Keep unrelated starter behavior unchanged.
-
-## Required Commands
-
-In each supplied Node project, run `npm ci` followed by `npm run agent:check`. Run every additional exercise-specific verification command described above. Java projects must also run `./mvnw test` on macOS/Linux or `mvnw.cmd test` on Windows.
-
-Use the versions declared in the repository root and follow the clean setup sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
-
-## Acceptance Criteria
-
-- All mission deliverables above are present and operate against the supplied starter.
-- Required commands pass from a clean dependency installation.
-- The change is limited to the stated exercise and preserves unrelated behavior.
-- Claims in the submission can be traced to code, tests, generated artifacts, or command output.
-
-## Evidence Contract
-
-Add `evidence/README.md` containing each required command, its result, and links to the relevant output or artifact. Put requested reports, screenshots, traces, diagrams, or generated files under `evidence/`. Keep normal evidence below 10 MB and explain any larger trace or report.
-
-## Incomplete When
-
-The submission is incomplete if the starter no longer runs, a required command or deliverable is missing, evidence cannot be reproduced, expected output is self-declared instead of derived from the supplied input, or unrelated exercise files were changed.
-
-## Evaluation Rubric
-
-Use [the repository evaluation rules](../../docs/EVALUATION_RUBRICS.md). Score this exercise as 30 points for correct behavior, 25 for coverage of the mission deliverables, 20 for reproducible verification and evidence, 15 for scope control, and 10 for clear reasoning and maintainability.
+See the [Strangler Checkout Route rubric](../../docs/EVALUATION_RUBRICS.md#strangler-checkout-route).

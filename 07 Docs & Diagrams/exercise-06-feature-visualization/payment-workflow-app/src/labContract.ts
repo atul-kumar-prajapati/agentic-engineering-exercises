@@ -1,9 +1,9 @@
 import type { LabContract } from "./types";
 
 export const labContract = {
-  title: "Feature visualization",
+  title: "Payment Retry Visualization and Fix",
   competency: "07. Docs & Diagrams",
-  skillPattern: "Feature visualization diagrams",
+  skillPattern: "Payment Retry Visualization and Fix diagrams",
   domain: "Checkout feature with payment authorization, capture, ledger entries, receipt notification, and gateway webhook reconciliation.",
   mission: "Understand the payment integration feature and generate architecture, process flow, sequence, and ER diagrams.",
   outcome: "The four diagram files make the payment feature understandable without adding unsupported systems, actors, or tables.",
@@ -53,7 +53,7 @@ export const labContract = {
       id: "06-01",
       title: "Create payment architecture diagram.",
       owner: "agent candidate",
-      skill: "Feature visualization diagrams",
+      skill: "Payment Retry Visualization and Fix diagrams",
       risk: "high",
       done: false
     },
@@ -61,7 +61,7 @@ export const labContract = {
       id: "06-02",
       title: "Create payment process flow diagram with success and declined paths.",
       owner: "agent candidate",
-      skill: "Feature visualization diagrams",
+      skill: "Payment Retry Visualization and Fix diagrams",
       risk: "high",
       done: false
     },
@@ -69,7 +69,7 @@ export const labContract = {
       id: "06-03",
       title: "Create payment sequence diagram from the source call order.",
       owner: "agent candidate",
-      skill: "Feature visualization diagrams",
+      skill: "Payment Retry Visualization and Fix diagrams",
       risk: "medium",
       done: false
     },
@@ -77,7 +77,7 @@ export const labContract = {
       id: "06-04",
       title: "Create payment ER diagram from the source entities and relationships.",
       owner: "agent candidate",
-      skill: "Feature visualization diagrams",
+      skill: "Payment Retry Visualization and Fix diagrams",
       risk: "medium",
       done: false
     }

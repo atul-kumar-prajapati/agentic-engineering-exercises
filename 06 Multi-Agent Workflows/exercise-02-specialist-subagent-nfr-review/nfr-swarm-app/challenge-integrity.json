@@ -1,0 +1,9 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "4aac4589fa7e02d5aa1f10f546972b120580adadde7cdca31e95a16d116b407d",
+    "../docs/nfr-risk-seeds.md": "a003f67933c601153cc156e0e19297db042b2001d7bbbd2bb3c685cb9dc524aa",
+    "../docs/specialist-prompts.md": "59e81d1b3bf15012ba2c59c778f66e15d4a16463a2a5ffc3ab01af97d839d91d",
+    "submission-contract.json": "c238fe491fe4335131813450180dce7f48a8dfe4f35fb82dd1e1ca88171ed766"
+  }
+}

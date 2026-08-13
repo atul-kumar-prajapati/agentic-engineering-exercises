@@ -9,9 +9,12 @@
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc -b --pretty false",
     "test": "node ./scripts/agent-check.mjs",
+    "test:persistence": "node ./scripts/run-persistence-tests.mjs",
+    "test:submission": "node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json",
+    "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
     "lint": "node ./scripts/lint-check.mjs",
     "format": "node ./scripts/format-check.mjs",
-    "agent:check": "npm run lint && npm run test && npm run format && npm run typecheck && npm run build"
+    "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build"
   },
   "dependencies": {
     "react": "^19.2.0",

@@ -1,0 +1,14 @@
+{
+  "name": "Repeated Mistake to Repository Rule",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "AGENTS.md", "minCharacters": 250, "includeAll": [".agent/persistence.md", "stable ID", "test"] },
+    { "path": ".agent/persistence.md", "minCharacters": 350, "includeAll": ["display label", "canonical", "clock", "exception", "command"] },
+    { "path": "evidence/before.md", "minCharacters": 250, "includeAll": ["agent", "model", "first attempt"] },
+    { "path": "evidence/before.patch", "minCharacters": 100 },
+    { "path": "evidence/after.md", "minCharacters": 250, "includeAll": ["agent", "model", "fresh", "first attempt"] },
+    { "path": "evidence/after.patch", "minCharacters": 100 },
+    { "path": "evidence/comparison.md", "minCharacters": 450, "includeAll": ["same task", "same conditions", "rule", "behavior", "verification"] }
+  ],
+  "requiredDirectories": [".agent", "evidence"]
+}

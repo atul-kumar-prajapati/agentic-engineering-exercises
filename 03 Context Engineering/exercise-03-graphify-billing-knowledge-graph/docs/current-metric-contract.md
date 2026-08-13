@@ -1,10 +1,15 @@
 # Recognized Revenue Contract
 
-Status: approved
+Status: Approved
+Effective: 2026-07-01
 Owner: Billing Platform
 
-- Recognized revenue for a charge is `grossAmount - credits`.
-- A refund reduces recognized revenue by its gross amount.
-- Dashboard totals are grouped by billing account, never by tenant.
-- Every event must resolve through the tenant-to-account mapping. Missing mappings are errors and must not create a new grouping key.
-- Support Analytics consumes the metric but does not own its calculation.
+This document is the current authority for recognized revenue.
+
+- A charge contributes `grossAmount - credits`.
+- A refund contributes `-grossAmount`. Credits do not reduce a refund again.
+- Totals are grouped by billing account, never by tenant.
+- Every event must resolve through the tenant-to-account directory.
+- A missing tenant mapping is an error and must not create a fallback grouping key.
+- Gross volume remains the sum of gross amounts and is not changed by the recognized-revenue rule.
+- The dashboard and scheduled snapshot must use the same shared revenue summary.

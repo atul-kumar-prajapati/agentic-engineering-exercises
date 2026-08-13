@@ -3,12 +3,12 @@
   "competency": "04. Test Automation",
   "toolPattern": "Playwright MCP",
   "domain": "Delayed checkout with tax and payment boundaries",
-  "mission": "Use live browser and network evidence to replace a misleading green test with a reliable parallel gate.",
-  "outcome": "Checkout approval and recovery are protected by observable, independent tests.",
-  "entities": ["tax quote", "payment authorization", "accessibility snapshot", "request payload", "Playwright trace"],
-  "seededDefects": ["fixed wait and generated selector", "authorization state leaks between tests", "payload and recovery behavior are untested"],
-  "verificationGates": ["stable smoke", "four-repeat reproduction", "twenty-repeat parallel run", "submission evidence verifier"],
-  "agentWorkflow": ["inspect live flow with MCP", "identify observable boundaries", "repair fixtures and tests", "repeat in parallel and retain trace"],
-  "workingDeliverables": ["resilient tests", "isolated API fixture", "MCP investigation", "repeat and trace evidence"],
-  "masterySignals": ["user-facing locators", "web-first readiness", "request-body proof", "parallel independence"]
+  "mission": "Use live accessibility and network evidence to replace a misleading green checkout test with a reliable parallel gate.",
+  "outcome": "Independent tests prove request contracts, approval, decline recovery, retry, and duplicate-submit protection.",
+  "entities": ["tax readiness", "payment authorization", "test session", "accessibility snapshot", "request payload", "Playwright trace"],
+  "seededDefects": ["fixed wait and generated selector", "server state leaks through a default session", "tax and authorization payloads are untested", "retry and duplicate submission lack request-count proof"],
+  "verificationGates": ["failure reproduction", "live MCP accessibility and network evidence", "isolated repaired tests", "twenty-repeat two-worker run", "bounded genuine trace"],
+  "agentWorkflow": ["capture a without-MCP first attempt", "reproduce the flake", "inspect the live flow with MCP", "repair tests from observed boundaries", "repeat in parallel and retain a trace", "compare both attempts"],
+  "workingDeliverables": ["repaired end-to-end tests", "before-and-after patches", "MCP investigation and test matrix", "repeat output and trace"],
+  "masterySignals": ["user-facing locators", "web-first readiness", "full request-body proof", "unique per-test server sessions", "parallel independence"]
 }

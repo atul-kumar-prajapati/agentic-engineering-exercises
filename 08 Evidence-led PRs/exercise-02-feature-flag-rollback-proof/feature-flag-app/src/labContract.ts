@@ -13,7 +13,7 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "Feature Flag Rollback Proof",
+  "title": "Feature Flag Kill-Switch Proof",
   "competency": "08. Evidence-led PRs - PR gate evidence and handoff",
   "domain": "Risky UI rollout guarded by feature flag and rollback proof",
   "mission": "Prove that a risky UI feature is gated, observable, and reversible before a reviewer sees the PR.",

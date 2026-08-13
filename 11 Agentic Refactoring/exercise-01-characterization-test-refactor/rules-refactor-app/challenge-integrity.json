@@ -1,0 +1,9 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "10bc68e54c7cb71a47436b94166fd87cad86486475e1c1ec58c517d614f82d5b",
+    "../docs/renewal-golden-cases.json": "1a00bd458de589b6a05abd013d62791da9c021a1f7db0b66a2c6419fa681f814",
+    "scripts/run-characterization-oracle.mjs": "f92c5964fda6e85b97456f697e5e0361129757ab071f600e62406e6929702bb8",
+    "submission-contract.json": "9e8af258d7937898ee758ac4c3bcf0ebf4225603251299aab945a801d9ca3192"
+  }
+}

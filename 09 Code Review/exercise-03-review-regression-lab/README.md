@@ -1,57 +1,37 @@
-# Exercise 03: Promptfoo Review Regression Lab
+# Exercise 03 : Code Review Regression Gate
 
-## Objective
+## Your Mission
 
-Measure whether a review prompt catches real historical defects without creating false blockers on harmless look-alike changes.
+Your mission is to decide whether an improved review prompt catches historical defects without turning harmless changes into false blockers.
 
-## Starting Point
+You are given one historical bad diff, a multi-bug diff, a clean look-alike control, and baseline and candidate prompts. A longer checklist can improve recall while destroying review precision.
 
-The harness includes a valid historical bad diff, a multi-bug case, a clean control, baseline and candidate prompts, a structural sanity check, model-graded Promptfoo configuration, and explicit adoption thresholds.
+Run repeated model reviews, improve the candidate from observed failures, and make an adoption decision using both recall and clean-control precision.
 
-## Required Implementation Changes
+The duration for this challenge is 30 min or less.
 
-- Run the same cases against the baseline and candidate prompt with the model used for real review.
-- Use at least three samples per case.
-- Report historical recall, multi-bug recall, clean-control precision, and regression against baseline.
-- Improve the prompt without naming case-specific defects or keywords.
-- Apply the adoption thresholds and record limitations and decision.
+## Project
 
-## Allowed Changes
+[regression-review-app](./regression-review-app) contains protected cases, prompts, a structural check, and model-evaluation configuration. [adoption thresholds](./docs/adoption-thresholds.md) define the gate.
 
-Change prompts, eval cases, scoring/report logic, and evidence. Do not encode expected findings, case IDs, exact diff tokens, or assertion answers into the provider or candidate prompt.
+## How To Go About It
 
-## Required Commands
+Run the same model and settings against baseline and candidate prompts at least three times per case. Report historical recall, multi-bug recall, clean-control precision, and variance.
 
-Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
+Improve general review behavior without naming case IDs, exact diff tokens, or expected findings. Select the candidate using held-out results and record limitations.
 
-From `regression-review-app`:
+## Evidence
 
-```text
-npm ci
-npm run eval:smoke
-set REVIEW_EVAL_MODEL=<provider:model>
-npm run eval:model
-npm run agent:check
-```
+Submit the final prompt, raw evaluation outputs, and `evidence/review-eval.md` containing model, settings, sample count, scores, variance, false blockers, limitations, and adoption decision.
 
-Use shell-appropriate environment syntax and repeat the model run to reach the declared sample count.
+Run `npm run eval:smoke`, `npm run eval:model`, `npm run test:submission`, and `npm run agent:check` from `regression-review-app`.
 
-## Acceptance Criteria
+Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-- The real review model and full diffs are evaluated.
-- Multi-bug and clean controls affect adoption.
-- Adding checklist words alone cannot guarantee success.
-- Recall and precision meet `docs/adoption-thresholds.md`.
-- Model, configuration, sample count, scores, and limitations are recorded.
+## Evaluation
 
-## Evidence Contract
+Reviewers will check real model runs, repeated samples, multi-bug coverage, clean controls, threshold calculations, and absence of answer leakage.
 
-Commit raw Promptfoo outputs plus a completed `docs/report-template.md` under `evidence/review-eval.md`. Include baseline/candidate prompt SHAs and adoption decision.
+The exercise is incomplete if only keyword checks run, provider logic contains answers, sample details are missing, or higher recall creates unacceptable false blockers.
 
-## Incomplete When
-
-Only deterministic keyword checks run, provider logic contains answers, clean controls are absent, model/configuration/sample count is missing, or the candidate improves recall by increasing false blockers.
-
-## Evaluation Rubric
-
-See [Review Regression Lab](../../docs/EVALUATION_RUBRICS.md#review-regression-lab).
+See the [Code Review Regression Gate rubric](../../docs/EVALUATION_RUBRICS.md#code-review-regression-gate).

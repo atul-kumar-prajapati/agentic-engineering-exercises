@@ -1,59 +1,37 @@
-# Exercise 05 : Graphify Codebase Graph to Diagrams
+# Exercise 05 : Graph-Backed Notification Fallback Rescue
 
 ## Your Mission
 
-Your mission is to convert codebase graph context into diagrams that guide a safe change.
+Your mission is to use a code graph and diagrams to repair a notification fallback that can contact customers through a channel they did not approve.
 
-You are given a repository where notification behavior crosses multiple modules and ownership boundaries.
+You are given a stale graph snapshot and routing code that always falls back from push to SMS. The real rule requires SMS consent, email fallback, and a durable queue when no permitted provider is available.
+
+Build a current graph, use it to find the routing boundary, fix the behavior, and create diagrams that another engineer can use to review the change.
 
 The duration for this challenge is 30 min or less.
 
 ## Project
 
-[notification-mesh-app](./notification-mesh-app) contains the notification workflow for this exercise.
+[notification-mesh-app](./notification-mesh-app) contains the application and seeded routing defect. [routing contract](./docs/current-routing-contract.md) defines the protected behavior.
 
 ## How To Go About It
 
-Use [Graphify](https://github.com/Graphify-Labs/graphify) on the provided notification project.
+Build a code-only graph with [Graphify](https://github.com/Graphify-Labs/graphify). Use scoped query and path commands to locate policy, provider, and queue dependencies before opening source files.
 
-Ask your coding agent to inspect `notification-mesh-app/`, create graph-backed diagrams, implement one safe notification change, and verify it.
+Fix the fallback and produce Mermaid architecture and sequence diagrams. Mark inferred graph edges and verify them in source before presenting them as facts.
 
 ## Evidence
 
-Produce the graph notes, diagrams, safe notification change, and verification output.
+Submit the fix and tests, `graphify-out/graph.json`, `graphify-out/GRAPH_REPORT.md`, `diagrams/notification-architecture.mmd`, `diagrams/fallback-sequence.mmd`, and `evidence/graph-to-source.md`.
 
-Raise the completed work as a PR for getting verified with our team.
+Run `npm run test:routing`, `npm run test:submission`, and `npm run agent:check` from `notification-mesh-app`.
 
+Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-## Required Implementation Changes
+## Evaluation
 
-Complete the mission and deliverables described above against the supplied starter. Keep the named workflow working and address the stated exercise problem instead of replacing it with an unrelated example.
+Reviewers will check that the graph identified the real routing boundary and that diagrams match source. Push, consented SMS, email fallback, and durable queue behavior must pass protected tests.
 
-## Allowed Changes
+The exercise is incomplete if the stale snapshot is copied, graph output is fabricated, inferred edges are unverified, or a disallowed channel can still be selected.
 
-Change files inside this exercise directory only. Do not edit another exercise, generated dependency directories, or repository-wide policy files. Keep unrelated starter behavior unchanged.
-
-## Required Commands
-
-In each supplied Node project, run `npm ci` followed by `npm run agent:check`. Run every additional exercise-specific verification command described above. Java projects must also run `./mvnw test` on macOS/Linux or `mvnw.cmd test` on Windows.
-
-Use the versions declared in the repository root and follow the clean setup sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
-
-## Acceptance Criteria
-
-- All mission deliverables above are present and operate against the supplied starter.
-- Required commands pass from a clean dependency installation.
-- The change is limited to the stated exercise and preserves unrelated behavior.
-- Claims in the submission can be traced to code, tests, generated artifacts, or command output.
-
-## Evidence Contract
-
-Add `evidence/README.md` containing each required command, its result, and links to the relevant output or artifact. Put requested reports, screenshots, traces, diagrams, or generated files under `evidence/`. Keep normal evidence below 10 MB and explain any larger trace or report.
-
-## Incomplete When
-
-The submission is incomplete if the starter no longer runs, a required command or deliverable is missing, evidence cannot be reproduced, expected output is self-declared instead of derived from the supplied input, or unrelated exercise files were changed.
-
-## Evaluation Rubric
-
-Use [the repository evaluation rules](../../docs/EVALUATION_RUBRICS.md). Score this exercise as 30 points for correct behavior, 25 for coverage of the mission deliverables, 20 for reproducible verification and evidence, 15 for scope control, and 10 for clear reasoning and maintainability.
+See the [Graph-Backed Notification Fallback Rescue rubric](../../docs/EVALUATION_RUBRICS.md#graph-backed-notification-fallback-rescue).

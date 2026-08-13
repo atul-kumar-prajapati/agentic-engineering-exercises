@@ -1,56 +1,37 @@
-# Exercise 01: Semgrep Security and Accessibility Review Gauntlet
+# Exercise 01 : Security and Accessibility Review Gauntlet
 
-## Objective
+## Your Mission
 
-Review an actual vulnerable comparison, distinguish scanner signal from noise, find the manual behavior defects, fix confirmed blockers at the correct boundary, and verify them.
+Your mission is to review an exact vulnerable PR, separate scanner signal from noise, and find important behavior defects that static analysis misses.
 
-## Starting Point
+You are given a dynamic HTML sink, a trusted static look-alike, lost keyboard semantics, weak note validation, and a server transition bypass. Treating every scanner warning as a blocker will produce the wrong review.
 
-`fixtures/review-target.bundle` contains exact `review-base` and `review-head` refs recorded in `fixtures/manifest.json`. The equivalent patch is valid against the supplied app. Semgrep flags one exploitable dynamic HTML sink and one trusted static announcement that requires reviewer judgment. The target also removes keyboard semantics and weakens server transition policy.
+Review the supplied base-to-head range, prove every finding, fix confirmed blockers at the correct boundary, and add regression tests.
 
-## Required Implementation Changes
+The duration for this challenge is 30 min or less.
 
-- Clone the bundle or apply the patch and review the exact comparison.
-- Run `semgrep scan --config semgrep.yml`.
-- Rank findings, prove true positives, and explicitly dismiss unsupported output.
-- Find manual accessibility and state-transition defects.
-- Fix confirmed blockers and add regression tests, including the server policy boundary.
+## Project
 
-## Allowed Changes
+[review-gauntlet-app](./review-gauntlet-app) contains the target application. `fixtures/review-target.bundle` and `fixtures/manifest.json` define the protected comparison.
 
-Change confirmed vulnerable code, focused tests, Semgrep configuration only when justified, and evidence. Do not delete the trusted static control merely to reduce scanner output or edit the fixture bundle/manifest.
+## How To Go About It
 
-## Required Commands
+Verify and clone the bundle, then review `review-base..review-head`. Run Semgrep, reproduce its findings, and inspect keyboard and state-transition behavior manually.
 
-Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
+Classify findings by severity and confidence. Dismiss unsupported scanner output with evidence, then fix confirmed blockers and add UI or server-boundary tests.
 
-From `review-gauntlet-app`:
+## Evidence
 
-```text
-npm ci
-npm run test:policy
-npm run agent:check
-semgrep scan --config semgrep.yml
-```
+Submit the fixes and tests, `evidence/review.md`, Semgrep output, fixture verification output, and final check output. Each finding needs file and line, scenario, impact, source, decision, and test.
 
-From the exercise directory, run `node scripts/verify-review-fixture.mjs` and confirm the patch applies to the base.
+Run `node scripts/verify-review-fixture.mjs`, `semgrep scan --config semgrep.yml`, `npm run test:policy`, `npm run test:submission`, and `npm run agent:check` as described by the project paths.
 
-## Acceptance Criteria
+Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-- Exact base/head SHAs match the manifest.
-- Scanner true and false positives are separated with evidence.
-- Dynamic note rendering, keyboard regression, note validation, and server transition bypass are reviewed.
-- Confirmed fixes have tests at UI or server boundary as appropriate.
-- All required commands pass after fixes.
+## Evaluation
 
-## Evidence Contract
+Reviewers will check the exact comparison, true-versus-false positive decisions, keyboard behavior, dynamic note rendering, note validation, and server policy enforcement.
 
-Commit `evidence/review.md` with severity, file/line, reproduction, scanner/manual source, fix/dismiss decision, and test. Include Semgrep and test output.
+The exercise is incomplete if scanner output is copied blindly, the manual defects are missed, a finding lacks reproduction evidence, or a blocker has no regression test.
 
-## Incomplete When
-
-The real comparison is not used, every scanner warning is accepted blindly, keyboard or server policy is missed, a finding lacks evidence, or a confirmed issue has no regression test.
-
-## Evaluation Rubric
-
-See [Security and Accessibility Review Gauntlet](../../docs/EVALUATION_RUBRICS.md#security-and-accessibility-review-gauntlet).
+See the [Security and Accessibility Review Gauntlet rubric](../../docs/EVALUATION_RUBRICS.md#security-and-accessibility-review-gauntlet).

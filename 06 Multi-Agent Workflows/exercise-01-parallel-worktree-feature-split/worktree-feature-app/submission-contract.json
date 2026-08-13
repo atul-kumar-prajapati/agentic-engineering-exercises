@@ -1,0 +1,9 @@
+{
+  "name": "Parallel Worktree Conflict Rescue",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "evidence/lane-handoffs.json", "validJson": true, "includeAll": ["baseSha", "commitSha", "ownedPaths", "rollback"] },
+    { "path": "evidence/worktree-log.md", "minCharacters": 200, "includeAll": ["Lane A", "Lane B", "Lane C", "worktree"] },
+    { "path": "evidence/integration.md", "minCharacters": 250, "includeAll": ["integration order", "src/types.ts", "final check", "rollback"] }
+  ]
+}

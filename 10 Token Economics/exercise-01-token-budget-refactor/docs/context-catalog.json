@@ -1,0 +1,7 @@
+[
+  { "id": "repository-rules", "path": "AGENTS.md", "bytes": 850, "tags": ["mandatory"], "authority": "current", "mandatory": true },
+  { "id": "current-adapter-contract", "path": "docs/current-adapter-contract.md", "bytes": 1700, "tags": ["adapter", "session", "api"], "authority": "current" },
+  { "id": "current-error-contract", "path": "docs/current-error-contract.md", "bytes": 900, "tags": ["adapter", "errors"], "authority": "current" },
+  { "id": "legacy-migration-notes", "path": "docs/legacy-migration-notes.md", "bytes": 4200, "tags": ["adapter", "session", "api"], "authority": "stale" },
+  { "id": "ui-style-guide", "path": "docs/ui-style-guide.md", "bytes": 2400, "tags": ["ui", "css"], "authority": "current" }
+]

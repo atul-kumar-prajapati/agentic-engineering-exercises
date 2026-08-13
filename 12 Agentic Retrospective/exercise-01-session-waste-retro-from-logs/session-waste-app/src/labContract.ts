@@ -13,7 +13,7 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "Session Waste Retro From Logs",
+  "title": "Trace-Measured Session Waste Reduction",
   "competency": "12. Agentic Retrospective - Session review, waste reduction, and improvement",
   "domain": "Agent session waste analyzer from real-looking transcript logs",
   "mission": "Analyze provided agent session logs to find retry loops, redundant file reads, and context waste.",

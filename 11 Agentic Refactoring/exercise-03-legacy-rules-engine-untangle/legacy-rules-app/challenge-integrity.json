@@ -1,0 +1,9 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "f1719101c60e510835a92bde7a7134b1cf61f0721004397b3f0d7d0fe93110b7",
+    "../docs/rules-contract.md": "84989174801bfcdc12cf4238021e187d48c7b13fac51e75cdc3bfcb1bc8a654f",
+    "../legacy-rules-api/src/test/java/dev/agentic/exercise/workflow/WorkflowContractCharacterizationTest.java": "1d3cb515380c5996b50c038434224eb893576a8c42f5e428dd8130c0b1006ffa",
+    "submission-contract.json": "db2019100d047b16c8b033a341e913c2bff00c722fe04e5d1a35f567d8eb43cb"
+  }
+}

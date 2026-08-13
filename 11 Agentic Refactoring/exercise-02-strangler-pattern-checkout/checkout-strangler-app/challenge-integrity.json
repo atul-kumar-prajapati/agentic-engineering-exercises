@@ -1,0 +1,9 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "e9a59369969a02aeb145de7afe45548c8d11cc2037e8d8a9bb469da7178017d1",
+    "../docs/checkout-contract.md": "8263cd19bd9d6ad060d10b9d618d89ea0c72b75c27d80277de828761fb38dd09",
+    "scripts/run-checkout-tests.mjs": "be72d562ea5cd8d0a8e021aced3f342051c237aa5920984b15e07a5fd307acc0",
+    "submission-contract.json": "251b300accfddd907a4172e7995393c0fcd76a5b8ab779dd8b12f44e02844624"
+  }
+}

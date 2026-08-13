@@ -1,59 +1,37 @@
-# Exercise 03 : OpenRewrite Contract-Safe Rules Slice
+# Exercise 03 : Contract-Safe Full-Stack Rules Extraction
 
 ## Your Mission
 
-Your mission is to refactor one legacy rules slice without breaking dependent clients.
+Your mission is to extract a Spring workflow decision policy without breaking its React client, validation errors, persistence behavior, or audit wording.
 
-You are given API and app repositories where rule names, DTOs, and adapters have drifted over time.
+You are given a service where lookup, validation, mutation, and persistence are interleaved. A clean-looking extraction can change exception order, response fields, or repository state after rejection.
+
+Create a dedicated policy boundary, preserve the public contract, and verify the API and client together.
 
 The duration for this challenge is 30 min or less.
 
 ## Project
 
-[legacy-rules-api](./legacy-rules-api) and [legacy-rules-app](./legacy-rules-app) contain the legacy rules workflow for this exercise.
+[legacy-rules-api](./legacy-rules-api) contains the Spring service and [legacy-rules-app](./legacy-rules-app) contains its client. [rules contract](./docs/rules-contract.md) defines protected behavior.
 
 ## How To Go About It
 
-Use [OpenRewrite](https://docs.openrewrite.org/) or an equivalent recipe-driven refactoring workflow where it fits.
+Add characterization tests before moving code. Extract validation and decision rules into `DecisionPolicy` while keeping repository lookup and persistence in the service.
 
-Ask your coding agent to inspect both repositories, protect the contract, refactor one rules slice, and verify both sides.
+Preserve error type and message, response shape, rejected-state immutability, and client parsing. Use a recipe or mechanical refactor only where the transformation is repeatable and reviewed.
 
 ## Evidence
 
-Produce the refactor, contract evidence, API/app verification output, and rollback note.
+Submit the extraction and tests, `evidence/contract-before.json`, `evidence/contract-after.json`, `evidence/refactor-map.md`, and `evidence/rollback.md`.
 
-Raise the completed work as a PR for getting verified with our team.
+Run the Maven wrapper test suite, then run `npm run test:submission` and `npm run agent:check` from `legacy-rules-app`.
 
+Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-## Required Implementation Changes
+## Evaluation
 
-Complete the mission and deliverables described above against the supplied starter. Keep the named workflow working and address the stated exercise problem instead of replacing it with an unrelated example.
+Reviewers will check characterization-first work, a real policy boundary, stable exception and JSON contracts, no persistence after rejection, client compatibility, and full-stack verification.
 
-## Allowed Changes
+The exercise is incomplete if only one project is tested, the contract changes silently, policy remains interleaved in the service, or expected responses are rewritten.
 
-Change files inside this exercise directory only. Do not edit another exercise, generated dependency directories, or repository-wide policy files. Keep unrelated starter behavior unchanged.
-
-## Required Commands
-
-In each supplied Node project, run `npm ci` followed by `npm run agent:check`. Run every additional exercise-specific verification command described above. Java projects must also run `./mvnw test` on macOS/Linux or `mvnw.cmd test` on Windows.
-
-Use the versions declared in the repository root and follow the clean setup sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
-
-## Acceptance Criteria
-
-- All mission deliverables above are present and operate against the supplied starter.
-- Required commands pass from a clean dependency installation.
-- The change is limited to the stated exercise and preserves unrelated behavior.
-- Claims in the submission can be traced to code, tests, generated artifacts, or command output.
-
-## Evidence Contract
-
-Add `evidence/README.md` containing each required command, its result, and links to the relevant output or artifact. Put requested reports, screenshots, traces, diagrams, or generated files under `evidence/`. Keep normal evidence below 10 MB and explain any larger trace or report.
-
-## Incomplete When
-
-The submission is incomplete if the starter no longer runs, a required command or deliverable is missing, evidence cannot be reproduced, expected output is self-declared instead of derived from the supplied input, or unrelated exercise files were changed.
-
-## Evaluation Rubric
-
-Use [the repository evaluation rules](../../docs/EVALUATION_RUBRICS.md). Score this exercise as 30 points for correct behavior, 25 for coverage of the mission deliverables, 20 for reproducible verification and evidence, 15 for scope control, and 10 for clear reasoning and maintainability.
+See the [Contract-Safe Full-Stack Rules Extraction rubric](../../docs/EVALUATION_RUBRICS.md#contract-safe-full-stack-rules-extraction).

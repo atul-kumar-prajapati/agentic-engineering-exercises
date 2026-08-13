@@ -13,7 +13,7 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "Rule Hardening From Repeated Mistakes",
+  "title": "Repeated Mistake to Repository Rule",
   "competency": "12. Agentic Retrospective - Session review, waste reduction, and improvement",
   "domain": "Rule hardening from repeated agent corrections",
   "mission": "Turn repeated agent corrections into durable AGENTS.md rules, skills, or hooks with clear trigger criteria.",

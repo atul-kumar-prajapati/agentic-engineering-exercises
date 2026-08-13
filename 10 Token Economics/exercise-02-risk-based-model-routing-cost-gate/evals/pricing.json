@@ -1,0 +1,5 @@
+{
+  "fast": { "inputPerMillion": 0.25, "outputPerMillion": 1.0 },
+  "balanced": { "inputPerMillion": 1.0, "outputPerMillion": 5.0 },
+  "reasoning": { "inputPerMillion": 5.0, "outputPerMillion": 25.0 }
+}

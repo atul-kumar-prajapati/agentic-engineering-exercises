@@ -1,0 +1,11 @@
+{
+  "name": "Contract-Safe Full-Stack Rules Extraction",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/DecisionPolicy.java", "minCharacters": 300, "includeAll": ["class DecisionPolicy", "validate"] },
+    { "path": "evidence/contract-before.json", "validJson": true },
+    { "path": "evidence/contract-after.json", "validJson": true },
+    { "path": "evidence/refactor-map.md", "minCharacters": 400, "includeAll": ["lookup", "validation", "persistence", "DecisionPolicy"] },
+    { "path": "evidence/rollback.md", "minCharacters": 250, "includeAll": ["service", "policy", "contract"] }
+  ]
+}

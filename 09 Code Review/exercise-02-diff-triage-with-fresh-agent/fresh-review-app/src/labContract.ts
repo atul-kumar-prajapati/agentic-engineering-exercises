@@ -13,7 +13,7 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "Diff Triage With Fresh Agent",
+  "title": "Independent Diff Triage",
   "competency": "09. Code Review - Code quality and risk review for merge confidence",
   "domain": "Fresh-agent review of cache and workflow-state changes",
   "mission": "Use a fresh review pass to find what the implementing agent missed, then decide which findings are merge blockers.",

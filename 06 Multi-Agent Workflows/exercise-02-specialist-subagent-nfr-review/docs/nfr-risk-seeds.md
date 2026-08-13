@@ -1,6 +1,6 @@
 # Nfr Risk Seeds
 
-This is a seeded lab input for Specialist Subagent NFR Review. It gives the learner concrete constraints to inspect, implement, test, and verify.
+This is a seeded lab input for Specialist Review Merge Gate. It gives the learner concrete constraints to inspect, implement, test, and verify.
 
 ## Operating Context
 

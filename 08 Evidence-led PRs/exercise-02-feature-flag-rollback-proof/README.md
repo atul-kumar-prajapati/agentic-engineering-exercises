@@ -1,59 +1,37 @@
-# Exercise 02 : OpenFeature Rollback Proof
+# Exercise 02 : Feature Flag Kill-Switch Proof
 
 ## Your Mission
 
-Your mission is to prove a risky feature is gated, observable, and reversible.
+Your mission is to prove that a risky invoice preview can be disabled without calling its new API or emitting misleading telemetry.
 
-You are given a repository with a partially built feature that needs a safe rollout path before review.
+You are given a seeded implementation where the disabled path still calls the preview service, evaluation errors fail open, and rollback leaves the new telemetry active.
+
+Implement a provider-independent feature-flag boundary, verify enabled and disabled behavior, and perform a timed rollback drill.
 
 The duration for this challenge is 30 min or less.
 
 ## Project
 
-[feature-flag-app](./feature-flag-app) contains the feature flag workflow for this exercise.
+[feature-flag-app](./feature-flag-app) contains the rollout boundary. [flag brief](./docs/flag-brief.md) defines defaults, evaluation context, telemetry, and rollback expectations.
 
 ## How To Go About It
 
-Use [OpenFeature](https://openfeature.dev/) or an equivalent feature-flag abstraction.
+Use [OpenFeature](https://openfeature.dev/) or an equivalent abstraction. Default safely when evaluation fails, keep a stable targeting key, and ensure the disabled path uses the legacy view without calling the new service.
 
-Ask your coding agent to inspect `feature-flag-app/`, gate the feature, add rollback proof, and verify both enabled and disabled states.
+Test enabled, disabled, provider-error, and rollback states. Record the flag change, observable result, elapsed rollback time, and remaining cleanup work.
 
 ## Evidence
 
-Produce the gated feature, rollback notes, and verification output for both states.
+Submit the implementation and tests, `evidence/enabled.json`, `evidence/disabled.json`, and `evidence/rollback-drill.md` using the supplied template.
 
-Raise the completed work as a PR for getting verified with our team.
+Run `npm run test:rollout`, `npm run test:submission`, and `npm run agent:check` from `feature-flag-app`.
 
+Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-## Required Implementation Changes
+## Evaluation
 
-Complete the mission and deliverables described above against the supplied starter. Keep the named workflow working and address the stated exercise problem instead of replacing it with an unrelated example.
+Reviewers will check safe defaults, stable targeting, API suppression, telemetry accuracy, both flag states, and a reproducible rollback drill.
 
-## Allowed Changes
+The exercise is incomplete if disabled users still reach the new API, evaluation errors enable the feature, rollback evidence is descriptive only, or protected inputs change.
 
-Change files inside this exercise directory only. Do not edit another exercise, generated dependency directories, or repository-wide policy files. Keep unrelated starter behavior unchanged.
-
-## Required Commands
-
-In each supplied Node project, run `npm ci` followed by `npm run agent:check`. Run every additional exercise-specific verification command described above. Java projects must also run `./mvnw test` on macOS/Linux or `mvnw.cmd test` on Windows.
-
-Use the versions declared in the repository root and follow the clean setup sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
-
-## Acceptance Criteria
-
-- All mission deliverables above are present and operate against the supplied starter.
-- Required commands pass from a clean dependency installation.
-- The change is limited to the stated exercise and preserves unrelated behavior.
-- Claims in the submission can be traced to code, tests, generated artifacts, or command output.
-
-## Evidence Contract
-
-Add `evidence/README.md` containing each required command, its result, and links to the relevant output or artifact. Put requested reports, screenshots, traces, diagrams, or generated files under `evidence/`. Keep normal evidence below 10 MB and explain any larger trace or report.
-
-## Incomplete When
-
-The submission is incomplete if the starter no longer runs, a required command or deliverable is missing, evidence cannot be reproduced, expected output is self-declared instead of derived from the supplied input, or unrelated exercise files were changed.
-
-## Evaluation Rubric
-
-Use [the repository evaluation rules](../../docs/EVALUATION_RUBRICS.md). Score this exercise as 30 points for correct behavior, 25 for coverage of the mission deliverables, 20 for reproducible verification and evidence, 15 for scope control, and 10 for clear reasoning and maintainability.
+See the [Feature Flag Kill-Switch Proof rubric](../../docs/EVALUATION_RUBRICS.md#feature-flag-kill-switch-proof).

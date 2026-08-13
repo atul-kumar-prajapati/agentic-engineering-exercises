@@ -1,0 +1,14 @@
+{
+  "name": "Specialist Review Merge Gate",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "evidence/specialists/security.md", "minCharacters": 250, "includeAll": ["SHA", "file", "reproduction", "severity"] },
+    { "path": "evidence/specialists/accessibility.md", "minCharacters": 250, "includeAll": ["keyboard", "file", "reproduction", "severity"] },
+    { "path": "evidence/specialists/performance.md", "minCharacters": 250, "includeAll": ["before", "after", "measurement", "SHA"] },
+    { "path": "evidence/specialists/testability.md", "minCharacters": 250, "includeAll": ["boundary", "test", "SHA"] },
+    { "path": "evidence/decision-log.md", "minCharacters": 400, "includeAll": ["fix", "defer", "dismiss", "owner", "residual risk", "final SHA"] },
+    { "path": "evidence/performance-before.json", "validJson": true },
+    { "path": "evidence/performance-after.json", "validJson": true }
+  ],
+  "requiredDirectories": ["evidence/specialists"]
+}

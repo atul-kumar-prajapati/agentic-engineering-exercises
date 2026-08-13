@@ -1,12 +1,13 @@
-# Previous Graph Extract
+# Historical Graph Extract
 
-Status: stale and incomplete
+Status: Stale and incomplete
+Generated: 2025-10-02
 
-| Node | Type | Claimed edge | Confidence |
-|---|---|---|---|
-| RevenueDashboard | React route | reads gross revenue | ambiguous |
-| billing_events | warehouse table | grouped by tenant ID | extracted |
-| IngestBillingEvents | scheduled job | owned by Support Analytics | inferred |
-| finance-metrics.md | document | defines gross revenue | extracted |
+| Node | Claimed relationship | Confidence |
+|---|---|---|
+| `RevenueDashboard` | reads gross revenue grouped by tenant | ambiguous |
+| `publishRevenueSnapshot` | owns the revenue formula | inferred |
+| `finance-metrics.md` | defines recognized revenue | extracted |
+| Support Analytics | owns calculation changes | inferred |
 
-This extract predates credits and the tenant-to-account bridge. It is supplied as misleading historical context, not as the graph artifact required for submission.
+This extract predates credits, billing-account consolidation, and the shared revenue summary. It is historical input, not the Graphify artifact required for submission.

@@ -1,0 +1,9 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "7c5d6b2b1b32b1de6e3503567d3ce85b79f5f39ea74479064ae2b19e639c2322",
+    "../docs/context-catalog.json": "4ab90548db488386f19d5215ddd203564673cade0cc39b22e76ff3bd24565a7d",
+    "scripts/run-context-tests.mjs": "f6bae85746f66964aaf17da9cc56313b3f3f39ea89ddc93ff6f034836ca026db",
+    "submission-contract.json": "b26eece6d314fcdecf45906403e56fd3b438e409120cb7cce75d2339bd7e9639"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "fb0fa26a4d0ee6d7cedcd84444cfd020969cdb5f60d302941027ebc9cc2188f9",
+    "../docs/duplicate-webhook-incident.md": "a5275ba40f8ef9fd0e40621325d94b8862cc58ef77e593cd5fcf7234b38d2a2a",
+    "scripts/run-webhook-tests.mjs": "50e3757d735bbdd87a1123a613e6b5302c6d2b368302727c34e37e6a70662128",
+    "submission-contract.json": "d331c0468c581cb0ab22a819e546d8869bcdf4ffdfffea63f467ca27012de404"
+  }
+}

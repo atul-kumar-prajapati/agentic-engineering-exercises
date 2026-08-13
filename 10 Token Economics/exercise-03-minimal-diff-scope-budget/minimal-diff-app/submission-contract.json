@@ -1,0 +1,9 @@
+{
+  "name": "Minimal-Diff Scope Budget",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "evidence/scope-budget.json", "validJson": true, "includeAll": ["plannedFiles", "actualFiles", "plannedLines", "actualLines", "outOfScopeFiles", "verification"] },
+    { "path": "evidence/avoided-work.md", "minCharacters": 300, "includeAll": ["checkout", "destructive", "shared", "reason"] },
+    { "path": "evidence/verification.md", "minCharacters": 250, "includeAll": ["export", "checkout", "delete", "result"] }
+  ]
+}

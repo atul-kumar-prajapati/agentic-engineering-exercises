@@ -1,7 +1,7 @@
 import type { LabContract } from "./types";
 
 export const labContract = {
-  "title": "Codebase Graph to Diagrams",
+  "title": "Graph-Backed Notification Fallback Rescue",
   "competency": "07. Docs & Diagrams",
   "skillPattern": "graph-to-diagram",
   "domain": "Notification mesh with campaign triggers, template rendering, channel routing, consent checks, and delivery audit events.",

@@ -1,0 +1,10 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "695c9bd5e3d79a6db1a45f7951b0dc65d484ed8c05a256b0b795f5bb454b5891",
+    "../docs/scope-contract.md": "287d50825ff5cd3555ec066d364e640a6438e4537d2f65c713cf1d59361ad592",
+    "scripts/run-migration-tests.mjs": "1801fc9be445025a4b99cadd71ab6a4ed59ebbae3c8063367e4dade8f5b3fa69",
+    "scripts/verify-scope-submission.mjs": "d439a2a6121e4db5160d9eab41ba9b2d0450ab05c106c63a8f0153fe80f29361",
+    "submission-contract.json": "bab9b255ae9c2b6c9ec939e700312b46dfe6a2dd4009d2cc831168b7dbe40b22"
+  }
+}

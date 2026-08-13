@@ -1,7 +1,7 @@
 import type { LabContract } from "./types";
 
 export const labContract = {
-  "title": "Agent-Ready Kanban Control Plane",
+  "title": "Agent Kanban Collision Control",
   "competency": "06. Multi-Agent Workflows",
   "skillPattern": "triage / to-issues / kanban board",
   "domain": "Support escalation workspace with customer-impact cards, reproduction links, severity, owner routing, and integration queue.",

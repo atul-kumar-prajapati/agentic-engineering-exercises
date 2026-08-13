@@ -1,7 +1,10 @@
-# Legacy Rollout Notes
+# Legacy Export Rollout Notes
 
-Status: superseded draft from 2025-11-02
+Status: Superseded draft
+Date: 2025-11-02
 
-The early rollout called both billing customers and workspaces `accounts`. It proposed enabling export for Growth and Enterprise accounts when the user was an account owner.
+The first rollout used `account` for both a billing customer and a workspace. It also used `account owner` for a billing owner and sometimes for a workspace admin.
 
-Do not treat this draft as current policy. It remains in the repository because older code and support tickets still use its vocabulary.
+The draft proposed export for Growth and Enterprise accounts when the requesting user was an account owner. Older support messages and code comments can still contain these terms.
+
+This document is retained as historical context. Its eligibility and ownership rules are not current policy.

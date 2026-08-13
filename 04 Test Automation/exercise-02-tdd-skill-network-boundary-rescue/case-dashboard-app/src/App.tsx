@@ -39,10 +39,10 @@ export default function App() {
       <header><p className="eyebrow">Support Operations</p><h1>Case dashboard</h1></header>
       <label className="search-label">Filter cases<input aria-label="Filter cases" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
 
-      {cases === null && !error && <p role="status">Loading cases...</p>}
+      {cases === null && !error && null}
       {error && <section role="alert"><p>We could not load cases. {error}</p><button onClick={() => setError("")}>Retry</button></section>}
       {cases?.length === 0 && <p>No cases are assigned yet.</p>}
-      {cases && cases.length > 0 && filteredCases.length === 0 && <p>No cases match "{query}".</p>}
+      {cases && cases.length > 0 && filteredCases.length === 0 && <p>No cases are assigned yet.</p>}
       {filteredCases.length > 0 && (
         <ul className="case-list" aria-label="Cases">
           {filteredCases.map((item) => (

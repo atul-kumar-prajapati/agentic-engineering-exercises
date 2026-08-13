@@ -1,0 +1,10 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "cab38b33ce4cce80b11c717943f1319fef9e5f1facc748a876a1be02733393a3",
+    "../fixtures/lighthouse-before.json": "a0c4270ab1f762e9756ea8a077649c576141088650b65dd165adeaa296c8baf1",
+    "../fixtures/a11y-before.json": "0d9b912f0447e701d3a9d8f0d78fcc3e617c78265c2e52753bf3e59cb2795ab2",
+    "scripts/verify-quality-evidence.mjs": "f4703b6905869cecc2abf94c0b3d8b3bdf6da13859b4c398642e56dbd0a4119f",
+    "submission-contract.json": "b0c685d22599f2ca2bef0237b33810a806462686b96e42c405b3cd76dc68bccd"
+  }
+}

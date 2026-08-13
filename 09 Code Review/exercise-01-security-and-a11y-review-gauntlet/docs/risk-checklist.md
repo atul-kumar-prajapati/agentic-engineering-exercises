@@ -1,6 +1,6 @@
 # Risk Checklist
 
-This is a seeded lab input for Security and A11y Review Gauntlet. It gives the learner concrete constraints to inspect, implement, test, and verify.
+This is a seeded lab input for Security and Accessibility Review Gauntlet. It gives the learner concrete constraints to inspect, implement, test, and verify.
 
 ## Operating Context
 

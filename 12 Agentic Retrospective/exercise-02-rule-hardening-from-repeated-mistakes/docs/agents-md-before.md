@@ -1,6 +1,6 @@
 # Agents Md Before
 
-This is a seeded lab input for Rule Hardening From Repeated Mistakes. It gives the learner concrete constraints to inspect, implement, test, and verify.
+This is a seeded lab input for Repeated Mistake to Repository Rule. It gives the learner concrete constraints to inspect, implement, test, and verify.
 
 ## Operating Context
 

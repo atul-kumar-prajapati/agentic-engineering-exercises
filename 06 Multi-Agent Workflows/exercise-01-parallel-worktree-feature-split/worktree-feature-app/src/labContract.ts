@@ -13,7 +13,7 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "Parallel Worktree Feature Split",
+  "title": "Parallel Worktree Conflict Rescue",
   "competency": "06. Multi-Agent Workflows - Parallel agents on isolated tasks",
   "domain": "Three-lane worktree plan for independent UI improvements",
   "mission": "Split three independent improvements across worktrees or subagents and integrate them without overlapping file edits.",

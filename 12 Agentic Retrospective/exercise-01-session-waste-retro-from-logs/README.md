@@ -1,59 +1,37 @@
-# Exercise 01 : Session Waste Retro From Logs
+# Exercise 01 : Trace-Measured Session Waste Reduction
 
 ## Your Mission
 
-Your mission is to find wasted agent effort in session logs and turn it into a concrete improvement.
+Your mission is to turn an agent session trace into one measurable workflow improvement, then prove it in a fresh replay.
 
-You are given a repository with agent traces that show retry loops, redundant reads, and missed verification.
+You are given repeated file reads, failed-command retry loops, and a completion claim without final verification. The seeded analyzer overcounts ordinary work and cannot identify the actual waste categories.
+
+Correct the measurements, choose the highest-value preventable waste, implement one durable improvement, and replay an equivalent task.
 
 The duration for this challenge is 30 min or less.
 
 ## Project
 
-[session-waste-app](./session-waste-app) contains the session waste workflow for this exercise.
+[session-waste-app](./session-waste-app) contains the analyzer. Protected session events and [usage summary](./docs/usage-summary.md) provide the source evidence.
 
 ## How To Go About It
 
-Use [Promptfoo](https://www.promptfoo.dev/docs/intro/) or a small local rubric to score before-and-after behavior.
+Define duplicate read, failed retry, verification, and useful work before calculating totals. Keep raw events unchanged and make the analyzer derive its output.
 
-Ask your coding agent to inspect `session-waste-app/`, analyze the traces, implement one durable improvement, and verify it.
+Choose one improvement such as a preflight check, context index, or verification gate. Run a fresh comparable task and report whether waste fell without reducing correctness.
 
 ## Evidence
 
-Produce the waste report, improvement change, before/after check, and verification output.
+Submit the analyzer and tests, `evidence/baseline.json`, `evidence/after.json`, `evidence/retrospective.md`, and `evidence/replay.md` with task conditions and verification results.
 
-Raise the completed work as a PR for getting verified with our team.
+Run `npm run test:analysis`, `npm run test:submission`, and `npm run agent:check` from `session-waste-app`.
 
+Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-## Required Implementation Changes
+## Evaluation
 
-Complete the mission and deliverables described above against the supplied starter. Keep the named workflow working and address the stated exercise problem instead of replacing it with an unrelated example.
+Reviewers will check derived metrics, category definitions, trace-to-action reasoning, comparable replay conditions, reduced preventable calls, and unchanged correctness.
 
-## Allowed Changes
+The exercise is incomplete if raw logs are edited, ordinary work is labeled waste, the improvement is only advice, or the after result lacks a fresh replay.
 
-Change files inside this exercise directory only. Do not edit another exercise, generated dependency directories, or repository-wide policy files. Keep unrelated starter behavior unchanged.
-
-## Required Commands
-
-In each supplied Node project, run `npm ci` followed by `npm run agent:check`. Run every additional exercise-specific verification command described above. Java projects must also run `./mvnw test` on macOS/Linux or `mvnw.cmd test` on Windows.
-
-Use the versions declared in the repository root and follow the clean setup sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
-
-## Acceptance Criteria
-
-- All mission deliverables above are present and operate against the supplied starter.
-- Required commands pass from a clean dependency installation.
-- The change is limited to the stated exercise and preserves unrelated behavior.
-- Claims in the submission can be traced to code, tests, generated artifacts, or command output.
-
-## Evidence Contract
-
-Add `evidence/README.md` containing each required command, its result, and links to the relevant output or artifact. Put requested reports, screenshots, traces, diagrams, or generated files under `evidence/`. Keep normal evidence below 10 MB and explain any larger trace or report.
-
-## Incomplete When
-
-The submission is incomplete if the starter no longer runs, a required command or deliverable is missing, evidence cannot be reproduced, expected output is self-declared instead of derived from the supplied input, or unrelated exercise files were changed.
-
-## Evaluation Rubric
-
-Use [the repository evaluation rules](../../docs/EVALUATION_RUBRICS.md). Score this exercise as 30 points for correct behavior, 25 for coverage of the mission deliverables, 20 for reproducible verification and evidence, 15 for scope control, and 10 for clear reasoning and maintainability.
+See the [Trace-Measured Session Waste Reduction rubric](../../docs/EVALUATION_RUBRICS.md#trace-measured-session-waste-reduction).

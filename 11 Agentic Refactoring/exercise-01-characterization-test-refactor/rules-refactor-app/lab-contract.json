@@ -1,5 +1,5 @@
 {
-  "title": "Vitest Characterization Test Refactor",
+  "title": "Characterization-First Rules Refactor",
   "competency": "11. Agentic Refactoring - Test-driven tech-debt cleanup",
   "domain": "Characterization-first refactor of legacy rule evaluation",
   "mission": "Capture existing behavior around a messy rules module before refactoring it into clearer pieces.",

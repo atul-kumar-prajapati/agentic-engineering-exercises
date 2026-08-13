@@ -1,56 +1,37 @@
-# Exercise 02: Fresh-Agent Diff Triage
+# Exercise 02 : Independent Diff Triage
 
-## Objective
+## Your Mission
 
-Use an independent review pass on an exact implementation range, fix supported blockers, and reject seeded reviewer noise with evidence.
+Your mission is to use a fresh reviewer to find merge blockers in an exact caching change without inheriting the implementer's assumptions.
 
-## Starting Point
+You are given mutable sorting, stale cache updates, filter-triggered clearing, unsafe JSON parsing, and evidence side effects. A plausible reviewer note is also seeded but may be unsupported.
 
-`fixtures/review-target.bundle` contains the exact base and head SHAs in `fixtures/manifest.json`; `pr/review-target.diff` is the equivalent applicable patch. The change adds workflow caching and contains multiple real defects. `docs/reviewer-noise.md` supplies one plausible but unsupported claim.
+Run an independent first-pass review, classify every finding, reject noise with evidence, and fix only supported blockers.
 
-## Required Implementation Changes
+The duration for this challenge is 30 min or less.
 
-- Review `review-base..review-head` with a fresh agent/session.
-- Classify every finding as blocker, non-blocker, or unsupported.
-- Check mutable sorting, cache updates after save, filter-triggered clearing, JSON parsing, and evidence side effects.
-- Confirm or dismiss the seeded claim from code evidence.
-- Fix merge blockers and add focused regression tests.
+## Project
 
-## Allowed Changes
+[fresh-review-app](./fresh-review-app) contains the application. `fixtures/review-target.bundle` and its manifest define the exact protected range; [reviewer noise](./docs/reviewer-noise.md) must be independently checked.
 
-Change blocker fixes, focused tests, review/evidence files, and no unrelated application areas. Do not edit the bundle, manifest, or seeded claim.
+## How To Go About It
 
-## Required Commands
+Start a fresh agent or session with the diff, acceptance context, and review rubric only. Do not provide implementation chat or expected defect names.
 
-Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
+Classify findings as blocker, non-blocker, or unsupported. Prove scenarios from the diff and mounted code, then add focused regression tests for supported blockers without unrelated refactoring.
 
-From the exercise directory and app:
+## Evidence
 
-```text
-node scripts/verify-review-fixture.mjs
-cd fresh-review-app
-npm ci
-npm run agent:check
-```
+Submit fixes and tests, `evidence/fresh-review.md`, the independent reviewer conditions, fixture verification output, and focused test output.
 
-Run focused tests added for each blocker.
+Run `node scripts/verify-review-fixture.mjs`, `npm run test:submission`, and `npm run agent:check` from the documented directories.
 
-## Acceptance Criteria
+Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-- The exact manifest comparison is reproducible.
-- Real state, mutation, and error-handling defects are supported by scenarios.
-- The unsupported claim is explicitly confirmed or dismissed.
-- Blockers are fixed without unrelated refactors.
-- Evidence records the independent review context and verification.
+## Evaluation
 
-## Evidence Contract
+Reviewers will check the exact range, reviewer independence, state and mutation scenarios, explicit handling of the seeded claim, and minimal blocker fixes.
 
-Commit `evidence/fresh-review.md` with base/head SHA, reviewer/session, severity, file/line, scenario, decision, fix, and command result. Include focused test output.
+The exercise is incomplete if implementation context is leaked, a different diff is reviewed, noise is repeated without checking, or supported blockers remain untested.
 
-## Incomplete When
-
-The reviewer shares implementation context, uses a different diff, repeats seeded noise without checking, fixes unsupported findings, or leaves a supported blocker untested.
-
-## Evaluation Rubric
-
-See [Fresh-Agent Diff Triage](../../docs/EVALUATION_RUBRICS.md#fresh-agent-diff-triage).
+See the [Independent Diff Triage rubric](../../docs/EVALUATION_RUBRICS.md#independent-diff-triage).

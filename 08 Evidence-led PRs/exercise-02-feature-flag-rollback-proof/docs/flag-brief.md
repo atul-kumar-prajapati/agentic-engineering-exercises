@@ -1,6 +1,6 @@
 # Flag Brief
 
-This is a seeded lab input for Feature Flag Rollback Proof. It gives the learner concrete constraints to inspect, implement, test, and verify.
+This is a seeded lab input for Feature Flag Kill-Switch Proof. It gives the learner concrete constraints to inspect, implement, test, and verify.
 
 ## Operating Context
 

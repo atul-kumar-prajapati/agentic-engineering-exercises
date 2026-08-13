@@ -1,7 +1,7 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
-    "../README.md": "9f7d103a07fcb94397a9f9f9e230846fcaf28ee41c5f14e94db05b1a34696264",
+    "../README.md": "92aa439bcafaa3d5e226de53ee226316f683637f879f268cc8487d6d52b2d887",
     "../docs/evidence-template.md": "2322b04849ca39e03bcab2a2d34e4572dd9e37a510da71c7bd93fe971537c643",
     "incidents/INC-2047.md": "b6803430d9bb749b9693c34de35e3be4693ffba243e40dc6d1a645d307ac2784",
     "docs/current-sla-policy.md": "c805a1d7bfdba095c8aed79dde413a7b6ddecc67472d3c1ac77f6eddb5010af6",

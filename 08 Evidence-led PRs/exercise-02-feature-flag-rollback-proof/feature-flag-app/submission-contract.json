@@ -1,0 +1,9 @@
+{
+  "name": "Feature Flag Kill-Switch Proof",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "evidence/enabled.json", "validJson": true, "includeAll": ["targetingKey", "apiCalls", "telemetry"] },
+    { "path": "evidence/disabled.json", "validJson": true, "includeAll": ["targetingKey", "apiCalls", "telemetry"] },
+    { "path": "evidence/rollback-drill.md", "minCharacters": 350, "includeAll": ["start time", "end time", "elapsed", "flag", "API", "telemetry", "rollback"] }
+  ]
+}

@@ -1,0 +1,12 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+const root = path.resolve(import.meta.dirname, "..", "..");
+const budgetPath = path.join(root, "evidence", "scope-budget.json");
+assert.ok(fs.existsSync(budgetPath), "missing evidence/scope-budget.json");
+const budget = JSON.parse(fs.readFileSync(budgetPath, "utf8"));
+assert.ok(budget.plannedFiles <= 3 && budget.actualFiles <= 3, "file budget exceeds three files");
+assert.ok(budget.plannedLines <= 60 && budget.actualLines <= 60, "changed-line budget exceeds 60 lines");
+assert.deepEqual(budget.outOfScopeFiles ?? [], [], "out-of-scope files were changed");
+assert.ok(Array.isArray(budget.verification) && budget.verification.length >= 2, "scope evidence needs focused and final verification");
+console.log("Declared and actual migration scope stay within budget.");

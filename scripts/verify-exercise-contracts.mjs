@@ -34,6 +34,27 @@ const challengeReadmes = new Set([
   path.normalize("05 Skill Packaging/exercise-01-progressive-disclosure-release-skill/README.md"),
   path.normalize("05 Skill Packaging/exercise-02-skill-trigger-boundary-evals/README.md"),
   path.normalize("05 Skill Packaging/exercise-03-skill-benchmark-package-gate/README.md"),
+  path.normalize("06 Multi-Agent Workflows/exercise-01-parallel-worktree-feature-split/README.md"),
+  path.normalize("06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/README.md"),
+  path.normalize("06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/README.md"),
+  path.normalize("07 Docs & Diagrams/exercise-04-workflow-diagram-reconstruction/README.md"),
+  path.normalize("07 Docs & Diagrams/exercise-05-codebase-graph-to-diagrams/README.md"),
+  path.normalize("07 Docs & Diagrams/exercise-06-feature-visualization/README.md"),
+  path.normalize("08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/README.md"),
+  path.normalize("08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/README.md"),
+  path.normalize("08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/README.md"),
+  path.normalize("09 Code Review/exercise-01-security-and-a11y-review-gauntlet/README.md"),
+  path.normalize("09 Code Review/exercise-02-diff-triage-with-fresh-agent/README.md"),
+  path.normalize("09 Code Review/exercise-03-review-regression-lab/README.md"),
+  path.normalize("10 Token Economics/exercise-01-token-budget-refactor/README.md"),
+  path.normalize("10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/README.md"),
+  path.normalize("10 Token Economics/exercise-03-minimal-diff-scope-budget/README.md"),
+  path.normalize("11 Agentic Refactoring/exercise-01-characterization-test-refactor/README.md"),
+  path.normalize("11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/README.md"),
+  path.normalize("11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/README.md"),
+  path.normalize("12 Agentic Retrospective/exercise-01-session-waste-retro-from-logs/README.md"),
+  path.normalize("12 Agentic Retrospective/exercise-02-rule-hardening-from-repeated-mistakes/README.md"),
+  path.normalize("12 Agentic Retrospective/exercise-03-trace-backed-workflow-optimizer/README.md"),
 ]);
 for (const relative of readmes) {
   const source = readFileSync(path.join(root, relative), "utf8");
@@ -90,7 +111,28 @@ const requiredArtifacts = [
   "05 Skill Packaging/exercise-03-skill-benchmark-package-gate/skill-benchmark-app/skills/incident-summary/SKILL.md",
   "05 Skill Packaging/exercise-03-skill-benchmark-package-gate/skill-benchmark-app/challenge-integrity.json",
   "09 Code Review/exercise-01-security-and-a11y-review-gauntlet/fixtures/review-target.bundle",
-  "09 Code Review/exercise-02-diff-triage-with-fresh-agent/fixtures/review-target.bundle"
+  "09 Code Review/exercise-02-diff-triage-with-fresh-agent/fixtures/review-target.bundle",
+  "06 Multi-Agent Workflows/exercise-01-parallel-worktree-feature-split/worktree-feature-app/submission-contract.json",
+  "06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/submission-contract.json",
+  "06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/submission-contract.json",
+  "07 Docs & Diagrams/exercise-04-workflow-diagram-reconstruction/docs/legacy-workflow-description.md",
+  "07 Docs & Diagrams/exercise-05-codebase-graph-to-diagrams/notification-mesh-app/scripts/run-routing-tests.mjs",
+  "07 Docs & Diagrams/exercise-06-feature-visualization/payment-workflow-app/scripts/run-webhook-tests.mjs",
+  "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/fixtures/check-results.json",
+  "08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/scripts/run-rollout-tests.mjs",
+  "08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/fixtures/lighthouse-before.json",
+  "09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/submission-contract.json",
+  "09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/submission-contract.json",
+  "09 Code Review/exercise-03-review-regression-lab/regression-review-app/submission-contract.json",
+  "10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/scripts/run-context-tests.mjs",
+  "10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/evals/routing-cases.json",
+  "10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/scripts/run-migration-tests.mjs",
+  "11 Agentic Refactoring/exercise-01-characterization-test-refactor/docs/renewal-golden-cases.json",
+  "11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/scripts/run-checkout-tests.mjs",
+  "11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/test/java/dev/agentic/exercise/workflow/WorkflowContractCharacterizationTest.java",
+  "12 Agentic Retrospective/exercise-01-session-waste-retro-from-logs/docs/session-events.json",
+  "12 Agentic Retrospective/exercise-02-rule-hardening-from-repeated-mistakes/tasks/proving-change.md",
+  "12 Agentic Retrospective/exercise-03-trace-backed-workflow-optimizer/workflow-optimizer-app/evals/replay-cases.json",
 ];
 for (const relative of requiredArtifacts) assert.ok(existsSync(path.join(root, relative)), `Missing starter artifact: ${relative}`);
 
@@ -99,6 +141,18 @@ assert.equal(packageFiles.length, 35, `Expected 35 package.json files, found ${p
 for (const relative of packageFiles) {
   const lockfile = path.join(path.dirname(relative), "package-lock.json");
   assert.ok(files.includes(lockfile), `${relative} is missing its committed package-lock.json`);
+}
+const upgradedPackages = packageFiles.filter((relative) => /^(06|07|08|09|10|11|12) /.test(relative));
+assert.equal(upgradedPackages.length, 21, `Expected 21 upgraded competency packages, found ${upgradedPackages.length}`);
+for (const relative of upgradedPackages) {
+  const project = path.dirname(relative);
+  for (const artifact of ["submission-contract.json", "challenge-integrity.json"]) {
+    assert.ok(files.includes(path.join(project, artifact)), `${relative} is missing ${artifact}`);
+  }
+  const manifest = JSON.parse(readFileSync(path.join(root, relative), "utf8"));
+  assert.ok(manifest.scripts?.["test:submission"], `${relative} is missing test:submission`);
+  assert.ok(manifest.scripts?.["test:integrity"], `${relative} is missing test:integrity`);
+  assert.ok(manifest.scripts?.["agent:check"]?.startsWith("npm run test:integrity"), `${relative} must run integrity first`);
 }
 assert.equal(readFileSync(path.join(root, ".nvmrc"), "utf8").trim(), "22.12.0", "Unexpected Node version");
 assert.equal(readFileSync(path.join(root, ".java-version"), "utf8").trim(), "21", "Unexpected Java version");

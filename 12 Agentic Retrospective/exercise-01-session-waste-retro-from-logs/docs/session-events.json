@@ -1,0 +1,10 @@
+[
+  { "sequence": 1, "type": "read", "target": "src/policy.ts", "result": "ok" },
+  { "sequence": 2, "type": "read", "target": "src/policy.ts", "result": "ok" },
+  { "sequence": 3, "type": "read", "target": "docs/contract.md", "result": "ok" },
+  { "sequence": 4, "type": "read", "target": "docs/contract.md", "result": "ok" },
+  { "sequence": 5, "type": "read", "target": "docs/contract.md", "result": "ok" },
+  { "sequence": 6, "type": "command", "target": "npm test -- policy", "result": "failed" },
+  { "sequence": 7, "type": "command", "target": "npm test -- policy", "result": "failed" },
+  { "sequence": 8, "type": "command", "target": "npm test -- policy", "result": "failed" }
+]

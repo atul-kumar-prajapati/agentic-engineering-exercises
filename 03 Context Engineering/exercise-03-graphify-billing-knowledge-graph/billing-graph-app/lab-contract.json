@@ -3,12 +3,12 @@
   "competency": "03. Context Engineering",
   "skillPattern": "graphify",
   "domain": "Cross-cutting recognized-revenue calculation",
-  "mission": "Use a queryable knowledge graph to find the safe edit path across calculation, mapping, consumers, docs, and ownership.",
-  "outcome": "The graph-first agent fixes the metric with fewer wrong files and verified edges.",
-  "entities": ["billing event", "recognized revenue", "tenant", "billing account", "owner team"],
-  "seededDefects": ["gross charges are reported as revenue", "results are grouped by tenant", "refunds and missing mappings are mishandled"],
-  "verificationGates": ["five behavior checks", "real graph artifacts", "scoped query log", "fair search-versus-graph comparison"],
-  "agentWorkflow": ["capture normal-search attempt", "build and query graph", "source-verify uncertain edges", "capture graph-first attempt"],
-  "workingDeliverables": ["billing fix", "graph artifacts", "query evidence", "before-and-after patches"],
-  "masterySignals": ["queries narrow file access", "confidence is respected", "ownership is correct", "behavior matches the metric contract"]
+  "mission": "Use a queryable knowledge graph to rescue a billing incident spanning calculation, mapping, consumers, contracts, and ownership.",
+  "outcome": "A graph-first agent finds the shared safe edit path, rejects stale context, and fixes both consumers without changing gross volume.",
+  "entities": ["billing event", "recognized revenue", "gross volume", "tenant", "billing account", "dashboard", "scheduled snapshot", "owner team"],
+  "seededDefects": ["credits are counted as revenue", "refunds increase revenue", "results are grouped by tenant", "historical sources point to the wrong formula and owner"],
+  "verificationGates": ["eight protected behavior checks", "real NetworkX graph artifacts", "six answered graph questions", "source-verified uncertain edges", "fair search-versus-graph comparison"],
+  "agentWorkflow": ["capture a normal-search first attempt", "build the complete exercise graph", "query before reading source", "source-verify uncertain edges", "capture a graph-first attempt", "compare results"],
+  "workingDeliverables": ["recognized-revenue fix", "Graphify JSON, HTML, and report", "query and audit evidence", "before-and-after patches and reports"],
+  "masterySignals": ["queries reveal both consumers and shared calculation", "edge confidence is respected", "current and stale sources are separated", "ownership is correct", "gross volume remains unchanged"]
 }

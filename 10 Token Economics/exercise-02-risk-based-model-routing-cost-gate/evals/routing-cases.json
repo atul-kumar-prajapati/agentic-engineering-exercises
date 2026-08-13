@@ -1,0 +1,8 @@
+[
+  { "id": "docs-typo", "risk": "low", "ambiguity": "low", "scope": "one-file", "expectedRoute": "fast" },
+  { "id": "bounded-test-fix", "risk": "medium", "ambiguity": "low", "scope": "three-files", "expectedRoute": "balanced" },
+  { "id": "authorization-boundary", "risk": "high", "ambiguity": "medium", "scope": "cross-boundary", "expectedRoute": "reasoning" },
+  { "id": "unknown-billing-policy", "risk": "high", "ambiguity": "high", "scope": "unknown", "expectedRoute": "clarify" },
+  { "id": "format-generated-fixture", "risk": "low", "ambiguity": "low", "scope": "mechanical", "expectedRoute": "fast" },
+  { "id": "public-api-migration", "risk": "high", "ambiguity": "low", "scope": "cross-boundary", "expectedRoute": "reasoning" }
+]

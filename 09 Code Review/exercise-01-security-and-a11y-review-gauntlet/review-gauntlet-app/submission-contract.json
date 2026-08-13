@@ -1,0 +1,9 @@
+{
+  "name": "Security and Accessibility Review Gauntlet",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "evidence/review.md", "minCharacters": 900, "includeAll": ["base SHA", "head SHA", "true positive", "false positive", "keyboard", "server", "severity", "file", "line", "test"] },
+    { "path": "evidence/semgrep.txt", "minCharacters": 150 },
+    { "path": "evidence/fixture-verification.txt", "minCharacters": 80 }
+  ]
+}

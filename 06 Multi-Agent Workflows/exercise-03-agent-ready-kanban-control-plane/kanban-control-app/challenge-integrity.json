@@ -1,0 +1,10 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "430d1adde55af3a06ae2d6cf747cd2a6874c479ceae9a6c366cf368d7cc7e01e",
+    "../docs/card-schema.md": "cb955e4c9431963c4cb8c3a33073d32420c6952c15c8cee7d9397c98480569b5",
+    "../docs/incoming-issues.md": "c8649776a156e6dfb0d79e7cf4da8c179c608b70421c75e29000184dd8ab1185",
+    "scripts/verify-board.mjs": "bb363bf661a9651cb05444dd9b3e9c12dbd4db2b4c066235d0bcc7330b0f196c",
+    "submission-contract.json": "55c283cb78b795e82121eabb7fc6dd80c118496687436d3e37eef9cc2f833331"
+  }
+}

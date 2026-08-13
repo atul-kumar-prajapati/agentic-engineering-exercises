@@ -1,0 +1,5 @@
+[
+  { "name": "unit-tests", "command": "npm test", "exitCode": 0, "result": "passed", "outputPath": "artifacts/unit-tests.txt" },
+  { "name": "checkout-smoke", "command": "npm run test:smoke", "exitCode": 1, "result": "failed", "outputPath": "artifacts/checkout-smoke.txt" },
+  { "name": "ui-screenshot", "command": "npm run screenshot", "exitCode": 0, "result": "passed", "outputPath": "artifacts/checkout.png" }
+]

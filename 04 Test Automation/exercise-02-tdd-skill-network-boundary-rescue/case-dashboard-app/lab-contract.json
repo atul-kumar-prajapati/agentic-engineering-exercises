@@ -3,12 +3,12 @@
   "competency": "04. Test Automation",
   "skillPattern": "tdd",
   "domain": "Network-backed support case states",
-  "mission": "Use red-green-refactor vertical slices to repair retry and build trustworthy component coverage.",
-  "outcome": "Six independent user-visible states are protected through the real request seam.",
-  "entities": ["loading state", "case list", "empty state", "MSW handler", "retry request"],
-  "seededDefects": ["retry clears the error without requesting", "unhandled requests only warn", "handler overrides leak"],
-  "verificationGates": ["green starter smoke", "protected retry acceptance", "six-state component suite", "TDD evidence verifier"],
-  "agentWorkflow": ["write one failing behavior test", "make the smallest fix", "refactor while green", "repeat and record every cycle"],
-  "workingDeliverables": ["product fix", "focused tests", "strict MSW setup", "red-green evidence"],
-  "masterySignals": ["tests lead code", "public seams are used", "network state is isolated", "retry proves a second request"]
+  "mission": "Use a popular TDD skill to repair three user-visible defects through ordered red and green vertical slices.",
+  "outcome": "Six independent states and a strict GET /api/cases boundary are protected by behaviour-focused component tests.",
+  "entities": ["loading announcement", "case list", "server-empty state", "filtered-empty state", "request error", "retry request", "MSW handler"],
+  "seededDefects": ["loading has no user-visible feedback", "filtered-empty is reported as server-empty", "retry clears the error without requesting", "unhandled requests only warn", "runtime handlers leak"],
+  "verificationGates": ["green weak smoke", "failing protected acceptance", "six-state participant suite", "three shuffled-order runs", "TDD evidence verifier"],
+  "agentWorkflow": ["capture a without-skill first attempt", "install and record the TDD skill", "confirm the public seam", "complete three red-green vertical slices", "add independent boundary checks", "run shuffled orders and compare attempts"],
+  "workingDeliverables": ["repaired dashboard", "strict MSW setup", "independent component tests", "before-and-after patches", "skill provenance", "ordered TDD and stability evidence"],
+  "masterySignals": ["red precedes each production change", "one behaviour is completed per cycle", "tests use public UI and network seams", "unexpected requests fail", "handler overrides reset", "retry proves exactly one new request"]
 }

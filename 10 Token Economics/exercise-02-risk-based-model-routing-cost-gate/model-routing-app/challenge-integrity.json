@@ -1,0 +1,10 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "cb98c987e4a057b8006c98c1a1df7f4be06d8fb278e28d2bec65a19a8d520f62",
+    "../evals/routing-cases.json": "a41524c16c77c1e26fdba3b2711286a6cc9076422de1bf7b4bcb5e00ba33c625",
+    "../evals/pricing.json": "4f29326178fa8b979842959f089a37b8a32af3d35486237ffba8d48308b22d0a",
+    "scripts/run-routing-tests.mjs": "897a7efb9f246a616eed5e52aabc73006ca5dc3d4e2d40cb232233f74dee2940",
+    "submission-contract.json": "e850bac5a899cd7482415ff8c9f0a11752df8feb2355f7f93652d77fb9dce8dd"
+  }
+}

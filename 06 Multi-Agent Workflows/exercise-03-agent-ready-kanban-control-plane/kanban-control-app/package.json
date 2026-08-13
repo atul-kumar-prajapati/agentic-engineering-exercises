@@ -10,9 +10,11 @@
     "typecheck": "tsc -b --pretty false",
     "test": "node ./scripts/agent-check.mjs",
     "board:verify": "node ./scripts/verify-board.mjs",
+    "test:submission": "node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json",
     "lint": "node ./scripts/lint-check.mjs",
     "format": "node ./scripts/format-check.mjs",
-    "agent:check": "npm run lint && npm run test && npm run format && npm run typecheck && npm run build"
+    "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
+    "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json"
   },
   "engines": {
     "node": ">=22.12.0 <25"

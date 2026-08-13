@@ -13,7 +13,7 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "Performance and A11y Evidence Gate",
+  "title": "Performance and Accessibility Release Gate",
   "competency": "08. Evidence-led PRs - PR gate evidence and handoff",
   "domain": "Performance and accessibility gate for a generated UI change",
   "mission": "Attach performance and accessibility evidence to a UI change so reviewers can judge risk quickly.",

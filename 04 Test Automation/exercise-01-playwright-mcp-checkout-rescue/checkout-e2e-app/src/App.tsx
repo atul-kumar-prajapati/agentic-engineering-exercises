@@ -1,4 +1,4 @@
-import { type FormEvent, useEffect, useMemo, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import "./styles.css";
 
 const subtotal = 99;
@@ -9,6 +9,7 @@ export default function App() {
   const [cardNumber, setCardNumber] = useState("4242424242424242");
   const [paymentState, setPaymentState] = useState<"idle" | "submitting" | "approved" | "declined">("idle");
   const [authorizationId, setAuthorizationId] = useState("");
+  const authorizationInFlight = useRef(false);
   const generatedClass = useMemo(() => `checkout-primary-${Math.floor(Math.random() * 3)}`, []);
 
   useEffect(() => {
@@ -25,15 +26,21 @@ export default function App() {
 
   async function authorizePayment(event: FormEvent) {
     event.preventDefault();
+    if (authorizationInFlight.current) return;
+    authorizationInFlight.current = true;
     setPaymentState("submitting");
-    const response = await fetch("/api/payments/authorize", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ cardholder, cardNumber, total }),
-    });
-    const result = (await response.json()) as { status: "approved" | "declined"; authorizationId: string | null };
-    setPaymentState(result.status);
-    setAuthorizationId(result.authorizationId ?? "");
+    try {
+      const response = await fetch("/api/payments/authorize", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ cardholder, cardNumber, total }),
+      });
+      const result = (await response.json()) as { status: "approved" | "declined"; authorizationId: string | null };
+      setPaymentState(result.status);
+      setAuthorizationId(result.authorizationId ?? "");
+    } finally {
+      authorizationInFlight.current = false;
+    }
   }
 
   return (

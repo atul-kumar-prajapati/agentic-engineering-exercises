@@ -1,6 +1,6 @@
 # Session Log
 
-This is a seeded lab input for Session Waste Retro From Logs. It gives the learner concrete constraints to inspect, implement, test, and verify.
+This is a seeded lab input for Trace-Measured Session Waste Reduction. It gives the learner concrete constraints to inspect, implement, test, and verify.
 
 ## Operating Context
 

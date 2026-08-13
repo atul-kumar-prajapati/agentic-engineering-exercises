@@ -1,6 +1,6 @@
 # Quality Gate Brief
 
-This is a seeded lab input for Performance and A11y Evidence Gate. It gives the learner concrete constraints to inspect, implement, test, and verify.
+This is a seeded lab input for Performance and Accessibility Release Gate. It gives the learner concrete constraints to inspect, implement, test, and verify.
 
 ## Operating Context
 

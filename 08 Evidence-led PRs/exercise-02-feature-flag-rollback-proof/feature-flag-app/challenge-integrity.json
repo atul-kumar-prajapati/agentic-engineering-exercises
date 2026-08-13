@@ -1,0 +1,9 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "18c3c0fa5105fee459e1c73757069cc2e66d71915c556d871d46db832198e476",
+    "../docs/flag-brief.md": "674cfe027db68927b91bcbbce7c00fbee54b595495ca75363e690301f5656b15",
+    "scripts/run-rollout-tests.mjs": "1c76f5fb739f5657a03302e512c492ebbc59bb7cb852c726b3ffec67695a3912",
+    "submission-contract.json": "2cbd1c5c640a0e7017c6146b8c5aa85157e65c377e1f6d9c2f196904a1cc11cf"
+  }
+}

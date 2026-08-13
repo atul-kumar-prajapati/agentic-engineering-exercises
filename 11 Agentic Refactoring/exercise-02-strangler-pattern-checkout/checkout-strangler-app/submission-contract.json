@@ -1,0 +1,10 @@
+{
+  "name": "Strangler Checkout Route",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "checkout-strangler-app/src/checkout/cardCheckout.mjs", "minCharacters": 250 },
+    { "path": "evidence/route-matrix.md", "minCharacters": 350, "includeAll": ["card", "gift-card", "invoice", "legacy", "new"] },
+    { "path": "evidence/contract-comparison.md", "minCharacters": 350, "includeAll": ["orderId", "status", "totalCents", "errorCode"] },
+    { "path": "evidence/rollback.md", "minCharacters": 250, "includeAll": ["route", "flag", "authorization"] }
+  ]
+}

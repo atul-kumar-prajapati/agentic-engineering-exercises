@@ -1,0 +1,10 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "acd53c47b8529a11a706768cb28d761ae432dc36f533796783928b0391cddc25",
+    "../fixtures/manifest.json": "3cdfe4d8cb8d51fe9fc5bbe00f0f3bf95488c33b25bd5779108fffa9eeb6165b",
+    "../pr/review-target.diff": "905eb9f72bd6b6df7905156557a71345812d854e2fb1ea42485c73b6b36edc16",
+    "../docs/reviewer-noise.md": "e1e6d6c132dfbf0afe29fd002af8ae9483d06ac72b12c0c03d20db62a68dff97",
+    "submission-contract.json": "dfd07a6d34ac15b5261e2a4df0148240bc8f686f383f34b8b33c2d3ae6f9b16d"
+  }
+}

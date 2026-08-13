@@ -1,0 +1,9 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "0d3840bafd59538ce44f28ddb8f70d6fb7f3980923d5fdff49d97c994990dbdf",
+    "../fixtures/check-results.json": "84dcea131f920aa85989890016c0f91324cd335b85b7de03dec032c391cf59d1",
+    "scripts/verify-evidence-pack.mjs": "b1abf0cb89a5c9399fcc739d0c10759e9f975dde2fc2d03b1fab300be1edfb79",
+    "submission-contract.json": "5eb917bb227dac845d4e33d28a79c579a2ff089f9dd38efe179aac29f3ebaad1"
+  }
+}

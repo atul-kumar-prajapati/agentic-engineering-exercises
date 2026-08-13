@@ -1,6 +1,6 @@
 # Rules Contract
 
-This is a seeded lab input for OpenRewrite Contract-Safe Rules Slice. It gives the learner concrete constraints to inspect, implement, test, and verify.
+This is a seeded lab input for Contract-Safe Full-Stack Rules Extraction. It gives the learner concrete constraints to inspect, implement, test, and verify.
 
 ## Operating Context
 

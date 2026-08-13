@@ -1,0 +1,9 @@
+{
+  "name": "Failure-Preserving PR Evidence Pack",
+  "root": "..",
+  "requiredFiles": [
+    { "path": ".github/workflows/pr-evidence.yml", "minCharacters": 350, "includeAll": ["permissions:", "if: always()", "upload-artifact", "github.sha"] },
+    { "path": "evidence/pr-evidence.json", "validJson": true, "includeAll": ["commitSha", "exitCode", "digest", "rollback"] },
+    { "path": "evidence/README.md", "minCharacters": 250, "includeAll": ["checkout-smoke", "failed", "reproduce"] }
+  ]
+}

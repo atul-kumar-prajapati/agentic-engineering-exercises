@@ -1,6 +1,6 @@
 # Legacy Behavior Notes
 
-This is a seeded lab input for Vitest Characterization Test Refactor. It gives the learner concrete constraints to inspect, implement, test, and verify.
+This is a seeded lab input for Characterization-First Rules Refactor. It gives the learner concrete constraints to inspect, implement, test, and verify.
 
 ## Operating Context
 

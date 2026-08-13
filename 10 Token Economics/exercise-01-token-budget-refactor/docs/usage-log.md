@@ -1,6 +1,6 @@
 # Usage Log
 
-This is a seeded lab input for Token Budget Refactor. It gives the learner concrete constraints to inspect, implement, test, and verify.
+This is a seeded lab input for Progressive Context Budget Refactor. It gives the learner concrete constraints to inspect, implement, test, and verify.
 
 ## Operating Context
 

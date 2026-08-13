@@ -1,0 +1,10 @@
+{
+  "name": "Trace-Measured Session Waste Reduction",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "evidence/baseline.json", "validJson": true, "includeAll": ["duplicateReads", "failedRetries", "finalVerificationRuns", "preventableCalls"] },
+    { "path": "evidence/after.json", "validJson": true, "includeAll": ["duplicateReads", "failedRetries", "finalVerificationRuns", "preventableCalls"] },
+    { "path": "evidence/retrospective.md", "minCharacters": 500, "includeAll": ["definition", "root cause", "improvement", "correctness"] },
+    { "path": "evidence/replay.md", "minCharacters": 400, "includeAll": ["same task", "conditions", "before", "after", "verification"] }
+  ]
+}

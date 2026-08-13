@@ -1,0 +1,10 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "4a45dc77fdec63fe7e7ac2ac1cf873b2ab10ae14607e2920cfebfb61d8f2f2ec",
+    "../docs/adoption-thresholds.md": "ab3b303cedeb32abcb98f733b1ad274054e3879f29695eae36503af4120dd059",
+    "eval/cases.json": "bf2d80f9d7ecfb3278f227420b7d67c31df86250d16ea75193822dbe33649787",
+    "eval/verify-catalog.mjs": "e18cd90008424266e0151ed576e1db0d1b184a41a38132a8d9398fdddbde05b1",
+    "submission-contract.json": "abad09e1ca62adfaa6e690d0dc6d289446ef3260840e85c6eb66857eedcaab01"
+  }
+}

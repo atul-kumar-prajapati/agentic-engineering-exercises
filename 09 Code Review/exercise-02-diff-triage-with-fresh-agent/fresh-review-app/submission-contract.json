@@ -1,0 +1,9 @@
+{
+  "name": "Independent Diff Triage",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "evidence/fresh-review.md", "minCharacters": 900, "includeAll": ["base SHA", "head SHA", "fresh", "blocker", "non-blocker", "unsupported", "scenario", "file", "line", "command"] },
+    { "path": "evidence/fixture-verification.txt", "minCharacters": 80 },
+    { "path": "evidence/focused-tests.txt", "minCharacters": 120, "includeAll": ["exit code"] }
+  ]
+}

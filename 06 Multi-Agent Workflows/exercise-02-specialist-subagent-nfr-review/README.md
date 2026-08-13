@@ -1,56 +1,37 @@
-# Exercise 02: Specialist Subagent NFR Review
+# Exercise 02 : Specialist Review Merge Gate
 
-## Objective
+## Your Mission
 
-Run security, accessibility, performance, and testability reviews against the mounted access-review workflow, integrate selected fixes, and recheck the final code.
+Your mission is to use specialist agents to review one risky access-approval change and make a single accountable merge decision.
 
-## Starting Point
+You are given unsafe HTML rendering, mouse-only queue rows, expensive render work, and an approval service that trusts the UI. Specialist reports can also conflict or describe different commits.
 
-The workflow contains deliberate risk: reviewer HTML rendering, non-keyboard queue rows, expensive render work, and a server-simulation policy that trusts the UI. Shared report and decision templates plus a baseline measurement command are supplied.
+Run security, accessibility, performance, and testability reviews against the same SHA, triage every finding, fix supported blockers, and make the specialists recheck the final SHA.
 
-## Required Implementation Changes
+The duration for this challenge is 30 min or less.
 
-- Give each specialist the same commit SHA and report schema.
-- Require exact file/line and reproduction evidence for every finding.
-- Include keyboard or assistive-technology evidence for accessibility.
-- Record comparable before and after performance measurements.
-- Triage every finding as fix, defer, or dismiss with owner and residual risk.
-- Re-run affected specialist reviews after fixes are integrated.
+## Project
 
-## Allowed Changes
+[nfr-swarm-app](./nfr-swarm-app) contains the access-review workflow and seeded risks. Use the supplied [specialist prompts](./docs/specialist-prompts.md) and shared report schema.
 
-Change the access-review workflow, focused tests, specialist reports, decision log, and evidence. Do not replace the workflow with the generic lab screen or remove risky behavior without recording the finding and decision.
+## How To Go About It
 
-## Required Commands
+Give each specialist the same commit, scope, severity rules, and evidence format. Findings must include a file and line, reproduction, impact, and proposed verification.
 
-Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
+The integration owner classifies each finding as fix, defer, or dismiss with an owner and residual risk. After fixes, rerun every affected specialist instead of relying on the original report.
 
-From `nfr-swarm-app`:
+## Evidence
 
-```text
-npm ci
-npm run measure:baseline
-npm run agent:check
-```
+Submit four reports under `evidence/specialists/`, `evidence/decision-log.md`, before-and-after performance JSON, keyboard or assistive-technology evidence, and the final SHA and check output.
 
-Add and record focused commands for every implemented fix, then rerun affected specialists on the final SHA.
+Run `npm run measure:baseline`, `npm run test:submission`, and `npm run agent:check` from `nfr-swarm-app`.
 
-## Acceptance Criteria
+Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-- Four specialist reports use the shared schema and severity calibration.
-- Findings describe the final submitted code or clearly identify pre-fix evidence.
-- Performance and accessibility claims have the required measurements.
-- The server authorization/evidence boundary is reviewed.
-- The decision log records owner, rationale, evidence, trigger, and residual risk.
+## Evaluation
 
-## Evidence Contract
+Reviewers will check that specialists reviewed the same code, evidence supports each finding, privileged approval is enforced at the service boundary, keyboard operation works, and performance claims use comparable measurements.
 
-Commit reports under `evidence/specialists/`, the completed decision log, before/after performance JSON, accessibility evidence, final SHA, and final check output.
+The exercise is incomplete if reports are blindly merged, findings lack evidence, different SHAs are compared without explanation, or the final code is not re-reviewed.
 
-## Incomplete When
-
-Reports review different unexplained SHAs, findings lack evidence, performance is subjective, keyboard behavior is not exercised, triage decisions lack owners, or no final-state recheck occurs.
-
-## Evaluation Rubric
-
-See [Specialist NFR Review](../../docs/EVALUATION_RUBRICS.md#specialist-nfr-review).
+See the [Specialist Review Merge Gate rubric](../../docs/EVALUATION_RUBRICS.md#specialist-review-merge-gate).

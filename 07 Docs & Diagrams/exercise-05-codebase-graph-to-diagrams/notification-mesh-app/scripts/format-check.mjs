@@ -13,7 +13,7 @@ for (const file of files) {
 }
 
 const readme = fs.readFileSync(path.join(process.cwd(), "..", "README.md"), "utf8");
-const requiredSections = ["## Use These Practices", "## Do This", "## Deliver", "## Verify"];
+const requiredSections = ["## Your Mission", "## Project", "## How To Go About It", "## Evidence", "## Evaluation"];
 const missingSections = requiredSections.filter((section) => !readme.includes(section));
 if (missingSections.length) {
   failures.push("README is missing required exercise sections: " + missingSections.join(", "));

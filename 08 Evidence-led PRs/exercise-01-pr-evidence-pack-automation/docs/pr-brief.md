@@ -1,6 +1,6 @@
 # Pr Brief
 
-This is a seeded lab input for PR Evidence Pack Automation. It gives the learner concrete constraints to inspect, implement, test, and verify.
+This is a seeded lab input for Failure-Preserving PR Evidence Pack. It gives the learner concrete constraints to inspect, implement, test, and verify.
 
 ## Operating Context
 

@@ -13,7 +13,7 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "Specialist Subagent NFR Review",
+  "title": "Specialist Review Merge Gate",
   "competency": "06. Multi-Agent Workflows - Parallel agents on isolated tasks",
   "domain": "Specialist NFR swarm for a risky generated change",
   "mission": "Use specialist subagents for security, accessibility, performance, and testability review while one main thread owns the decision log.",

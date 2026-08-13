@@ -1,0 +1,9 @@
+{
+  "name": "Agent Kanban Collision Control",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "docs/agent-board.json", "validJson": true, "includeAll": ["stateHistory", "reservedPaths", "collisionRule", "rollback"] },
+    { "path": "docs/integration-log.md", "minCharacters": 250, "includeAll": ["review", "command", "decision"] },
+    { "path": "evidence/completed-lane.md", "minCharacters": 300, "includeAll": ["base SHA", "commit SHA", "reserved paths", "reviewer", "rollback"] }
+  ]
+}

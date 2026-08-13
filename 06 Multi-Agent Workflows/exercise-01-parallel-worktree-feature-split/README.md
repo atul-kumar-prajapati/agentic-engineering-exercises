@@ -1,55 +1,37 @@
-# Exercise 01: Parallel Worktree Feature Split
+# Exercise 01 : Parallel Worktree Conflict Rescue
 
-## Objective
+## Your Mission
 
-Implement the three supplied product improvements in isolated Git worktrees and integrate them with inspectable handoffs.
+Your mission is to deliver three related product changes through parallel agent lanes without losing work or allowing agents to edit the same shared file.
 
-## Starting Point
+You are given saved-filter, SLA-risk, and evidence-export tasks. Two lanes need changes to `src/types.ts`, but neither lane owns that file. A careless parallel run will create conflicting commits or hide an incomplete lane.
 
-`docs/task-board.md` defines saved filters, SLA risk, and evidence export. `docs/file-ownership-map.md` assigns paths and deliberately makes lanes A and C request changes to shared `src/types.ts`.
+Use isolated Git worktrees, preserve every lane commit, and integrate the shared type requests once through an integration owner.
 
-## Required Implementation Changes
+The duration for this challenge is 30 min or less.
 
-- Create one branch and worktree per lane from the same recorded base SHA.
-- Keep each lane inside its ownership boundary and run its focused check.
-- Preserve every lane branch and commit for review.
-- Resolve shared type requests in a separate integration-owner commit.
-- Integrate in the documented order and run the final application check.
+## Project
 
-## Allowed Changes
+[worktree-feature-app](./worktree-feature-app) contains the application. [task board](./docs/task-board.md) defines the three fixed lanes, ownership boundaries, focused checks, and integration order.
 
-Each lane may change only its owned paths and tests. Only the integration owner may change `src/types.ts`, integration evidence, or resolve cross-lane conflicts.
+## How To Go About It
 
-## Required Commands
+Record one base SHA and create one branch and worktree per lane. Give each agent only its task, owned paths, and focused command.
 
-Use the supported versions and clean-install sequence in [the submission standard](../../docs/SUBMISSION_STANDARD.md).
+Each lane must commit its work and hand off its result without editing `src/types.ts`. The integration owner reviews the three commits, applies both shared-type requests in one commit, and records any rejected or blocked work.
 
-From `worktree-feature-app`:
+## Evidence
 
-```text
-npm ci
-npm run agent:check
-npm run lanes:verify
-```
+Submit the completed feature work, `evidence/lane-handoffs.json`, `evidence/worktree-log.md`, `evidence/integration.md`, and focused output for every lane.
 
-Each lane must also record and run the focused command from the task board.
+Run `npm run lanes:verify`, `npm run test:submission`, and `npm run agent:check` from `worktree-feature-app`.
 
-## Acceptance Criteria
+Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-- All three product changes satisfy their explicit criteria.
-- Handoffs include base SHA, branch, paths, command/result, commit SHA, rollback, and shared-file request.
-- Lane commits exist and remain inspectable.
-- The ownership map, handoffs, worktree log, and Git history agree.
-- The shared conflict is resolved once by the integration owner.
+## Evaluation
 
-## Evidence Contract
+Reviewers will verify that all lanes share one base SHA, remain within their ownership boundaries, preserve inspectable commits, and pass focused checks. The shared file must be changed only by the integration owner.
 
-Commit `evidence/lane-handoffs.json`, `evidence/worktree-log.md`, `evidence/integration.md`, focused outputs, and final check output. Use the handoff template.
+The exercise is incomplete if lane history is missing, agents edit the same shared file independently, a blocked lane is presented as complete, or the final integrated check fails.
 
-## Incomplete When
-
-Tasks are replaced with different work, lane commits are unavailable, ownership is violated, the shared file is edited independently in multiple lanes, or only the cherry-picked result is shown.
-
-## Evaluation Rubric
-
-See [Parallel Worktree Feature Split](../../docs/EVALUATION_RUBRICS.md#parallel-worktree-feature-split).
+See the [Parallel Worktree Conflict Rescue rubric](../../docs/EVALUATION_RUBRICS.md#parallel-worktree-conflict-rescue).

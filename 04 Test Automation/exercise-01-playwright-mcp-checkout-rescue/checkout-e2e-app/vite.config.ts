@@ -3,7 +3,12 @@ import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 
 function checkoutApi(): Plugin {
-  let authorizationCount = 0;
+  const authorizationCounts = new Map<string, number>();
+
+  function checkoutSession(request: IncomingMessage) {
+    const value = request.headers["x-checkout-session"];
+    return typeof value === "string" && value.trim() ? value : "default";
+  }
 
   function json(response: ServerResponse, status: number, body: unknown) {
     response.statusCode = status;
@@ -22,23 +27,31 @@ function checkoutApi(): Plugin {
     configureServer(server) {
       server.middlewares.use(async (request, response, next) => {
         if (request.url === "/api/testing/reset" && request.method === "POST") {
-          authorizationCount = 0;
-          return json(response, 200, { reset: true });
+          const session = checkoutSession(request);
+          authorizationCounts.set(session, 0);
+          return json(response, 200, { reset: true, session });
         }
         if (request.url === "/api/tax-quote" && request.method === "POST") {
           await readBody(request);
-          setTimeout(() => json(response, 200, { tax: 7.92 }), 180);
+          setTimeout(() => json(response, 200, { tax: 7.92 }), 900);
           return;
         }
         if (request.url === "/api/payments/authorize" && request.method === "POST") {
           const body = (await readBody(request)) as { cardNumber?: string; total?: number };
-          authorizationCount += 1;
+          const session = checkoutSession(request);
+          const authorizationCount = (authorizationCounts.get(session) ?? 0) + 1;
+          authorizationCounts.set(session, authorizationCount);
           const declined = body.cardNumber?.endsWith("0000") || authorizationCount % 3 === 0;
-          return json(response, declined ? 402 : 200, {
-            status: declined ? "declined" : "approved",
-            authorizationId: declined ? null : `AUTH-${authorizationCount}`,
-            total: body.total,
-          });
+          setTimeout(
+            () =>
+              json(response, declined ? 402 : 200, {
+                status: declined ? "declined" : "approved",
+                authorizationId: declined ? null : `AUTH-${session}-${authorizationCount}`,
+                total: body.total,
+              }),
+            900,
+          );
+          return;
         }
         next();
       });

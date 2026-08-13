@@ -1,0 +1,8 @@
+{
+  "name": "Code Review Regression Gate",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "evidence/review-eval.md", "minCharacters": 1000, "includeAll": ["model", "settings", "sample count", "historical recall", "multi-bug recall", "clean-control precision", "variance", "false blocker", "limitation", "adoption"] },
+    { "path": "evidence/results.json", "validJson": true, "includeAll": ["baseline", "candidate", "samples"] }
+  ]
+}

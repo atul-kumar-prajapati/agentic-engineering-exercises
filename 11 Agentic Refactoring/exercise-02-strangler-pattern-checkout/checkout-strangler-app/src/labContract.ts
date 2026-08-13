@@ -13,7 +13,7 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "jscodeshift Strangler Checkout Slice",
+  "title": "Strangler Checkout Route",
   "competency": "11. Agentic Refactoring - Test-driven tech-debt cleanup",
   "domain": "Strangler replacement for one checkout decision branch",
   "mission": "Replace one path of a tangled checkout workflow with a new module while preserving external behavior.",

@@ -13,7 +13,7 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "Security and A11y Review Gauntlet",
+  "title": "Security and Accessibility Review Gauntlet",
   "competency": "09. Code Review - Code quality and risk review for merge confidence",
   "domain": "Security and accessibility review of a generated approval UI",
   "mission": "Review a generated app change for security, accessibility, and behavioral regressions before approving it.",

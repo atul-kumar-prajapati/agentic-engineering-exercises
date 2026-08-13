@@ -1,0 +1,10 @@
+{
+  "name": "Trace-Backed Workflow Optimizer",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "workflow-optimizer-app/workflow/instructions.md", "minCharacters": 500, "includeAll": ["scope", "evidence", "verification", "clarify"] },
+    { "path": "evidence/failure-clusters.md", "minCharacters": 500, "includeAll": ["trace", "root cause", "frequency", "workflow change"] },
+    { "path": "evidence/benchmark.json", "validJson": true, "includeAll": ["baseline", "candidate", "tokens", "durationMs", "assertions"] },
+    { "path": "evidence/adoption.md", "minCharacters": 500, "includeAll": ["held-out", "variance", "cost", "critical", "limitation", "adopt"] }
+  ]
+}

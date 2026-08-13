@@ -1,6 +1,6 @@
 # Implementer Notes
 
-This is a seeded lab input for Diff Triage With Fresh Agent. It gives the learner concrete constraints to inspect, implement, test, and verify.
+This is a seeded lab input for Independent Diff Triage. It gives the learner concrete constraints to inspect, implement, test, and verify.
 
 ## Operating Context
 

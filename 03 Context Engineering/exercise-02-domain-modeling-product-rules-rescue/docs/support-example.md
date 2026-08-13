@@ -1,7 +1,11 @@
-# Support Example
+# Support Case SEC-318
 
-Customer `cust-atlas` pays for workspaces `ws-red` and `ws-blue`.
+Status: Resolved under the current policy
 
-Rina is the billing owner for the customer and an admin of `ws-red`. She has no membership in `ws-blue`. Billing ownership must not allow her to export `ws-blue` history.
+Billing customer `cust-atlas` pays for workspaces `ws-red` and `ws-blue`.
 
-Mateo is an admin of `ws-blue`, but the membership is suspended. He must not be allowed to export.
+- Rina owns the billing customer and has an active admin membership in `ws-red`. She may export from `ws-red` when its plan and residency are eligible.
+- Rina has no membership in `ws-blue`. Billing ownership must not allow her to export from `ws-blue`.
+- Mateo has an admin membership in `ws-blue`, but it is suspended. He must not be allowed to export.
+
+This case demonstrates the current policy but does not replace it.

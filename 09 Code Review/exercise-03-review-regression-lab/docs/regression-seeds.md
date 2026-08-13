@@ -1,6 +1,6 @@
 # Regression Seeds
 
-This is a seeded lab input for Review Regression Lab. It gives the learner concrete constraints to inspect, implement, test, and verify.
+This is a seeded lab input for Code Review Regression Gate. It gives the learner concrete constraints to inspect, implement, test, and verify.
 
 ## Operating Context
 

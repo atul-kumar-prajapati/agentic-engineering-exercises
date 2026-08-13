@@ -1,0 +1,10 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "e16d578adedec91bf89a38108b6613603b2f53b0a6922ead1e94be61d6d13269",
+    "../docs/task-board.md": "0d7af78235313118cc3194c92b8d3198f92aa988d2deace732e8388ffed2a48a",
+    "../docs/file-ownership-map.md": "a2f87f9908b8fe5b29b99ed4d61ac92b19ac277dcfb62f45c71629abeaafd7df",
+    "scripts/verify-lane-handoffs.mjs": "c9971642ceb092394ba6eeb89f3aa3d1313e7c7259365fe7a00d58c3c8bb83df",
+    "submission-contract.json": "debf019f92c99164a631f25dfa7282d3202d135221e1b6427cc9f6778d795d5e"
+  }
+}

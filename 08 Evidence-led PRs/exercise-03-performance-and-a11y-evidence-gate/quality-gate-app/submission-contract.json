@@ -1,0 +1,10 @@
+{
+  "name": "Performance and Accessibility Release Gate",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "lighthouserc.json", "validJson": true, "includeAll": ["numberOfRuns", "pessimistic", "categories:performance", "categories:accessibility"] },
+    { "path": "evidence/lighthouse-after.json", "validJson": true, "includeAll": ["commitSha", "runs", "performance", "largestContentfulPaintMs"] },
+    { "path": "evidence/a11y-after.json", "validJson": true, "includeAll": ["commitSha", "violations"] },
+    { "path": "evidence/comparison.md", "minCharacters": 350, "includeAll": ["baseline", "after", "environment", "residual risk"] }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Progressive Context Budget Refactor",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "evidence/context-plan.md", "minCharacters": 350, "includeAll": ["task", "maximum", "question", "authority"] },
+    { "path": "evidence/context-ledger.json", "validJson": true, "includeAll": ["selected", "skipped", "bytes", "reason"] },
+    { "path": "evidence/decision.md", "minCharacters": 300, "includeAll": ["expanded", "stale", "verification", "trade-off"] }
+  ]
+}

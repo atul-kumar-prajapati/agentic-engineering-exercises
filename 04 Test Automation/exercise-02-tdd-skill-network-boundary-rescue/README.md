@@ -2,44 +2,60 @@
 
 ## Your Mission
 
-Your mission is to repair a case dashboard by working in strict red, green, refactor cycles.
+Your mission is to repair a network-backed case dashboard through genuine test-first cycles.
 
-You are given one weak green test, a retry path that does not send a second request, and network handlers that leak between tests. A large test written after the fix can easily miss these problems.
+The supplied test passes, but loading feedback is missing, an empty filter is reported as an empty server, Retry never sends another request, and the test network setup allows hidden request and handler leaks.
 
-Use the TDD skill to build one user-visible behaviour at a time through the real `GET /api/cases` boundary.
+Use the TDD skill to complete one user-visible behaviour at a time through the real `GET /api/cases` boundary.
 
-The duration for this challenge is 30 min or less.
+Compare the agent's implementation before and after using the skill.
+
+The duration for this challenge is 45 min or less.
 
 ## Project
 
-[case-dashboard-app](./case-dashboard-app) contains the dashboard, MSW boundary, weak test, and seeded retry defect.
+[case-dashboard-app](./case-dashboard-app) contains the dashboard, MSW network boundary, weak test, and failing acceptance checks.
+
+Use this request for both agent runs:
+
+> Repair the case dashboard test-first. Prove loading, success, server-empty, filtered-empty, request error, and retry recovery through GET /api/cases. Make the network test boundary strict and isolated.
+
+Run the weak test and failing acceptance checks before changing any files.
 
 ## How To Go About It
 
-Install the [TDD skill](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd):
+Start a fresh agent session without the TDD skill. Provide the request and repository, save its first implementation and observations, then revert the implementation.
 
-```bash
-npx skills add https://github.com/mattpocock/skills --skill tdd
-```
+Install the current [TDD skill](https://github.com/mattpocock/skills/tree/main/skills/engineering/tdd) using `npx skills add mattpocock/skills --skill tdd`.
 
-Start with a failing test for one behaviour, make the smallest production change that passes, then refactor. Repeat for loading, success, server-empty, filtered-empty, error, and retry.
+Start another fresh session with the skill available. Confirm the public seam, then complete separate red and green cycles for loading, filtered-empty, and retry. Add independent checks for success, server-empty, and request error.
 
-Make unhandled requests fail and reset handlers after every test. Tests must use public UI seams and prove retry sends a new request and recovers.
+Use MSW at `GET /api/cases`, fail unhandled requests, reset runtime handlers after every test, and assert only user-visible behaviour. Retry must send a new request before recovery.
+
+Run the complete suite in shuffled orders and compare both implementations.
+
+Keep the agent, model, other tools, permissions, prompt, time limit, and first-attempt conditions the same. The TDD skill must be the only changed input. Do not rerun either implementation.
 
 ## Evidence
 
-Submit the tests and fix, `evidence/tdd-cycles.md` with each red and green command, `evidence/red.patch`, `evidence/green.patch`, and `evidence/network-boundaries.md` mapping the six states to test names.
+Submit:
 
-Run `npm run test:smoke`, `npm run test:component`, `npm run test:submission`, and `npm run agent:check` from `case-dashboard-app`.
+- The repaired dashboard, strict test setup, and independent component tests.
+- `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, and `evidence/after.patch`.
+- `evidence/skill-record.md` identifying the installed skill source, commit, path, and file hash.
+- `evidence/tdd-cycles.md` containing each red failure and green result in execution order.
+- `evidence/network-boundaries.md` mapping all six states to exact tests and assertions.
+- `evidence/comparison.md` explaining the differences between both implementations.
+- `evidence/network-run.txt` containing the shuffled stability command, output, and exit code.
+- Output from `npm run test:smoke`, `npm run test:acceptance`, `npm run test:network`, `npm run test:tdd`, and `npm run agent:check`.
+- A focused pull request containing only the exercise changes.
 
-Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Use the [network contract](./docs/network-contract.md), [evidence template](./docs/evidence-template.md), and repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
 ## Evaluation
 
-Reviewers will check that production changes follow observed failing tests, each cycle is small, and assertions describe what a user sees.
+The final tests must prove all six states through the real request seam, use user-facing queries, fail unexpected requests, reset handler overrides, and prove Retry sends exactly one new request before recovery.
 
-All six states must be independent. Unexpected requests must fail, handler changes must not leak, and retry must issue a fresh request before recovery.
+The exercise is incomplete if the runs are not comparable, red evidence was produced after the implementation, behaviours are completed in one horizontal batch, `fetch` or component internals are mocked, protected inputs are changed, or required evidence is missing.
 
-The exercise is incomplete if evidence is recreated after coding, the request boundary is bypassed, implementation details are asserted, protected inputs are changed, or required checks fail.
-
-See the [TDD Skill Network Boundary Rescue rubric](../../docs/EVALUATION_RUBRICS.md#tdd-skill-network-boundary-rescue).
+See the [evaluation rubric](../../docs/EVALUATION_RUBRICS.md#tdd-skill-network-boundary-rescue).

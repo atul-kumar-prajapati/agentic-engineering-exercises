@@ -13,7 +13,7 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "PR Evidence Pack Automation",
+  "title": "Failure-Preserving PR Evidence Pack",
   "competency": "08. Evidence-led PRs - PR gate evidence and handoff",
   "domain": "Automated PR evidence pack for generated code",
   "mission": "Create a PR evidence pack that automatically gathers test output, build proof, screenshots, and residual risks.",

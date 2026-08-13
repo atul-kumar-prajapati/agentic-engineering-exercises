@@ -1,0 +1,10 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "703a8d7710ebe621a0315e8c7ccef7edaeaa5c3ccaa3d884f78a4c9f3b35b4ee",
+    "evals/replay-cases.json": "52d5a3d99f68b3d95e3ac84af716a880cb731eafee422e2e2dd4c9289317401a",
+    "scripts/validate-replay-fixtures.mjs": "9cfb26a844b6960d29ae31836716cc958ac12ac77110d35f646c80b0ab286e0a",
+    "scripts/verify-workflow-results.mjs": "35de1fec9e7eee9c8e240599a7ce7fe134efeb2d8c387d1b6578b27acf810d0d",
+    "submission-contract.json": "a567762edab397b9bf9c7607063c9489f8119797d4302522d8e1f22d65872606"
+  }
+}
