@@ -2,13 +2,57 @@
   "title": "Progressive Disclosure Release Skill",
   "competency": "05. Skill Packaging",
   "skillPattern": "Agent Skills progressive disclosure",
-  "domain": "Evidence-backed customer release notes",
-  "mission": "Replace a monolithic release prompt with a standards-compliant reusable skill package.",
-  "outcome": "The skill loads concise instructions, detailed policy, and deterministic Git extraction only when needed.",
-  "entities": ["SKILL.md", "reference", "script", "eval", "release trace"],
-  "seededDefects": ["trigger is too broad", "policy and examples are mixed", "missing evidence is treated as passing"],
-  "verificationGates": ["fixture smoke", "skill structure validation", "Git-derived note verification", "fair comparison evidence"],
-  "agentWorkflow": ["capture raw-prompt baseline", "package with progressive disclosure", "run fresh skill attempt", "verify and compare"],
-  "workingDeliverables": ["skill folder", "Git helper", "evals", "before-and-after release outputs"],
-  "masterySignals": ["valid metadata", "precise routing", "no duplicated context", "derived and traceable output"]
+  "domain": "Evidence-backed customer release notes from arbitrary Git ranges",
+  "mission": "Replace a broad monolithic prompt with a focused, portable release-notes skill that loads resources conditionally.",
+  "outcome": "The packaged skill improves release-note accuracy while using only the policy and deterministic tooling needed by each request.",
+  "entities": [
+    "SKILL.md metadata",
+    "conditional reference",
+    "Git extractor",
+    "quality eval",
+    "trigger eval",
+    "release trace"
+  ],
+  "seededDefects": [
+    "trigger includes unrelated engineering summaries",
+    "all rules and examples load for every task",
+    "Git range is selected manually",
+    "internal telemetry is published",
+    "missing artifacts are treated as passing"
+  ],
+  "verificationGates": [
+    "three-range fixture smoke",
+    "Agent Skills structure validation",
+    "fixture-independent extractor test",
+    "Git-derived release-note score",
+    "comparison and resource evidence verifier",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
+  ],
+  "agentWorkflow": [
+    "capture the monolithic first attempt",
+    "separate core workflow from conditional policy",
+    "replace copied Git output with one reusable script",
+    "define quality and trigger evals",
+    "run a fresh skill attempt and selective scenarios",
+    "verify and compare",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
+  ],
+  "workingDeliverables": [
+    "portable skill folder",
+    "three focused references",
+    "range-agnostic Git extractor",
+    "quality and trigger eval sets",
+    "comparable release outputs",
+    "resource-use and evaluation evidence",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
+  ],
+  "masterySignals": [
+    "valid cross-agent metadata",
+    "precise positive and negative routing",
+    "resources load only when relevant",
+    "extractor survives an unrelated repository",
+    "customer output is traced and evidence-safe"
+  ]
 }

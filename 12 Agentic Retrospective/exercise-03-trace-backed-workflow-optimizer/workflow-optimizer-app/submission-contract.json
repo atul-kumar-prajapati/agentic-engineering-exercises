@@ -2,9 +2,13 @@
   "name": "Trace-Backed Workflow Optimizer",
   "root": "..",
   "requiredFiles": [
-    { "path": "workflow-optimizer-app/workflow/instructions.md", "minCharacters": 500, "includeAll": ["scope", "evidence", "verification", "clarify"] },
-    { "path": "evidence/failure-clusters.md", "minCharacters": 500, "includeAll": ["trace", "root cause", "frequency", "workflow change"] },
-    { "path": "evidence/benchmark.json", "validJson": true, "includeAll": ["baseline", "candidate", "tokens", "durationMs", "assertions"] },
-    { "path": "evidence/adoption.md", "minCharacters": 500, "includeAll": ["held-out", "variance", "cost", "critical", "limitation", "adopt"] }
+    { "path": "workflow-optimizer-app/workflow/instructions.md", "minCharacters": 900, "includeAll": ["scope", "clarify", "authoritative", "contradiction", "context", "failed", "stop", "verification", "exit code", "completion"] },
+    { "path": "evidence/baseline-runs.json", "minCharacters": 12000, "validJson": true, "includeAll": ["baseline", "responseSha256", "settingsHash", "permissionsHash"] },
+    { "path": "evidence/candidate-runs.json", "minCharacters": 12000, "validJson": true, "includeAll": ["candidate", "responseSha256", "settingsHash", "permissionsHash"] },
+    { "path": "evidence/benchmark.json", "minCharacters": 5000, "validJson": true, "includeAll": ["trainQuality", "heldoutQuality", "heldoutStdDev", "heldoutCriticalFailures", "tokenCost", "durationCost", "adopt"] },
+    { "path": "evidence/failure-clusters.md", "minCharacters": 1200, "includeAll": ["TR-01", "TR-12", "scope-before-action", "evidence-authority", "completion-verification", "context-selection", "clarification-boundary", "frequency", "workflow change"] },
+    { "path": "evidence/adoption.md", "minCharacters": 900, "includeAll": ["held-out", "train", "variance", "median tokens", "duration", "critical", "limitation", "adopt"] },
+    { "path": "evidence/history.json", "minCharacters": 120, "validJson": true, "includeAll": ["baselineSha", "candidateSha"] },
+    { "path": "evidence/commands/workflow-verify.txt", "minCharacters": 300, "includeAll": ["Baseline SHA", "Candidate SHA", "train", "held-out", "PASS", "exit code: 0"] }
   ]
 }

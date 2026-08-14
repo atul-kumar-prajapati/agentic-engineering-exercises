@@ -13,44 +13,42 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "Security and Accessibility Review Gauntlet",
-  "competency": "09. Code Review - Code quality and risk review for merge confidence",
-  "domain": "Security and accessibility review of a generated approval UI",
-  "mission": "Review a generated app change for security, accessibility, and behavioral regressions before approving it.",
-  "outcome": "A generated PR is reviewed, patched, and re-verified before merge.",
-  "entities": [
-    "review diff",
-    "unsafe rendering",
-    "keyboard navigation",
-    "severity finding"
+  title: "Security and Accessibility Review Gauntlet",
+  competency: "09. Code Review",
+  domain: "Evidence-backed review of an exact access-approval PR containing scanner signal, scanner noise, and manual behavior defects.",
+  mission: "Classify the protected PR findings, repair confirmed blockers at the correct boundary, and prove them with regression tests.",
+  outcome: "A reviewer can distinguish exploitability from pattern matches and prevent security, keyboard, validation, and policy regressions from merging.",
+  entities: ["protected Git range", "scanner finding", "manual finding", "server transition", "regression test", "merge decision"],
+  seededDefects: [
+    "Reviewer-controlled notes enter a dynamic HTML sink.",
+    "Queue actions lose native button and keyboard behavior.",
+    "Client note validation and explicit button type are removed.",
+    "Approval wording bypasses note validation and protected server transitions.",
+    "A safe static HTML sink resembles the real vulnerability.",
   ],
-  "seededDefects": [
-    "dangerous HTML preview is introduced",
-    "queue rows lose button semantics",
-    "high-priority approval bypasses evidence"
+  verificationGates: [
+    "Bundle SHAs and generated diff match the protected manifest.",
+    "All five required findings have correct severity, source, and decision.",
+    "Protected component and server tests prove the repaired behavior.",
+    "Learner regression tests cover each confirmed blocker.",
+    "Git history binds fixes and tests to the submitted evidence.",
   ],
-  "verificationGates": [
-    "fresh review",
-    "security test",
-    "a11y regression test",
-    "fix/defer/dismiss triage"
+  agentWorkflow: [
+    "Verify and clone the protected bundle.",
+    "Run the scanner and independently inspect behavior boundaries.",
+    "Record the review before changing the vulnerable starter.",
+    "Fix blockers, add regression tests, and re-run the review gates.",
   ],
-  "agentWorkflow": [
-    "Ask the coding agent to inspect this lab contract, starter code, docs, and tests before proposing a plan.",
-    "Revise the agent plan so it exercises the competency practice and avoids the common mistake.",
-    "Implement the smallest working change that addresses the seeded defects.",
-    "Run the verification gates and capture command evidence before writing the final review note."
+  workingDeliverables: [
+    "Fixed rendering, keyboard, validation, and server policy code.",
+    "Learner regression test suite.",
+    "Structured and Markdown review reports.",
+    "Raw scanner, fixture, and final verification output.",
   ],
-  "workingDeliverables": [
-    "Patched starter code.",
-    "Regression tests for security/a11y/behavior blockers.",
-    "Triage table with fix/defer/dismiss decisions.",
-    "Re-review evidence after the patch."
+  masterySignals: [
+    "Scanner output is reproduced and classified rather than copied.",
+    "Important manual findings are identified despite no scanner warning.",
+    "Authorization remains enforced at the server boundary.",
+    "Every blocker maps to a focused regression test and exact evidence.",
   ],
-  "masterySignals": [
-    "Use a fresh review pass on `pr/review-target.diff` for security, accessibility, behavior, and tests.",
-    "Patch the merge-blocking findings in the starter code.",
-    "Add regression tests for each blocker.",
-    "Re-review after fixes and explicitly dismiss or defer remaining findings."
-  ]
 };

@@ -1,53 +1,68 @@
 import fs from "node:fs";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
+import { benchmarkMarkdown, buildBenchmark, collectWorkspace } from "./benchmark-lib.mjs";
 
-const root = process.cwd();
-const exerciseRoot = path.resolve(root, "..");
+const appRoot = process.cwd();
+const exerciseRoot = path.resolve(appRoot, "..");
+const evidenceRoot = path.join(exerciseRoot, "evidence");
 const failures = [];
-const evals = JSON.parse(fs.readFileSync("evals/evals.json", "utf8")).evals;
-const readJson = (relative) => {
-  const absolute = path.join(root, relative);
-  if (!fs.existsSync(absolute)) { failures.push(`missing ${relative}`); return null; }
-  try { return JSON.parse(fs.readFileSync(absolute, "utf8")); } catch { failures.push(`${relative} is invalid JSON`); return null; }
-};
-const baseline = readJson("results/baseline.json");
-const withSkill = readJson("results/with-skill.json");
-const validate = (label, values) => {
-  if (!Array.isArray(values)) return;
-  for (const item of evals) {
-    const runs = values.filter((run) => run.evalId === item.id);
-    if (runs.length !== 3) failures.push(`${label} needs three runs for eval ${item.id}`);
-    for (const run of runs) {
-      if (!run.model || !Number.isFinite(run.inputTokens) || !Number.isFinite(run.outputTokens) || !Number.isFinite(run.elapsedMs)) failures.push(`${label} run for eval ${item.id} lacks model, token, or time metrics`);
-      for (const expectation of item.expectations) if (typeof run.assertions?.[expectation.id] !== "boolean") failures.push(`${label} run for eval ${item.id} lacks assertion ${expectation.id}`);
-    }
+const evals = JSON.parse(fs.readFileSync(path.join(appRoot, "evals", "evals.json"), "utf8")).evals;
+
+let collected;
+try {
+  collected = collectWorkspace({ appRoot, exerciseRoot, evals });
+  failures.push(...collected.failures);
+} catch (error) {
+  failures.push(error.message);
+}
+
+let expectedBenchmark;
+if (collected && !collected.failures.length) expectedBenchmark = buildBenchmark(collected, evals);
+const benchmarkPath = path.join(evidenceRoot, "benchmark.json");
+const benchmarkMdPath = path.join(evidenceRoot, "benchmark.md");
+if (!fs.existsSync(benchmarkPath)) failures.push("missing evidence/benchmark.json");
+else if (expectedBenchmark) {
+  try {
+    const submitted = JSON.parse(fs.readFileSync(benchmarkPath, "utf8"));
+    if (JSON.stringify(submitted) !== JSON.stringify(expectedBenchmark)) failures.push("evidence/benchmark.json does not match the recomputed workspace benchmark");
+  } catch {
+    failures.push("evidence/benchmark.json is invalid JSON");
   }
-};
-validate("baseline", baseline);
-validate("with-skill", withSkill);
-const passRate = (values, split, criticalOnly = false) => {
-  const selected = evals.filter((item) => item.split === split);
-  const assertions = selected.flatMap((item) => item.expectations.filter((expectation) => !criticalOnly || expectation.critical).flatMap((expectation) => values.filter((run) => run.evalId === item.id).map((run) => run.assertions?.[expectation.id] === true)));
-  return assertions.length ? assertions.filter(Boolean).length / assertions.length : 0;
-};
-if (Array.isArray(baseline) && Array.isArray(withSkill) && !failures.length) {
-  if (passRate(withSkill, "held-out") <= passRate(baseline, "held-out")) failures.push("with-skill held-out quality does not improve over baseline");
-  if (passRate(withSkill, "held-out", true) < passRate(baseline, "held-out", true)) failures.push("a critical held-out assertion regressed");
 }
-const benchmarkPath = path.join(exerciseRoot, "evidence", "benchmark.json");
-const reportPath = path.join(exerciseRoot, "evidence", "benchmark.md");
-for (const [file, terms] of [[benchmarkPath, []], [reportPath, ["quality", "variance", "token", "elapsed", "held-out", "adoption"]]]) {
-  if (!fs.existsSync(file)) failures.push(`missing ${path.relative(exerciseRoot, file)}`);
-  else for (const term of terms) if (!fs.readFileSync(file, "utf8").toLowerCase().includes(term)) failures.push(`benchmark.md is missing ${term}`);
+if (!fs.existsSync(benchmarkMdPath)) failures.push("missing evidence/benchmark.md");
+else if (expectedBenchmark && fs.readFileSync(benchmarkMdPath, "utf8") !== benchmarkMarkdown(expectedBenchmark)) failures.push("evidence/benchmark.md does not match the recomputed benchmark");
+if (expectedBenchmark && !expectedBenchmark.gate.passed) {
+  for (const check of expectedBenchmark.gate.checks.filter((item) => !item.passed)) failures.push(`benchmark gate failed: ${check.id}`);
 }
-const archive = path.join(exerciseRoot, "dist", "incident-summary.skill");
-if (!fs.existsSync(archive)) failures.push("missing dist/incident-summary.skill");
-else {
-  const bytes = fs.readFileSync(archive);
-  if (bytes.length < 200 || bytes[0] !== 0x50 || bytes[1] !== 0x4b || !bytes.includes(Buffer.from("SKILL.md"))) failures.push("incident-summary.skill is not a valid skill archive containing SKILL.md");
+
+function requireReport(name, terms) {
+  const file = path.join(evidenceRoot, name);
+  if (!fs.existsSync(file)) {
+    failures.push(`missing evidence/${name}`);
+    return "";
+  }
+  const text = fs.readFileSync(file, "utf8");
+  const lower = text.toLowerCase();
+  for (const term of terms) if (!lower.includes(term)) failures.push(`evidence/${name} is missing ${term}`);
+  return text;
 }
+
+const skillRecord = requireReport("skill-record.md", ["source", "source commit", "installed path", "sha-256", "installation", "agent", "model", "permissions", "time limit", "repository commit"]);
+if (skillRecord) {
+  if (!/https:\/\/github\.com\/anthropics\/skills/i.test(skillRecord)) failures.push("evidence/skill-record.md must identify the skill-creator source repository");
+  if (!/source commit[^a-f0-9]*[a-f0-9]{40}/i.test(skillRecord)) failures.push("evidence/skill-record.md must contain a 40-character source commit");
+  if (!/sha-256[^a-f0-9]*[a-f0-9]{64}/i.test(skillRecord)) failures.push("evidence/skill-record.md must contain the installed SKILL.md SHA-256");
+}
+requireReport("analysis.md", ["training", "held-out", "critical", "variance", "token", "elapsed", "outlier", "adoption"]);
+
+const skillCheck = spawnSync(process.execPath, [path.join(appRoot, "scripts", "validate-benchmark-skill.mjs")], { cwd: appRoot, encoding: "utf8" });
+if (skillCheck.status !== 0) failures.push(`skill validation failed: ${(skillCheck.stderr || skillCheck.stdout).trim()}`);
+const packageCheck = spawnSync("python", [path.join(appRoot, "scripts", "verify-skill-package.py")], { cwd: appRoot, encoding: "utf8" });
+if (packageCheck.status !== 0) failures.push(`package verification failed: ${(packageCheck.stderr || packageCheck.stdout).trim()}`);
+
 if (failures.length) {
-  console.error("Benchmark submission verification failed:\n" + failures.map((failure) => `- ${failure}`).join("\n"));
+  console.error("Benchmark submission verification failed:\n" + [...new Set(failures)].map((failure) => `- ${failure}`).join("\n"));
   process.exit(1);
 }
-console.log("Repeated baseline and skill runs pass the held-out quality and package gate.");
+console.log("All 36 runs were regraded, the benchmark gate passed, and the archive exactly matches the evaluated skill.");

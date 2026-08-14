@@ -1,18 +1,76 @@
-import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
+import {
+  expectedSummary,
+  readAxeEvidence,
+  readLighthouseReports,
+  renderComparison,
+  verifyGateControls,
+  verifyGitBinding,
+  verifyLighthouseConfig,
+  verifySummary,
+} from "./quality-verification.mjs";
 
-const root = path.resolve(import.meta.dirname, "..", "..");
-const lighthousePath = path.join(root, "evidence", "lighthouse-after.json");
-const a11yPath = path.join(root, "evidence", "a11y-after.json");
-assert.ok(fs.existsSync(lighthousePath) && fs.existsSync(a11yPath), "missing final Lighthouse or accessibility evidence");
-const lighthouse = JSON.parse(fs.readFileSync(lighthousePath, "utf8"));
-const a11y = JSON.parse(fs.readFileSync(a11yPath, "utf8"));
-assert.match(lighthouse.commitSha ?? "", /^[0-9a-f]{7,40}$/i, "Lighthouse evidence needs a commit SHA");
-assert.equal(a11y.commitSha, lighthouse.commitSha, "browser evidence must describe the same commit");
-assert.ok(lighthouse.runs >= 3, "at least three Lighthouse runs are required");
-assert.ok(lighthouse.performance >= 0.9, "performance score must be at least 0.90");
-assert.equal(lighthouse.accessibility, 1, "Lighthouse accessibility score must be 1.00");
-assert.ok(lighthouse.largestContentfulPaintMs <= 2500, "LCP must be at most 2500 ms");
-assert.equal((a11y.violations ?? []).length, 0, "automated accessibility evidence must have no violations");
-console.log("Performance and accessibility evidence meets the release thresholds.");
+const appRoot = process.cwd();
+const exerciseRoot = path.resolve(appRoot, "..");
+const repositoryRoot = execFileSync("git", ["rev-parse", "--show-toplevel"], { cwd: appRoot, encoding: "utf8" }).trim();
+const evidenceRoot = path.join(exerciseRoot, "evidence");
+const lighthouseDir = path.join(evidenceRoot, "raw", "lighthouse");
+const axePath = path.join(evidenceRoot, "raw", "axe.json");
+const summaryPath = path.join(evidenceRoot, "quality-summary.json");
+const comparisonPath = path.join(evidenceRoot, "comparison.md");
+const contractPath = path.join(exerciseRoot, "fixtures", "quality-thresholds.json");
+const baselineLighthouse = JSON.parse(fs.readFileSync(path.join(exerciseRoot, "fixtures", "lighthouse-before.json"), "utf8"));
+const baselineAxe = JSON.parse(fs.readFileSync(path.join(exerciseRoot, "fixtures", "a11y-before.json"), "utf8"));
+const contract = JSON.parse(fs.readFileSync(contractPath, "utf8"));
+const failures = [];
+
+let config;
+try { config = JSON.parse(fs.readFileSync(path.join(appRoot, "lighthouserc.json"), "utf8")); }
+catch { failures.push("missing or invalid lighthouserc.json"); }
+if (config) failures.push(...verifyLighthouseConfig(config, contract));
+
+let summary;
+try { summary = JSON.parse(fs.readFileSync(summaryPath, "utf8")); }
+catch { failures.push("missing or invalid evidence/quality-summary.json"); }
+const sourceSha = summary?.sourceSha ?? "";
+if (!/^[a-f0-9]{40}$/.test(sourceSha)) failures.push("quality evidence must use one full source SHA");
+const lighthouse = readLighthouseReports(lighthouseDir, contract);
+failures.push(...lighthouse.failures);
+const lighthouseMajor = lighthouse.runs[0]?.environment?.browserMajor;
+const axe = readAxeEvidence(axePath, sourceSha, contract, lighthouseMajor);
+failures.push(...axe.failures);
+let expected;
+if (lighthouse.runs.length === contract.lighthouseRuns && axe.axe && /^[a-f0-9]{40}$/.test(sourceSha)) {
+  expected = expectedSummary({ sourceSha, contract, runs: lighthouse.runs, axe: axe.axe });
+  failures.push(...verifySummary(summary, expected));
+  if (expected.releaseDecision !== "passed") failures.push("submitted browser evidence does not meet the release thresholds");
+}
+
+if (expected) {
+  const expectedComparison = renderComparison(expected, baselineLighthouse, baselineAxe);
+  const comparison = fs.existsSync(comparisonPath) ? fs.readFileSync(comparisonPath, "utf8").replaceAll("\r\n", "\n") : "";
+  if (comparison !== expectedComparison) failures.push("comparison.md was not generated from the submitted raw evidence");
+  failures.push(...verifyGateControls({ appRoot, lighthouseDir, axePath, contractPath, sourceSha, expected }));
+}
+
+if (/^[a-f0-9]{40}$/.test(sourceSha)) {
+  failures.push(...verifyGitBinding({ repositoryRoot, exerciseRoot, sourceSha }));
+  try {
+    const committedAt = Date.parse(execFileSync("git", ["show", "-s", "--format=%cI", sourceSha], { cwd: repositoryRoot, encoding: "utf8" }).trim());
+    for (const run of lighthouse.runs) if (Date.parse(run.fetchTime) < committedAt) failures.push(`${run.file} predates the source commit`);
+    if (axe.axe && Date.parse(axe.axe.generatedAt) < committedAt) failures.push("axe evidence predates the source commit");
+  } catch { failures.push("could not verify browser evidence capture times against the source commit"); }
+}
+
+if (failures.length) {
+  console.error(`Quality evidence verification failed:\n${[...new Set(failures)].map((failure) => `- ${failure}`).join("\n")}`);
+  process.exit(1);
+}
+console.log(`Source SHA: ${sourceSha}`);
+console.log("PASS three raw Lighthouse reports use one route and Chrome environment");
+console.log("PASS pessimistic performance, accessibility, LCP, and axe thresholds met");
+console.log("PASS raw artifact SHA-256 digests and generated comparison verified");
+console.log("PASS performance and axe negative controls return non-zero with failed decisions");
+console.log("PASS Git source binding and evidence-only follow-up history verified");

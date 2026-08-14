@@ -2,8 +2,12 @@
   "name": "Progressive Context Budget Refactor",
   "root": "..",
   "requiredFiles": [
-    { "path": "evidence/context-plan.md", "minCharacters": 350, "includeAll": ["task", "maximum", "question", "authority"] },
-    { "path": "evidence/context-ledger.json", "validJson": true, "includeAll": ["selected", "skipped", "bytes", "reason"] },
-    { "path": "evidence/decision.md", "minCharacters": 300, "includeAll": ["expanded", "stale", "verification", "trade-off"] }
+    { "path": "evidence/context-plan.json", "minCharacters": 500, "validJson": true, "includeAll": ["schemaVersion", "tags", "questionTags", "openQuestions", "maximumBytes", "mandatoryIds", "expectedSelectedIds"] },
+    { "path": "evidence/context-plan.md", "minCharacters": 700, "includeAll": ["before", "maximum", "mandatory", "authority", "open question"] },
+    { "path": "token-budget-app/tests/context-selector.test.mjs", "minCharacters": 900, "includeAll": ["deterministic", "budget", "stale", "duplicate", "question"] },
+    { "path": "evidence/context-ledger.json", "minCharacters": 1800, "validJson": true, "includeAll": ["planSha", "sourceSha", "selected", "skipped", "totalBytes", "remainingBytes", "reason"] },
+    { "path": "evidence/decision.md", "minCharacters": 900, "includeAll": ["planned", "actual", "expanded", "stale", "verification", "correctness", "trade-off"] },
+    { "path": "evidence/commands/context-tests.txt", "minCharacters": 250, "includeAll": ["real UTF-8", "mandatory", "deterministic", "exit code: 0"] },
+    { "path": "evidence/commands/context-verify.txt", "minCharacters": 250, "includeAll": ["Plan SHA", "Source SHA", "Selected bytes", "evidence-only follow-up"] }
   ]
 }

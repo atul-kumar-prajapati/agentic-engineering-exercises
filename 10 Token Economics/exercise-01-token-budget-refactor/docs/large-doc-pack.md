@@ -1,31 +1,7 @@
-# Large Doc Pack
+# Context Pack Index
 
-This is a seeded lab input for Progressive Context Budget Refactor. It gives the learner concrete constraints to inspect, implement, test, and verify.
+The real source files are under `docs/context-sources/`. Their protected catalog metadata is in `context-catalog.json`.
 
-## Operating Context
+The task is a session-adapter refactor. Start with repository rules and the current adapter contract. Expand to the error contract only when validation or error behavior becomes an open question. The legacy notes are stale; UI and audit documents are unrelated to this refactor.
 
-Token-budgeted refactor of a noisy rules component
-
-## Concrete Inputs
-
-- context budget
-- model effort choice
-- deterministic script
-- refactor test
-
-## Seeded Risks
-
-- plan loads whole app instead of change path
-- routine rename spends high-effort review turns
-- deterministic migration is done manually
-
-## Verification Expectations
-
-- context manifest
-- model routing log
-- refactor test
-- automation savings estimate
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+Do not open every source before writing the context plan. Use catalog metadata to choose the initial set, then read only the selected files.

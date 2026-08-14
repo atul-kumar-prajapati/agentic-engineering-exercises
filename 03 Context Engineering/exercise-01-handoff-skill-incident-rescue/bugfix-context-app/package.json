@@ -13,7 +13,11 @@
     "test:handoff": "node ./scripts/verify-handoff.mjs",
     "lint": "node ./scripts/lint-check.mjs",
     "format": "node ./scripts/format-check.mjs",
-    "agent:check": "npm run lint && npm run format && npm run typecheck && npm run build && node ./scripts/agent-check.mjs"
+    "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
+    "agent:check": "npm run test:integrity && npm run lint && npm run format && npm run typecheck && npm run build && node ./scripts/agent-check.mjs",
+    "verify:implementation": "npm run test:incident",
+    "verify:submission": "npm run test:handoff",
+    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
   },
   "dependencies": {
     "react": "^19.2.0",

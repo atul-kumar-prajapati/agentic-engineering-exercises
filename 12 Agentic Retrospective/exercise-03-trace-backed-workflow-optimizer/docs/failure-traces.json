@@ -1,0 +1,14 @@
+[
+  { "traceId": "TR-01", "failure": "edited before confirming requested module", "rootCause": "scope-before-action" },
+  { "traceId": "TR-02", "failure": "changed adjacent export outside request", "rootCause": "scope-before-action" },
+  { "traceId": "TR-03", "failure": "assumed product choice and started implementation", "rootCause": "scope-before-action" },
+  { "traceId": "TR-04", "failure": "used stale rollout note over current contract", "rootCause": "evidence-authority" },
+  { "traceId": "TR-05", "failure": "omitted contradiction from final reasoning", "rootCause": "evidence-authority" },
+  { "traceId": "TR-06", "failure": "claimed completion after focused test only", "rootCause": "completion-verification" },
+  { "traceId": "TR-07", "failure": "did not record exit code for final command", "rootCause": "completion-verification" },
+  { "traceId": "TR-08", "failure": "continued changing code after a failed release gate", "rootCause": "completion-verification" },
+  { "traceId": "TR-09", "failure": "loaded every reference before identifying decision", "rootCause": "context-selection" },
+  { "traceId": "TR-10", "failure": "reloaded broad architecture context without need", "rootCause": "context-selection" },
+  { "traceId": "TR-11", "failure": "left an important product option unresolved", "rootCause": "clarification-boundary" },
+  { "traceId": "TR-12", "failure": "silently chose destructive migration behavior", "rootCause": "clarification-boundary" }
+]

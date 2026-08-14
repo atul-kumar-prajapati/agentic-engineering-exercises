@@ -1,49 +1,77 @@
-# Graphify Billing Knowledge Graph Evidence
+# Graph-First Billing Evidence
 
-Copy the relevant section into each evidence file and replace every prompt with observed information. Do not report a command as passing unless its captured output proves it.
+Record only the first attempt from each implementation session. Do not retry, correct, or rewrite either result. Use exact commits, commands, exit codes, counts, paths, and source citations.
 
-## before.md and after.md
+## `evidence/before.md`
 
-- Agent: [name]
-- Model: [model and version]
-- Tools: [enabled tools]
-- Permissions: [permission mode]
-- Time limit: [implementation time limit]
-- Prompt: Correct recognized-revenue totals in the dashboard and scheduled snapshot. Use the current metric rules and billing-account boundaries, preserve gross-volume behaviour, and reject events without a valid account mapping.
+### Run
+
+- Starting commit:
+- Implementation commit:
+- Agent:
+- Model:
+- Tools:
+- Permissions:
+- Time limit:
 - Attempt: 1
-- Context source: [normal repository search or Graphify graph]
-- Graphify: [disabled or enabled]
+- Human hints: 0
+- Prompt: Correct recognized-revenue totals in the dashboard and scheduled snapshot. Use the current metric rules and billing-account boundaries, preserve gross-volume behaviour, and reject events without a valid account mapping.
+- Context source: Normal repository search
+- Graphify: Disabled
+- Patch: `evidence/before.patch`
 
-### Questions and investigation
+### Results
 
-Record answers to `GQ-01` through `GQ-06`, files opened in order, and assumptions made.
+| Proof | Result |
+|---|---|
+| `npm run test:billing` | Pass or fail; exit code: N |
+| Graph questions answered correctly | Number out of 6 |
+| Files opened | Number |
+| Wrong or stale sources used | Number |
+| Unsupported assumptions | Number |
+| Files changed | Number |
+| Lines added and removed | `+N / -N` |
 
-### Implementation
+## `evidence/after.md`
 
-Record the files changed and why.
+Use the same Run fields, with `Context source: Graphify graph` and `Graphify: Enabled`.
 
-### Verification
+### Results
 
-Record every command, exit code, and relevant output.
+| Proof | Result |
+|---|---|
+| `npm run test:billing` | Pass or fail; exit code: N |
+| `npm run test:graph` | Pass or fail; exit code: N |
+| `npm run agent:check` | Pass or fail; exit code: N |
+| Graph questions answered correctly | Number out of 6 |
+| Files opened | Number |
+| Wrong or stale sources used | Number |
+| Unsupported assumptions | Number |
+| Files changed | Number |
+| Lines added and removed | `+N / -N` |
 
-## graph-queries.md
+## `evidence/graph-queries.md`
 
-For every graph question, record the exact command, relevant output, confidence, answer, and source files opened to verify important inferred or ambiguous edges.
+For GQ-01 through GQ-06, record the exact command, relevant result, confidence, answer, and source file used to verify inferred or ambiguous edges.
 
-## graph-audit.md
+## `evidence/graph-audit.md`
 
-### Current sources retained
+### Current Sources Retained
 
-List each current rule or ownership fact, its source path, and the graph node or edge that led to it.
+| Rule or ownership fact | Source path and line | Graph node or edge |
+|---|---|---|
 
-### Stale or unsupported claims excluded
+### Stale or Unsupported Claims Excluded
 
-List each excluded claim, where it appeared, and the source that disproves it.
+| Claim | Source | Current evidence that rejects it |
+|---|---|---|
 
-### Graph-first boundary
+### Graph-First Boundary
 
-Confirm that the graph-first agent queried the graph before opening source files.
+Record the first graph command and first source-file read. Confirm graph queries occurred first.
 
-## comparison.md
+## `evidence/comparison.md`
 
-Compare question accuracy, files opened, wrong files opened, unsupported assumptions, implementation correctness, and verification. Explain why both first attempts used fair conditions.
+Confirm fair run conditions, then compare question accuracy, files opened, stale sources, assumptions, billing test results, and changed files. State whether graph-first context improved the result and support it with both patches.
+
+Use genuine Git diffs for `evidence/before.patch` and `evidence/after.patch`. Record the matching patch path in each run file and keep `evidence/comparison.md` in the final branch.

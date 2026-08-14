@@ -1,9 +1,9 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
-    "../README.md": "d92332d5e73b77167a2515fad142d17c80de843533c9c0ca5d6710d5a5e714c3",
+    "../README.md": "c283fb1f1a4f0e78a1d25f5cf7dcdc1c7144f496e292f3fe5832dd938bbf9e93",
     "../docs/current-metric-contract.md": "b95bec46ee644998883b909e5abf55aa8e72f725709b01c9e2adb764c9c44112",
-    "../docs/evidence-template.md": "939d18b2f016ae82d2c7b30c1aad76429317c7a0c23f93057d26642bd704e137",
+    "../docs/evidence-template.md": "a4da9ccb6332507dc99bcb5328c06e1ff157e0a67e552912b8805b0c5f13b7c9",
     "../docs/graph-extract.md": "28a60a32d18227daf3072bcc6912636e00b093781eac7e508679ca21265727ee",
     "../docs/graph-questions.md": "e3e7f6ad610a8b256722400bdf76ab09d6f7474b4e9954db8439b472ea17228c",
     "../docs/legacy-finance-metrics.md": "0d35e02183cefa6e152fb63b6834d83bdb5f48d33bf249b12017e3b56ee530dd",
@@ -11,9 +11,9 @@
     "../docs/service-ownership.md": "dcf46885ddbc8bc8997036b939aa842a061d584f735c54899ab2bdc2933c453a",
     "incidents/REV-482.md": "44cfcb04674d5144af8fcd995fc3158f36717ac625cf9756b10b3901a91d14b4",
     "index.html": "4c1e0650afe34edc5947a42d1c4993afa768d23420e48c9a4f7ef035ba650356",
-    "lab-contract.json": "b9bedd32264c2ea1e60f5938646fbc6be3ecab911bbf8a852faa0f9f5e2bb1c5",
+    "lab-contract.json": "4662721325c52017bc2f1d8edb1583252d49b2ae69628b728a2a8200d0f44f89",
     "package-lock.json": "312428e801608f9e6d52c9d5735cf8c88179adb6338cfef02784744e84691f9d",
-    "package.json": "c656ceab2106351ddf47aea7f95a05f68644148f328eb9534af9d8cd020ce962",
+    "package.json": "1e5dbfb754689132f044c81de5dfedce7c8165b0a341e33f2d929fa65a1c5e74",
     "scripts/agent-check.mjs": "292e10a8bd5acd3a3824ea82d9805d078b5d9f4341b49c486a8a16d24d5bca8b",
     "scripts/format-check.mjs": "8b2792ba15f266068dc2fdd040e1530f71e7411e77f7f1e393c0a53c3349cb9e",
     "scripts/lint-check.mjs": "0b9ce2d831b5f7127907b966424339ac6bbef8967d2cc4cb93739b406547706e",

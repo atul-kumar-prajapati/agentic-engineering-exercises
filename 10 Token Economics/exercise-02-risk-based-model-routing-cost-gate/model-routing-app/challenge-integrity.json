@@ -1,10 +1,28 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
-    "../README.md": "cb98c987e4a057b8006c98c1a1df7f4be06d8fb278e28d2bec65a19a8d520f62",
-    "../evals/routing-cases.json": "a41524c16c77c1e26fdba3b2711286a6cc9076422de1bf7b4bcb5e00ba33c625",
-    "../evals/pricing.json": "4f29326178fa8b979842959f089a37b8a32af3d35486237ffba8d48308b22d0a",
-    "scripts/run-routing-tests.mjs": "897a7efb9f246a616eed5e52aabc73006ca5dc3d4e2d40cb232233f74dee2940",
-    "submission-contract.json": "e850bac5a899cd7482415ff8c9f0a11752df8feb2355f7f93652d77fb9dce8dd"
+    "../README.md": "244057c30fb38dbc743a4538cda2d042b5548151660954ac59211cab1c3a33b5",
+    "../docs/cost-dashboard-sample.md": "59300cf31f65a0170b1795c6ea268058f1581a61b0e299e10a3853fb706e2cdf",
+    "../docs/team-usage-scenarios.md": "145d7ded604058f5f53c3cb095bcedbf50c6c00913dbee483f0e7799ccda84e7",
+    "../docs/measurement-contract.md": "4a3556c466f2711bff92ba23b6fdc51ba7aaa22a6a637bed1394879da678b21f",
+    "../evals/pricing.json": "6b8bf405901f938dfc93fe8b4d88982f53f953bbc470d972920de63fa87588b3",
+    "../evals/routing-cases.json": "0bf785383f5346ab0bbec0c65507d35b354ba04273916bd6fe59c91983f3a66a",
+    "index.html": "2d25a9b984560f03bbd08bd850f913a1b3a8c15cf397e52e0fd6c3d8f430d3e2",
+    "lab-contract.json": "e42c9531bd382b4cf24ead8b645342d3af1bb460f17c52f8649a74456620302e",
+    "package-lock.json": "acfaef819eecca045dd5f98dabcaf74c4fbe0a25851a412a3d8ecc4ddc253174",
+    "package.json": "03736c77fd5c8baab4db466deb5897a883bd06c5d589de2f171bebde021d3a9d",
+    "scripts/agent-check.mjs": "9e24824c7ef20743505fb1787d83608278c7a8e4e81c568f56f57bbf24dbe125",
+    "scripts/format-check.mjs": "2b404502159a61cc97468297e9d7b18e7fca5101fae7126ed4ac271395aada30",
+    "scripts/lint-check.mjs": "f8046db589aee4e610d87c6725cb64e8f7f62235267ddc6a39166754f6af1784",
+    "scripts/routing-verification.mjs": "68d1acce046207f42684a793551f6b201ba5a3747acf08d2ccdff524ddc89dfa",
+    "scripts/run-routing-tests.mjs": "4c14f215818b97b9287967645d5aa86fe9d31ce27c73da8687beac6e90616fae",
+    "scripts/score-routing-eval.mjs": "fd58abf0fe99069010fd8e278c8ae72de3eb67f636535adaa7bb980df6ac0690",
+    "scripts/test-routing-verifier.mjs": "78d416797d111ed6f8af1d9d2cbfb8421e15b77aa268681f2789f1808073a5e6",
+    "scripts/validate-routing-fixtures.mjs": "b2d239a8ec156c3bb2dce3d4c146d86dd7028f14e43f0749a5813f22a9b72657",
+    "scripts/verify-routing-submission.mjs": "c6fde21cdea2a3856756d7073beeac475ac114cdbee122d080246279685e8c9a",
+    "src/labContract.ts": "8bfdfd4e30967329df04a5abcf4c6e7620e52ac13b64648ad784c48ac205ffd3",
+    "submission-contract.json": "76f59f7e02a7d1f22df8c53237d83b089b5eb7e27f331f018191e890f278a834",
+    "tsconfig.json": "b72b825b933563195288d4b0ebb158673891a811f0cb5ea5d3fc286920c2f7f9",
+    "vite.config.ts": "4f9fbbdbc10bf58253a12eb98c949427d351c61ade1ed8250a3c9705ef0b50ba"
   }
 }

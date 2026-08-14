@@ -2,36 +2,55 @@
 
 ## Your Mission
 
-Your mission is to decide whether an improved review prompt catches historical defects without turning harmless changes into false blockers.
+Your team wants a stronger code-review prompt, but an overcautious reviewer can appear thorough while creating false merge blockers. Your mission is to improve review recall without sacrificing clean-control precision.
 
-You are given one historical bad diff, a multi-bug diff, a clean look-alike control, and baseline and candidate prompts. A longer checklist can improve recall while destroying review precision.
+The protected catalog contains a historical five-bug diff, a two-bug security diff, and a clean look-alike. The starter candidate is deliberately noisy.
 
-Run repeated model reviews, improve the candidate from observed failures, and make an adoption decision using both recall and clean-control precision.
+Run a repeated real-model baseline and candidate evaluation, improve only from measured training failures, and make an evidence-based adoption decision.
 
-The duration for this challenge is 30 min or less.
+The duration for this challenge is 60 min or less.
 
 ## Project
 
-[regression-review-app](./regression-review-app) contains protected cases, prompts, a structural check, and model-evaluation configuration. [adoption thresholds](./docs/adoption-thresholds.md) define the gate.
+[regression-review-app](./regression-review-app) contains protected cases, Promptfoo configuration, scorer, and evidence verifier. [Adoption thresholds](./docs/adoption-thresholds.md) and the [judgment contract](./docs/judgment-contract.md) define the gate.
 
 ## How To Go About It
 
-Run the same model and settings against baseline and candidate prompts at least three times per case. Report historical recall, multi-bug recall, clean-control precision, and variance.
+1. Record the starting commit and baseline prompt in `evidence/before.md` and `evidence/before.patch`. Set `REVIEW_EVAL_MODEL` to a real remote model provider.
 
-Improve general review behavior without naming case IDs, exact diff tokens, or expected findings. Select the candidate using held-out results and record limitations.
+2. Run the protected catalog check, then evaluate the baseline and unchanged candidate without cache, three times per case under identical provider settings.
+
+3. Bind every judgment to its raw response hash and score against protected finding IDs. Do not replace the provider with deterministic code or expose case IDs, expected findings, file hints, or diff tokens to the candidate.
+
+4. Improve only `eval/review-prompt-candidate.md` from training failures. Do not tune against held-out results.
+
+5. Rerun all 18 candidate samples with the same model, temperature, cases, repository state, and first-attempt conditions. Do not selectively rerun weak responses.
+
+6. Generate the scorecard and compare recall, precision, false blockers, variance, and regression limits. Use the thresholds to adopt or reject the candidate.
+
+7. Save `evidence/after.md`, `evidence/after.patch`, raw results, judgments, scorecard, report, and comparison. Raise a focused PR containing only the candidate and evidence.
 
 ## Evidence
 
-Submit the final prompt, raw evaluation outputs, and `evidence/review-eval.md` containing model, settings, sample count, scores, variance, false blockers, limitations, and adoption decision.
+Submit:
 
-Run `npm run eval:smoke`, `npm run eval:model`, `npm run test:submission`, and `npm run agent:check` from `regression-review-app`.
+- The final candidate prompt and its focused source commit.
+- `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, and `evidence/after.patch`.
+- Raw Promptfoo output, run metadata, response-bound judgments, and generated scorecard.
+- `evidence/review-eval.md` and `evidence/comparison.md`.
+- Output from `npm run verify:exercise`.
+- A focused pull request containing only this exercise.
 
-Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, real-model metadata, uncached sample completeness, response-bound judgments, generated scores, thresholds, prompt leakage, and required proof.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Reviewers will check real model runs, repeated samples, multi-bug coverage, clean controls, threshold calculations, and absence of answer leakage.
+## Completion Criteria
 
-The exercise is incomplete if only keyword checks run, provider logic contains answers, sample details are missing, or higher recall creates unacceptable false blockers.
+The challenge is complete when:
 
-See the [Code Review Regression Gate rubric](../../docs/EVALUATION_RUBRICS.md#code-review-regression-gate).
+- Both prompt lanes use the same real provider, model, temperature, cases, and three uncached samples per case.
+- Historical and multi-bug recall each reach 80 percent and clean-control precision reaches 90 percent.
+- No metric regresses by more than five percentage points and the prompt contains no fixture answers.
+- Every judgment matches a raw response hash and the report matches the generated scorecard.
+- `npm run verify:exercise` passes and the adoption decision follows the measured gate.

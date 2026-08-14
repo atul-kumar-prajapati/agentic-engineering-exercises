@@ -1,9 +1,13 @@
-# Before and After Evidence Template
+# Spec Framing Evidence
 
-Use this structure for both `evidence/before.md` and `evidence/after.md`.
+Record only the first attempt from each agent session. Do not retry, correct, or rewrite the generated specification. Use exact commits, commands, exit codes, counts, and identifiers instead of long explanations.
 
-## Session Conditions
+## `evidence/before.md`
 
+### Run
+
+- Starting commit:
+- Implementation commit:
 - Agent:
 - Model:
 - Tools:
@@ -11,21 +15,89 @@ Use this structure for both `evidence/before.md` and `evidence/after.md`.
 - Time limit:
 - Attempt: 1
 - Prompt: Allow users to manage their subscriptions.
+- Human hints: 0
+- Patch: `evidence/before.patch`
 
-## Result
+### Results
 
-Record whether the agent produced an implementation-ready result and why.
+| Proof | Result |
+|---|---|
+| Specification artifacts created | File paths |
+| Invented decisions | Number |
+| Important questions missed | Number |
+| Requirements without testable acceptance criteria | Number |
+| Requirements not traced to tasks | Number |
+| Files changed | Number |
+| Lines added and removed | `+N / -N` |
 
-## Invented or Resolved Decisions
+### Important Problems
 
-For the before run, list decisions the agent invented without evidence. For the after run, list decisions resolved by `specs/clarifications.md` and cite their question identifiers.
+List no more than three. Cite the generated file and line, then name the missing evidence or unanswered question.
 
-## Missing Questions or Remaining Blockers
+## `evidence/after.md`
 
-For the before run, list important questions the agent missed. For the after run, state any remaining blocker or write `None` and explain why the specification is ready.
+### Run
 
-## Artifacts and Validation
+- Starting commit:
+- Implementation commit:
+- Agent:
+- Model:
+- Tools:
+- Permissions:
+- Time limit:
+- Attempt: 1
+- Prompt: Allow users to manage their subscriptions.
+- Human hints: 0
+- Clarification file used: `specs/clarifications.md`
+- Patch: `evidence/after.patch`
 
-List the generated artifacts and relevant command results.
+### Results
 
-Create `evidence/comparison.md` separately. Explain whether the conditions were identical, identify at least three specific improvements, and connect each improvement to a clarification question and final requirement.
+| Proof | Result |
+|---|---|
+| `npm run spec:verify` | Pass or fail; exit code: N |
+| Confirmed questions | Q identifiers |
+| Explicit assumptions | Q identifiers |
+| Requirements | Number and REQ identifiers |
+| Acceptance criteria | Number and AC identifiers |
+| Untraced requirements or criteria | Number |
+| Files changed | Number |
+| Lines added and removed | `+N / -N` |
+
+### Decisions Resolved
+
+| Clarification | Repository evidence | Final requirement |
+|---|---|---|
+| Q identifier | File and line | REQ identifier |
+
+## `evidence/comparison.md`
+
+### Fair Comparison
+
+| Condition | Before | After | Same? |
+|---|---|---|---|
+| Starting commit | | | Yes or No |
+| Product request | | | Yes or No |
+| Agent and model | | | Yes or No |
+| Tools and permissions | | | Yes or No |
+| Time limit | | | Yes or No |
+| Human hints | | | Yes or No |
+| Attempts | | | Yes or No |
+
+### Results
+
+| Metric | Before | After |
+|---|---|---|
+| Invented decisions | | |
+| Missed questions | | |
+| Testable acceptance criteria | | |
+| Traceability gaps | | |
+| Validation result | | |
+
+### Improvements
+
+Identify at least three specific improvements. For each one, cite its Q identifier, final REQ identifier, and the affected generated file.
+
+### Conclusion
+
+State whether clarification made the specification safer to implement. Support the answer with the tables and patches.

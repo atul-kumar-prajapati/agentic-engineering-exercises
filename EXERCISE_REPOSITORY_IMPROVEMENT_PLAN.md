@@ -65,40 +65,7 @@ Add the following sections to every exercise:
 - Two reviewers can independently reach the same completion decision.
 - Evidence paths, formats, and size expectations are stated in the README.
 
-### 3. Add a clear evaluation rubric for every exercise
-
-**Priority:** P1
-
-The current artifact-based approach can allow a large but shallow submission to appear complete. Scoring should focus on correctness, decisions, and proof.
-
-**Required change**
-
-Create an exercise-specific rubric using a common structure:
-
-- Correctness and working behavior.
-- Coverage of the stated requirements.
-- Quality and relevance of tests or evaluation cases.
-- Verification evidence.
-- Scope control and avoidance of unrelated changes.
-- Quality of reasoning, including assumptions and trade-offs where relevant.
-
-**Example 100-point structure**
-
-- 30 points: correctness.
-- 25 points: requirement coverage.
-- 20 points: verification and evidence.
-- 15 points: isolation and scope control.
-- 10 points: explanation and maintainability.
-
-The weighting can be adjusted for each exercise, but the reviewer must be able to explain every deduction using observable evidence.
-
-**Done when**
-
-- Each README links to its rubric.
-- The rubric describes pass, partial, and fail conditions.
-- More documentation does not automatically receive a better score.
-
-### 4. Use real exercise inputs instead of self-declared fixtures
+### 3. Use real exercise inputs instead of self-declared fixtures
 
 **Priority:** P0
 
@@ -116,7 +83,7 @@ Exercises that involve diffs, commits, skills, migrations, or reviews should pro
 - A reviewer can independently inspect the original input.
 - Changing the real input can cause the participant's verification to fail.
 
-### 5. Make the toolchain reproducible
+### 4. Make the toolchain reproducible
 
 **Priority:** P1
 
@@ -166,7 +133,6 @@ Change one routing rule that exists in two policy locations, update representati
 
 - The exercise includes a follow-up task brief.
 - The repository captures the fresh agent's result and verification output.
-- The rubric scores agent performance, not the volume of onboarding documentation.
 
 ### Exercise 2: Agent Guardrails
 
@@ -221,7 +187,6 @@ Before writing the specification, require the participant to provide three to fi
 
 - The clarification and assumption section is mandatory.
 - Important billing, authorization, failure-state, and scope boundaries cannot be silently invented.
-- The rubric scores decision quality, feasibility, traceability, scope control, risk handling, and concision.
 
 ## 04 Test Automation
 
@@ -242,7 +207,6 @@ Before writing the specification, require the participant to provide three to fi
 
 - The failure is observable before the fix and stable after the fix.
 - The participant does not need to invent the checkout application.
-- The rubric checks resilient locators, absence of fixed waits, mock isolation, payload assertions, repeated parallel success, and root-cause explanation.
 
 ### Exercise 2: MSW Component Network Boundary Tests
 
@@ -400,7 +364,7 @@ Before writing the specification, require the participant to provide three to fi
 
 **Required change**
 
-- Provide the schema and a scoring rubric.
+- Provide the schema and automated validation rules.
 - Include one deliberately conflicting pair of cards.
 - Include one failed, cancelled, or rejected lane.
 - Keep card state consistent across the board, ownership map, application data, and integration log.
@@ -480,9 +444,8 @@ Before writing the specification, require the participant to provide three to fi
 ### Phase 2: Standardize completion and review
 
 1. Add the acceptance and evidence contract template.
-2. Add the common rubric structure.
-3. Pin toolchains and add clean-checkout verification.
-4. Add automated starter-smoke checks to prevent README drift.
+2. Pin toolchains and add clean-checkout verification.
+3. Add automated starter-smoke checks to prevent README drift.
 
 ### Phase 3: Add the accepted exercise-specific proof steps
 
@@ -501,7 +464,6 @@ Before writing the specification, require the participant to provide three to fi
 - [ ] Setup versions and clean installation commands are documented.
 - [ ] Acceptance criteria are explicit.
 - [ ] Evidence files, paths, and commands are explicit.
-- [ ] The rubric scores correctness and proof, not document volume.
 - [ ] The verification fails when the seeded problem or expected behavior is changed.
 - [ ] Exercise state and evidence are consistent across documentation, code, and Git history.
 - [ ] No requirement depends on information available only in the original feedback report.

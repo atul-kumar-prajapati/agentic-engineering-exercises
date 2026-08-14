@@ -1,9 +1,21 @@
 {
   "name": "Failure-Preserving PR Evidence Pack",
-  "root": "..",
+  "root": "../../..",
   "requiredFiles": [
-    { "path": ".github/workflows/pr-evidence.yml", "minCharacters": 350, "includeAll": ["permissions:", "if: always()", "upload-artifact", "github.sha"] },
-    { "path": "evidence/pr-evidence.json", "validJson": true, "includeAll": ["commitSha", "exitCode", "digest", "rollback"] },
-    { "path": "evidence/README.md", "minCharacters": 250, "includeAll": ["checkout-smoke", "failed", "reproduce"] }
+    { "path": ".github/workflows/evidence-led-pr-01.yml", "minCharacters": 900, "includeAll": ["pull_request:", "permissions:", "contents: read", "ubuntu-24.04", "persist-credentials: false", "npm ci", "github.sha", "always()", "actions/upload-artifact@", "if-no-files-found: error", "retention-days:"] },
+    { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/pr-evidence-app/scripts/generate-pr-evidence.mjs", "minCharacters": 1200, "includeAll": ["--fixture", "--sha", "--output", "sha256", "process.exitCode"] },
+    { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/generated/pr-evidence.json", "validJson": true, "minCharacters": 1500, "includeAll": ["schemaVersion", "sourceSha", "fixtureSha256", "overallResult", "overallExitCode", "checkout-smoke", "artifact", "sha256", "reviewerAction", "rollback"] },
+    { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/generated/summary.md", "minCharacters": 1000, "includeAll": ["Source SHA", "Overall result", "Overall exit code", "unit-tests", "checkout-smoke", "ui-screenshot", "Artifact", "SHA-256", "Risk", "Reviewer action", "Rollback"] },
+    { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/generated/artifacts/unit-tests.txt", "minCharacters": 50, "includeAll": ["PASS", "8 passed"] },
+    { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/generated/artifacts/checkout-smoke.txt", "minCharacters": 80, "includeAll": ["FAIL", "Payment authorization", "Exit code: 1"] },
+    { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/generated/artifacts/checkout.svg", "minCharacters": 500, "includeAll": ["<svg", "Checkout", "Payment authorization could not be completed"] },
+    { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/README.md", "minCharacters": 600, "includeAll": ["Source SHA", "checkout-smoke", "failed", "Exit code", "Risk", "Reviewer action", "Rollback", "Reproduce", "evidence/generated/summary.md", "evidence/generated/artifacts/checkout-smoke.txt"] },
+    { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/commands/evidence-verify.txt", "minCharacters": 450, "includeAll": ["Source SHA", "PASS submitted", "PASS generator", "PASS .github/workflows/evidence-led-pr-01.yml", "PASS Git history", "PASS verified evidence contract"] }
+  ],
+  "requiredDirectories": [
+    "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence",
+    "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/generated",
+    "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/generated/artifacts",
+    "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/commands"
   ]
 }

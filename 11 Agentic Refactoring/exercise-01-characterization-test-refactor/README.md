@@ -2,36 +2,54 @@
 
 ## Your Mission
 
-Your mission is to simplify a renewal-eligibility function without changing the undocumented behavior that current callers depend on.
+Your team needs a complex renewal rule simplified, but nobody can confirm which surprising behaviors current callers depend on. Your mission is to refactor the internal decision structure without changing any observable result.
 
-You are given nested conditions, misleading names, and surprising edge cases. Some behavior looks wrong but no approved requirement authorizes a bug fix during this refactor.
+The function allows support overrides, accepts negative late-payment counts, and rejects some mature accounts as `plan-not-supported`. These may be bugs, but this task does not authorize behavior changes.
 
-Capture the current behavior before editing, classify surprising cases, refactor one rules slice, and prove the observable outputs remain unchanged.
+Compare an unconstrained agent refactor with a characterization-first workflow and prove every output remains identical.
 
-The duration for this challenge is 30 min or less.
+The duration for this challenge is 45 min or less.
 
 ## Project
 
-[rules-refactor-app](./rules-refactor-app) contains the legacy rule. [golden cases](./docs/renewal-golden-cases.json) are protected observations, not permission to rewrite expected values.
+[rules-refactor-app](./rules-refactor-app) contains the legacy function and protected oracle. [Golden cases](./docs/renewal-golden-cases.json) are observed behavior and must not be edited.
 
 ## How To Go About It
 
-Run the oracle and add characterization tests around public inputs and outputs. Record each surprising result as preserve, approved change, or suspected bug; only preserve is authorized in this exercise.
+1. Create two branches from the same starting commit. In the first branch, give a fresh coding agent the refactor request without a characterization requirement. Do not correct or retry it. Save `evidence/before.md` and `evidence/before.patch`.
 
-Refactor in small steps with the tests green after each step. Improve names and decision structure without changing the exported contract or coupling tests to private helpers.
+2. Review the first result for changed outputs, reason strings, validation gaps, decision order, public API, or tests coupled to private helpers.
+
+3. In the second branch, add one characterization test that calls only `evaluateRenewalEligibility`, capture `before-output.json`, and commit those two files before production edits.
+
+4. Classify every surprising case as preserve or suspected bug. This challenge authorizes preserve only.
+
+5. Start a fresh agent session under the same agent, model, tools, permissions, request, time limit, and first-attempt conditions. Refactor only `legacyEligibility.mjs` in a separate commit.
+
+6. Preserve the export, inputs, result fields, exact reason strings, validation gaps, and decision order. Capture `after-output.json` from the refactored code and compare it byte-for-byte with the baseline.
+
+7. Save `evidence/after.md`, `evidence/after.patch`, behavior decisions, refactor steps, command proof, and comparison. Raise the PR from the second branch.
 
 ## Evidence
 
-Submit the refactor and characterization tests, `evidence/before-output.json`, `evidence/after-output.json`, `evidence/behavior-decisions.md`, and `evidence/refactor-steps.md`.
+Submit:
 
-Run `npm run test:oracle`, `npm run test:submission`, and `npm run agent:check` from `rules-refactor-app`.
+- The characterization-first and refactor commits.
+- `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, and `evidence/after.patch`.
+- Before and after outputs, `behavior-decisions.md`, `refactor-steps.md`, and `evidence/comparison.md`.
+- Captured command output and output from `npm run verify:exercise`.
+- A focused pull request containing only this exercise.
 
-Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, application quality, test-first history, public-only characterization, exact behavior parity, refactor scope, and required proof.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Reviewers will check that characterization precedes refactoring, tests use public behavior, every golden case is preserved, and suspected bugs are documented rather than silently changed.
+## Completion Criteria
 
-The exercise is incomplete if expected outputs are edited to match the refactor, tests assert private helpers, behavior changes without approval, or the before snapshot is recreated afterward.
+The challenge is complete when:
 
-See the [Characterization-First Rules Refactor rubric](../../docs/EVALUATION_RUBRICS.md#characterization-first-rules-refactor).
+- Both agent attempts use matching conditions and genuine first-attempt patches.
+- Characterization tests and baseline output are committed before production edits and call only the public function.
+- Every protected field, value, reason string, validation gap, and decision result is identical before and after.
+- The refactor commit changes only `legacyEligibility.mjs`; suspected bugs are documented, not fixed.
+- `npm run verify:exercise` passes and Git history proves the required order.

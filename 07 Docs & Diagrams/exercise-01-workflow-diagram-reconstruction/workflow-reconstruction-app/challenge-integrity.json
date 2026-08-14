@@ -1,0 +1,21 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "e4ffa07c82ddb1d0d6836646e8f5207102e2dead55c50f424f485d0afec75675",
+    "../docs/legacy-workflow-description.md": "6486fdb67cbc09575b1c03a1a40576b2c18c581f1252335b6313b51bacd29536",
+    "../docs/diagram-contract.md": "a4087ae8044ce869125d63c76c82eda6c472ff9a0c27b8bd72ae5f94c411b6ac",
+    "../docs/evidence-template.md": "9cc96ac25d54c32158d7988cbd8fc5de4b8d982c66b6ac9bac7b750036340743",
+    "package.json": "474d62550419bc0f38d0a54900808c766e84d54e4098f8e6a5b4b5f995af9c75",
+    "package-lock.json": "284d1a67ae57d262d08386dc7d111a5aa08bb73bb82aea915d869d95ce4a0f92",
+    "submission-contract.json": "d1efc93e8e205c2755c9cb40964d90b606b5d4a6191663552b34f6b9924f2af6",
+    "scripts/diagram-verification.mjs": "9d2e2b5378fda764d42845430fb42e5ee7a21ff47cb61aaa399b68b9b1e6e324",
+    "scripts/mermaid-parser.mjs": "9f7eb0064de810138afa214f5dc50573ba431d2e6f165f5a48a07c13c17d5ae7",
+    "scripts/parse-diagrams.mjs": "2e1a874a3a6dccc0214dd9be3e49476b4e1f3a37590b73e3a8285802c1e33f26",
+    "scripts/trace-workflow.mjs": "9c8a4e8c260725ad20ed2875e6cd30e8ace5d42a16d20bc29dff2514eebd67e4",
+    "scripts/test-diagram-verifier.mjs": "9bcb0f3a2bc383d5d3f22c222a14e3b6667615d060d1feb7e8d33e8dca490949",
+    "scripts/verify-diagrams.mjs": "3f41ba4422faab90d900c6e5ddc4509b36f16d3fb3c54c5a35f3e73d2dc0857b",
+    "src/App.tsx": "ed4bf19f044f22a14bda28b3892594204738b828cde2cbc50419a0d1fe4b419a",
+    "src/data/accessRequests.tsx": "546fecac913c95921b36eb309ad1eea2c1bb9f96a4370b4cd111328bdc4eb52f",
+    "src/workflow.tsx": "72f2a50a7bb538e166ee92fc2178cbdf0edc39824554f9c1209f42b531403582"
+  }
+}

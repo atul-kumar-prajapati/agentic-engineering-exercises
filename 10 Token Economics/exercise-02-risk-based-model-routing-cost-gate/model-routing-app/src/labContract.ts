@@ -1,56 +1,19 @@
 export interface LabContract {
-  title: string;
-  competency: string;
-  domain: string;
-  mission: string;
-  outcome: string;
-  entities: string[];
-  seededDefects: string[];
-  verificationGates: string[];
-  agentWorkflow: string[];
-  workingDeliverables: string[];
-  masterySignals: string[];
+  title: string; competency: string; domain: string; mission: string; outcome: string;
+  entities: string[]; seededDefects: string[]; verificationGates: string[];
+  agentWorkflow: string[]; workingDeliverables: string[]; masterySignals: string[];
 }
 
 export const labContract: LabContract = {
-  "title": "Risk-Based Model Routing Cost Gate",
-  "competency": "10. Token Economics - Right model and token cost optimizations",
-  "domain": "Model and effort routing policy for an engineering team",
-  "mission": "Design a model and effort routing policy for a team using agents across planning, coding, reviews, and retros.",
-  "outcome": "A team routing policy chooses model and effort by task risk, not habit.",
-  "entities": [
-    "routing rule",
-    "usage log",
-    "scenario",
-    "cost estimate"
-  ],
-  "seededDefects": [
-    "routine test edits route to max effort",
-    "security review routes to cheap model without escalation",
-    "policy ignores latency for incident fixes"
-  ],
-  "verificationGates": [
-    "scenario simulation",
-    "cost estimator",
-    "risk override test",
-    "leadership recommendation"
-  ],
-  "agentWorkflow": [
-    "Ask the coding agent to inspect this lab contract, starter code, docs, and tests before proposing a plan.",
-    "Revise the agent plan so it exercises the competency practice and avoids the common mistake.",
-    "Implement the smallest working change that addresses the seeded defects.",
-    "Run the verification gates and capture command evidence before writing the final review note."
-  ],
-  "workingDeliverables": [
-    "Routing policy in config or code.",
-    "Cost/latency estimator script.",
-    "Scenario simulation output.",
-    "Leadership recommendation for adoption."
-  ],
-  "masterySignals": [
-    "Encode model/effort routing rules for planning, routine edits, tests, reviews, and retros.",
-    "Build a small estimator or simulation using the provided scenarios and usage logs.",
-    "Run the estimator against at least three advanced-engineering workflows.",
-    "Tune the policy when cost, latency, or risk looks wrong."
-  ]
+  title: "Risk-Based Model Routing Cost Gate",
+  competency: "10. Token Economics - measured model routing",
+  domain: "Coding-agent task routing by risk, ambiguity, and scope",
+  mission: "Lower expected model cost while preserving clarification, quality, and safety boundaries.",
+  outcome: "A field-based policy clears held-out routes and a response-bound 36-run cost gate.",
+  entities: ["routing decision", "eligible tier lane", "raw response", "expected escalation cost"],
+  seededDefects: ["every task uses reasoning", "ambiguity never clarifies", "retry and escalation are unpriced", "quality and safety are unmeasured"],
+  verificationGates: ["held-out routing matrix", "response SHA binding", "cost reconciliation", "quality and safety floors", "all-reasoning comparison"],
+  agentWorkflow: ["Implement routes from task fields.", "Collect three runs for every eligible lane.", "Grade and bind every raw response.", "Use the protected scorer and adopt only when all gates pass."],
+  workingDeliverables: ["Router and tests.", "Raw runs and responses.", "Generated cost model.", "Policy and adoption evidence."],
+  masterySignals: ["Unknown work clarifies before execution.", "High risk never downgrades for savings.", "Failed calls are charged before escalation.", "Savings and quality come from repeated measurements."],
 };

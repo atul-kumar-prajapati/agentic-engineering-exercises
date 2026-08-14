@@ -41,9 +41,9 @@ Use the index below to choose an exercise, then read the local exercise README f
 | 06. Multi-Agent Workflows | 01 | [Parallel Worktree Conflict Rescue](./06%20Multi-Agent%20Workflows/exercise-01-parallel-worktree-feature-split/README.md) | [worktree-feature-app](./06%20Multi-Agent%20Workflows/exercise-01-parallel-worktree-feature-split/worktree-feature-app) |
 | 06. Multi-Agent Workflows | 02 | [Specialist Review Merge Gate](./06%20Multi-Agent%20Workflows/exercise-02-specialist-subagent-nfr-review/README.md) | [nfr-swarm-app](./06%20Multi-Agent%20Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app) |
 | 06. Multi-Agent Workflows | 03 | [Agent Kanban Collision Control](./06%20Multi-Agent%20Workflows/exercise-03-agent-ready-kanban-control-plane/README.md) | [kanban-control-app](./06%20Multi-Agent%20Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app) |
-| 07. Docs & Diagrams | 04 | [Implementation-Backed Workflow Reconstruction](./07%20Docs%20%26%20Diagrams/exercise-04-workflow-diagram-reconstruction/README.md) | [workflow-reconstruction-app](./07%20Docs%20%26%20Diagrams/exercise-04-workflow-diagram-reconstruction/workflow-reconstruction-app) |
-| 07. Docs & Diagrams | 05 | [Graph-Backed Notification Fallback Rescue](./07%20Docs%20%26%20Diagrams/exercise-05-codebase-graph-to-diagrams/README.md) | [notification-mesh-app](./07%20Docs%20%26%20Diagrams/exercise-05-codebase-graph-to-diagrams/notification-mesh-app) |
-| 07. Docs & Diagrams | 06 | [Payment Retry Visualization and Fix](./07%20Docs%20%26%20Diagrams/exercise-06-feature-visualization/README.md) | [payment-workflow-app](./07%20Docs%20%26%20Diagrams/exercise-06-feature-visualization/payment-workflow-app) |
+| 07. Docs & Diagrams | 01 | [Implementation-Backed Workflow Reconstruction](./07%20Docs%20%26%20Diagrams/exercise-01-workflow-diagram-reconstruction/README.md) | [workflow-reconstruction-app](./07%20Docs%20%26%20Diagrams/exercise-01-workflow-diagram-reconstruction/workflow-reconstruction-app) |
+| 07. Docs & Diagrams | 02 | [Source-Verified Code Graph Rescue](./07%20Docs%20%26%20Diagrams/exercise-02-codebase-graph-to-diagrams/README.md) | [notification-mesh-app](./07%20Docs%20%26%20Diagrams/exercise-02-codebase-graph-to-diagrams/notification-mesh-app) |
+| 07. Docs & Diagrams | 03 | [Incident-Backed Payment Visualization](./07%20Docs%20%26%20Diagrams/exercise-03-feature-visualization/README.md) | [payment-workflow-app](./07%20Docs%20%26%20Diagrams/exercise-03-feature-visualization/payment-workflow-app) |
 | 08. Evidence-led PRs | 01 | [Failure-Preserving PR Evidence Pack](./08%20Evidence-led%20PRs/exercise-01-pr-evidence-pack-automation/README.md) | [pr-evidence-app](./08%20Evidence-led%20PRs/exercise-01-pr-evidence-pack-automation/pr-evidence-app) |
 | 08. Evidence-led PRs | 02 | [Feature Flag Kill-Switch Proof](./08%20Evidence-led%20PRs/exercise-02-feature-flag-rollback-proof/README.md) | [feature-flag-app](./08%20Evidence-led%20PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app) |
 | 08. Evidence-led PRs | 03 | [Performance and Accessibility Release Gate](./08%20Evidence-led%20PRs/exercise-03-performance-and-a11y-evidence-gate/README.md) | [quality-gate-app](./08%20Evidence-led%20PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app) |
@@ -66,6 +66,6 @@ Keep solutions scoped to the selected exercise. Do not change unrelated exercise
 
 ## Submission and Review Standard
 
-All exercises use the same completion contract, evidence rules, and supported toolchain. Read [the submission standard](./docs/SUBMISSION_STANDARD.md) before starting and use [the evaluation rubrics](./docs/EVALUATION_RUBRICS.md) when reviewing a submission.
+All exercises use the same completion contract, evidence rules, and supported toolchain. Read [the submission standard](./docs/SUBMISSION_STANDARD.md) before starting.
 
 From the repository root, run `npm ci` and `npm run verify:contracts` to detect missing README contracts and required starter artifacts.

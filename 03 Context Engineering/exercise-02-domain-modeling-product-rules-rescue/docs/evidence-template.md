@@ -1,45 +1,77 @@
-# Domain Modeling Product Rules Rescue Evidence
+# Domain Modeling Evidence
 
-Copy the relevant section into each evidence file and replace every prompt with observed information. Do not report a command as passing unless its captured output proves it.
+Record only the first attempt from each implementation session. Do not retry, correct, or rewrite either result. Use exact commits, commands, exit codes, counts, paths, and source citations.
 
-## before.md and after.md
+## `evidence/before.md`
 
-- Agent: [name]
-- Model: [model and version]
-- Tools: [enabled tools]
-- Permissions: [permission mode]
-- Time limit: [implementation time limit]
-- Prompt: Add AI-history export to the workspace settings page. Only an authorized administrator on an eligible workspace may export. Preserve the existing security and data-residency restrictions.
+### Run
+
+- Starting commit:
+- Implementation commit:
+- Agent:
+- Model:
+- Tools:
+- Permissions:
+- Time limit:
 - Attempt: 1
-- Context source: [supplied repository or CONTEXT.md]
-- Domain Modeling skill: [disabled or enabled]
+- Human hints: 0
+- Prompt: Add AI-history export to the workspace settings page. Only an authorized administrator on an eligible workspace may export. Preserve the existing security and data-residency restrictions.
+- Context source: Supplied repository
+- Domain Modeling skill: Disabled
+- Patch: `evidence/before.patch`
 
-### Investigation
+### Results
 
-Record which terms the agent distinguished, which sources it treated as authoritative, and which contradictions it noticed.
+| Proof | Result |
+|---|---|
+| `npm run test:rules` | Pass or fail; exit code: N |
+| Domain terms kept distinct | Number |
+| Current rules followed | Number |
+| Legacy assumptions followed | Number |
+| Authorization cases failed | Number |
+| Files changed | Number |
+| Lines added and removed | `+N / -N` |
 
-### Decisions and implementation
+### Important Problems
 
-Record the rule the agent implemented, the files it changed, and any assumptions it made.
+List no more than three. Give the implementation file and line, confused term or rule, and authoritative source.
 
-### Verification
+## `evidence/after.md`
 
-Record every command, exit code, and relevant output.
+Use the same Run fields, with `Context source: CONTEXT.md` and `Domain Modeling skill: Enabled`.
 
-## domain-audit.md
+### Results
 
-### Current rules retained
+| Proof | Result |
+|---|---|
+| `npm run test:rules` | Pass or fail; exit code: N |
+| `npm run test:domain` | Pass or fail; exit code: N |
+| `npm run agent:check` | Pass or fail; exit code: N |
+| Domain terms kept distinct | Number |
+| Current rules followed | Number |
+| Legacy assumptions followed | Number |
+| Authorization cases failed | Number |
+| Files changed | Number |
+| Lines added and removed | `+N / -N` |
 
-For every retained rule, provide the rule, its authoritative source path, and how it was represented in the domain vocabulary or decision record.
+## `evidence/domain-audit.md`
 
-### Legacy or unsupported assumptions excluded
+### Current Rules Retained
 
-For every excluded assumption, provide the claim, where it appeared, and the current source that disproves it.
+| Rule | Authoritative source and line | Domain term or ADR decision |
+|---|---|---|
 
-### Context boundary
+### Legacy or Unsupported Assumptions Excluded
 
-List exactly what the final implementation agent received. Confirm that it did not receive the previous implementation or extra explanations.
+| Assumption | Source | Current evidence that rejects it |
+|---|---|---|
 
-## comparison.md
+### Context Boundary
 
-Compare vocabulary, source selection, authorization boundaries, implementation correctness, verification, and context size. Explain why the two implementation runs were fair.
+List exactly what the final agent received and confirm it did not receive the previous implementation or extra explanation.
+
+## `evidence/comparison.md`
+
+Confirm fair run conditions, then compare vocabulary, source selection, authorization cases, test results, context size, and changed files. State whether the domain model improved the result and support the conclusion with both patches.
+
+Use genuine Git diffs for `evidence/before.patch` and `evidence/after.patch`. Record the matching patch path in each run file and keep `evidence/comparison.md` in the final branch.

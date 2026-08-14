@@ -1,0 +1,37 @@
+{
+  "name": "workflow-reconstruction-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node ./node_modules/vite/bin/vite.js --host 0.0.0.0",
+    "build": "node ./node_modules/vite/bin/vite.js build",
+    "preview": "node ./node_modules/vite/bin/vite.js preview",
+    "typecheck": "node ./node_modules/typescript/bin/tsc -b --pretty false",
+    "test": "node ./scripts/test-diagram-verifier.mjs && node ./scripts/starter-check.mjs",
+    "lint": "node ./scripts/starter-check.mjs",
+    "format": "node ./scripts/format-check.mjs",
+    "workflow:trace": "node ./scripts/trace-workflow.mjs",
+    "diagrams:parse": "node ./scripts/parse-diagrams.mjs",
+    "diagrams:verify": "node ./scripts/verify-diagrams.mjs",
+    "test:submission": "npm run diagrams:verify && node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json",
+    "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
+    "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
+    "verify:implementation": "npm run workflow:trace && npm run diagrams:parse",
+    "verify:submission": "npm run test:submission",
+    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.0.4",
+    "jsdom": "^29.0.1",
+    "mermaid": "^11.16.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12"
+  }
+}

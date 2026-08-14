@@ -1,35 +1,40 @@
 {
-    "name":  "release-notes-app",
-    "version":  "0.1.0",
-    "private":  true,
-    "type":  "module",
-    "scripts":  {
-                    "dev":  "vite --host 127.0.0.1",
-                    "build":  "tsc -b \u0026\u0026 vite build",
-                    "preview":  "vite preview --host 127.0.0.1",
-                    "typecheck":  "tsc -b --pretty false",
-                    "test":  "node ./scripts/agent-check.mjs",
-                    "fixture:smoke":  "node ./scripts/verify-fixture.mjs",
-                    "release:verify":  "node ./scripts/verify-release-notes.mjs",
-                    "skill:validate":  "node ./scripts/validate-skill.mjs",
-                    "test:submission":  "node ./scripts/verify-skill-submission.mjs",
-                    "test:integrity":  "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
-                    "lint":  "node ./scripts/lint-check.mjs",
-                    "format":  "node ./scripts/format-check.mjs",
-                    "agent:check":  "npm run test:integrity \u0026\u0026 npm run lint \u0026\u0026 npm run test \u0026\u0026 npm run format \u0026\u0026 npm run typecheck \u0026\u0026 npm run build"
-                },
-    "engines":  {
-                    "node":  ">=22.12.0 <25"
-                },
-    "dependencies":  {
-                         "react":  "^19.2.0",
-                         "react-dom":  "^19.2.0"
-                     },
-    "devDependencies":  {
-                            "@types/react":  "^19.2.7",
-                            "@types/react-dom":  "^19.2.3",
-                            "@vitejs/plugin-react":  "^5.0.4",
-                            "typescript":  "^5.9.3",
-                            "vite":  "^7.1.12"
-                        }
+  "name": "release-notes-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc -b --pretty false",
+    "test": "node ./scripts/agent-check.mjs",
+    "fixture:materialize": "node ./scripts/materialize-fixture.mjs",
+    "fixture:smoke": "node ./scripts/verify-fixture.mjs",
+    "release:verify": "node ./scripts/verify-release-notes.mjs",
+    "skill:validate": "node ./scripts/validate-skill.mjs",
+    "skill:test-extractor": "node ./scripts/verify-extractor.mjs",
+    "test:submission": "node ./scripts/verify-skill-submission.mjs",
+    "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
+    "lint": "node ./scripts/lint-check.mjs",
+    "format": "node ./scripts/format-check.mjs",
+    "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
+    "verify:implementation": "npm run skill:validate && npm run skill:test-extractor",
+    "verify:submission": "npm run test:submission",
+    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
+  },
+  "engines": {
+    "node": ">=22.12.0 <25"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.0.4",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12"
+  }
 }

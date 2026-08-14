@@ -2,13 +2,27 @@
   "name": "Specialist Review Merge Gate",
   "root": "..",
   "requiredFiles": [
-    { "path": "evidence/specialists/security.md", "minCharacters": 250, "includeAll": ["SHA", "file", "reproduction", "severity"] },
-    { "path": "evidence/specialists/accessibility.md", "minCharacters": 250, "includeAll": ["keyboard", "file", "reproduction", "severity"] },
-    { "path": "evidence/specialists/performance.md", "minCharacters": 250, "includeAll": ["before", "after", "measurement", "SHA"] },
-    { "path": "evidence/specialists/testability.md", "minCharacters": 250, "includeAll": ["boundary", "test", "SHA"] },
-    { "path": "evidence/decision-log.md", "minCharacters": 400, "includeAll": ["fix", "defer", "dismiss", "owner", "residual risk", "final SHA"] },
-    { "path": "evidence/performance-before.json", "validJson": true },
-    { "path": "evidence/performance-after.json", "validJson": true }
+    { "path": "evidence/review-cycle.json", "validJson": true, "includeAll": ["baseline_sha", "remediation_sha", "session_id", "findings", "output_sha256"] },
+    { "path": "evidence/decision-log.json", "validJson": true, "includeAll": ["merge_decision", "changed_paths", "rollback", "residual_risk"] },
+    { "path": "evidence/specialists/security-before.md", "minCharacters": 250, "includeAll": ["SEC-01", "SEC-02", "reproduction", "impact"] },
+    { "path": "evidence/specialists/security-after.md", "minCharacters": 180, "includeAll": ["SHA", "recheck", "pass"] },
+    { "path": "evidence/specialists/accessibility-before.md", "minCharacters": 250, "includeAll": ["A11Y-01", "keyboard", "impact"] },
+    { "path": "evidence/specialists/accessibility-after.md", "minCharacters": 180, "includeAll": ["SHA", "keyboard", "pass"] },
+    { "path": "evidence/specialists/performance-before.md", "minCharacters": 250, "includeAll": ["PERF-01", "measurement", "impact"] },
+    { "path": "evidence/specialists/performance-after.md", "minCharacters": 180, "includeAll": ["SHA", "measurement", "pass"] },
+    { "path": "evidence/specialists/testability-before.md", "minCharacters": 250, "includeAll": ["TEST-01", "deterministic", "impact"] },
+    { "path": "evidence/specialists/testability-after.md", "minCharacters": 180, "includeAll": ["SHA", "deterministic", "pass"] },
+    { "path": "evidence/commands/security-before.txt", "minCharacters": 120, "includeAll": ["fail"] },
+    { "path": "evidence/commands/security-after.txt", "minCharacters": 120, "includeAll": ["pass"] },
+    { "path": "evidence/commands/accessibility-before.txt", "minCharacters": 120, "includeAll": ["fail"] },
+    { "path": "evidence/commands/accessibility-after.txt", "minCharacters": 120, "includeAll": ["pass"] },
+    { "path": "evidence/commands/performance-before.txt", "minCharacters": 120, "includeAll": ["fail"] },
+    { "path": "evidence/commands/performance-after.txt", "minCharacters": 120, "includeAll": ["pass"] },
+    { "path": "evidence/commands/testability-before.txt", "minCharacters": 120, "includeAll": ["fail"] },
+    { "path": "evidence/commands/testability-after.txt", "minCharacters": 120, "includeAll": ["pass"] },
+    { "path": "evidence/performance-before.json", "validJson": true, "includeAll": ["sourceSha", "durationMs", "sampleSize", "iterations"] },
+    { "path": "evidence/performance-after.json", "validJson": true, "includeAll": ["sourceSha", "durationMs", "sampleSize", "iterations"] },
+    { "path": "evidence/integration.md", "minCharacters": 350, "includeAll": ["baseline SHA", "remediation SHA", "triage", "changed paths", "merge decision", "rollback", "remaining risk"] }
   ],
-  "requiredDirectories": ["evidence/specialists"]
+  "requiredDirectories": ["evidence/specialists", "evidence/commands"]
 }

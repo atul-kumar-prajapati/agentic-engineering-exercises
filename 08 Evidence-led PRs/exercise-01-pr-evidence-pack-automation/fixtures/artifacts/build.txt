@@ -1,0 +1,4 @@
+vite build completed
+33 modules transformed
+dist/index.html 0.42 kB
+Build result: passed

@@ -1,1 +1,17 @@
-{"algorithm":"sha256-normalized-lf","protectedFiles":{"../README.md":"d94d6aaab7179c71b5abcc6e38a6ed8e1b862ff9b8409312aa8b659258c7582f","../docs/release-claim.md":"8718c096da8d4b85667398035f567273a9c31b481a965efb4f6f0cf47fadcfd7","../docs/release-requirements.md":"436c92fe38a5138589414e026e72868695d80cfa1056f0ab03f5246938aa7120","lab-contract.json":"20fad5d07b12381beba20c237b43dac761662af37a636b0af2561a0ba110a394","tests/release/workflow.release.test.ts":"ccacb9d843457dbe1c3fffebc08e51f71999ff67e769660441fa3289aa30b755","../scripts/verification-gate.mjs":"d6f69d7b171412d4db409128d527d6b2808e8d0792a8fb143f9129d0ddae5988","../workflow-rules-api/src/test/java/dev/agentic/exercise/workflow/WorkflowReleaseGateTest.java":"a79bfbbbfe3877a44b5676e9301af06943a2f61b2afd240512e8609e53d75124"}}
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "9eca51d3ef2f95759e85f749ec8abe20be1e3dac2b46add7c80ba2adff10eb09",
+    "../docs/release-claim.md": "13b1d33732d0a11980053d057624b2d8b87d99069781f58e289790d8089f2199",
+    "../docs/release-requirements.md": "b5f7469e206019e2254d66b21011f0cb00501ae07656f5800ff25018f027dcd8",
+    "../docs/evidence-template.md": "82fd5f7a56dd94d33c524ce3806d89b8b29586a99551caccdde7c096dce27712",
+    "lab-contract.json": "01938cb0e8094491e468bf385875330daf6d9b4d87037136446c62931d595ab9",
+    "package.json": "90256345097061283b02168105df035aee9ef22432dab7edb187db8c730b9b27",
+    "tests/release/workflow.release.test.ts": "2a527df547c51f4612bb9edfde20a5976518c1170ed0ea6d3ab295899c56cd56",
+    "scripts/verify-gate-contract.mjs": "69de99066177c057535267d3415c3e66a6a56cf5e490b58b21220bb08b4f54bc",
+    "scripts/verify-release-submission.mjs": "06b7b0cce48bccdaf38580c1d5ed986832489a965235b77cbc2e61fe58da43ad",
+    "../scripts/previous-release-check.mjs": "c91204101e4ad8afbcb352b925879f979c8c3552cb719fff7ba7fbd7c0189bde",
+    "../workflow-rules-api/src/test/java/dev/agentic/exercise/workflow/WorkflowServiceTest.java": "e7c2fdba4f39048926fa82060c42c03e405faa1b6c06751c2640bd64e3c660d9",
+    "../workflow-rules-api/src/test/java/dev/agentic/exercise/workflow/WorkflowReleaseGateTest.java": "d9f9544b163e3554c736add5cf37a8b2c584a670f343e5cf5260b7e038ad21db"
+  }
+}

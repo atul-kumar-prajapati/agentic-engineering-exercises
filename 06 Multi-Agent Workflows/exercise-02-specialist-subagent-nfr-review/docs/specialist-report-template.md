@@ -1,16 +1,15 @@
-# Specialist Review Report
-
-Use one copy of this schema for security, accessibility, performance, and testability.
+# Specialist Report
 
 - Specialist:
+- Agent and session ID:
+- Phase: before | after
 - Reviewed commit SHA:
 - Reviewed paths:
 - Verification command:
-- Result: pass | findings
+- Exit code and output SHA-256:
+- Result: findings | pass
 
-| ID | Severity | File and line | Reproduction or measurement | User impact | Recommendation |
+| ID | Severity | File and line | Reproduction or measurement | Impact | Recommendation |
 |---|---|---|---|---|---|
 
-Severity calibration: a blocker permits unauthorized access, prevents keyboard completion, causes a measured budget failure, or makes the critical workflow unverifiable. A warning has bounded impact or a safe workaround.
-
-Accessibility findings must include keyboard or assistive-technology evidence. Performance findings must include comparable before and after measurements.
+A blocker permits unauthorized approval, unsafe content execution, prevents keyboard completion, exceeds the protected performance gate, or leaves the approval boundary nondeterministic. An after report must explain how each earlier finding was rechecked.

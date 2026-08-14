@@ -1,19 +1,19 @@
 # Review Eval Report
 
-- Model and provider:
-- Configuration and temperature:
-- Sample count:
-- Baseline prompt commit:
-- Candidate prompt commit:
+- Provider and model:
+- Temperature and configuration:
+- Candidate prompt source SHA:
+- Samples per prompt/case:
+- Raw results and scorecard SHA-256:
 
-| Case | Kind | Baseline score | Candidate score | Finding or false blocker evidence |
-|---|---|---:|---:|---|
+| Prompt | Historical recall | Multi-bug recall | Clean precision | Per-run range |
+|---|---:|---:|---:|---:|
 
-## Aggregate Results
+## Analysis
 
-- Historical recall:
-- Multi-bug recall:
-- Clean-control precision:
+- Missed findings and repeated failure pattern:
+- False blockers and clean-control evidence:
+- Disputed labels and resolution:
 - Regression versus baseline:
 - Known limitations:
-- Adoption decision and rationale:
+- Adopt or reject, with failed/passed gate rationale:

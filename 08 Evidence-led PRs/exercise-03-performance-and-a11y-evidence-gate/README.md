@@ -2,36 +2,55 @@
 
 ## Your Mission
 
-Your mission is to stop a visually successful UI change from merging when it exceeds the performance budget or loses accessible controls.
+Your team is ready to merge a dashboard because it looks correct, even though its first render is slow and an icon action has no accessible name. Your mission is to fix both defects and build a release gate that cannot hide a bad browser run.
 
-You are given a baseline report, an oversized content section, and an unnamed action. A report-only workflow currently produces files but does not fail on regression.
+The repository has baseline reports but no enforceable pessimistic decision. Averages or optimistic scores can make a regression appear acceptable.
 
-Repair the UI and create one release gate that compares real browser evidence against explicit performance and accessibility thresholds.
+Compare an ordinary visual-fix attempt with a measured performance and accessibility gate backed by raw browser evidence.
 
-The duration for this challenge is 30 min or less.
+The duration for this challenge is 45 min or less.
 
 ## Project
 
-[quality-gate-app](./quality-gate-app) contains the generated UI change. Protected baseline reports and [quality gate brief](./docs/quality-gate-brief.md) define the required comparison.
+[quality-gate-app](./quality-gate-app) contains the dashboard and protected evidence harness. The [quality gate brief](./docs/quality-gate-brief.md), thresholds, baseline reports, and [gate CLI contract](./docs/gate-cli-contract.md) define the release decision.
 
 ## How To Go About It
 
-Configure [Lighthouse CI](https://googlechrome.github.io/lighthouse-ci/) with at least three runs and pessimistic assertions. Add an automated accessibility check for the mounted page.
+1. Create two branches from the same starting commit. In the first branch, ask a fresh coding agent to fix and prove the dashboard quality issue without extra guidance. Do not correct or retry it. Save `evidence/before.md` and `evidence/before.patch`.
 
-Fix the seeded problems, compare the same URL and environment, and make a threshold violation return a non-zero exit code. Do not raise scores by disabling relevant audits.
+2. Review whether the first result proves production-build performance, accessible naming, run count, worst-case thresholds, axe results, and failure behavior.
+
+3. In the second branch, remove the startup delay without changing dashboard behavior and give the icon action an accessible name.
+
+4. Create `lighthouserc.json` for exactly three production-build runs and `scripts/quality-gate.mjs` with the required CLI. Use the worst run for performance, accessibility, and LCP decisions. Any axe violation must fail the gate.
+
+5. Start a fresh agent session under the same agent, model, tools, permissions, prompt, time limit, and first-attempt conditions. Capture three Lighthouse reports and one axe report from the completed implementation.
+
+6. Prove the gate succeeds for valid reports and returns non-zero when one Lighthouse run or the axe result is changed to a protected failing value.
+
+7. Save `evidence/after.md`, `evidence/after.patch`, generated summary, comparison, and command proof. Raise the final PR from the second branch.
 
 ## Evidence
 
-Submit the UI fix, gate configuration, `evidence/lighthouse-after.json`, `evidence/a11y-after.json`, `evidence/comparison.md`, and the final gate output.
+Submit:
 
-Run `npm run quality:verify`, `npm run test:submission`, and `npm run agent:check` from `quality-gate-app`.
+- The UI fixes, Lighthouse configuration, and quality-gate CLI.
+- `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, and `evidence/after.patch`.
+- Three raw Lighthouse reports, one raw axe report, the generated quality summary, and `evidence/comparison.md`.
+- Captured verification output under `evidence/commands/`.
+- Output from `npm run verify:exercise`.
+- A focused pull request containing only this exercise.
 
-Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, application quality, three raw production audits, axe results, worst-run thresholds, deliberate failure controls, source SHA, and before-and-after proof.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Reviewers will check comparable evidence, three browser runs, performance at or above 0.90, accessibility at 1.00, LCP at or below 2500 ms, and zero accessible-name violations.
+## Completion Criteria
 
-The exercise is incomplete if audits are disabled, reports use different environments, only screenshots are supplied, or the gate remains green when a threshold fails.
+The challenge is complete when:
 
-See the [Performance and Accessibility Release Gate rubric](../../docs/EVALUATION_RUBRICS.md#performance-and-accessibility-release-gate).
+- Both agent attempts use matching conditions and genuine first-attempt patches.
+- All three audits use the same route, production build, browser environment, and implementation SHA.
+- The worst run has performance at least 0.90, accessibility 1.00, LCP at most 2500 ms, and zero axe violations.
+- Protected Lighthouse and axe mutations both write a failed decision and return non-zero.
+- `npm run verify:exercise` passes and no protected report, threshold, capture script, or generated result is hand-edited.

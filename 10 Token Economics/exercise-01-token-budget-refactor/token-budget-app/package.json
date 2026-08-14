@@ -8,13 +8,17 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc -b --pretty false",
-    "test": "node ./scripts/agent-check.mjs",
-    "test:context": "node ./scripts/run-context-tests.mjs",
-    "test:submission": "node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json",
+    "test": "node ./scripts/test-context-verifier.mjs && node ./scripts/agent-check.mjs",
+    "test:context": "node ./scripts/run-context-tests.mjs && node ./tests/context-selector.test.mjs",
+    "context:verify": "node ./scripts/verify-context-submission.mjs",
+    "test:submission": "npm run test:context && npm run context:verify && node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json",
     "lint": "node ./scripts/lint-check.mjs",
     "format": "node ./scripts/format-check.mjs",
     "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
-    "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json"
+    "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
+    "verify:implementation": "npm run test:context",
+    "verify:submission": "npm run test:submission",
+    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
   },
   "dependencies": {
     "react": "^19.2.0",

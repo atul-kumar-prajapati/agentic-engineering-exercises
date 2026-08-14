@@ -2,36 +2,54 @@
 
 ## Your Mission
 
-Your mission is to convert repeated agent corrections into a concise repository rule that changes behavior in a fresh session.
+Your team repeatedly corrects the same coding-agent persistence mistakes in PR review. Your mission is to turn those repeated corrections into minimal repository guidance and prove it changes a fresh agent's first attempt.
 
-You are given correction history showing display labels saved instead of stable IDs, status text stored without normalization, and timestamps created inside business logic. The starter has no enforceable guidance and repeats those mistakes.
+Three mistakes recur across separate changes: display labels stored as identity, unnormalized status values, and ambient timestamps inside business logic. The proving task does not reveal these hidden conventions.
 
-Run the proving task once, harden the repository instructions and checks, then run the same task with a fresh agent and compare the first attempts.
+Compare the exact task before and after guidance, then keep only rules supported by repeated evidence.
 
-The duration for this challenge is 30 min or less.
+The duration for this challenge is 45 min or less.
 
 ## Project
 
-[rule-hardening-app](./rule-hardening-app) contains the seeded persistence defect. [correction history](./docs/correction-history.md) and [proving task](./tasks/proving-change.md) are protected inputs.
+[rule-hardening-app](./rule-hardening-app) contains the defective persistence boundary and protected patch grader. The [correction history](./docs/correction-history.json), [guidance contract](./docs/guidance-contract.md), and [proving task](./tasks/proving-change.md) are immutable.
 
 ## How To Go About It
 
-Cluster repeated mistakes and write only rules supported by more than one event. Put minimum safe-start guidance in `AGENTS.md`, route deeper persistence guidance to `.agent/`, and make executable checks enforce objective behavior.
+1. Create two branches from the same starting commit. In the first branch, run the proving task in a fresh agent session without new guidance. Do not hint, correct, retry, or edit the patch. Save `evidence/before.md` and `evidence/before.patch`.
 
-Give a fresh agent the same proving task and conditions. Capture both unedited first attempts before making corrections and explain any rule that did not change behavior.
+2. Map each proposed rule to at least two separate correction events. Do not create permanent guidance from one mistake or personal preference.
+
+3. In the second branch, create a short `AGENTS.md` that routes persistence work to `.agent/persistence.md`. Keep stable-ID, canonical-status, injected-clock, and exception details only in the deeper file.
+
+4. Commit the guidance without implementation code. Start a different fresh session from that commit using the same prompt, agent, model, tools, permissions, and time limit.
+
+5. Preserve the unedited first patch in `evidence/after.patch`. The patch grader must show at least two baseline defects and zero final defects.
+
+6. Apply the successful after patch with one participant test in a separate implementation commit. Final source must be identical to the graded patch.
+
+7. Save `evidence/after.md`, comparison, rule map, history, and command output. Raise a focused PR from the second branch.
 
 ## Evidence
 
-Submit `AGENTS.md`, the focused `.agent/` guidance, executable check, final fix, `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, `evidence/after.patch`, and `evidence/comparison.md`.
+Submit:
 
-Run `npm run test:persistence`, `npm run test:submission`, and `npm run agent:check` from `rule-hardening-app`.
+- `AGENTS.md`, `.agent/persistence.md`, final implementation, and participant test.
+- `evidence/before.md`, unedited `evidence/before.patch`, `evidence/after.md`, and unedited `evidence/after.patch`.
+- Run metadata, `evidence/comparison.md`, `rule-map.md`, `history.json`, and command output.
+- Output from `npm run verify:exercise`.
+- A focused pull request containing only this exercise.
 
-Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, application quality, rule support, concise guidance, patch authenticity, matched sessions, objective grading, source identity, history, and required proof.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Reviewers will check trace-backed rules, minimal safe-start context, deeper routing, executable enforcement, identical first-attempt conditions, and stable-ID, normalized-status, injected-time behavior.
+## Completion Criteria
 
-The exercise is incomplete if rules are generic, copied from one isolated mistake, duplicated across files, unsupported by checks, or the after attempt is not fresh.
+The challenge is complete when:
 
-See the [Repeated Mistake to Repository Rule rubric](../../docs/EVALUATION_RUBRICS.md#repeated-mistake-to-repository-rule).
+- Both sessions differ only by repository guidance and use unedited first-attempt patches.
+- Every permanent rule is supported by repeated correction events.
+- `AGENTS.md` remains concise and routes to non-duplicated focused guidance.
+- The grader finds at least two before defects and zero after defects, and final source equals the graded after patch.
+- `npm run verify:exercise` passes and Git history separates guidance from implementation.

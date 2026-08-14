@@ -1,31 +1,13 @@
-# Evidence Fixtures
+# Evidence Fixture Guide
 
-This is a seeded lab input for Failure-Preserving PR Evidence Pack. It gives the learner concrete constraints to inspect, implement, test, and verify.
+Each protected fixture contains `schemaVersion` and a `checks` array. Every check supplies:
 
-## Operating Context
+- `name`, `command`, `exitCode`, and `result`.
+- `outputPath`, resolved relative to the fixture file.
+- `risk`, `reviewerAction`, and `rollback`.
 
-Automated PR evidence pack for generated code
+The generator must work with any valid fixture using this shape. It must not special-case check names or rewrite failures.
 
-## Concrete Inputs
+For each check, copy the source artifact into `<output>/artifacts/` using its filename. Reject duplicate filenames, missing files, paths outside the fixture directory, invalid result and exit-code combinations, and an invalid source SHA.
 
-- PR template
-- check output
-- screenshot artifact
-- risk note
-
-## Seeded Risks
-
-- evidence pack omits failed smoke output
-- PR template asks reviewers to infer rollback risk
-- artifact path is not stable for CI
-
-## Verification Expectations
-
-- evidence generator
-- artifact path check
-- PR template fill
-- failure-output capture
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+The protected verifier runs both `check-results.json`, whose overall exit is `1`, and `check-results-pass.json`, whose overall exit is `0`.

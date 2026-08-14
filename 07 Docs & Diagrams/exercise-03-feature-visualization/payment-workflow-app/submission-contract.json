@@ -1,0 +1,17 @@
+{
+  "name": "Incident-Backed Payment Visualization",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "diagrams/payment-architecture.mmd", "minCharacters": 400, "includeAll": ["flowchart LR", "CheckoutUI", "Orchestrator", "GatewayAdapter", "LedgerRecord", "ReceiptRecord", "WebhookHandler", "VIS-01", "VIS-07"] },
+    { "path": "diagrams/webhook-reconciliation-state.mmd", "minCharacters": 550, "includeAll": ["stateDiagram-v2", "signature_check", "reference_check", "duplicate_check", "rejected", "already_handled", "ledger_recorded", "handled", "VIS-07", "VIS-11"] },
+    { "path": "diagrams/payment-sequence.mmd", "minCharacters": 900, "includeAll": ["sequenceDiagram", "Authorization approved", "Authorization declined", "First delivery", "Duplicate delivery", "invalid signature", "unknown reference", "already-handled", "VIS-01", "VIS-11"] },
+    { "path": "diagrams/payment-data.mmd", "minCharacters": 550, "includeAll": ["erDiagram", "CUSTOMER", "CHECKOUT_ORDER", "ORDER_ITEM", "PAYMENT_METHOD", "PAYMENT_INTENT", "GATEWAY_TRANSACTION", "LEDGER_ENTRY", "WEBHOOK_EVENT", "RECEIPT", "VIS-12", "VIS-16"] },
+    { "path": "evidence/traceability.json", "validJson": true, "includeAll": ["source_sha", "VIS-01", "VIS-16", "source_line", "source_excerpt", "diagram_paths"] },
+    { "path": "evidence/brief-contradictions.md", "minCharacters": 700, "includeAll": ["BRIEF-01", "BRIEF-04", "Claim:", "Result:", "Source:", "Diagram decision:"] },
+    { "path": "evidence/diagram-manifest.json", "validJson": true, "includeAll": ["source_sha", "sha256", "payment_trace", "diagram_parse"] },
+    { "path": "evidence/verification.md", "minCharacters": 350, "includeAll": ["source SHA", "feature test", "Mermaid parser", "semantic diagram", "traceability", "contradiction", "remaining uncertainty", "final conclusion"] },
+    { "path": "evidence/commands/payment-trace.txt", "minCharacters": 350, "includeAll": ["Source SHA", "Approved", "Declined", "First webhook", "Duplicate webhook", "Invalid signature", "Unknown gateway reference", "PASS"] },
+    { "path": "evidence/commands/diagram-parse.txt", "minCharacters": 300, "includeAll": ["Source SHA", "payment-architecture.mmd", "webhook-reconciliation-state.mmd", "payment-sequence.mmd", "payment-data.mmd", "PASS"] }
+  ],
+  "requiredDirectories": ["diagrams", "evidence", "evidence/commands"]
+}

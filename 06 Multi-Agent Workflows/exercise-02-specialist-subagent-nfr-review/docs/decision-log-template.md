@@ -1,6 +1,8 @@
-# NFR Decision Log
+# Integration Decision Log
 
-| Finding ID | Decision (fix, defer, dismiss) | Owner | Rationale | Evidence | Follow-up trigger | Residual risk |
-|---|---|---|---|---|---|---|
+| Finding ID | Decision | Owner | Rationale | Verification evidence | Residual risk |
+|---|---|---|---|---|---|
 
-After fixes are integrated, rerun every specialist whose reviewed paths changed. Record the final commit SHA in each report so reviewers can confirm the evidence describes the submitted application.
+Use `fix`, `defer`, or `dismiss`. Every baseline finding must appear once. Required blocker IDs must be fixed. A deferred or dismissed finding needs concrete reasoning and residual risk.
+
+Record the baseline SHA, remediation SHA, merge decision, rollback command, changed paths, final checks, and remaining risk in `evidence/integration.md`.

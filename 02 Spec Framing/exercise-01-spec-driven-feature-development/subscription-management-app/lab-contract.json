@@ -21,14 +21,16 @@
     "Three to five evidence-based clarifications cover authorization, billing, failure, and scope.",
     "Requirements and acceptance criteria are testable and trace into the plan and tasks.",
     "Before and after evidence uses the same agent conditions and contains genuine patches.",
-    "Starter application code and challenge evidence remain unchanged."
+    "Starter application code and challenge evidence remain unchanged.",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
   ],
   "agentWorkflow": [
     "Capture an unframed specification attempt in a fresh agent session.",
     "Inspect source code, stakeholder conflicts, and billing constraints.",
     "Record confirmed decisions or explicit assumptions with consequences.",
     "Generate the final specification in another fresh session under identical conditions.",
-    "Compare both results and stop before implementation."
+    "Compare both results and stop before implementation.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
   ],
   "workingDeliverables": [
     "specs/clarifications.md",

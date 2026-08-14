@@ -1,45 +1,55 @@
 {
   "title": "Agent Kanban Collision Control",
-  "competency": "06. Multi-Agent Workflows",
-  "skillPattern": "triage / to-issues / kanban board",
-  "domain": "Support escalation workspace with customer-impact cards, reproduction links, severity, owner routing, and integration queue.",
-  "mission": "Turn a noisy backlog into agent-ready cards, isolated worktrees, review queues, and integration ownership.",
-  "outcome": "Multiple agents can work in parallel because the board encodes issue state, ownership, blockers, review gates, and merge order.",
+  "competency": "06. Multi-Agent Workflows - Agent-ready work and collision control",
+  "skillPattern": "evidence-first triage, exclusive reservations, isolated execution, and accountable integration",
+  "domain": "An escalation queue where unclear, colliding, and cancelled cards can cause unsafe agent assignments",
+  "mission": "Repair an invalid agent board, execute only the inherited-severity card, and prove that the lane, review, integration, and final control state match Git.",
+  "outcome": "Unsafe cards remain visible but unassigned, one ready lane is integrated without overlap, and all control-plane mirrors agree.",
   "entities": [
-    "Escalation",
-    "TriageState",
-    "Worktree",
-    "AgentCard",
-    "ReviewQueue",
-    "MergePlan"
+    "agent-ready card and state history",
+    "requested path and active reservation",
+    "blocker and cancellation reason",
+    "isolated lane commit and focused check",
+    "review decision, merge commit, and control commit"
   ],
   "seededDefects": [
-    "Two cards ask agents to edit the shared escalation schema at the same time.",
-    "A ready-for-agent label is applied before reproduction steps exist.",
-    "The merge queue has no owner for resolving cross-card conflicts.",
-    "Human-review cards are mixed with autonomous bugfix cards."
+    "a needs-info card owns workflowApi.ts without a reproduction",
+    "ESC-120 and blocked ESC-122 both reserve scoring.ts",
+    "a cancelled export card still owns exportApi.ts",
+    "inherited Critical severity is reduced to the child's declared Low value",
+    "the original verifier trusts board declarations without checking Git or product behavior"
   ],
   "verificationGates": [
-    "Backlog states distinguish needs-info, ready-for-agent, ready-for-human, blocked, and done.",
-    "Every agent card has ownership, touched area, commands, and merge criteria.",
-    "Worktree plan avoids overlapping edits where possible.",
-    "Integration evidence records which agent outputs were accepted, revised, or rejected."
+    "protected inherited-severity source and rendering acceptance tests",
+    "exact card states, histories, blockers, released reservations, and board mirrors",
+    "one-parent lane history, fixed path ownership, commit trailers, and hashed output",
+    "reviewed lane content preserved in a no-ff integration merge",
+    "exact control commit followed only by evidence changes",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
   ],
   "agentWorkflow": [
-    "Triage cards before spawning or assigning agents.",
-    "Split work by ownership and conflict risk.",
-    "Use isolated branches or worktrees for implementation.",
-    "Keep the main thread responsible for review, integration, and final evidence."
+    "Validate all incoming cards and release reservations held by unsafe states.",
+    "Create one isolated ESC-120 lane from the recorded clean base.",
+    "Review its exact commit, paths, regression test, and focused output.",
+    "Integrate with no-ff and synchronize every board and ownership artifact.",
+    "Capture evidence, verify it against Git, and retain unresolved and cancelled work.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
   ],
   "workingDeliverables": [
-    "Updated triage board.",
-    "Worktree or branch plan with collision warnings.",
-    "At least one working card implementation in React.",
-    "Integration note with accepted and rejected agent outputs."
+    "A fixed inherited-severity implementation and lane-owned regression test.",
+    "Synchronized structured and rendered Kanban board data.",
+    "Updated ownership map and integration log.",
+    "Machine-readable control-plane evidence and hashed command output.",
+    "An inspectable lane, merge, control, and evidence history.",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
   ],
   "masterySignals": [
-    "Parallelism is intentional, not chaotic.",
-    "The main owner keeps control of integration.",
-    "Cards are small enough for independent agent execution."
+    "Readiness is proven before assignment instead of inferred from a label.",
+    "Blocked, unclear, and cancelled work cannot hold active reservations.",
+    "One agent owns the feature lane while one human remains accountable for review and integration.",
+    "Terminal and unresolved cards remain visible with complete histories.",
+    "Automated verification detects board drift, illegal scope, fabricated evidence, and hidden integration edits."
   ]
 }

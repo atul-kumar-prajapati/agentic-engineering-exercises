@@ -1,0 +1,19 @@
+import fs from "node:fs";
+import path from "node:path";
+import { benchmarkMarkdown, buildBenchmark, collectWorkspace } from "./benchmark-lib.mjs";
+
+const appRoot = process.cwd();
+const exerciseRoot = path.resolve(appRoot, "..");
+const evals = JSON.parse(fs.readFileSync(path.join(appRoot, "evals", "evals.json"), "utf8")).evals;
+const collected = collectWorkspace({ appRoot, exerciseRoot, evals });
+if (collected.failures.length) {
+  console.error("Benchmark aggregation failed:\n" + collected.failures.map((failure) => `- ${failure}`).join("\n"));
+  process.exit(1);
+}
+const benchmark = buildBenchmark(collected, evals);
+const evidenceRoot = path.join(exerciseRoot, "evidence");
+fs.mkdirSync(evidenceRoot, { recursive: true });
+fs.writeFileSync(path.join(evidenceRoot, "benchmark.json"), JSON.stringify(benchmark, null, 2) + "\n");
+fs.writeFileSync(path.join(evidenceRoot, "benchmark.md"), benchmarkMarkdown(benchmark));
+console.log(`Benchmark gate ${benchmark.gate.passed ? "passed" : "failed"}. Results written to evidence/benchmark.json and evidence/benchmark.md.`);
+if (!benchmark.gate.passed) process.exit(1);

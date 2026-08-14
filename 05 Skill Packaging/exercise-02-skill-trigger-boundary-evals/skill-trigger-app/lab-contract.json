@@ -2,13 +2,54 @@
   "title": "Skill Trigger Boundary Evals",
   "competency": "05. Skill Packaging",
   "skillPattern": "skill-creator trigger optimization",
-  "domain": "Routing between change review, release notes, and incident summary skills",
-  "mission": "Improve a vague skill description using repeated positive, negative, and held-out trigger decisions.",
-  "outcome": "The real description triggers for substantive code review and abstains for neighbouring workflows.",
-  "entities": ["skill description", "trigger case", "negative case", "held-out split", "trigger rate"],
-  "seededDefects": ["description is vague", "release and incident requests collide", "paraphrased reviews do not reliably trigger"],
-  "verificationGates": ["20 protected cases", "three runs per request", "held-out improvement", "overfitting check"],
-  "agentWorkflow": ["measure unchanged description", "analyze confusion", "improve metadata", "rerun and select by held-out score"],
-  "workingDeliverables": ["updated SKILL.md", "raw repeated results", "metrics report", "adoption decision"],
-  "masterySignals": ["substantive evals", "clear use and non-use boundaries", "held-out selection", "measured trigger quality"]
+  "domain": "Routing code-change reviews without colliding with implementation, release communication, incident reporting, or document review",
+  "mission": "Measure a vague skill description, repair only its trigger boundary, and prove the change with repeated train and held-out decisions.",
+  "outcome": "The real description activates for evidence-backed review of supplied code changes and abstains for neighboring workflows.",
+  "entities": [
+    "skill description",
+    "protected trigger request",
+    "model decision",
+    "training split",
+    "held-out split",
+    "confusion matrix"
+  ],
+  "seededDefects": [
+    "description does not identify code artifacts",
+    "description collides with summaries and implementation work",
+    "description omits explicit non-use boundaries"
+  ],
+  "verificationGates": [
+    "20 protected substantive cases",
+    "three decisions per request and description",
+    "environment parity",
+    "7 of 8 held-out majority accuracy",
+    "recall and specificity thresholds",
+    "phrase-leakage check",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
+  ],
+  "agentWorkflow": [
+    "record the unchanged baseline",
+    "analyze training confusion",
+    "edit only description metadata",
+    "rerun under identical conditions",
+    "select using held-out score and stability",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
+  ],
+  "workingDeliverables": [
+    "updated SKILL.md",
+    "120 raw trigger decisions",
+    "skill provenance",
+    "training error analysis",
+    "scored comparison and adoption decision",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
+  ],
+  "masterySignals": [
+    "clear positive and negative boundaries",
+    "fair repeated comparison",
+    "balanced precision and recall",
+    "held-out improvement",
+    "no prompt overfitting"
+  ]
 }

@@ -1,31 +1,9 @@
-# Implementer Notes
+# Protected Implementer Notes
 
-This is a seeded lab input for Independent Diff Triage. It gives the learner concrete constraints to inspect, implement, test, and verify.
+Do not provide this file to the fresh reviewer.
 
-## Operating Context
+The caching change was intended to make saved workflow actions survive reload while keeping filtering and evidence collection read-only. Default items may be returned in due-date order, but the imported fixture is shared and must not be mutated.
 
-Fresh-agent review of cache and workflow-state changes
+Known review targets are filter-triggered cache deletion, unguarded cached JSON, in-place sorting, and stale cache writes from evidence collection. The earlier claim that `saveAction` itself mutates `workItems` is unsupported because it returns a new object.
 
-## Concrete Inputs
-
-- fresh review prompt
-- local storage cache
-- mutable fixture
-- triage table
-
-## Seeded Risks
-
-- cached state is never updated after save
-- sort mutates shared fixtures
-- cache clear erases legitimate user work
-
-## Verification Expectations
-
-- fresh-agent finding verification
-- cache regression test
-- human triage
-- merge confidence note
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+These notes are for accountable-engineer triage after the independent first pass.

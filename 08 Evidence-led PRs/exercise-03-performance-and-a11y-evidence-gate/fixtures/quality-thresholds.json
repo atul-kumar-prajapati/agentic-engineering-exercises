@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "route": "/",
+  "lighthouseRuns": 3,
+  "aggregation": "pessimistic",
+  "thresholds": {
+    "minimumPerformance": 0.9,
+    "minimumAccessibility": 1,
+    "maximumLargestContentfulPaintMs": 2500,
+    "maximumAxeViolations": 0
+  }
+}

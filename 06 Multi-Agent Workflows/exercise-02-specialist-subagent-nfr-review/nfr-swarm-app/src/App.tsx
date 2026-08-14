@@ -1,43 +1,43 @@
 import { useState } from "react";
-import { accessReviews, type AccessReview } from "./data/accessReviews";
+import { AccessReviewQueue } from "./components/AccessReviewQueue";
+import { ReviewNote } from "./components/ReviewNote";
+import { accessReviews } from "./data/accessReviews";
 import { approveAccessReview } from "./services/accessReviewApi";
+import { calculatePortfolioRisk } from "./utils/accessReviewRisk";
 import "./styles.css";
-
-function calculatePortfolioRisk(items: AccessReview[]) {
-  let score = 0;
-  for (let pass = 0; pass < 150_000; pass += 1) {
-    score = items.reduce((total, item) => total + item.risk + (item.privileged ? 20 : 0), pass % 7);
-  }
-  return Math.round(score / Math.max(items.length, 1));
-}
 
 export default function App() {
   const [reviews, setReviews] = useState(accessReviews);
   const [selectedId, setSelectedId] = useState(reviews[0].id);
+  const [error, setError] = useState("");
   const selected = reviews.find((item) => item.id === selectedId) ?? reviews[0];
   const portfolioRisk = calculatePortfolioRisk(reviews);
 
   async function approve() {
-    const updated = await approveAccessReview(selected);
-    setReviews((items) => items.map((item) => item.id === updated.id ? updated : item));
+    setError("");
+    try {
+      const updated = await approveAccessReview(selected);
+      setReviews((items) => items.map((item) => item.id === updated.id ? updated : item));
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Approval failed");
+    }
   }
 
   return (
     <main className="review-shell">
-      <header><p className="eyebrow">Identity Operations</p><h1>Access review queue</h1><p>Portfolio risk: {portfolioRisk}</p></header>
+      <header>
+        <p className="eyebrow">Identity Operations</p>
+        <h1>Access review queue</h1>
+        <p>Portfolio risk: {portfolioRisk}</p>
+      </header>
       <div className="review-grid">
-        <section className="queue" aria-label="Access reviews">
-          {reviews.map((item) => (
-            <div className={item.id === selected.id ? "queue-row selected" : "queue-row"} onClick={() => setSelectedId(item.id)} key={item.id}>
-              <strong>{item.requester}</strong><span>{item.resource}</span><small>{item.status}</small>
-            </div>
-          ))}
-        </section>
+        <AccessReviewQueue reviews={reviews} selectedId={selected.id} onSelect={setSelectedId} />
         <section className="detail">
           <h2>{selected.resource}</h2>
           <p>Requested by {selected.requester}</p>
-          <div className="request-note" dangerouslySetInnerHTML={{ __html: selected.note }} />
-          <button onClick={() => void approve()}>Approve access</button>
+          <ReviewNote note={selected.note} />
+          <button onClick={() => void approve()} type="button">Approve access</button>
+          {error ? <p role="alert">{error}</p> : null}
         </section>
       </div>
     </main>

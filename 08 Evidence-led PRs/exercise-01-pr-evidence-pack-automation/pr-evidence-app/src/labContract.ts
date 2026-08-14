@@ -13,44 +13,39 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "Failure-Preserving PR Evidence Pack",
-  "competency": "08. Evidence-led PRs - PR gate evidence and handoff",
-  "domain": "Automated PR evidence pack for generated code",
-  "mission": "Create a PR evidence pack that automatically gathers test output, build proof, screenshots, and residual risks.",
-  "outcome": "A PR can explain itself with automated proof instead of reviewer guesswork.",
-  "entities": [
-    "PR template",
-    "check output",
-    "screenshot artifact",
-    "risk note"
+  title: "Failure-Preserving PR Evidence Pack",
+  competency: "08. Evidence-led PRs",
+  domain: "Pull-request evidence generated from protected check results and uploaded by GitHub Actions.",
+  mission: "Build an evidence generator and workflow that publish complete proof while preserving the original failing exit code.",
+  outcome: "Reviewers receive commit-bound results, immutable artifact digests, explicit risk, reviewer action, and rollback without a false green check.",
+  entities: ["source commit", "check result", "artifact", "evidence pack", "workflow run"],
+  seededDefects: [
+    "There is no executable generator for the protected results.",
+    "The failed smoke result can be omitted or rewritten.",
+    "No root workflow uploads stable evidence after failure.",
+    "Risk, reviewer action, and rollback are not enforced per check.",
   ],
-  "seededDefects": [
-    "evidence pack omits failed smoke output",
-    "PR template asks reviewers to infer rollback risk",
-    "artifact path is not stable for CI"
+  verificationGates: [
+    "The generator passes mixed-result and all-passing protected fixtures.",
+    "Every artifact is copied byte-for-byte and receives a SHA-256 digest.",
+    "The workflow uses read-only permissions, pinned actions, and always-run verification and upload.",
+    "Source SHA and Git history bind evidence to the reviewed implementation.",
   ],
-  "verificationGates": [
-    "evidence generator",
-    "artifact path check",
-    "PR template fill",
-    "failure-output capture"
+  agentWorkflow: [
+    "Inspect the fixture, evidence schema, and workflow requirements.",
+    "Implement one fixture-independent generator.",
+    "Add the repository-root pull-request workflow.",
+    "Generate, verify, and document the failing evidence pack.",
   ],
-  "agentWorkflow": [
-    "Ask the coding agent to inspect this lab contract, starter code, docs, and tests before proposing a plan.",
-    "Revise the agent plan so it exercises the competency practice and avoids the common mistake.",
-    "Implement the smallest working change that addresses the seeded defects.",
-    "Run the verification gates and capture command evidence before writing the final review note."
+  workingDeliverables: [
+    "Evidence generator with the required CLI.",
+    "Repository-root GitHub Actions workflow.",
+    "Generated JSON pack and copied artifacts.",
+    "Reviewer-facing evidence summary and verification output.",
   ],
-  "workingDeliverables": [
-    "Evidence pack generator.",
-    "Updated tests/checks feeding the pack.",
-    "Generated artifact folder with logs and summary.",
-    "PR template section wired to the generated evidence."
+  masterySignals: [
+    "Failure evidence is complete before the generator exits non-zero.",
+    "A failed check cannot become a successful workflow.",
+    "Every review claim is connected to a commit and immutable artifact.",
   ],
-  "masterySignals": [
-    "Implement an evidence pack script that runs checks, captures output, and writes a PR-ready summary.",
-    "Add or repair tests so the evidence pack is meaningful.",
-    "Include screenshots, coverage, traces, or logs where useful for the starter.",
-    "Make failure states visible rather than silently swallowed."
-  ]
 };

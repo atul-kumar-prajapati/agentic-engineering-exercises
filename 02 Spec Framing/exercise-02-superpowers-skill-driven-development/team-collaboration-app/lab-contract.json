@@ -22,20 +22,25 @@
     "The Team Invitations interface delegates lifecycle behavior to the invitation service.",
     "Superpowers design, plan, skill usage, TDD, review, and verification evidence is present.",
     "Before and after runs use the same conditions and contain genuine, different patches.",
-    "Protected challenge files remain unchanged."
+    "Protected challenge files remain unchanged.",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
   ],
   "agentWorkflow": [
     "Capture a first implementation without Superpowers.",
     "Use Superpowers brainstorming and approve the design before planning.",
     "Create the implementation plan and follow the selected execution workflow.",
     "Record a failing invitation test before production implementation.",
-    "Request code review and verify the completed feature before claiming success."
+    "Request code review and verify the completed feature before claiming success.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
   ],
   "workingDeliverables": [
     "Working invitation service and Team Invitations interface",
     "Superpowers design and implementation plan",
     "Before and after session evidence and patches",
     "Skill usage, TDD, review, and comparison evidence",
-    "Passing invitation, submission, and agent checks"
+    "Passing invitation, submission, and agent checks",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
   ]
 }

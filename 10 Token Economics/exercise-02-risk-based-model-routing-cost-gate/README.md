@@ -2,36 +2,55 @@
 
 ## Your Mission
 
-Your mission is to reduce agent cost without routing high-risk or ambiguous work to a model that cannot complete it safely.
+Your team sends every coding task to its most expensive reasoning model because it has no safe routing policy. Your mission is to reduce cost without sending risky or unclear work to an unsuitable model.
 
-You are given a router that sends every task to the most expensive tier. The protected task set includes mechanical edits, bounded code changes, security-sensitive work, and requests that must be clarified before execution.
+A cheap replacement can look efficient while failing security work, hiding retry costs, or executing requests that should be clarified first.
 
-Build and evaluate a routing policy using measured quality, escalation, latency, and cost rather than model reputation.
+Build a field-based router, benchmark every eligible route, and adopt it only when quality, safety, latency, and total expected cost pass the protected gate.
 
-The duration for this challenge is 30 min or less.
+The duration for this challenge is 60 min or less.
 
 ## Project
 
-[model-routing-app](./model-routing-app) contains the seeded router. Protected cases and pricing live under `evals/`.
+[model-routing-app](./model-routing-app) contains the all-reasoning router and protected scorer. Cases, eligible tiers, quality floors, and pricing live under `evals/`; the [measurement contract](./docs/measurement-contract.md) defines valid proof.
 
 ## How To Go About It
 
-Define fast, balanced, reasoning, and clarify routes. Run each task three times on every eligible tier and grade it against the supplied assertions.
+1. Record the all-reasoning baseline, starting commit, router patch, and measured cost in `evidence/before.md` and `evidence/before.patch`.
 
-Implement the smallest policy that meets quality and safety floors. Calculate expected cost from measured routing outcomes and include retry and escalation cost, not only first-call price.
+2. Implement `fast`, `balanced`, `reasoning`, and `clarify` routes from task risk, ambiguity, and scope. Do not route by case ID or wording copied from fixtures.
+
+3. High ambiguity or missing risk must clarify without model execution. High-risk work must use reasoning. The router must pass unseen field permutations.
+
+4. Using one real provider family and fixed settings, run every eligible case and tier pair three times. Save raw responses, response hashes, token counts, latency, quality, and safety results.
+
+5. Include the expected cost and latency of retries or escalations for low-quality or unsafe first calls. Do not average away any security failure.
+
+6. Save the final router and measurements in `evidence/after.md` and `evidence/after.patch`. Run the protected scorer and reconcile every cost to measured tokens and protected pricing.
+
+7. Write the routing policy, adoption decision, and comparison. Adopt only if every quality and safety floor passes and expected cost is at least 25 percent below all-reasoning.
 
 ## Evidence
 
-Submit the router and tests, raw run results, `evidence/routing-policy.md`, `evidence/cost-model.json`, and `evidence/adoption.md` with quality, cost, latency, variance, and exceptions.
+Submit:
 
-Run `npm run test:routing`, `npm run eval:fixtures`, `npm run test:submission`, and `npm run agent:check` from `model-routing-app`.
+- The router and learner tests.
+- `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, and `evidence/after.patch`.
+- Raw responses, response-bound measurements, run metadata, and generated `cost-model.json`.
+- `routing-policy.md`, `adoption.md`, and `evidence/comparison.md`.
+- Output from `npm run verify:exercise`.
+- A focused pull request containing only this exercise.
 
-Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, router behavior, real-run completeness, response hashes, quality and safety gates, retry economics, cost reconciliation, and required proof.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Reviewers will check safe escalation, clarification handling, three-run measurements, pricing math, retry cost, quality floors, and held-out routing behavior.
+## Completion Criteria
 
-The exercise is incomplete if every task uses one tier, security work is downgraded for cost, ambiguous work executes without clarification, or savings are based on list price alone.
+The challenge is complete when:
 
-See the [Risk-Based Model Routing Cost Gate rubric](../../docs/EVALUATION_RUBRICS.md#risk-based-model-routing-cost-gate).
+- Routing depends only on task fields and passes unseen permutations.
+- Ambiguous or missing-risk tasks clarify, high-risk tasks use reasoning, and every executable lane has three valid runs.
+- Raw hashes, tokens, pricing, retries, escalations, latency, quality, and safety recompute exactly.
+- Every selected route passes its floors and expected cost is at least 25 percent below all-reasoning.
+- `npm run verify:exercise` passes and the adoption decision matches the generated scorecard.

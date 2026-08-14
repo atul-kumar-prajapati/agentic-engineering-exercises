@@ -1,47 +1,40 @@
-# Exercise 02 : Domain Modeling Skill Product Rules Rescue
+# Exercise 02 : Domain Modeling Product Rules Rescue
 
 ## Your Mission
 
-Your mission is to fix an AI-history export rule that was implemented using confused domain language.
+Your team shipped an authorization bug because product documents and code use the words account, customer, workspace, owner, and admin inconsistently. Your mission is to create a clear domain model and use it to implement the correct AI-history export rule.
 
-The application treats `account`, `customer`, `workspace`, `owner`, and `admin` as interchangeable terms. This causes billing ownership to be incorrectly treated as workspace access.
+The current implementation treats billing ownership as workspace access. Conflicting current and legacy sources make a plausible but unsafe fix easy to produce.
 
-Use the Domain Modeling skill to define the correct vocabulary, resolve the conflicting rules, and implement the correct export policy.
-
-Compare the agent's implementation before and after providing the domain model.
+Use the Domain Modeling skill, then prove whether precise vocabulary improves the same agent's first-attempt result.
 
 The duration for this challenge is 30 min or less.
 
 ## Project
 
-[product-rules-app](./product-rules-app) contains the application code, conflicting rule documents, and seeded policy defect.
+[product-rules-app](./product-rules-app) is a workspace settings application with conflicting access rules and a seeded policy defect.
 
-Use this request for both agent runs:
+Use this production change in both implementation sessions:
 
 > Add AI-history export to the workspace settings page. Only an authorized administrator on an eligible workspace may export. Preserve the existing security and data-residency restrictions.
 
-The request does not define `authorized administrator` or `eligible workspace`. Identify their correct meaning from the repository sources.
+The request does not define `authorized administrator` or `eligible workspace`. Their correct meaning must be discovered from current repository evidence.
 
 ## How To Go About It
 
-Install the [Domain Modeling skill](https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md):
+1. Create two branches from the same starting commit. The second branch must not contain the implementation produced in the first branch.
 
-```bash
-npx skills add mattpocock/skills --skill=domain-modeling
-```
+2. In the first branch, start a fresh agent session without the Domain Modeling skill. Give it the production change exactly as written. Do not provide hints, corrections, or retries. Commit the result and save `evidence/before.md` and `evidence/before.patch`.
 
-Start a fresh agent session without using the skill. Provide the product request and repository, save the first implementation and observations, then revert the implementation.
+3. Install the [Domain Modeling skill](https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md). Inspect the first result, current policy, legacy notes, support example, previous-agent claim, source code, and tests.
 
-Use the Domain Modeling skill to inspect the current policy, legacy notes, support example, previous-agent claim, source code, and tests.
+4. In the second branch, create `CONTEXT.md` with the canonical terms and relationships, limited to 700 words. Create `docs/adr/0001-ai-history-export.md` with the resolved policy, its sources, rejected interpretations, and consequences.
 
-Create:
+5. Start another fresh agent session. Give it only the production change and `CONTEXT.md`; it may inspect files referenced by that document. Use the same agent, model, tools, permissions, time limit, and first-attempt condition as the first run.
 
-- `CONTEXT.md` containing the canonical terms and relationships. Keep it within 700 words.
-- `docs/adr/0001-ai-history-export.md` containing the resolved export policy, sources, and consequences.
+6. Do not provide hints, corrections, or retries. Keep the implementation and regression tests from the second session.
 
-Start another fresh agent session. Provide only the product request and `CONTEXT.md`. The agent may inspect files referenced by `CONTEXT.md`.
-
-Use the same agent, model, tools, permissions, prompt, time limit, and first attempt for both runs. Do not rerun either implementation.
+7. Save `evidence/after.md`, `evidence/after.patch`, `evidence/domain-audit.md`, and `evidence/comparison.md`. Raise the final PR only from the second branch.
 
 ## Evidence
 
@@ -50,20 +43,21 @@ Submit:
 - The completed export policy and regression tests.
 - `CONTEXT.md` and `docs/adr/0001-ai-history-export.md`.
 - `evidence/before.md` and `evidence/before.patch`.
-- `evidence/domain-audit.md` showing current rules retained and legacy rules excluded.
 - `evidence/after.md` and `evidence/after.patch`.
-- `evidence/comparison.md` explaining what improved.
-- Output from `npm run test:rules`, `npm run test:domain`, and `npm run agent:check`.
+- `evidence/domain-audit.md` and `evidence/comparison.md`.
+- Output from `npm run verify:exercise`.
 - A focused pull request containing only the exercise changes.
 
-Use the [evidence template](./docs/evidence-template.md) and follow the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, application quality, export behavior, domain vocabulary, source decisions, comparable sessions, and required evidence.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-The domain model must clearly separate billing customer, user, workspace, membership, role, and data residency.
+## Completion Criteria
 
-The final policy must require an Enterprise workspace with standard residency and an active admin membership belonging to the requesting user in that same workspace. Billing ownership alone must not grant access.
+The challenge is complete when:
 
-The exercise is incomplete if the runs are not comparable, legacy guidance is treated as current, protected inputs are changed, or the required checks fail.
-
-See the [evaluation rubric](../../docs/EVALUATION_RUBRICS.md#domain-modeling-product-rules-rescue).
+- Both branches start from the same commit and both implementation sessions use the same request and working conditions.
+- The domain model clearly separates billing customer, user, workspace, membership, role, and data residency.
+- Current rules are retained and legacy or unsupported interpretations are explicitly excluded.
+- Export requires an Enterprise workspace with standard residency and an active admin membership for the requesting user in that workspace.
+- Billing ownership alone does not grant access, `npm run verify:exercise` passes, and all required proof is present.

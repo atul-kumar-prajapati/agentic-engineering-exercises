@@ -1,1 +1,20 @@
-{"algorithm":"sha256-normalized-lf","protectedFiles":{"../README.md":"eeb6447f630e382000a8d648a90c9f5c756bcbc2e33294c2ef5280dd3d0bd032","../docs/monolithic-skill-draft.md":"d29b4c3c901b2953326c2714d2b2f3365b91dad084255a2c6ec2342e48d8f19f","../docs/release-policy.md":"43bc071d1ef6664ede337bc7b7fe169dbd373b012a8bfb32841281a2877624d0","../docs/pr-descriptions.md":"91725cf5f88ffa9192b36bf0b3aa5adc2b150bfb4223539084126b23b3e9fd7b","../docs/ci-evidence.md":"36e5990b0048a2b2a3e84eb15c665588ea1724f46e5dad41bf3a4095f9c724dd","lab-contract.json":"732f60d75e1501aee50d73945c9e9614e91a1169852eb634d02ff23cdb30992f","scripts/verify-release-notes.mjs":"1faae7447a5e1b0df077760a47bb86b3cf592b676601c6e9f632bf7114a420a9"}}
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "49b55db09547a0dfed8e9932066172090aa33a55b9d080cf93b88294f80c0aeb",
+    "../docs/monolithic-skill-draft.md": "cd5cf90cc0d800dc21aec44fd603a002400537a72961c9b8a3806998d361af8d",
+    "../docs/release-policy.md": "be00d65e57bab26019e6a608a358a133eb06c677180a8e0abdd82fa6fba338b0",
+    "../docs/pr-descriptions.md": "91725cf5f88ffa9192b36bf0b3aa5adc2b150bfb4223539084126b23b3e9fd7b",
+    "../docs/ci-evidence.md": "36e5990b0048a2b2a3e84eb15c665588ea1724f46e5dad41bf3a4095f9c724dd",
+    "../docs/evidence-template.md": "0be29ea7dab6de69065a44a0dd03a804c2ff569f4d762050744dab1a0b2266aa",
+    "../docs/eval-scenarios.md": "4c2de37619f42bb069412e563655e21196cde59f85fa6b7cfd6a5347c0e1a5ad",
+    "lab-contract.json": "adce5b081a8ad93a50e96c13af2a22bc50d39a77157a38bfbf82ba4a293db66c",
+    "package.json": "25010a7c5d13c3fe2c57a3a960766d6872863aca4fbbc28b610c948e1f4f3b7e",
+    "scripts/materialize-fixture.mjs": "44534489c1fffb2a17c493a018dfcadcc96e871c5c64dc25e2b42d8713c43f2c",
+    "scripts/verify-fixture.mjs": "9dc426f711ffb7a36ab5ca2a332d7d3b6082fdb5803f7a2b4b7d58ec8ba3d6c6",
+    "scripts/validate-skill.mjs": "cfbe17f3fdfdfa67fb506cf46f5590370aa46ed57972c2749ce52036f80871b4",
+    "scripts/verify-extractor.mjs": "e31fd1dacff71a6fc520b0fcb41e0604521bd279ae0eafa65758d209387e551c",
+    "scripts/verify-release-notes.mjs": "1eb41e628ff148ef40261c4ba55b79af1f433dd71112615483d3c68cb38216e3",
+    "scripts/verify-skill-submission.mjs": "97e225c51fcecb35af4aab234d55e0e450adbd0232c544f819c89ff0c087693d"
+  }
+}

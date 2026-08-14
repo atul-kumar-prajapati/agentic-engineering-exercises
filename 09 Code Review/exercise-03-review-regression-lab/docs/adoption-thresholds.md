@@ -1,10 +1,10 @@
 # Review Prompt Adoption Thresholds
 
-Record the model, provider configuration, temperature, sample count, prompt commit, and raw report path.
+Use one real remote provider, model, temperature, and configuration for baseline and candidate. Run three uncached samples for every prompt/case pair, producing 18 responses.
 
-- Historical and multi-bug recall: at least 80% across three sampled runs.
-- Clean-control precision: at least 90%; a blocker on the clean control is a failure.
-- Regression limit: no metric may fall more than five percentage points below the previous prompt.
-- Human review: required for disagreements between sampled runs or any newly introduced blocker.
+- Historical five-bug recall: at least 80% across candidate samples.
+- Multi-bug recall: at least 80% across candidate samples.
+- Clean-control precision: at least 90%; all three candidate samples must avoid a false blocker.
+- Regression limit: no candidate metric may be more than five percentage points below baseline.
 
-Use `report-template.md` for before and after results. Known limitations and unstable cases must be included; a higher aggregate score alone is not sufficient for adoption.
+Human-label every response against the protected finding catalog and bind the judgment to its SHA-256. Any failed threshold means do not adopt, regardless of aggregate score.

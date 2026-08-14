@@ -2,41 +2,46 @@
   "title": "Characterization-First Rules Refactor",
   "competency": "11. Agentic Refactoring - Test-driven tech-debt cleanup",
   "domain": "Characterization-first refactor of legacy rule evaluation",
-  "mission": "Capture existing behavior around a messy rules module before refactoring it into clearer pieces.",
-  "outcome": "Legacy behavior is characterized before structure changes, then refactored in small green steps.",
+  "mission": "Refactor renewal eligibility only after a public characterization test captures every protected behavior.",
+  "outcome": "Git history and identical snapshots prove that a focused structural refactor preserved all ten observed results.",
   "entities": [
-    "behavior spec",
-    "golden case",
-    "legacy branch",
-    "refactor step"
+    "renewal account",
+    "eligibility result",
+    "golden observation",
+    "characterization commit"
   ],
   "seededDefects": [
-    "current behavior around overdue high-risk items is undocumented",
-    "refactor changes log text used by support",
-    "test is patched to match new behavior"
+    "support override silently takes precedence over arrears",
+    "negative late-payment counts pass the enterprise rule",
+    "mature unsupported accounts retain plan-not-supported"
   ],
   "verificationGates": [
-    "green baseline",
-    "golden case tests",
-    "preserve/change/bug table",
-    "stepwise refactor proof"
+    "characterization commit precedes production edits",
+    "ten public golden observations",
+    "byte-equivalent before and after snapshots",
+    "source-only refactor commit",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
   ],
   "agentWorkflow": [
-    "Ask the coding agent to inspect this lab contract, starter code, docs, and tests before proposing a plan.",
-    "Revise the agent plan so it exercises the competency practice and avoids the common mistake.",
-    "Implement the smallest working change that addresses the seeded defects.",
-    "Run the verification gates and capture command evidence before writing the final review note."
+    "Inspect the public rule, behavior notes, and immutable golden cases.",
+    "Add the characterization test and before snapshot before touching production code.",
+    "Refactor only the decision structure in a separate source-only commit.",
+    "Capture the after snapshot and run every protected verification command.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
   ],
   "workingDeliverables": [
-    "Characterization tests.",
-    "Refactored production code.",
-    "Behavior category notes tied to tests.",
-    "Before/after verification evidence."
+    "Public characterization test and focused Git history.",
+    "Refactored renewal rule.",
+    "Preserve or suspected-bug decisions.",
+    "Identical before and after output evidence.",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
   ],
   "masterySignals": [
-    "Generate a behavior spec from the current code and mark preserve/change/bug categories.",
-    "Add characterization tests that pass against the current behavior.",
-    "Refactor the messy module without changing preserved behavior.",
-    "Keep the suite green after each logical step."
+    "Tests the public export rather than private implementation details.",
+    "Preserves exact fields, values, reason strings, precedence, and validation gaps.",
+    "Separates characterization and source changes into auditable commits.",
+    "Proves all ten before and after observations are identical."
   ]
 }

@@ -2,36 +2,56 @@
 
 ## Your Mission
 
-Your mission is to use specialist agents to review one risky access-approval change and make a single accountable merge decision.
+Your team is about to merge an access-approval change with interacting security, accessibility, performance, and testability risks. Your mission is to use independent specialist agents to find, triage, fix, and recheck those risks against exact Git commits.
 
-You are given unsafe HTML rendering, mouse-only queue rows, expensive render work, and an approval service that trusts the UI. Specialist reports can also conflict or describe different commits.
+The application renders unsafe notes, uses mouse-only review rows, repeats expensive calculations, and trusts UI authorization. A single general review can miss both individual defects and their combined impact.
 
-Run security, accessibility, performance, and testability reviews against the same SHA, triage every finding, fix supported blockers, and make the specialists recheck the final SHA.
+Run a controlled before-and-after specialist review cycle and make the merge decision from reproducible evidence.
 
-The duration for this challenge is 30 min or less.
+The duration for this challenge is 45 min or less.
 
 ## Project
 
-[nfr-swarm-app](./nfr-swarm-app) contains the access-review workflow and seeded risks. Use the supplied [specialist prompts](./docs/specialist-prompts.md) and shared report schema.
+[nfr-swarm-app](./nfr-swarm-app) contains the access-review workflow and protected specialist checks. The [risk seeds](./docs/nfr-risk-seeds.md), [specialist prompts](./docs/specialist-prompts.md), and [remediation contract](./docs/remediation-contract.md) define the review scope.
 
 ## How To Go About It
 
-Give each specialist the same commit, scope, severity rules, and evidence format. Findings must include a file and line, reproduction, impact, and proposed verification.
+1. Record one clean baseline SHA in `evidence/before.md` and create `evidence/before.patch` for the risky change under review.
 
-The integration owner classifies each finding as fix, defer, or dismiss with an owner and residual risk. After fixes, rerun every affected specialist instead of relying on the original report.
+2. Start four separate review-only sessions for security, accessibility, performance, and testability. Give each specialist only its role prompt, the baseline SHA, report format, and focused command. Specialists must not edit code.
+
+3. Verify that every finding has a source location, reproducible evidence, impact, and recommendation. Combine duplicates and record a fix, defer, or dismiss decision for every unique finding.
+
+4. As integration owner, implement all supported blockers in one remediation commit. Do not include evidence files in that commit. Measure performance at the baseline and remediation SHAs with identical inputs.
+
+5. Start four fresh specialist sessions for the final recheck. Every recheck must inspect the same remediation SHA and run its focused command.
+
+6. Save the remediation state in `evidence/after.md` and `evidence/after.patch`. Link every original finding to its decision, code change, recheck result, and remaining risk.
+
+7. Run the complete gate and raise the PR only when all required blockers are resolved and the evidence matches the reviewed Git history.
 
 ## Evidence
 
-Submit four reports under `evidence/specialists/`, `evidence/decision-log.md`, before-and-after performance JSON, keyboard or assistive-technology evidence, and the final SHA and check output.
+Submit:
 
-Run `npm run measure:baseline`, `npm run test:submission`, and `npm run agent:check` from `nfr-swarm-app`.
+- `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, and `evidence/after.patch`.
+- `evidence/review-cycle.json` and `evidence/decision-log.json`.
+- Eight specialist reports and eight command outputs, one before and one after per specialist.
+- Performance results for both SHAs and `evidence/integration.md`.
+- `evidence/comparison.md` with findings, decisions, rechecks, performance, and merge outcome.
+- Output from `npm run verify:exercise`.
+- A focused pull request containing only this exercise.
 
-Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, application quality, all specialist gates, review provenance, triage, remediation, rechecks, performance, and required evidence.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Reviewers will check that specialists reviewed the same code, evidence supports each finding, privileged approval is enforced at the service boundary, keyboard operation works, and performance claims use comparable measurements.
+## Completion Criteria
 
-The exercise is incomplete if reports are blindly merged, findings lack evidence, different SHAs are compared without explanation, or the final code is not re-reviewed.
+The challenge is complete when:
 
-See the [Specialist Review Merge Gate rubric](../../docs/EVALUATION_RUBRICS.md#specialist-review-merge-gate).
+- Four distinct baseline sessions review one baseline SHA without editing application code.
+- Every finding has evidence and a recorded decision, and all required blockers are fixed in one remediation commit.
+- Four fresh sessions recheck one remediation SHA with matching passing command evidence.
+- Performance is measured at both SHAs with identical inputs and meets the required improvement.
+- `npm run verify:exercise` passes and the merge decision is fully traceable to the submitted proof.

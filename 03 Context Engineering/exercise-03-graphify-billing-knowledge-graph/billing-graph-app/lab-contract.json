@@ -5,10 +5,53 @@
   "domain": "Cross-cutting recognized-revenue calculation",
   "mission": "Use a queryable knowledge graph to rescue a billing incident spanning calculation, mapping, consumers, contracts, and ownership.",
   "outcome": "A graph-first agent finds the shared safe edit path, rejects stale context, and fixes both consumers without changing gross volume.",
-  "entities": ["billing event", "recognized revenue", "gross volume", "tenant", "billing account", "dashboard", "scheduled snapshot", "owner team"],
-  "seededDefects": ["credits are counted as revenue", "refunds increase revenue", "results are grouped by tenant", "historical sources point to the wrong formula and owner"],
-  "verificationGates": ["eight protected behavior checks", "real NetworkX graph artifacts", "six answered graph questions", "source-verified uncertain edges", "fair search-versus-graph comparison"],
-  "agentWorkflow": ["capture a normal-search first attempt", "build the complete exercise graph", "query before reading source", "source-verify uncertain edges", "capture a graph-first attempt", "compare results"],
-  "workingDeliverables": ["recognized-revenue fix", "Graphify JSON, HTML, and report", "query and audit evidence", "before-and-after patches and reports"],
-  "masterySignals": ["queries reveal both consumers and shared calculation", "edge confidence is respected", "current and stale sources are separated", "ownership is correct", "gross volume remains unchanged"]
+  "entities": [
+    "billing event",
+    "recognized revenue",
+    "gross volume",
+    "tenant",
+    "billing account",
+    "dashboard",
+    "scheduled snapshot",
+    "owner team"
+  ],
+  "seededDefects": [
+    "credits are counted as revenue",
+    "refunds increase revenue",
+    "results are grouped by tenant",
+    "historical sources point to the wrong formula and owner"
+  ],
+  "verificationGates": [
+    "eight protected behavior checks",
+    "real NetworkX graph artifacts",
+    "six answered graph questions",
+    "source-verified uncertain edges",
+    "fair search-versus-graph comparison",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
+  ],
+  "agentWorkflow": [
+    "capture a normal-search first attempt",
+    "build the complete exercise graph",
+    "query before reading source",
+    "source-verify uncertain edges",
+    "capture a graph-first attempt",
+    "compare results",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
+  ],
+  "workingDeliverables": [
+    "recognized-revenue fix",
+    "Graphify JSON, HTML, and report",
+    "query and audit evidence",
+    "before-and-after patches and reports",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
+  ],
+  "masterySignals": [
+    "queries reveal both consumers and shared calculation",
+    "edge confidence is respected",
+    "current and stale sources are separated",
+    "ownership is correct",
+    "gross volume remains unchanged"
+  ]
 }

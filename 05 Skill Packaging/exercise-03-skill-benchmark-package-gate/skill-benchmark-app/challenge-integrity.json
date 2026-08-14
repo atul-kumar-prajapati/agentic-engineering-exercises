@@ -1,1 +1,28 @@
-{"algorithm":"sha256-normalized-lf","protectedFiles":{"../README.md":"47983e9a9f117a76d5489d30faf6e242b3ba93b2377877a09804cf3ec14e6602","../docs/incident-sources.md":"165653eb618296a324eae8fe2245dc0fc5ddcbe3799412615b1ad429e72b8b34","../docs/benchmark-gate.md":"174ae81a2b520257a4ea14ae735d3867730b98119a6bbfa90e392cc5ab36dfc5","lab-contract.json":"61ebd8d94568143742680e37e2b808ba64d2ac0e37ba021e9a74f40aa6b8f474","evals/evals.json":"bfe618e6d1e572aecbd88cb9a25b25cf72384408ec1e59f4e15bbecc2adda28f","evals/files/incident-a.md":"8b90d39196cae0638e2a83fef6f4c5150460c259e39d7b9e7284faff977ec1ce","evals/files/incident-b.md":"946e0884ba07a7b28cf247b982580cddd98b941ef1a780bdb2c067389fc0901c","evals/files/incident-c.md":"f7bbf65513b5656467c6cc3052039e40f8291a721664cf31187cec9491c9f5c0","evals/files/incident-d.md":"27a3cd530f1b55b6d6a460ce4c8ccbecbd95f37707646e34ccb793ea74d2a235"}}
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "2143df0064103a2706ad7d0a85930feb5b6a8169243a385c6145fae872fd23b4",
+    "../docs/benchmark-gate.md": "0c1502a3399f168783c25e95a4f3f28d293697079071d7a270c655245638c64b",
+    "../docs/incident-sources.md": "c80d2c5cca49b91751aa895beb8daa73e6ce1faa626d157b96dea35dca1f3ed2",
+    "../docs/incident-output-contract.md": "629d1f18494ad8997ae8408b785b7924bc1a6af6817a960af126e9a3aca1a961",
+    "../docs/evidence-template.md": "5f7869be3040a12688a808a7a7d711c046dfb743c1e0b76200605c65f4779491",
+    "lab-contract.json": "5ee64806bf1ccd257fcedfbe222c5ed168b3cacf477f0d91372d2756c6b63e46",
+    "package.json": "728416384fa93ac1f254237b1ec6da22de253cf8ba865d69f868a88ec384d5ac",
+    "evals/evals.json": "7f146b92c89f33a3c994a7bc90013df70aa2d9b9b053f6afcf0b2be7d1289d6b",
+    "evals/files/incident-a.md": "8db1d3142589b3b5e5f94c05fb52958a2930aa102cf9fb91ddb96ac80ea5460d",
+    "evals/files/incident-b.md": "073cb068510b2c7264e9380c65562596ebe7d18c7467b8ac752b87dfe2947353",
+    "evals/files/incident-c.md": "77591d98926774fbdd8762c3c0fcf87215ed1b5f08985792b3bc123866befaec",
+    "evals/files/incident-d.md": "95790c0dcab33944e9e2d08f98dd2efd058250485f0e9ce0fad92429095275a5",
+    "fixtures/incident-summary-starter/SKILL.md": "96a5f38ad9b0f2ed2f8097a21fbe77680f54c39f9a527edc0cdf630bde771a24",
+    "scripts/aggregate-benchmark.mjs": "9d19c6816ad251c0b3dd1b0eb54ebc0cb250a3df2725d326efaa20e64d00f7c2",
+    "scripts/benchmark-lib.mjs": "ed2d55ec87f53e59d0ffa4d559f514b346d6e98be744235a311cee6b56d1eec9",
+    "scripts/grade-incident-output.mjs": "a3464410292ca07c80837b9f37325d406dd20dcf98884625869140b024f13e58",
+    "scripts/package-skill.py": "b67162d6893e0b797b45c27a5911573c93aa169cc1916ba48de011a5814ab281",
+    "scripts/test-benchmark-framework.mjs": "e16ab4997b36ae5cd50b59d475839af5b7e1c37a54b08061c8e042edf7fe3327",
+    "scripts/test-package-framework.py": "36fc6d9878ad2be58b55e9f811744788983bfba1fb49039c1a65ec4c8768eb88",
+    "scripts/validate-benchmark-fixtures.mjs": "2179a4c1527d20f494083bf7bf4ba063a0ef79dadce059a2aeda5865dcf3dad4",
+    "scripts/validate-benchmark-skill.mjs": "daf8f7c7726d056257368d240ef7f1d42fcf60ee206048c0f57e8d1a3943291f",
+    "scripts/verify-benchmark-submission.mjs": "6a97333fc6c16d60ee55f1d9c03df7f0fe6e76880c0f6ad6654e6e3dd07addcb",
+    "scripts/verify-skill-package.py": "5be6eaf7bbb78031727f15825ff2f0a6e4dec23698d1224a7412b8cbd6776ad4"
+  }
+}

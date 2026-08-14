@@ -104,3 +104,4 @@ if (failures.length) {
 }
 
 console.log(`\n${passed} product-rule checks passed.`);
+process.exit(0);

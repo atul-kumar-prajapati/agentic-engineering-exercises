@@ -13,44 +13,40 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  "title": "Feature Flag Kill-Switch Proof",
-  "competency": "08. Evidence-led PRs - PR gate evidence and handoff",
-  "domain": "Risky UI rollout guarded by feature flag and rollback proof",
-  "mission": "Prove that a risky UI feature is gated, observable, and reversible before a reviewer sees the PR.",
-  "outcome": "A risky agent-written feature is gated, observable, and reversible.",
-  "entities": [
-    "feature flag",
-    "rollback config",
-    "telemetry event",
-    "disabled state"
+  title: "Feature Flag Kill-Switch Proof",
+  competency: "08. Evidence-led PRs",
+  domain: "Provider-independent invoice preview rollout with a configuration kill switch and commit-bound rollback evidence.",
+  mission: "Repair the rollout boundary, implement an atomic no-deploy rollback command, and prove every state from one source commit.",
+  outcome: "Reviewers can verify that only an enabled target reaches the preview service and that one command safely disables the rollout.",
+  entities: ["flag evaluation", "targeting context", "preview API", "telemetry event", "rollback configuration", "source commit"],
+  seededDefects: [
+    "The boundary evaluates with a true default and accepts invalid targeting context.",
+    "Disabled and provider-error states still call the preview API and emit telemetry.",
+    "The preview telemetry omits required identity fields and API failures do not fail closed.",
+    "There is no atomic, audited rollback command.",
   ],
-  "seededDefects": [
-    "flag default differs between dev and CI",
-    "rollback path leaves telemetry enabled",
-    "disabled state still calls the new API"
+  verificationGates: [
+    "Protected tests cover enabled, disabled, provider-error, invalid-context, and API-error behavior.",
+    "The rollback drill rejects invalid input without mutation and atomically changes a temporary configuration.",
+    "Generated JSON and Markdown record observed calls, telemetry, timing, configuration digests, and audit data.",
+    "One source SHA contains the implementation and later changes are evidence only.",
   ],
-  "verificationGates": [
-    "flag on/off tests",
-    "rollback script",
-    "telemetry assertion",
-    "PR evidence capture"
+  agentWorkflow: [
+    "Inspect the protected flag, rollback, and evidence contracts.",
+    "Repair the provider-independent boundary without changing the protected scenarios.",
+    "Implement the rollback CLI and prove invalid-input and successful rollback behavior.",
+    "Commit the implementation, generate evidence for that SHA, and run the submission verifier.",
   ],
-  "agentWorkflow": [
-    "Ask the coding agent to inspect this lab contract, starter code, docs, and tests before proposing a plan.",
-    "Revise the agent plan so it exercises the competency practice and avoids the common mistake.",
-    "Implement the smallest working change that addresses the seeded defects.",
-    "Run the verification gates and capture command evidence before writing the final review note."
+  workingDeliverables: [
+    "Corrected invoice preview rollout boundary.",
+    "Atomic rollback CLI with audit metadata.",
+    "Three generated rollout scenario documents.",
+    "Generated rollback JSON, reviewer Markdown, and verification output.",
   ],
-  "workingDeliverables": [
-    "Feature flag implementation in code/config.",
-    "Telemetry or audit behavior.",
-    "Tests for on/off/rollback states.",
-    "Rollback evidence suitable for a PR."
+  masterySignals: [
+    "Every non-enabled path returns legacy behavior with zero preview side effects.",
+    "Flag evaluation and telemetry use the same stable account identity.",
+    "Rollback is validated, audited, atomic, deterministic, and completes within the objective.",
+    "Evidence is generated, reproducible, and bound to the reviewed source commit.",
   ],
-  "masterySignals": [
-    "Implement a real feature flag around the risky UI behavior.",
-    "Add telemetry/audit events for enabled, disabled, and rollback paths.",
-    "Build a rollback script or documented command that changes behavior without a deploy.",
-    "Test both flag states and the failure path."
-  ]
 };

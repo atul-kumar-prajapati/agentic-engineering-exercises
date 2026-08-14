@@ -1,45 +1,99 @@
-# Handoff Skill Incident Rescue Evidence
+# Handoff Incident Evidence
 
-Copy the relevant section into each evidence file and replace every prompt with observed information. Do not report a command as passing unless its captured output proves it.
+Record only the first attempt from each implementation session. Do not retry, correct, or rewrite either result. Use exact commits, commands, exit codes, counts, paths, and source citations.
 
-## before.md and after.md
+## `evidence/before.md`
 
-- Agent: [name]
-- Model: [model and version]
-- Tools: [enabled tools]
-- Permissions: [permission mode]
-- Time limit: [implementation time limit]
-- Prompt: Complete the automatic escalation fix for at-risk cases. Use the current SLA rules, preserve existing ownership and manual escalation behaviour, and keep the queue totals and saved workflow state consistent.
+### Run
+
+- Starting commit:
+- Implementation commit:
+- Agent:
+- Model:
+- Tools:
+- Permissions:
+- Time limit:
 - Attempt: 1
-- Context source: [raw session history or generated handoff]
-- Handoff skill: [disabled or enabled]
+- Human hints: 0
+- Prompt: Complete the automatic escalation fix for at-risk cases. Use the current SLA rules, preserve existing ownership and manual escalation behaviour, and keep the queue totals and saved workflow state consistent.
+- Context source: Raw session history
+- Handoff skill: Disabled
+- Patch: `evidence/before.patch`
 
-### Investigation
+### Results
 
-Record which files the agent treated as authoritative and which contradictions it noticed.
+| Proof | Result |
+|---|---|
+| `npm run test:incident` | Pass or fail; exit code: N |
+| Current requirements followed | Number |
+| Stale claims followed | Number |
+| Protected behaviors broken | Number |
+| Context supplied | Word or token count |
+| Files changed | Number |
+| Lines added and removed | `+N / -N` |
 
-### Decisions and implementation
+### Important Problems
 
-Record the requirements the agent followed, the files it changed, and the assumptions it made.
+List no more than three. Give the implementation file and line, incorrect claim, and authoritative source that contradicts it.
 
-### Verification
+## `evidence/after.md`
 
-Record each command, exit code, and relevant output.
+### Run
 
-## handoff-audit.md
+- Starting commit:
+- Implementation commit:
+- Agent:
+- Model:
+- Tools:
+- Permissions:
+- Time limit:
+- Attempt: 1
+- Human hints: 0
+- Prompt: Complete the automatic escalation fix for at-risk cases. Use the current SLA rules, preserve existing ownership and manual escalation behaviour, and keep the queue totals and saved workflow state consistent.
+- Context source: `evidence/handoff.md`
+- Handoff skill: Enabled
+- Patch: `evidence/after.patch`
 
-### Verified facts retained
+### Results
 
-For every retained fact, provide the fact, its authoritative source path, and how it was verified.
+| Proof | Result |
+|---|---|
+| `npm run test:incident` | Pass or fail; exit code: N |
+| `npm run test:handoff` | Pass or fail; exit code: N |
+| `npm run agent:check` | Pass or fail; exit code: N |
+| Current requirements followed | Number |
+| Stale claims followed | Number |
+| Protected behaviors broken | Number |
+| Context supplied | Word or token count |
+| Files changed | Number |
+| Lines added and removed | `+N / -N` |
 
-### Outdated or unsupported claims excluded
+## `evidence/handoff-audit.md`
 
-For every excluded claim, provide the claim, where it appeared, and the evidence showing why it must not guide the next agent.
+### Verified Facts Retained
 
-### Handoff boundary
+| Fact | Authoritative source and line | Verification |
+|---|---|---|
 
-Confirm what the fresh implementation agent received and that the raw session history was not provided.
+### Outdated or Unsupported Claims Excluded
 
-## comparison.md
+| Claim | Source | Contradicting evidence |
+|---|---|---|
 
-Compare requirement selection, implementation correctness, protected behaviour, verification, and context size. Explain why the two implementation runs were fair.
+### Handoff Boundary
+
+Confirm exactly what the final agent received and that the raw session history was not provided.
+
+## `evidence/comparison.md`
+
+### Fair Comparison
+
+Confirm the same starting commit, incident request, agent, model, tools, permissions, time limit, human hints, and first-attempt condition.
+
+### Results
+
+Compare requirement selection, stale claims followed, protected behavior, test results, files changed, and context size.
+
+### Conclusion
+
+State whether the verified handoff improved the implementation. Support the answer with exact results and both patches.

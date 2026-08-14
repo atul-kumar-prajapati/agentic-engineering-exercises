@@ -2,10 +2,12 @@
   "name": "Characterization-First Rules Refactor",
   "root": "..",
   "requiredFiles": [
-    { "path": "rules-refactor-app/src/rules/legacyEligibility.characterization.test.mjs", "minCharacters": 350, "includeAll": ["evaluateRenewalEligibility", "assert"] },
-    { "path": "evidence/before-output.json", "validJson": true },
-    { "path": "evidence/after-output.json", "validJson": true },
-    { "path": "evidence/behavior-decisions.md", "minCharacters": 400, "includeAll": ["preserve", "suspected bug", "support override"] },
-    { "path": "evidence/refactor-steps.md", "minCharacters": 300, "includeAll": ["characterization", "green", "command"] }
+    { "path": "rules-refactor-app/src/rules/legacyEligibility.characterization.test.mjs", "minCharacters": 700, "includeAll": ["evaluateRenewalEligibility", "renewal-golden-cases", "deepEqual"] },
+    { "path": "evidence/before-output.json", "minCharacters": 2500, "validJson": true, "includeAll": ["enterprise accepts negative", "support override wins", "plan-not-supported"] },
+    { "path": "evidence/after-output.json", "minCharacters": 2500, "validJson": true, "includeAll": ["enterprise accepts negative", "support override wins", "plan-not-supported"] },
+    { "path": "evidence/history.json", "minCharacters": 150, "validJson": true, "includeAll": ["characterizationSha", "refactorSha"] },
+    { "path": "evidence/behavior-decisions.md", "minCharacters": 900, "includeAll": ["preserve", "suspected bug", "support override", "negative", "plan-not-supported", "payment-history"] },
+    { "path": "evidence/refactor-steps.md", "minCharacters": 700, "includeAll": ["characterization", "before", "green", "refactor", "after", "command", "exit code: 0"] },
+    { "path": "evidence/commands/refactor-verify.txt", "minCharacters": 250, "includeAll": ["Characterization SHA", "Refactor SHA", "ten before and after", "evidence"] }
   ]
 }

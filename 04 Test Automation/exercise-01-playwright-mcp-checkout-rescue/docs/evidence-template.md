@@ -35,3 +35,11 @@ Map tax payload, authorization payload, approval, decline, retry, duplicate subm
 ## comparison.md
 
 Compare failure diagnosis, locator strategy, waiting strategy, network assertions, isolation, behavioural coverage, repeated-run result, and changed files. Explain why both first attempts used fair conditions.
+
+## Required Run Files
+
+- `evidence/before.md` records the first session conditions, investigation, command exit codes, files changed, and lines added and removed.
+- `evidence/before.patch` is the genuine Git diff produced by that first attempt.
+- `evidence/after.md` records the matching second session conditions, MCP observations used, command exit codes, files changed, and lines added and removed.
+- `evidence/after.patch` is the genuine Git diff produced by the MCP-backed attempt.
+- `evidence/comparison.md` uses measured results from both runs and the two patches.

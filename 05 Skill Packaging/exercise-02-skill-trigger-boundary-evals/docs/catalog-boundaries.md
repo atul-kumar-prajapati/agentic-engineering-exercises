@@ -1,9 +1,11 @@
 # Skill Catalog Boundaries
 
-The catalog contains three neighbouring tasks:
+Route by the user's primary requested action:
 
-- `change-review` reviews an actual diff, branch, or pull request and reports evidence-backed code findings.
-- `release-notes` publishes customer-visible changes from a release comparison and evidence.
-- `incident-summary` explains an operational incident from timeline, impact, remediation, and follow-up evidence.
+- Use `change-review` when the user wants an existing diff, branch, commit, or pull request inspected for defects or merge risk. Its output is evidence-backed findings tied to code locations.
+- Use `release-notes` when the user wants customer-facing release communication from merged changes and verification evidence.
+- Use `incident-summary` when the user wants an operational incident report from timeline, impact, remediation, and follow-up evidence.
 
-A request that asks for multiple independent workflows should not be forced into one skill. Conceptual explanations and ordinary document summaries should not trigger any of these skills.
+Do not use `change-review` to implement fixes, debug a failure without a supplied change, write a pull-request description, summarize an approved diff, review a design document, explain review practices, publish release notes, or report an incident.
+
+Do not force a request containing multiple independent workflows into one skill. Split the work or ask the user which workflow should run first.

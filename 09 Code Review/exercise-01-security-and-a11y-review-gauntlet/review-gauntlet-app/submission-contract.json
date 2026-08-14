@@ -2,8 +2,12 @@
   "name": "Security and Accessibility Review Gauntlet",
   "root": "..",
   "requiredFiles": [
-    { "path": "evidence/review.md", "minCharacters": 900, "includeAll": ["base SHA", "head SHA", "true positive", "false positive", "keyboard", "server", "severity", "file", "line", "test"] },
-    { "path": "evidence/semgrep.txt", "minCharacters": 150 },
-    { "path": "evidence/fixture-verification.txt", "minCharacters": 80 }
-  ]
+    { "path": "review-gauntlet-app/tests/review-regressions.test.ts", "minCharacters": 1000, "includeAll": ["dangerouslySetInnerHTML", "keyboard", "short", "Blocked", "Escalated", "Ready", "approved"] },
+    { "path": "evidence/review.json", "validJson": true, "minCharacters": 3000, "includeAll": ["schemaVersion", "baseSha", "headSha", "sourceSha", "reviewerSession", "request-changes", "SEC-001", "SCAN-001", "A11Y-001", "VAL-001", "POL-001", "testPath"] },
+    { "path": "evidence/review.md", "minCharacters": 2200, "includeAll": ["Base SHA", "Head SHA", "Request changes", "SEC-001", "SCAN-001", "A11Y-001", "VAL-001", "POL-001", "True positive", "False positive"] },
+    { "path": "evidence/semgrep.txt", "minCharacters": 250, "includeAll": ["react-dangerous-html-review", "ActionComposer.tsx", "SafeAnnouncement.tsx"] },
+    { "path": "evidence/fixture-verification.txt", "minCharacters": 50, "includeAll": ["Review fixture verified: review-base..review-head"] },
+    { "path": "evidence/commands/review-verify.txt", "minCharacters": 300, "includeAll": ["Source SHA", "PASS exact protected", "PASS five required", "PASS dynamic HTML", "PASS keyboard", "PASS Git source binding"] }
+  ],
+  "requiredDirectories": ["evidence", "evidence/commands"]
 }

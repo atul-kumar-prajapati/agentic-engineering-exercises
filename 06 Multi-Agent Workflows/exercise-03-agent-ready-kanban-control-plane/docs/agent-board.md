@@ -1,12 +1,12 @@
 # Agent Board Seed
 
-The canonical structured board is [agent-board.json](./agent-board.json). It is mirrored by the application's `src/data/agent-board.json`.
+The canonical structured board is [agent-board.json](./agent-board.json). The application copy must remain identical.
 
-| Card | State | Decision |
+| Card | Seed state | Unsafe condition |
 |---|---|---|
-| ESC-118 | needs-info | Do not assign until reproduction exists. |
-| ESC-120 | ready-for-agent | Runs first and owns `scoring.ts`. |
-| ESC-122 | blocked | Conflicts with ESC-120 and must wait. |
-| ESC-121 | cancelled | Production-like data makes the proposed lane unsafe. |
+| ESC-118 | needs-info | Holds `workflowApi.ts` without a reproduction. |
+| ESC-120 | ready-for-agent | Correctly reserves the inherited-severity lane. |
+| ESC-122 | blocked | Illegally reserves `scoring.ts` while waiting. |
+| ESC-121 | cancelled | Still reserves `exportApi.ts` after cancellation. |
 
-Completing the exercise requires one card implementation plus a consistent update to both JSON boards, the ownership map, and the integration log.
+The final board keeps unsafe work visible, marks ESC-120 merged, releases every reservation, and records the full transition history.

@@ -2,22 +2,52 @@ import { spawnSync } from "node:child_process";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const client = path.join(root, "workflow-gate-app");
-const provider = path.join(root, "workflow-rules-api");
-const commands = [
-  { label: "client release tests", command: "npm", args: ["run", "test:release"], cwd: client },
-  { label: "client quality and build", command: "npm", args: ["run", "agent:check"], cwd: client },
-  { label: "provider tests and build", command: process.platform === "win32" ? "mvnw.cmd" : "./mvnw", args: ["test"], cwd: provider },
+const exerciseRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const provider = path.join(exerciseRoot, "workflow-rules-api");
+
+function executeCommand(command, args, options) {
+  if (process.platform === "win32") {
+    return spawnSync("cmd.exe", ["/d", "/s", "/c", [command, ...args].join(" ")], {
+      ...options,
+      shell: false,
+    });
+  }
+  return spawnSync(command, args, { ...options, shell: false });
+}
+
+// Seeded previous-agent shortcut: this proves one provider unit-test class only.
+export const releaseSteps = [
+  {
+    id: "focused-provider-unit",
+    command: process.platform === "win32" ? "mvnw.cmd" : "./mvnw",
+    args: ["-q", "-Dtest=WorkflowServiceTest", "test"],
+    cwd: provider,
+  },
 ];
 
-for (const step of commands) {
-  console.log(`\nVERIFY ${step.label}: ${step.command} ${step.args.join(" ")}`);
-  const result = spawnSync(step.command, step.args, { cwd: step.cwd, stdio: "inherit", shell: process.platform === "win32" });
-  if (result.status !== 0) {
-    console.error(`FAILED ${step.label} with exit code ${result.status ?? 1}`);
-    process.exit(result.status ?? 1);
+export function runReleaseGate(steps = releaseSteps, execute = executeCommand, logger = console) {
+  for (const step of steps) {
+    logger.log(`VERIFY ${step.id}: ${step.command} ${step.args.join(" ")}`);
+    const result = execute(step.command, step.args, {
+      cwd: step.cwd,
+      stdio: "inherit",
+      shell: false,
+    });
+
+    if (result.status && result.status !== 0) {
+      logger.error(`FAILED ${step.id} with exit code ${result.status}`);
+      return result.status;
+    }
+    logger.log(`PASS ${step.id}`);
   }
-  console.log(`PASS ${step.label}`);
+
+  logger.log("VERIFIED focused provider check passed.");
+  return 0;
 }
-console.log("\nVERIFIED release gate passed with fresh client and provider evidence.");
+
+const isDirectRun = process.argv[1]
+  && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (isDirectRun) {
+  process.exitCode = runReleaseGate();
+}

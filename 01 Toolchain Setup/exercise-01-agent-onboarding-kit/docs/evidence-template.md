@@ -1,44 +1,89 @@
-# Evidence Template
+# Agent Onboarding Evidence
 
-Use these headings in the required evidence files. Replace every instruction with the actual result from the agent session.
+Record only the first attempt from each agent session. Do not retry, correct, or rewrite the agent's implementation. Use exact commits, commands, exit codes, counts, and file paths instead of long explanations.
 
 ## `evidence/before.md`
 
+### Run
+
 - Starting commit:
-- Session identifier:
+- Implementation commit:
 - Agent and model:
 - Tools and permissions:
-- Time allowed:
-- Feature request used:
-- Onboarding files available: None
-- Files changed:
-- Approach taken:
-- Checks run and results:
-- Human help provided:
-- Did the implementation copy or extend the existing bad practice? Explain:
+- Time limit:
+- Human hints: 0
+- Retries: 0
+- Onboarding available: No
 - Patch: `evidence/before.patch`
+
+### Results
+
+| Proof | Result |
+|---|---|
+| `npm run agent:check` | Pass or fail; exit code: N |
+| `npm run verify:implementation` | Pass or fail; exit code: N |
+| Files changed | Number |
+| Lines added and removed | `+N / -N` |
+| Unmet requirements | Failed checks or `None` |
+
+### Problems Found
+
+List no more than three important problems. Give the affected file and line for each one.
 
 ## `evidence/after.md`
 
+### Run
+
 - Starting commit:
-- Session identifier:
+- Implementation commit:
 - Agent and model:
 - Tools and permissions:
-- Time allowed:
-- Feature request used:
+- Time limit:
+- Human hints: 0
+- Retries: 0
 - Onboarding files read:
-- Files changed:
-- Approach taken:
-- Checks run and results:
-- Human help provided:
-- Did the implementation avoid the existing bad practice? Explain:
 - Patch: `evidence/after.patch`
+
+### Results
+
+| Proof | Result |
+|---|---|
+| `npm run agent:check` | Pass or fail; exit code: N |
+| `npm run verify:implementation` | Pass or fail; exit code: N |
+| Files changed | Number |
+| Lines added and removed | `+N / -N` |
+| Unmet requirements | Failed checks or `None` |
+
+### Onboarding Used
+
+| Onboarding instruction | Resulting code or verification change |
+|---|---|
+| File and line | File and line |
 
 ## `evidence/comparison.md`
 
-- Confirm that both runs used the same feature request, starting application code, model, tools, permissions, and time limit.
-- Explain how the two implementations differed.
-- Identify any business rules copied by either implementation.
-- Name the onboarding instructions that influenced the second result.
-- Compare correctness, maintainability, verification, and human help required.
-- State whether the onboarding improved the result and support the conclusion with evidence.
+### Fair Comparison
+
+| Condition | Before | After | Same? |
+|---|---|---|---|
+| Starting commit | | | Yes or No |
+| Production change | | | Yes or No |
+| Agent and model | | | Yes or No |
+| Tools and permissions | | | Yes or No |
+| Time limit | | | Yes or No |
+| Human hints | | | Yes or No |
+| Retries | | | Yes or No |
+
+### Results
+
+| Metric | Before | After |
+|---|---|---|
+| Application check | | |
+| Implementation check | | |
+| Failed requirements | | |
+| Files changed | | |
+| Lines added and removed | | |
+
+### Conclusion
+
+State whether the onboarding improved the result. Support the answer with the results table and the two patches.

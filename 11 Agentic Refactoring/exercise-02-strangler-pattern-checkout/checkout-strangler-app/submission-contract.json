@@ -2,9 +2,12 @@
   "name": "Strangler Checkout Route",
   "root": "..",
   "requiredFiles": [
-    { "path": "checkout-strangler-app/src/checkout/cardCheckout.mjs", "minCharacters": 250 },
-    { "path": "evidence/route-matrix.md", "minCharacters": 350, "includeAll": ["card", "gift-card", "invoice", "legacy", "new"] },
-    { "path": "evidence/contract-comparison.md", "minCharacters": 350, "includeAll": ["orderId", "status", "totalCents", "errorCode"] },
-    { "path": "evidence/rollback.md", "minCharacters": 250, "includeAll": ["route", "flag", "authorization"] }
+    { "path": "checkout-strangler-app/src/checkout/cardCheckout.mjs", "minCharacters": 800, "includeAll": ["authorize", "amountCents", "PAYMENT_DECLINED"] },
+    { "path": "checkout-strangler-app/src/checkout/checkoutRouter.test.mjs", "minCharacters": 900, "includeAll": ["routeCheckout", "cardSliceEnabled", "gift-card", "invoice", "authorizationCreated"] },
+    { "path": "evidence/route-matrix.md", "minCharacters": 700, "includeAll": ["card", "gift-card", "invoice", "unknown", "flag off", "pre-authorization", "ambiguous", "legacy", "new slice"] },
+    { "path": "evidence/contract-comparison.md", "minCharacters": 600, "includeAll": ["orderId", "status", "totalCents", "errorCode", "approved", "declined"] },
+    { "path": "evidence/rollback.md", "minCharacters": 500, "includeAll": ["cardSliceEnabled", "false", "legacy", "authorizationCreated", "no duplicate"] },
+    { "path": "evidence/history.json", "minCharacters": 70, "validJson": true, "includeAll": ["sourceSha"] },
+    { "path": "evidence/commands/strangler-verify.txt", "minCharacters": 180, "includeAll": ["Source SHA", "PASS", "exit code: 0"] }
   ]
 }

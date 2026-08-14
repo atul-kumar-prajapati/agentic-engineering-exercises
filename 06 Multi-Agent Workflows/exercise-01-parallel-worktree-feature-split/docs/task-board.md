@@ -1,33 +1,36 @@
 # Three-Lane Product Task Board
 
-All lanes start from the same recorded base SHA. Do not invent replacement tasks.
+All lanes start from the same clean base SHA. Each lane creates one commit and remains inside its owned paths.
 
 ## Lane A: Saved queue filters
 
-Add a named saved-filter preset for High-priority Blocked work. The preset must use the existing filter behavior and remain searchable.
+Add a `High-priority Blocked` preset to the filter bar. Applying it sets priority to `High` and status to `Blocked` while preserving the current search query.
 
-- Owned paths: `src/components/FilterBar.tsx`, `src/utils/filters.ts`, related filter tests.
-- Focused verification: `npm test -- filters` or the equivalent test file command added by the lane.
-- Shared-file request: add `FilterPreset` to `src/types.ts` through the integration owner.
+- Owned paths: `src/components/FilterBar.tsx`, `src/utils/filters.ts`, and `tests/lane-a/**`.
+- Required API: export `savedFilterPresets` and `applyFilterPreset` from `filters.ts`.
+- Focused verification: `npm run test:lane-a`.
+- Shared request: promote the lane-local `FilterPreset` interface to `src/types.ts` during integration.
 
 ## Lane B: SLA risk indicator
 
-Show a distinct metric for work due today and ensure due-today Blocked work remains critical.
+Add a `Due today` portfolio metric. Count all items where `dueInDays` is zero and preserve the rule that a due-today Blocked item is `Critical`.
 
-- Owned paths: `src/utils/scoring.ts`, `src/components/MetricStrip.tsx`, related scoring tests.
-- Focused verification: `npm test -- scoring` or the equivalent test file command added by the lane.
+- Owned paths: `src/utils/scoring.ts`, `src/components/MetricStrip.tsx`, and `tests/lane-b/**`.
+- Required API: `summarizePortfolio` returns `dueToday`; `MetricStrip` renders the metric.
+- Focused verification: `npm run test:lane-b`.
 - No shared-file ownership.
 
 ## Lane C: Evidence export
 
-Add an export action that produces a JSON evidence bundle for the selected work item, including its ID, owner, status, risk, and collected evidence.
+Add an `Export JSON` action for collected evidence. The serialized bundle contains the selected item's ID, owner, status, calculated risk, evidence entries, and generation time.
 
-- Owned paths: `src/components/EvidencePanel.tsx`, `src/services/workflowApi.ts`, related evidence tests.
-- Focused verification: `npm test -- evidence` or the equivalent test file command added by the lane.
-- Shared-file request: add `EvidenceBundle` to `src/types.ts` through the integration owner.
+- Owned paths: `src/components/EvidencePanel.tsx`, `src/services/workflowApi.ts`, and `tests/lane-c/**`.
+- Required API: export `createEvidenceBundle` and `serializeEvidenceBundle` from `workflowApi.ts`; render `Export JSON` only when evidence exists.
+- Focused verification: `npm run test:lane-c`.
+- Shared request: promote the lane-local `EvidenceBundle` interface to `src/types.ts` during integration.
 
 ## Controlled Conflict
 
-Lanes A and C both need `src/types.ts`, but neither owns it. Each lane must record its requested type change without editing that file. The integration owner applies both requests in one documented shared-file commit after the lane commits are ready.
+Lanes A and C define temporary structural interfaces inside their owned utility or service file so their commits remain independently testable. They must request promotion without editing `src/types.ts`.
 
-Integration order is B, A, C, then the shared-file resolution. If a lane cannot pass its focused check, mark it blocked and do not cherry-pick it.
+The integration owner merges B, A, and C with `--no-ff`, then creates one commit that adds both interfaces to `src/types.ts` and replaces the two temporary definitions with imports. Do not merge a lane whose focused check fails.

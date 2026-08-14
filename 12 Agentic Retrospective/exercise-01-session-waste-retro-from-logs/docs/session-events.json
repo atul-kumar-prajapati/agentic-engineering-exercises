@@ -1,10 +1,15 @@
 [
-  { "sequence": 1, "type": "read", "target": "src/policy.ts", "result": "ok" },
-  { "sequence": 2, "type": "read", "target": "src/policy.ts", "result": "ok" },
-  { "sequence": 3, "type": "read", "target": "docs/contract.md", "result": "ok" },
-  { "sequence": 4, "type": "read", "target": "docs/contract.md", "result": "ok" },
-  { "sequence": 5, "type": "read", "target": "docs/contract.md", "result": "ok" },
-  { "sequence": 6, "type": "command", "target": "npm test -- policy", "result": "failed" },
-  { "sequence": 7, "type": "command", "target": "npm test -- policy", "result": "failed" },
-  { "sequence": 8, "type": "command", "target": "npm test -- policy", "result": "failed" }
+  { "sequence": 1, "type": "read", "target": "src/policy.ts", "contentVersion": "v1", "workspaceRevision": 1, "result": "ok" },
+  { "sequence": 2, "type": "read", "target": "src/policy.ts", "contentVersion": "v1", "workspaceRevision": 1, "result": "ok" },
+  { "sequence": 3, "type": "context", "target": "docs/architecture.md", "bytes": 12400, "workspaceRevision": 1, "result": "ok" },
+  { "sequence": 4, "type": "read", "target": "docs/contract.md", "contentVersion": "c1", "workspaceRevision": 1, "result": "ok" },
+  { "sequence": 5, "type": "command", "target": "npm test -- policy", "workspaceRevision": 1, "phase": "focused-test", "result": "failed" },
+  { "sequence": 6, "type": "command", "target": "npm test -- policy", "workspaceRevision": 1, "phase": "focused-test", "result": "failed" },
+  { "sequence": 7, "type": "command", "target": "npm test -- policy", "workspaceRevision": 1, "phase": "focused-test", "result": "failed" },
+  { "sequence": 8, "type": "diagnosis", "target": "missing test environment", "workspaceRevision": 1, "result": "ok" },
+  { "sequence": 9, "type": "command", "target": "npm test -- policy", "workspaceRevision": 1, "phase": "focused-test", "result": "passed" },
+  { "sequence": 10, "type": "write", "target": "src/policy.ts", "contentVersion": "v2", "workspaceRevision": 2, "result": "ok" },
+  { "sequence": 11, "type": "read", "target": "src/policy.ts", "contentVersion": "v2", "workspaceRevision": 2, "result": "ok" },
+  { "sequence": 12, "type": "command", "target": "npm test -- policy", "workspaceRevision": 2, "phase": "focused-test", "result": "passed" },
+  { "sequence": 13, "type": "claim", "target": "task complete", "workspaceRevision": 2, "result": "ok" }
 ]

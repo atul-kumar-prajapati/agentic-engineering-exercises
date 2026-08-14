@@ -224,6 +224,11 @@ dd {
   color: #991b1b;
 }
 
+.incident-list { display: grid; gap: 10px; }
+.incident-card { display: flex; align-items: center; justify-content: space-between; gap: 20px; border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+.incident-card p { margin: 5px 0 0; color: var(--muted); }
+.severity-badge { border-radius: 999px; background: #fff0df; color: #8c3d0b; font-weight: 800; padding: 7px 11px; }
+
 @media (max-width: 940px) {
   .hero,
   .metrics,

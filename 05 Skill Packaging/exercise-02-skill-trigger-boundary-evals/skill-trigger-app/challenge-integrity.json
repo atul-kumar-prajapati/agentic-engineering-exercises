@@ -1,1 +1,20 @@
-{"algorithm":"sha256-normalized-lf","protectedFiles":{"../README.md":"c407c881908adf1b10b207fe107696cb6e83e18458ba973c2388d9be91d965da","../docs/catalog-boundaries.md":"93ec7fba96cd86cebd1b2410d8f5ee6d825ebbdd51dcb214f9cdd5f8e9dbb2ab","lab-contract.json":"63fec406998a8ef4a36b7461b4128dd341c1c8b3cb880d139add73691b553815","evals/trigger-evals.json":"141ed9993beeb417d70af32398fe01519af9235c0c44db3b7d800ec58918aae5","skills/release-notes/SKILL.md":"18b970797bf177bacf96f98857ce7fe309df75d5716c6362bf993d3ba71e2fd3","skills/incident-summary/SKILL.md":"ff2b1e900f33c52c799c176aef9525dbfd049d71000bb3cbf2de9d9fe6eb1b7c"}}
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "b7f384cec8d5624cddfaa5185635b5ba7d105ca6e12a6ef40cc15611e31d0954",
+    "../docs/catalog-boundaries.md": "bf1b1db8effeadd2119d3786f37e58455a40d776646951a34177bfc31016a5e9",
+    "../docs/evidence-template.md": "543f5639acf1b234b10c3fa184763ee325ff235b83d6a380bc2110d2f058ed1f",
+    "fixtures/change-review-baseline/SKILL.md": "09cfd1c9a98db7e0e13b7d465449812b57b067a2453a3f7db4b199e311fb9c6a",
+    "lab-contract.json": "054ab277a251d72cfae048a5f7437b0f8d3ff0315c72897272928f29ff94ec2c",
+    "package.json": "84a269faa4f0cf61d9de668e866a203696b1e154758944397ad3d4b0f84762c1",
+    "evals/trigger-evals.json": "3402a39f267ac68a2471471958cb50480e2bf8e1e04f343449eec3402a9f195c",
+    "scripts/score-trigger-results.mjs": "e65873a6c949d5a1a74ba33c2a77256e2530d154b21de80c2f99f7aaafbd44a7",
+    "scripts/test-trigger-evaluation.mjs": "c4c8976547f96d0fcbb68f55bb2b258bc7ddd1e0e822398de4964cc2193eabb5",
+    "scripts/trigger-evaluation.mjs": "3e6ed50ab5c49c6309b51422dd1284a7bca6e46609134b1512c45574383112b0",
+    "scripts/validate-change-review-skill.mjs": "5a202ad939e445df3a97fc174410074b284c58be556a7b828cff00e8d9d0f557",
+    "scripts/validate-trigger-fixtures.mjs": "87aa16fb242e09c1857975c1ec4ac244ab57fc3273bdd30a664a4c3aa803238e",
+    "scripts/verify-trigger-submission.mjs": "b20788c5cc2bf9b32ac41b397cbfb8c57bfb1583373963e890b691a564e584be",
+    "skills/release-notes/SKILL.md": "18b970797bf177bacf96f98857ce7fe309df75d5716c6362bf993d3ba71e2fd3",
+    "skills/incident-summary/SKILL.md": "ff2b1e900f33c52c799c176aef9525dbfd049d71000bb3cbf2de9d9fe6eb1b7c"
+  }
+}

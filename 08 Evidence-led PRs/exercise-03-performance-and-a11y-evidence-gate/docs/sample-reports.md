@@ -1,31 +1,11 @@
-# Sample Reports
+# Protected Baseline Reports
 
-This is a seeded lab input for Performance and Accessibility Release Gate. It gives the learner concrete constraints to inspect, implement, test, and verify.
+The protected baseline represents the defective starter at route `/`:
 
-## Operating Context
+- Three Lighthouse runs.
+- Worst performance: `0.82`.
+- Worst accessibility: `0.91`.
+- Worst LCP: `3380 ms`.
+- Axe violation: `button-name`, one affected node.
 
-Performance and accessibility gate for a generated UI change
-
-## Concrete Inputs
-
-- Lighthouse report
-- a11y violation
-- budget threshold
-- before/after capture
-
-## Seeded Risks
-
-- largest contentful section regresses past budget
-- button has no accessible name
-- report is generated but not attached to evidence
-
-## Verification Expectations
-
-- a11y check
-- performance budget
-- before/after report
-- evidence pack link
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+Use the baseline only for the generated before-and-after comparison. It is not acceptable as after evidence.

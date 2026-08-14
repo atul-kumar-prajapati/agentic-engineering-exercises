@@ -1,8 +1,30 @@
 # Workflow Release Requirements
 
-- The client must reject workflow payloads with no `decisionState` instead of silently accepting them.
-- Every API workflow response must include `decisionState`.
-- `Blocked` items use `needs-evidence`; an accepted `Ready` decision uses `accepted`.
-- Allowed decision transitions are `Blocked` and `Ready`. Any other state must be rejected.
-- The release gate must run the client tests and build plus the complete provider tests and build.
-- A completion claim must name the exact fresh command, exit code, and relevant output.
+## Client boundary
+
+- Treat every provider response as unknown input at runtime.
+- Reject a response when `decisionState` is missing or is not `needs-evidence`, `pending-review`, or `accepted`.
+- Preserve the existing workflow fields after validation.
+
+## Provider boundary
+
+- Include a derived `decisionState` in every workflow response.
+- Map `Blocked` to `needs-evidence`, `In Review` to `pending-review`, and `Ready` to `accepted`.
+- Accept decision transitions only to `Blocked` or `Ready`.
+- Reject any other transition before saving it.
+- Keep the existing evidence-note rule for `Ready` decisions.
+
+## Release gate
+
+Run these surfaces exactly once from one command:
+
+1. The protected gate contract check.
+2. The protected client release tests.
+3. Client integrity, quality checks, typecheck, and production build.
+4. The complete Maven test and package lifecycle through the committed wrapper.
+
+The gate must stop on the first non-zero result or process-spawn error and exit non-zero. It may report success only after every surface passes.
+
+## Completion claim
+
+Record the exact command, implementation commit SHA, date, relevant unedited output, and exit code from one fresh gate run. A focused test, cached artifact, previous run, expected result, or another agent's summary is not release evidence.

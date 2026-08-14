@@ -1,14 +1,14 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
-    "../README.md": "c4d4bd41c2eb5a7a430c1a6d4d96efa01cc0f481abdfc92322dde40de1a045d0",
+    "../README.md": "09a2a9af66b0f23b20e526bbb5127e7436532c3023c65bf5ab9a4891eaa7c8f0",
     "../docs/checkout-contract.md": "ba5fabd527105610b7412969d7ae618a39a6051733eea43d3c2a8ffeae6179bb",
-    "../docs/evidence-template.md": "b2c523c2c805f592985328ae33ae50ed4d097fec47e745a5086549f943a6c127",
+    "../docs/evidence-template.md": "218d0ea2a0c6366c43fc4b04e033430747b145a94c30a9b64fb9903fac941f4c",
     "../docs/flaky-test-notes.md": "0fe199a47b2c419b200fe5a11690e11c09eac85f40feccf1c56ffc84027d4805",
     "index.html": "81111f8450a6a60eeaec3899840fd32523847e60512de9de1750936d34d6547a",
-    "lab-contract.json": "17b78e856baf9c124278ae88017e4958faef89c560a6e7c1b265ca6bdfa816cb",
+    "lab-contract.json": "d542a5fec85a74b248d3d3237396f2f43d27e5a55e20702bea69c2edff41bde2",
     "package-lock.json": "2bc673a924393b5c0eaee9c408008d72344dd431dd1f2ed5dc9d7e55ccdf6c7f",
-    "package.json": "8347c88438b725b0a8957923d0b2ad35398fe49ed3a05c72de7e8fe253ce705e",
+    "package.json": "c6d33b6932a974ead886d86691debef798b503e06b6d7593e4c4ac1a17b72be4",
     "playwright.config.ts": "eb512df6eab8e7a12601961b93d9d055f14ab5d86dab56cf48317c920309af9b",
     "scripts/agent-check.mjs": "9e24824c7ef20743505fb1787d83608278c7a8e4e81c568f56f57bbf24dbe125",
     "scripts/format-check.mjs": "2b404502159a61cc97468297e9d7b18e7fca5101fae7126ed4ac271395aada30",

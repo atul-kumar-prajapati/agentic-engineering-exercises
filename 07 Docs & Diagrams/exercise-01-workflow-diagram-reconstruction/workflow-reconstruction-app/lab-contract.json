@@ -1,0 +1,42 @@
+{
+  "title": "Implementation-Backed Workflow Reconstruction",
+  "competency": "07. Docs & Diagrams - Source-verified technical communication",
+  "mission": "Reconstruct the implemented access-provisioning workflow and prove every important diagram edge from exact source evidence.",
+  "domain": "Access provisioning with normal approval, high-risk security review, provisioning failure, rollback ownership, and a conflicting progress display.",
+  "outcome": "A document-led attempt is compared with three source-backed Mermaid diagrams whose states, actors, transitions, contradictions, and hashes are independently verifiable.",
+  "entities": [
+    "Access request",
+    "Manager approval",
+    "Security review",
+    "Provisioning",
+    "Rollback"
+  ],
+  "seededDefects": [
+    "The legacy description omits the high-risk security route.",
+    "The legacy description invents an automatic provisioning retry.",
+    "Rollback ownership is undocumented.",
+    "The UI marks security review complete on a path that never entered it."
+  ],
+  "verificationGates": [
+    "Every Mermaid file parses.",
+    "Required states, actors, routes, and conditions match protected source traces.",
+    "Every required edge maps to an exact valid source line.",
+    "Evidence hashes match the declared source SHA and diagram files.",
+    "npm run verify:exercise checks implementation quality and submission evidence."
+  ],
+  "agentWorkflow": [
+    "Capture a legacy-document-led first attempt.",
+    "Trace the workflow implementation and identify contradictory claims.",
+    "Create state, approval, and failure diagrams from source.",
+    "Map important edges to exact lines and compare both attempts.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
+  ],
+  "workingDeliverables": [
+    "diagrams/access-state.mmd",
+    "diagrams/access-approval-sequence.mmd",
+    "diagrams/access-failure-sequence.mmd",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
+  ]
+}

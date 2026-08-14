@@ -1,31 +1,21 @@
 # Specialist Prompts
 
-This is a seeded lab input for Specialist Review Merge Gate. It gives the learner concrete constraints to inspect, implement, test, and verify.
+Use one fresh agent session per role. Give every agent the same baseline SHA and forbid application edits.
 
-## Operating Context
+## Security
 
-Specialist NFR swarm for a risky generated change
+Inspect untrusted note rendering and the approval service boundary. Run `npm run review:security`. Report exploitable paths, direct service reproductions, and the smallest safe boundary fix.
 
-## Concrete Inputs
+## Accessibility
 
-- security review
-- accessibility review
-- performance review
-- main-thread decision log
+Inspect the queue selection workflow using keyboard-native semantics. Run `npm run review:accessibility`. Report the blocked interaction and keyboard evidence.
 
-## Seeded Risks
+## Performance
 
-- specialist findings are merged without triage
-- accessibility pass lacks keyboard coverage
-- performance finding has no measurement
+Inspect portfolio-risk complexity and repeated render work. Run the baseline measurement and `npm run review:performance`. Report comparable inputs, timings, calculation correctness, and the required reduction.
 
-## Verification Expectations
+## Testability
 
-- specialist report schema
-- fix/defer/dismiss table
-- implemented top fixes
-- post-fix recheck
+Inspect whether approval success and failure can be tested deterministically without browser globals or real waits. Run `npm run review:testability`. Report the boundary that prevents reliable tests.
 
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+Every report uses the shared template. A specialist reports findings only; the integration owner owns decisions and code changes.

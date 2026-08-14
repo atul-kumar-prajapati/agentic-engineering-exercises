@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "flagKey": "invoice-preview-v2",
+  "enabled": true,
+  "allowlist": [
+    "acct-100",
+    "acct-200"
+  ],
+  "revision": "rollout-2026-08-14"
+}

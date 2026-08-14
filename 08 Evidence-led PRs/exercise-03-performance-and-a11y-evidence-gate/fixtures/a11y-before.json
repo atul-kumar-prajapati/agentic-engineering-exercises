@@ -1,1 +1,8 @@
-{ "commitSha": "baseline-protected", "url": "http://127.0.0.1:4173", "violations": [{ "id": "button-name", "nodes": 1 }] }
+{
+  "schemaVersion": 1,
+  "sourceSha": "baseline-protected",
+  "route": "/",
+  "violations": [
+    { "id": "button-name", "impact": "critical", "nodes": 1 }
+  ]
+}

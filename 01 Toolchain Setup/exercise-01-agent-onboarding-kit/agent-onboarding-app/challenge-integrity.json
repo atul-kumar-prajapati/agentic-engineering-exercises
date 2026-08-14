@@ -1,0 +1,21 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "93c471e38822e15c10c3b4c8d8244b381fdae031d0931c7054245825a67084e1",
+    "../docs/evidence-template.md": "1030640b6783d67fe918600902ddd499701dba48b6a93710f9de382292e5796f",
+    "docs/support-notes.md": "36895297d46a5095f90f5ee3926996384eae46596518ba3afc544d9c256dbba4",
+    "index.html": "3e48958cdd517883addd6dd4296923a53cb49dd1f19526bf662b1ad958594747",
+    "lab-contract.json": "23e7fc015db94293a3b2ae8d19596e6b8314d80dc2cd49f0dc130c7cd2c2912e",
+    "package-lock.json": "67e0434a6c3d9155be555fac301d2016acc299506011ed6b0714a8db2d3b6d03",
+    "package.json": "3b4a192649aa4be7b188be8fce5125c92d8ef5c4130063adcb61340da285cbda",
+    "scripts/agent-check.mjs": "df25afb1d834ef532aa6fe3be5febf9ae3ad2646615a266b68016b91c64322d6",
+    "scripts/format-check.mjs": "2b404502159a61cc97468297e9d7b18e7fca5101fae7126ed4ac271395aada30",
+    "scripts/lint-check.mjs": "743ce103805e4ef78ebb2f36a10abca0cc75d98400bb32aca764a1f1f2b8c237",
+    "scripts/verify-follow-up.mjs": "d1211d89ded509483df7ebe24b31ef008f7c3de07d218b9b33f64942259c91eb",
+    "scripts/verify-implementation.mjs": "1328ac2768aae3de40a16192c1505f751ddb51f2cc6b0d4f4390a4f33ef7e833",
+    "src/main.tsx": "a3c01e26da2169530930ba2e7124859d5d7083d1a0215f171b9eb7c74236997b",
+    "src/styles.css": "4ae04b4ef9ef1b86aea57c14178db51f9f48c272da439c8119d2dd30263e8678",
+    "tsconfig.json": "9fa41f46d737fc74ebc0af2202337c116e241de60582f224cba2e866aea9fe83",
+    "vite.config.ts": "204f5406c59ba5b8e7a3a2e886ff804567dd217afd19472e4a7840675ad54f90"
+  }
+}

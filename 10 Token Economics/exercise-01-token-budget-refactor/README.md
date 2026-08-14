@@ -2,36 +2,54 @@
 
 ## Your Mission
 
-Your mission is to complete a dependency-sensitive refactor without loading an entire documentation pack into the agent context.
+Your team is spending tokens by loading an entire documentation pack for every coding task, including stale and unrelated guidance. Your mission is to select the smallest authoritative context that still lets an agent refactor a session adapter correctly.
 
-You are given a context selector that always returns every document. It wastes tokens, includes stale migration notes, and can push the current API contract out of the useful context window.
+The starter selector returns every source. A cheaper but careless selector can omit mandatory repository rules or choose a small secondary note instead of the primary contract.
 
-Implement progressive context selection that always includes repository rules, adds only task-relevant sources, and stays within the supplied byte budget.
+Compare an unbudgeted agent result with a deterministic, question-driven context selection and prove correctness is not traded for lower cost.
 
-The duration for this challenge is 30 min or less.
+The duration for this challenge is 45 min or less.
 
 ## Project
 
-[token-budget-app](./token-budget-app) contains the seeded selector. [context catalog](./docs/context-catalog.json) identifies source cost, tags, authority, and staleness.
+[token-budget-app](./token-budget-app) contains the broken selector and protected checks. The [context catalog](./docs/context-catalog.json) maps real files to tags, priority, authority, and exact UTF-8 cost.
 
 ## How To Go About It
 
-Record the task and context budget before reading the large document pack. Start from file names and metadata, select the smallest authoritative set, then expand only when a recorded question cannot be answered.
+1. Create two branches from the same starting commit. In the first branch, run a fresh agent session for the adapter refactor with the full context pack. Do not correct or retry it. Save `evidence/before.md` and `evidence/before.patch` with context bytes and results.
 
-Fix the selector and verify relevant, irrelevant, stale, mandatory, and over-budget cases. Do not remove required context merely to improve the cost number.
+2. Review which loaded sources were mandatory, relevant, stale, duplicated, or unrelated and which open questions required more context.
+
+3. In the second branch, commit `evidence/context-plan.json` and `evidence/context-plan.md` before changing code. Record task tags, maximum bytes, mandatory rules, open questions, and expected sources.
+
+4. Fix `src/budget/selectContext.mjs`. Select mandatory current sources first, then relevant current sources by priority and stable ID. Record why every source was selected or skipped.
+
+5. Reject a budget that cannot fit mandatory context. Never choose stale guidance because it is smaller, and never exceed the declared exact UTF-8 byte budget.
+
+6. Run a fresh agent session with only the selected context using the same agent, model, tools, permissions, request, time limit, and first-attempt conditions. Add focused tests for ordering, tight budgets, stale sources, duplicates, byte totals, and question-driven expansion.
+
+7. Save `evidence/after.md`, `evidence/after.patch`, `context-ledger.json`, `decision.md`, and comparison. Raise the PR only from the second branch.
 
 ## Evidence
 
-Submit the selector and tests, `evidence/context-plan.md`, `evidence/context-ledger.json`, and `evidence/decision.md` showing what was loaded, skipped, expanded, and why.
+Submit:
 
-Run `npm run test:context`, `npm run test:submission`, and `npm run agent:check` from `token-budget-app`.
+- The selector and learner regression tests.
+- `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, and `evidence/after.patch`.
+- The pre-change context plan, final context ledger, decision, and `evidence/comparison.md`.
+- Captured command output and output from `npm run verify:exercise`.
+- A focused pull request containing only this exercise.
 
-Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, application quality, selector behavior, exact byte accounting, plan-before-code history, context decisions, and required before-and-after proof.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Reviewers will check mandatory repository context, authoritative source preference, relevance, stale-source exclusion, deterministic budgeting, and correct behavior under the maximum byte limit.
+## Completion Criteria
 
-The exercise is incomplete if the full pack is loaded, required rules are omitted, cost evidence is estimated after the work, or correctness is traded for a lower token count.
+The challenge is complete when:
 
-See the [Progressive Context Budget Refactor rubric](../../docs/EVALUATION_RUBRICS.md#progressive-context-budget-refactor).
+- Both agent runs use matching conditions and the second receives only its selected context.
+- Mandatory repository rules are always selected and current primary sources beat stale, unrelated, or secondary sources.
+- Selection is deterministic, exact byte totals are correct, the budget is never exceeded, and impossible budgets fail clearly.
+- The context plan predates code changes and the final ledger matches the actual selection and Git history.
+- `npm run verify:exercise` passes and the measured context reduction does not reduce task correctness.

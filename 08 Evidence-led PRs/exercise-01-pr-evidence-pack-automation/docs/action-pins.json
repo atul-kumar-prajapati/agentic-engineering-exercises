@@ -1,0 +1,17 @@
+{
+  "checkout": {
+    "repository": "actions/checkout",
+    "release": "v4.2.2",
+    "sha": "11bd71901bbe5b1630ceea73d27597364c9af683"
+  },
+  "setup-node": {
+    "repository": "actions/setup-node",
+    "release": "v4.4.0",
+    "sha": "49933ea5288caeca8642d1e84afbd3f7d6820020"
+  },
+  "upload-artifact": {
+    "repository": "actions/upload-artifact",
+    "release": "v4.6.2",
+    "sha": "ea165f8d65b6e75b540449e92b4886f43607fa02"
+  }
+}

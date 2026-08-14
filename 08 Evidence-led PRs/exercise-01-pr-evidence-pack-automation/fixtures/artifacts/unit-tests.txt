@@ -1,0 +1,5 @@
+PASS src/utils/scoring.test.ts
+PASS src/utils/filters.test.ts
+
+Tests: 8 passed, 8 total
+Suites: 2 passed, 2 total

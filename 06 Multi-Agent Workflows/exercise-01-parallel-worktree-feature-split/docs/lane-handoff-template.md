@@ -3,12 +3,15 @@
 - Lane and owner:
 - Base SHA:
 - Branch:
+- Worktree path:
 - Owned paths:
-- Shared-file requests:
+- Changed paths:
+- Shared-type request:
 - Focused command:
-- Command result and output path:
+- Exit code, output path, and SHA-256:
 - Commit SHA:
+- Commit subject and trailers:
 - Rollback command:
 - Risks or blockers:
 
-The branch and commit must remain available until review is complete. A summary without an inspectable commit is not a valid handoff.
+The branch must still point to the lane commit when verification runs. A summary without an inspectable commit and command output is not a valid handoff.

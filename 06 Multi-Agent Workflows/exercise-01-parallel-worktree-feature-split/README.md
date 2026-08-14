@@ -2,36 +2,56 @@
 
 ## Your Mission
 
-Your mission is to deliver three related product changes through parallel agent lanes without losing work or allowing agents to edit the same shared file.
+Your team needs three product changes at the same time, but two changes depend on shared types that no lane owns. Your mission is to coordinate parallel coding agents without overlapping edits, lost commits, or hidden integration conflicts.
 
-You are given saved-filter, SLA-risk, and evidence-export tasks. Two lanes need changes to `src/types.ts`, but neither lane owns that file. A careless parallel run will create conflicting commits or hide an incomplete lane.
+Each lane must remain independently testable and request shared changes instead of editing shared ownership. One integration owner must review the real Git history, merge in the required order, and resolve shared types once.
 
-Use isolated Git worktrees, preserve every lane commit, and integrate the shared type requests once through an integration owner.
+Use real Git worktrees and prove the parallel workflow from base commit to final integration.
 
-The duration for this challenge is 30 min or less.
+The duration for this challenge is 60 min or less.
 
 ## Project
 
-[worktree-feature-app](./worktree-feature-app) contains the application. [task board](./docs/task-board.md) defines the three fixed lanes, ownership boundaries, focused checks, and integration order.
+[worktree-feature-app](./worktree-feature-app) contains the application and protected acceptance tests. The [task board](./docs/task-board.md), [ownership map](./docs/file-ownership-map.md), and [integration contract](./docs/integration-contract.md) define the three fixed lanes.
 
 ## How To Go About It
 
-Record one base SHA and create one branch and worktree per lane. Give each agent only its task, owned paths, and focused command.
+1. Record one clean base SHA and the initial worktree state in `evidence/before.md` and `evidence/before.patch`.
 
-Each lane must commit its work and hand off its result without editing `src/types.ts`. The integration owner reviews the three commits, applies both shared-type requests in one commit, and records any rejected or blocked work.
+2. Create three branches from that SHA and attach each one to a real Git worktree. Use the lane tasks from the board; branch names may differ, but the evidence must identify which branch implements each lane.
+
+3. Give each agent only its lane task, owned paths, shared-type request, and focused command. Every lane must add tests, pass its focused check, create one inspectable commit, and submit a handoff without editing `src/types.ts`.
+
+4. Keep the lane branches and worktrees available for review. Capture `git worktree list --porcelain` while all three are linked.
+
+5. As integration owner, verify every handoff against its commit. Merge lanes B, A, and C with `--no-ff`, then create one separate commit that adds the shared types and updates imports.
+
+6. Run the complete acceptance and repository checks. Record the final history and metrics in `evidence/after.md` and `evidence/after.patch`, then remove the linked worktrees and capture the final worktree list.
+
+7. Save all lane, command, integration, and comparison evidence. Raise a focused PR from the integration branch without flattening or rewriting the lane history.
 
 ## Evidence
 
-Submit the completed feature work, `evidence/lane-handoffs.json`, `evidence/worktree-log.md`, `evidence/integration.md`, and focused output for every lane.
+Submit:
 
-Run `npm run lanes:verify`, `npm run test:submission`, and `npm run agent:check` from `worktree-feature-app`.
+- The completed feature work and lane-owned tests.
+- `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, and `evidence/after.patch`.
+- `evidence/lane-handoffs.json`, `evidence/integration.json`, and `evidence/integration.md`.
+- Worktree captures and all four command outputs under `evidence/commands/`.
+- `evidence/comparison.md` with lane isolation, conflicts, merge history, and final results.
+- Output from `npm run verify:exercise`.
+- A focused pull request containing only this exercise.
 
-Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, application quality, every lane, integrated behavior, ownership boundaries, Git history, handoffs, and required evidence.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Reviewers will verify that all lanes share one base SHA, remain within their ownership boundaries, preserve inspectable commits, and pass focused checks. The shared file must be changed only by the integration owner.
+## Completion Criteria
 
-The exercise is incomplete if lane history is missing, agents edit the same shared file independently, a blocked lane is presented as complete, or the final integrated check fails.
+The challenge is complete when:
 
-See the [Parallel Worktree Conflict Rescue rubric](../../docs/EVALUATION_RUBRICS.md#parallel-worktree-conflict-rescue).
+- All lane commits share the recorded base parent, remain inspectable, match their handoffs, and change only owned paths.
+- Every lane includes tests and passes its focused command without editing `src/types.ts`.
+- Three `--no-ff` merges preserve B, A, C order and one later commit owns all shared-type changes.
+- Worktree and command evidence match the Git repository, and linked worktrees are cleaned up only after verification.
+- `npm run verify:exercise` passes and the final PR preserves the required history and proof.

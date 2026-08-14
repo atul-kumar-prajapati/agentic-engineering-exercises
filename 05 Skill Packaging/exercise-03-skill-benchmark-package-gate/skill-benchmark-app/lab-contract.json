@@ -2,13 +2,62 @@
   "title": "Skill Benchmark and Package Gate",
   "competency": "05. Skill Packaging",
   "skillPattern": "skill-creator quality evaluation and packaging",
-  "domain": "Source-backed incident summaries",
-  "mission": "Benchmark baseline and with-skill task quality before distributing an installable skill.",
-  "outcome": "Only an evaluated skill with improved held-out quality and no critical regression is packaged.",
-  "entities": ["eval task", "assertion", "baseline run", "skill run", "variance", ".skill archive"],
-  "seededDefects": ["facts lack source IDs", "inference is presented as fact", "open follow-ups appear complete"],
-  "verificationGates": ["four protected evals", "three runs per lane", "held-out and critical checks", "archive validation"],
-  "agentWorkflow": ["measure baseline and unchanged skill", "grade evidence-backed assertions", "improve and rerun", "package passing version"],
-  "workingDeliverables": ["improved skill", "raw run results", "benchmark report", "installable archive"],
-  "masterySignals": ["quality is measured", "variance and cost are visible", "held-out tasks decide", "package matches evaluated version"]
+  "domain": "Evidence-backed incident summaries with conflicting sources, unverified claims, and incomplete follow-ups",
+  "mission": "Prove that an improved skill beats both no-skill and starter-skill behavior before packaging it.",
+  "outcome": "Only the exact skill version that passes quality, critical, variance, cost, and archive-integrity gates is distributed.",
+  "entities": [
+    "protected eval task",
+    "without-skill run",
+    "starter-skill run",
+    "candidate-skill run",
+    "output-derived grade",
+    "benchmark statistic",
+    "skill tree hash",
+    ".skill archive"
+  ],
+  "seededDefects": [
+    "timeline claims lack citations",
+    "hypotheses are presented as confirmed causes",
+    "mitigation is mistaken for recovery",
+    "open work appears complete",
+    "archive checks do not bind evaluated files"
+  ],
+  "verificationGates": [
+    "36 first-attempt runs",
+    "cross-lane environment parity",
+    "recomputed assertion grades",
+    "held-out and critical thresholds",
+    "variance and cost limits",
+    "fixture-leakage scan",
+    "byte-for-byte package verification",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
+  ],
+  "agentWorkflow": [
+    "measure no-skill and unchanged-skill behavior",
+    "analyze training failures",
+    "improve the reusable skill",
+    "run the held-out comparison",
+    "aggregate quality and cost",
+    "package only the passing tree hash",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
+  ],
+  "workingDeliverables": [
+    "improved skill package",
+    "36 outputs with timing and grading",
+    "generated benchmark",
+    "evidence-based analysis",
+    "skill-creator provenance",
+    "verified installable archive",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
+  ],
+  "masterySignals": [
+    "skill value is isolated",
+    "grading is evidence-derived",
+    "variance and cost are visible",
+    "held-out tasks decide",
+    "critical claims never regress",
+    "package matches the evaluated version"
+  ]
 }

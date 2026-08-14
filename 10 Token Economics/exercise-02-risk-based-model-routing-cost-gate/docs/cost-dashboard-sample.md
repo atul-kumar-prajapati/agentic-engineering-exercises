@@ -1,31 +1,5 @@
-# Cost Dashboard Sample
+# Cost Dashboard Fields
 
-This is a seeded lab input for Model Routing Cost Planner. It gives the learner concrete constraints to inspect, implement, test, and verify.
+Report selected route, first-call cost and latency, failure probability, retry or escalation route, expected added cost and latency, total expected cost, quality mean, quality range, and safety failures for every executable case.
 
-## Operating Context
-
-Model and effort routing policy for an engineering team
-
-## Concrete Inputs
-
-- routing rule
-- usage log
-- scenario
-- cost estimate
-
-## Seeded Risks
-
-- routine test edits route to max effort
-- security review routes to cheap model without escalation
-- policy ignores latency for incident fixes
-
-## Verification Expectations
-
-- scenario simulation
-- cost estimator
-- risk override test
-- leadership recommendation
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+Also report the policy total, all-reasoning baseline, savings percentage, and pass/fail result for quality, safety, completeness, reconciliation, and savings gates.

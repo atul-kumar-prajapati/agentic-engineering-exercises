@@ -1,9 +1,31 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
-    "../README.md": "7c5d6b2b1b32b1de6e3503567d3ce85b79f5f39ea74479064ae2b19e639c2322",
-    "../docs/context-catalog.json": "4ab90548db488386f19d5215ddd203564673cade0cc39b22e76ff3bd24565a7d",
-    "scripts/run-context-tests.mjs": "f6bae85746f66964aaf17da9cc56313b3f3f39ea89ddc93ff6f034836ca026db",
-    "submission-contract.json": "b26eece6d314fcdecf45906403e56fd3b438e409120cb7cce75d2339bd7e9639"
+    "../README.md": "dd31d96fa9bb3b5fe21eaa17ddab9a000af80d3f7442281b00ed11e13dfef91a",
+    "../docs/context-catalog.json": "32b5b9bcf123b056bedfebe3ddd2d263227ee006e661ee7b9daf42b049c5fcd3",
+    "../docs/large-doc-pack.md": "b1959af1b7e1d153ee7fb92ef03e758f8fab9e8d158802acad02ddcb71f531e1",
+    "../docs/usage-log.md": "db97c2c87be2f43afa9ce6bfff6fe37bdf400ed429d551a1ce3e905f7ee5fda2",
+    "../docs/ledger-contract.md": "e0155b87d096b82e4259de42167c4806b59cd7d94f66fc0cd47d1a1251ae18ec",
+    "../docs/context-sources/AGENTS.md": "5c02321c106790d4b26ffc7e81c11d83d86731149b122ce066bcba36819e6aeb",
+    "../docs/context-sources/current-adapter-contract.md": "03b3b380b5c25aac1d2d6c05b8dd55bcee8b0e8d0245904825cb264c594076dc",
+    "../docs/context-sources/current-error-contract.md": "ff612a912a81e34b2e82db8cee5472f1289a4caa18c0c3dafd635e6b3a777606",
+    "../docs/context-sources/legacy-migration-notes.md": "28f19cefdfcc48de593693ffcc9427875722d754643a77bf96ac2d9c61375f6c",
+    "../docs/context-sources/ui-style-guide.md": "1ef079dcbc9bcc9ac9e248fad3a55efdab94176846c6c6a5edc7e7e49c8d281e",
+    "../docs/context-sources/audit-retention.md": "3fa54fdf4d3d10a1fe72ec37f7cbce802a701934a5a4267b6c6a72fa2aa02c2c",
+    "index.html": "7bf2f744c57431b9d43f860f292123472a569010e19398a51791560edd93c2b0",
+    "lab-contract.json": "d1d32da9834e21abc4d6600a75ce82fc72e0464b62f02d19da55b84873324909",
+    "package-lock.json": "14ce36bbe117f4292b4e64dde8013208aba94b190e5a58867fa59b771f023e3d",
+    "package.json": "61fd85f6453979a53762db1fcb2a3522b2c112890f06614a08874d39f601f4c5",
+    "scripts/agent-check.mjs": "9e24824c7ef20743505fb1787d83608278c7a8e4e81c568f56f57bbf24dbe125",
+    "scripts/context-verification.mjs": "14c57cd7c70654f13fb14d604f20f4b129e1a8a9cd66b66a65f0d073cccc14fb",
+    "scripts/format-check.mjs": "2b404502159a61cc97468297e9d7b18e7fca5101fae7126ed4ac271395aada30",
+    "scripts/lint-check.mjs": "f8046db589aee4e610d87c6725cb64e8f7f62235267ddc6a39166754f6af1784",
+    "scripts/run-context-tests.mjs": "b9d96b49449c1ec7742a9b539837ee7ee4733844159f9d2b266021dedb457a6c",
+    "scripts/test-context-verifier.mjs": "8c29b7e40d15c39991d5f73008ab90a09d6fea71db284d98090f97a107d46b57",
+    "scripts/verify-context-submission.mjs": "6c8d4156eb7077696256ccefb760510dbe85de38d6284762ee84f5f93f4491a3",
+    "src/labContract.ts": "f658972993f594111c45a0bb2b1a4cc403cadafd54c8348c6fdc49cf70237cf2",
+    "submission-contract.json": "91583317cdf10bc7c473715c113a0b421b17f7c95273ba44ce652002cc82af30",
+    "tsconfig.json": "b72b825b933563195288d4b0ebb158673891a811f0cb5ea5d3fc286920c2f7f9",
+    "vite.config.ts": "4f9fbbdbc10bf58253a12eb98c949427d351c61ade1ed8250a3c9705ef0b50ba"
   }
 }

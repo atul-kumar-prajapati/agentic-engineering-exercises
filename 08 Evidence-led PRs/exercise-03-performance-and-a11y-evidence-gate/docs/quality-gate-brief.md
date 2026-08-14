@@ -1,31 +1,16 @@
 # Quality Gate Brief
 
-This is a seeded lab input for Performance and Accessibility Release Gate. It gives the learner concrete constraints to inspect, implement, test, and verify.
+Audit the production build at route `/` in Chrome.
 
-## Operating Context
+The release passes only when all requirements hold:
 
-Performance and accessibility gate for a generated UI change
+- Exactly three Lighthouse reports use one route and browser environment.
+- Worst performance score is at least `0.90`.
+- Worst Lighthouse accessibility score is `1.00`.
+- Worst largest contentful paint is at most `2500 ms`.
+- The axe browser scan contains zero violations.
+- Every Lighthouse assertion uses error severity and pessimistic aggregation.
 
-## Concrete Inputs
+The gate must reject one bad run even when the other two pass. Do not use `skipAudits`, change the protected thresholds, or replace raw browser output with a manual summary.
 
-- Lighthouse report
-- a11y violation
-- budget threshold
-- before/after capture
-
-## Seeded Risks
-
-- largest contentful section regresses past budget
-- button has no accessible name
-- report is generated but not attached to evidence
-
-## Verification Expectations
-
-- a11y check
-- performance budget
-- before/after report
-- evidence pack link
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+The starter has two measured defects: first render is deliberately delayed and an icon-only action has no accessible name. Preserve the dashboard's behavior while fixing them.

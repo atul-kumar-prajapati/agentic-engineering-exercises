@@ -2,8 +2,13 @@
   "name": "Feature Flag Kill-Switch Proof",
   "root": "..",
   "requiredFiles": [
-    { "path": "evidence/enabled.json", "validJson": true, "includeAll": ["targetingKey", "apiCalls", "telemetry"] },
-    { "path": "evidence/disabled.json", "validJson": true, "includeAll": ["targetingKey", "apiCalls", "telemetry"] },
-    { "path": "evidence/rollback-drill.md", "minCharacters": 350, "includeAll": ["start time", "end time", "elapsed", "flag", "API", "telemetry", "rollback"] }
-  ]
+    { "path": "feature-flag-app/scripts/rollback-invoice-preview.mjs", "minCharacters": 900, "includeAll": ["--config", "--actor", "--reason", "--timestamp", "invoice-preview-v2", "previousRevision", "writeFile", "rename"] },
+    { "path": "evidence/enabled.json", "validJson": true, "minCharacters": 700, "includeAll": ["schemaVersion", "sourceSha", "enabled", "invoice-preview-v2", "defaultValue", "targetingKey", "accountId", "apiCalls", "invoice_preview_viewed", "passed"] },
+    { "path": "evidence/disabled.json", "validJson": true, "minCharacters": 500, "includeAll": ["schemaVersion", "sourceSha", "disabled", "flag-disabled", "defaultValue", "apiCalls", "telemetry", "passed"] },
+    { "path": "evidence/provider-error.json", "validJson": true, "minCharacters": 500, "includeAll": ["schemaVersion", "sourceSha", "provider-error", "flag-evaluation-error", "defaultValue", "apiCalls", "telemetry", "passed"] },
+    { "path": "evidence/rollback-drill.json", "validJson": true, "minCharacters": 1800, "includeAll": ["schemaVersion", "sourceSha", "startTime", "endTime", "elapsedMs", "configBeforeSha256", "configAfterSha256", "lastRollback", "previousRevision", "behaviorBefore", "behaviorAfter", "remainingCleanup", "passed"] },
+    { "path": "evidence/rollback-drill.md", "minCharacters": 750, "includeAll": ["Source SHA", "Command", "Start time", "End time", "Elapsed", "Before rollback", "After rollback", "Target allowlist: empty", "API calls: 0", "Telemetry events: 0", "Result: PASS", "Remaining cleanup"] },
+    { "path": "evidence/commands/rollout-verify.txt", "minCharacters": 450, "includeAll": ["Source SHA", "PASS enabled evidence", "PASS disabled and provider-error", "PASS rollback drill", "PASS protected scenarios", "PASS Git source binding"] }
+  ],
+  "requiredDirectories": ["evidence", "evidence/commands"]
 }

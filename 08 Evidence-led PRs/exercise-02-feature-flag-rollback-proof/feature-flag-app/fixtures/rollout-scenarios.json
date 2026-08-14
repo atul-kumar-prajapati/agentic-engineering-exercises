@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "scenarios": [
+    {
+      "id": "enabled",
+      "context": { "targetingKey": "acct-100", "accountId": "acct-100" },
+      "providerError": false,
+      "expected": { "experience": "preview", "reason": null, "apiCalls": 1, "telemetry": ["invoice_preview_viewed"] }
+    },
+    {
+      "id": "disabled",
+      "context": { "targetingKey": "acct-999", "accountId": "acct-999" },
+      "providerError": false,
+      "expected": { "experience": "legacy", "reason": "flag-disabled", "apiCalls": 0, "telemetry": [] }
+    },
+    {
+      "id": "provider-error",
+      "context": { "targetingKey": "acct-100", "accountId": "acct-100" },
+      "providerError": true,
+      "expected": { "experience": "legacy", "reason": "flag-evaluation-error", "apiCalls": 0, "telemetry": [] }
+    }
+  ]
+}

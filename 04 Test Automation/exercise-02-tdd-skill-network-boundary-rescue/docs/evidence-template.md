@@ -52,3 +52,9 @@ Compare the public seam, implementation order, observed red failures, production
 ## network-run.txt
 
 Capture `npm run test:network`, all configured shuffle seeds, the final summary, and `Exit code: 0`.
+
+## Required Run Files
+
+- `evidence/before.md` and `evidence/after.md` record matching session conditions, exact command exit codes, behavior counts, files changed, and lines added and removed.
+- `evidence/before.patch` and `evidence/after.patch` are genuine Git diffs from the two first attempts.
+- `evidence/comparison.md` compares the observed red-green order, network isolation, six behaviors, and final checks.

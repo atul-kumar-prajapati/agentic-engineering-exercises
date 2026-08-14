@@ -1,0 +1,47 @@
+{
+  "title": "Source-Verified Code Graph Rescue",
+  "competency": "07. Docs & Diagrams",
+  "skillPattern": "source-to-graph-to-diagram",
+  "domain": "Notification routing across provider availability, SMS consent, immediate delivery, and durable queue fallback.",
+  "mission": "Generate a code graph, repair an unsafe notification fallback, and produce diagrams whose relationships trace to source.",
+  "outcome": "The implementation, graph, diagrams, tests, and evidence agree at one Git source SHA.",
+  "entities": [
+    "ChannelRouter",
+    "ProviderStatus",
+    "ConsentPolicy",
+    "ImmediateRoute",
+    "DurableQueue"
+  ],
+  "seededDefects": [
+    "SMS availability bypasses explicit customer consent.",
+    "The stale snapshot assigns consent checks to provider availability.",
+    "The stale snapshot invents a route from immediate delivery to the durable queue."
+  ],
+  "verificationGates": [
+    "The generated graph exactly matches source call relationships.",
+    "Both Mermaid diagrams parse and contain only supported edges.",
+    "Protected routing tests prove every required fallback.",
+    "Traceability and hashes bind all evidence to one source SHA.",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
+  ],
+  "agentWorkflow": [
+    "Generate and query the graph before editing the router.",
+    "Fix consent and fallback behavior without changing protected inputs.",
+    "Map graph edges to diagrams and exact source lines.",
+    "Regenerate and verify all artifacts from the source commit.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
+  ],
+  "workingDeliverables": [
+    "Corrected notification router.",
+    "Generated code graph and two Mermaid diagrams.",
+    "Source-bound traceability and command evidence.",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
+  ],
+  "masterySignals": [
+    "Generated structure is separated from inferred behavior.",
+    "Diagrams contain no unsupported relationship.",
+    "The fix is proven by protected tests and reproducible evidence."
+  ]
+}

@@ -1,73 +1,83 @@
-import { calculateReadiness, groupByRisk } from "./domainReadiness";
+import { useEffect, useMemo, useState } from "react";
+import { ActionComposer } from "./components/ActionComposer";
+import { ActivityFeed } from "./components/ActivityFeed";
+import { DetailPanel } from "./components/DetailPanel";
+import { EvidencePanel } from "./components/EvidencePanel";
+import { FilterBar } from "./components/FilterBar";
+import { MetricStrip } from "./components/MetricStrip";
+import { PageHeader } from "./components/PageHeader";
+import { ScenarioBoard } from "./components/ScenarioBoard";
+import { WorkQueue } from "./components/WorkQueue";
+import { activityEvents } from "./data/workItems";
 import { labContract } from "./labContract";
+import { collectEvidence, fetchWorkItems, saveAction } from "./services/workflowApi";
 import "./styles.css";
+import type { ActionDraft, WorkItem } from "./types";
+import { defaultFilters, filterItems } from "./utils/filters";
+import { summarizePortfolio } from "./utils/scoring";
 
 export default function App() {
-  const readiness = calculateReadiness(labContract);
-  const groupedRisks = groupByRisk(labContract.seededDefects);
+  const [items, setItems] = useState<WorkItem[]>([]);
+  const [selectedId, setSelectedId] = useState("");
+  const [filters, setFilters] = useState(defaultFilters);
+  const [evidence, setEvidence] = useState<string[]>([]);
+
+  useEffect(() => {
+    void fetchWorkItems().then((loadedItems) => {
+      setItems(loadedItems);
+      setSelectedId(loadedItems[0]?.id ?? "");
+    });
+  }, []);
+
+  const visibleItems = useMemo(() => filterItems(items, filters), [items, filters]);
+  const selected = items.find((item) => item.id === selectedId) ?? visibleItems[0];
+  const summary = items.length
+    ? summarizePortfolio(items)
+    : { critical: 0, blocked: 0, averageRisk: 0, ready: 0 };
+
+  async function saveSelected(draft: ActionDraft) {
+    if (!selected) return;
+    const saved = await saveAction(selected.id, draft);
+    setItems((current) => current.map((item) => (item.id === saved.id ? saved : item)));
+  }
+
+  async function collectSelectedEvidence() {
+    if (!selected) return;
+    setEvidence(await collectEvidence(selected));
+  }
 
   return (
     <main className="app-shell">
-      <section className="page-header">
-        <div>
-          <p className="eyebrow">{labContract.competency}</p>
-          <h1>{labContract.title}</h1>
-          <p>{labContract.domain}</p>
-        </div>
-        <div className="metric-card">
-          <span>Readiness</span>
-          <strong>{readiness.score}%</strong>
-          <small>{readiness.status}</small>
-        </div>
-      </section>
+      <PageHeader title="Worktree Feature Queue" subtitle={labContract.domain} competency={labContract.competency} />
+      <MetricStrip summary={summary} />
+      <FilterBar filters={filters} onChange={setFilters} />
 
       <section className="workspace-grid">
-        <article className="panel">
-          <h2>Domain Model</h2>
-          <ul>
-            {labContract.entities.map((entity) => (
-              <li key={entity}>{entity}</li>
-            ))}
-          </ul>
-        </article>
+        <WorkQueue
+          items={visibleItems}
+          selectedId={selected?.id ?? ""}
+          onSelect={(item) => {
+            setSelectedId(item.id);
+            setEvidence([]);
+          }}
+        />
 
-        <article className="panel">
-          <h2>Seeded Defects</h2>
-          <ul>
-            {labContract.seededDefects.map((defect) => (
-              <li key={defect}>{defect}</li>
-            ))}
-          </ul>
-        </article>
+        <div className="center-stack">
+          {selected ? (
+            <>
+              <DetailPanel item={selected} />
+              <ActionComposer key={selected.id} item={selected} onSave={saveSelected} />
+            </>
+          ) : (
+            <section className="detail-panel">No work item matches the current filters.</section>
+          )}
+        </div>
 
-        <article className="panel">
-          <h2>Verification Gates</h2>
-          <ul>
-            {labContract.verificationGates.map((gate) => (
-              <li key={gate}>{gate}</li>
-            ))}
-          </ul>
-        </article>
-      </section>
-
-      <section className="workspace-grid">
-        <article className="panel wide">
-          <h2>Agent Workflow</h2>
-          <ol>
-            {labContract.agentWorkflow.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
-        </article>
-
-        <article className="panel">
-          <h2>Risk Groups</h2>
-          {Object.entries(groupedRisks).map(([risk, items]) => (
-            <p key={risk}>
-              <strong>{risk}</strong>: {items.length}
-            </p>
-          ))}
-        </article>
+        <div className="side-stack">
+          <ScenarioBoard focus={labContract.verificationGates} />
+          {selected ? <EvidencePanel item={selected} evidence={evidence} onCollect={collectSelectedEvidence} /> : null}
+          <ActivityFeed events={activityEvents} />
+        </div>
       </section>
     </main>
   );

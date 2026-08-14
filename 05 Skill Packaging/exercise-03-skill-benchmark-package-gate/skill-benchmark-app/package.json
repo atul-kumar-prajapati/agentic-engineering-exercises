@@ -8,14 +8,21 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc -b --pretty false",
-    "test": "node ./scripts/agent-check.mjs",
+    "test": "node ./scripts/test-benchmark-framework.mjs && python ./scripts/test-package-framework.py && node ./scripts/agent-check.mjs",
     "eval:fixtures": "node ./scripts/validate-benchmark-fixtures.mjs",
+    "eval:grade": "node ./scripts/grade-incident-output.mjs",
+    "benchmark:aggregate": "node ./scripts/aggregate-benchmark.mjs",
     "skill:validate": "node ./scripts/validate-benchmark-skill.mjs",
+    "package:skill": "python ./scripts/package-skill.py",
+    "package:verify": "python ./scripts/verify-skill-package.py",
     "test:submission": "node ./scripts/verify-benchmark-submission.mjs",
     "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
     "lint": "node ./scripts/lint-check.mjs",
     "format": "node ./scripts/format-check.mjs",
-    "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build"
+    "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
+    "verify:implementation": "npm run skill:validate && npm run benchmark:aggregate && npm run package:verify",
+    "verify:submission": "npm run test:submission",
+    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
   },
   "engines": {
     "node": ">=22.12.0 <25"

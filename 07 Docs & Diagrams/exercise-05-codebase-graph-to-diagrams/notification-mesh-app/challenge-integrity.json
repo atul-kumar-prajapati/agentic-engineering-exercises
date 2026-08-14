@@ -1,9 +1,0 @@
-{
-  "algorithm": "sha256-normalized-lf",
-  "protectedFiles": {
-    "../README.md": "56b5f145cdca0069248f4296e1575203c403d0fb42aa16477dc303c7f6907b76",
-    "../docs/current-routing-contract.md": "6456a34bb9781dbc2d21eedda836b42f41b3b71868e19b82334a39fce9d76d0b",
-    "scripts/run-routing-tests.mjs": "e79d2b558ad8f5e5f9306087a4c148c2a35cdcdf67efba5b9a7c7154d8ab2e23",
-    "submission-contract.json": "392b7a602f20282aab5938776c8d67391bbb229600d45e2bf4abdc984e69f1b7"
-  }
-}

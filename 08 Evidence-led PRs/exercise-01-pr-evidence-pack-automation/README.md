@@ -2,36 +2,55 @@
 
 ## Your Mission
 
-Your mission is to build a GitHub Actions evidence pack that remains trustworthy when a PR check fails.
+Your team is merging PRs that look green because failed checks and their artifacts are omitted from the review summary. Your mission is to automate a PR evidence pack that remains complete and honest when a required check fails.
 
-You are given test, screenshot, and risk inputs. The current process publishes only successful output, uses unstable artifact paths, and lets reviewers infer rollback risk.
+The protected fixture contains passing tests, a failed checkout smoke check, and a UI artifact. The repository has no generator or active workflow, so a success-only report is easy to produce.
 
-Create one deterministic evidence bundle tied to the commit SHA, upload it even when a check fails, and make missing or inconsistent evidence fail the workflow.
+Compare an unstructured evidence attempt with an automated, failure-preserving result and prove the original exit status is never hidden.
 
-The duration for this challenge is 30 min or less.
+The duration for this challenge is 45 min or less.
 
 ## Project
 
-[pr-evidence-app](./pr-evidence-app) contains the application. Protected inputs under `fixtures/` include passing and failing checks that the evidence generator must preserve.
+[pr-evidence-app](./pr-evidence-app) contains the application and verification harness. Protected [fixtures](./fixtures/check-results.json) define the checks and artifacts, and the [evidence contract](./docs/evidence-contract.md) defines the required output.
 
 ## How To Go About It
 
-Add a least-privilege GitHub Actions workflow and a local evidence generator. The bundle must contain commit SHA, command, exit code, result, artifact path and digest, risk, reviewer action, and rollback for every required check.
+1. Create two branches from the same starting commit. In the first branch, ask a fresh coding agent to produce a PR evidence pack from the fixture without extra guidance. Do not correct or retry it. Save `evidence/before.md` and `evidence/before.patch`.
 
-Use stable paths and upload the bundle with an `always()` condition. Do not convert a failed check to success merely to publish evidence.
+2. Review which commands, failures, artifacts, digests, risks, or rollback details were lost or rewritten.
+
+3. In the second branch, create `pr-evidence-app/scripts/generate-pr-evidence.mjs` with the required CLI. It must copy every fixture artifact to a stable directory, calculate SHA-256 digests, write the evidence JSON and summary, and exit with the fixture's original overall result.
+
+4. Create `.github/workflows/evidence-led-pr-01.yml` at the repository root. Use pull-request path filtering, read-only permissions, immutable action SHAs, `npm ci`, and `github.sha`.
+
+5. Verification and upload steps must use `if: always()` without `continue-on-error`. The stable evidence directory must upload even when generation returns non-zero, while the job remains failed.
+
+6. Start a fresh agent session in the second branch under the same agent, model, tools, permissions, prompt, time limit, and first-attempt conditions. Keep its implementation without correction or retry.
+
+7. Commit the generator and workflow, generate evidence from that source SHA, save `evidence/after.md`, `evidence/after.patch`, and `evidence/comparison.md`, then raise the final PR from the second branch.
 
 ## Evidence
 
-Submit `.github/workflows/pr-evidence.yml`, the generator, `evidence/pr-evidence.json`, `evidence/README.md`, and one local reproduction showing the failed smoke result remains visible.
+Submit:
 
-Run `npm run evidence:verify`, `npm run test:submission`, and `npm run agent:check` from `pr-evidence-app`.
+- The evidence generator and `.github/workflows/evidence-led-pr-01.yml`.
+- `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, and `evidence/after.patch`.
+- Generated evidence JSON, summary, and copied artifacts under `evidence/generated/`.
+- `evidence/README.md`, command output, and `evidence/comparison.md`.
+- Output from `npm run verify:exercise`.
+- A focused pull request containing only this exercise and its workflow.
 
-Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, application quality, failing and passing fixtures, generated evidence integrity, workflow safety, source SHA, and required before-and-after proof.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Reviewers will check provenance, stable paths, failure preservation, artifact digest, least-privilege permissions, risk, rollback, and workflow failure propagation.
+## Completion Criteria
 
-The exercise is incomplete if evidence is success-only, tied to no SHA, manually rewritten, uploaded from an unstable path, or the workflow hides a failed command.
+The challenge is complete when:
 
-See the [Failure-Preserving PR Evidence Pack rubric](../../docs/EVALUATION_RUBRICS.md#failure-preserving-pr-evidence-pack).
+- Both agent attempts use matching conditions and genuine first-attempt patches.
+- Generated evidence preserves every command, result, exit code, artifact digest, risk, reviewer action, and rollback.
+- The generator passes the protected failing and all-passing cases and returns the original overall status.
+- The workflow is read-only, uses immutable actions, uploads evidence after failure, and does not turn the failed job green.
+- `npm run verify:exercise` passes and all submitted evidence matches one source SHA and unchanged fixtures.

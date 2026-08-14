@@ -1,0 +1,40 @@
+{
+  "name": "notification-mesh-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node ./node_modules/vite/bin/vite.js --host 127.0.0.1",
+    "build": "node ./node_modules/typescript/bin/tsc -b && node ./node_modules/vite/bin/vite.js build",
+    "preview": "node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1",
+    "typecheck": "node ./node_modules/typescript/bin/tsc -b --pretty false",
+    "test": "node ./scripts/test-code-graph.mjs && node ./scripts/test-graph-verifier.mjs && node ./scripts/agent-check.mjs",
+    "test:routing": "node ./scripts/run-routing-tests.mjs",
+    "graph:build": "node ./scripts/build-code-graph.mjs",
+    "graph:query": "node ./scripts/query-code-graph.mjs",
+    "graph:path": "node ./scripts/find-graph-path.mjs",
+    "diagrams:parse": "node ./scripts/parse-diagrams.mjs",
+    "graph:verify": "node ./scripts/verify-graph-submission.mjs",
+    "test:submission": "npm run test:routing && npm run graph:verify && node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json",
+    "lint": "node ./scripts/lint-check.mjs",
+    "format": "node ./scripts/format-check.mjs",
+    "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
+    "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
+    "verify:implementation": "npm run test:routing && npm run graph:build && npm run diagrams:parse",
+    "verify:submission": "npm run test:submission",
+    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.0.4",
+    "jsdom": "^29.0.1",
+    "mermaid": "^11.16.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12"
+  }
+}

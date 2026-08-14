@@ -1,125 +1,31 @@
 import type { LabContract } from "./types";
 
 export const labContract = {
-  "title": "Minimal-Diff Scope Budget",
-  "competency": "10. Token Economics",
-  "skillPattern": "Minimal-diff scope ladder",
-  "domain": "Design system migration with component variants, accessibility states, visual review notes, package boundaries, and release coordination.",
-  "mission": "Practice Ponytail, an external minimal-diff ladder skill, by finishing a design-system migration slice with the smallest safe diff.",
-  "outcome": "A migration task ships with less new code, less context churn, and no hidden loss of validation, accessibility, or error handling.",
-  "entities": [
-    "ComponentVariant",
-    "A11yState",
-    "VisualReview",
-    "PackageBoundary",
-    "MigrationStep",
-    "LadderDecision"
+  title: "Minimal-Diff Scope Budget",
+  competency: "10. Token Economics - bounded implementation scope",
+  skillPattern: "Pre-committed minimal-diff budget",
+  domain: "Single-action design-system variant migration",
+  mission: "Ship the export variant migration within a pre-declared Git scope budget while preserving legacy actions.",
+  outcome: "One helper and one test change, with exact history-backed scope evidence and no unrelated cleanup.",
+  entities: ["ScopePlan", "VariantHelper", "RegressionTest", "GitNumstat"],
+  seededDefects: ["Export remains legacy-primary.", "Declared scope can be self-reported.", "Shared cleanup is tempting.", "Unknown legacy fallback is easy to lose."],
+  verificationGates: ["Protected behavior test passes.", "Plan commit precedes source.", "Only allowed paths change.", "Git numstat stays within budget."],
+  agentWorkflow: ["Commit the exact scope plan.", "Change only export helper and focused test.", "Run protected and learner checks.", "Record Git-derived scope and avoided work."],
+  workingDeliverables: ["Plan commit.", "Minimal source commit.", "Scope ledger.", "Avoided-work and verification evidence."],
+  masterySignals: ["The request defines scope.", "Git data proves the budget.", "Legacy behavior stays tested."],
+  backlog: [
+    { id: "scope-01", title: "Migrate export without touching legacy consumers", owner: "learner", skill: "Minimal diff", risk: "high", done: false },
+    { id: "scope-02", title: "Prove checkout and delete remain unchanged", owner: "learner", skill: "Regression test", risk: "critical", done: false },
+    { id: "scope-03", title: "Bind declared scope to Git numstat", owner: "reviewer", skill: "Evidence", risk: "medium", done: false },
   ],
-  "seededDefects": [
-    "The migration plan proposes a new wrapper component where an existing prop already covers the state.",
-    "A proposed date input abstraction ignores the native browser control already in the platform.",
-    "The smallest diff candidate removes an accessibility label while reducing code.",
-    "The session transcript accepts new utility code before checking shared helpers."
+  evidence: [
+    { gate: "Plan before code", status: "missing", proof: "requires learner history" },
+    { gate: "Behavior preserved", status: "partial", proof: "protected test supplied" },
+    { gate: "Actual diff within budget", status: "missing", proof: "requires source commit" },
   ],
-  "verificationGates": [
-    "Ladder ledger proves skip/reuse/platform/dependency options were considered before new code.",
-    "Final diff changes fewer files than the overbuilt starter plan while preserving required behavior.",
-    "Safety exceptions are explicit for validation, accessibility, error handling, and data-loss protection.",
-    "One focused check proves the implemented migration slice."
+  decisions: [
+    { question: "Expand shared code?", decision: "No; one helper branch satisfies the request.", status: "decided" },
+    { question: "How is scope measured?", decision: "From source commit numstat.", status: "decided" },
+    { question: "Has the migration passed?", decision: "Pending learner implementation and evidence.", status: "open" },
   ],
-  "agentWorkflow": [
-    "Audit the session transcript and starter code for overbuilt migration ideas.",
-    "Create a Ponytail ladder ledger showing which rung was accepted or rejected for each proposed change.",
-    "Implement one design-system migration task by deleting, reusing, or using native behavior before adding new code.",
-    "Add the smallest check that would fail if the chosen shortcut broke behavior."
-  ],
-  "workingDeliverables": [
-    "Ponytail ladder ledger with accepted and rejected rungs.",
-    "Working React migration slice.",
-    "One focused runnable check for non-trivial logic.",
-    "Short impact note comparing avoided code, changed files, commands, and residual risks."
-  ],
-  "masterySignals": [
-    "Small diff follows from understanding.",
-    "Reuse beats new code when existing behavior is correct.",
-    "Safety exceptions survive the shortcut."
-  ],
-  "backlog": [
-    {
-      "id": "04-01",
-      "title": "The migration plan proposes a new wrapper component where an existing prop already covers the state.",
-      "owner": "agent candidate",
-      "skill": "Minimal-diff scope ladder",
-      "risk": "high",
-      "done": false
-    },
-    {
-      "id": "04-02",
-      "title": "A proposed date input abstraction ignores the native browser control already in the platform.",
-      "owner": "accountable owner",
-      "skill": "Minimal-diff scope ladder",
-      "risk": "medium",
-      "done": false
-    },
-    {
-      "id": "04-03",
-      "title": "The smallest diff candidate removes an accessibility label while reducing code.",
-      "owner": "agent candidate",
-      "skill": "Minimal-diff scope ladder",
-      "risk": "critical",
-      "done": false
-    },
-    {
-      "id": "04-04",
-      "title": "The session transcript accepts new utility code before checking shared helpers.",
-      "owner": "accountable owner",
-      "skill": "Minimal-diff scope ladder",
-      "risk": "medium",
-      "done": false
-    }
-  ],
-  "evidence": [
-    {
-      "gate": "Ladder ledger proves skip/reuse/platform/dependency options were considered before new code.",
-      "status": "missing",
-      "proof": "needs learner evidence"
-    },
-    {
-      "gate": "Final diff changes fewer files than the overbuilt starter plan while preserving required behavior.",
-      "status": "partial",
-      "proof": "seeded check ready for implementation"
-    },
-    {
-      "gate": "Safety exceptions are explicit for validation, accessibility, error handling, and data-loss protection.",
-      "status": "ready",
-      "proof": "seeded check ready for implementation"
-    },
-    {
-      "gate": "One focused check proves the implemented migration slice.",
-      "status": "partial",
-      "proof": "seeded check ready for implementation"
-    }
-  ],
-  "decisions": [
-    {
-      "question": "How will the team prove step 1?",
-      "decision": "Audit the session transcript and starter code for overbuilt migration ideas.",
-      "status": "decided"
-    },
-    {
-      "question": "How will the team prove step 2?",
-      "decision": "Create a Ponytail ladder ledger showing which rung was accepted or rejected for each proposed change.",
-      "status": "decided"
-    },
-    {
-      "question": "How will the team prove step 3?",
-      "decision": "Implement one design-system migration task by deleting, reusing, or using native behavior before adding new code.",
-      "status": "open"
-    },
-    {
-      "question": "How will the team prove step 4?",
-      "decision": "Add the smallest check that would fail if the chosen shortcut broke behavior.",
-      "status": "open"
-    }
-  ]
 } satisfies LabContract;

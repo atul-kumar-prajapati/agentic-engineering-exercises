@@ -2,40 +2,57 @@
 
 ## Your Mission
 
-Your mission is to repair a skill description that triggers for the wrong work and stays hidden for the work it should handle.
+Your team's code-review skill activates for unrelated requests and stays silent for reviews it should handle. Your mission is to repair only its description and prove the new trigger boundary with repeated positive, negative, and held-out evaluations.
 
-You are given three neighbouring skills and a vague `change-review` description. It collides with release notes and incident summaries, while paraphrased code-review requests often miss it.
+The catalog contains three similar skills. The current `change-review` description collides with release notes, incident reports, implementation work, and ordinary summaries.
 
-Use the skill-creator workflow to build positive and negative trigger evals, improve the description, and prove the result on held-out requests.
+Measure the original behavior first, improve it without changing the skill body, then prove the result on requests that were not used for tuning.
 
-The duration for this challenge is 30 min or less.
+The duration for this challenge is 45 min or less.
 
 ## Project
 
-[skill-trigger-app](./skill-trigger-app) contains the real skill catalog, protected held-out requests, and the result verifier.
+[skill-trigger-app](./skill-trigger-app) contains the skill catalog, 20 protected trigger requests, the original skill snapshot, deterministic scoring, and held-out gates. Read the [catalog boundaries](./docs/catalog-boundaries.md).
+
+The allowed implementation change is only the `description` field in `skills/change-review/SKILL.md`.
 
 ## How To Go About It
 
-Install the official [skill-creator skill](https://github.com/anthropics/skills/tree/main/skills/skill-creator).
+1. Create two branches from the same starting commit. The second branch must preserve the original skill body and all protected cases.
 
-Create realistic should-trigger and should-not-trigger requests. Keep 40 percent as held-out cases, run each request three times, and record the original description's results before editing it.
+2. Install the official [skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator). In the first branch, run every protected request three times with the original skill. Do not edit the skill or cases. Save the 60 decisions, `evidence/before.md`, `evidence/before.patch`, and `evidence/before-results.json`.
 
-Improve only the real `SKILL.md` description. Rerun the same cases and select the description by held-out score, not training score. Do not encode exact eval wording in the skill.
+3. Analyze only the training false positives and false negatives. Identify which use and non-use boundaries are missing without copying case wording into the description.
+
+4. In the second branch, change only the `change-review` description. Keep the skill instructions, neighboring skills, scoring code, and protected requests unchanged.
+
+5. Rerun every request three times with the same agent, model, runtime, settings, repository state, and first-attempt conditions. Save all 60 decisions in `evidence/after-results.json`.
+
+6. Select or reject the new description using held-out accuracy, recall, specificity, stability, and improvement. Do not tune again after reading held-out failures.
+
+7. Save `evidence/after.md`, `evidence/after.patch`, the skill record, trigger analysis, and comparison. Raise the final PR only from the second branch.
 
 ## Evidence
 
-Submit the updated skill, `evals/trigger-evals.json`, raw before and after results, and `evidence/trigger-evaluation.md` containing model, settings, three-run trigger rates, train score, held-out score, false positives, false negatives, and adoption decision.
+Submit:
 
-Run `npm run eval:fixtures`, `npm run test:submission`, and `npm run agent:check` from `skill-trigger-app`.
+- The updated `skills/change-review/SKILL.md`.
+- `evidence/before.md`, `evidence/before.patch`, and `evidence/before-results.json`.
+- `evidence/after.md`, `evidence/after.patch`, and `evidence/after-results.json`.
+- `evidence/skill-record.md`, `evidence/trigger-analysis.md`, and `evidence/comparison.md`.
+- Output from `npm run verify:exercise`.
+- A focused pull request containing only this exercise.
 
-Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, skill integrity, all 120 decisions, matching run conditions, training and held-out scores, stability, and required evidence.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Reviewers will check that requests are substantive, positive and negative boundaries include confusing neighbours, and every result comes from actual trigger decisions.
+## Completion Criteria
 
-The final description must improve held-out performance without overfitting or changing the skill instructions to recognize exact test phrases.
+The challenge is complete when:
 
-The exercise is incomplete if held-out cases are edited, only deterministic keyword matching is used as final evidence, runs are missing, protected inputs are changed, or required checks fail.
-
-See the [Skill Trigger Boundary Evals rubric](../../docs/EVALUATION_RUBRICS.md#skill-trigger-boundary-evals).
+- Before and after results contain three real decisions for every protected request under matching conditions.
+- Only the `change-review` description changes, and it states clear use and non-use boundaries without held-out wording.
+- Training accuracy is at least 10 of 12 and held-out accuracy at least 7 of 8.
+- Held-out recall and specificity are each at least 75 percent, decisions are stable, and the held-out score improves.
+- `npm run verify:exercise` passes and the final PR contains all required proof.

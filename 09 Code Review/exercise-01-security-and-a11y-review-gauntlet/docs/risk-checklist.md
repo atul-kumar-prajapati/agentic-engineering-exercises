@@ -1,31 +1,11 @@
-# Risk Checklist
+# Review Boundaries
 
-This is a seeded lab input for Security and Accessibility Review Gauntlet. It gives the learner concrete constraints to inspect, implement, test, and verify.
+Review these risk areas in `review-base..review-head`:
 
-## Operating Context
+- Data origin and rendering context for every HTML sink.
+- Native keyboard and focus behavior of interactive queue rows.
+- Client validation removed or weakened by the patch.
+- Server authorization and state-transition rules.
+- Tests missing for each confirmed behavior regression.
 
-Security and accessibility review of a generated approval UI
-
-## Concrete Inputs
-
-- review diff
-- unsafe rendering
-- keyboard navigation
-- severity finding
-
-## Seeded Risks
-
-- dangerous HTML preview is introduced
-- queue rows lose button semantics
-- high-priority approval bypasses evidence
-
-## Verification Expectations
-
-- fresh review
-- security test
-- a11y regression test
-- fix/defer/dismiss triage
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+Severity must follow impact, not scanner severity. A static warning is not automatically exploitable, and a clean scanner result does not prove behavioral correctness.

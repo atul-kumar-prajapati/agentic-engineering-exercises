@@ -1,9 +1,19 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
-    "../README.md": "d860066654c11198bb59c27447a48e46a7d5c8558975edae5161039db5ab0a8e",
-    "../docs/session-events.json": "c67627942a9f3aca58511f2028734eabaa265f39765e4dbd4d3e23ac93379aaa",
-    "scripts/run-analysis-tests.mjs": "d9ad941105a099fd6eb1d7d355eecd4a1dd822ad569ed672f11f855a1175ecba",
-    "submission-contract.json": "6faa71daa1d4213a9b251158c11ddfee3cb8174aeacd190060cad0fecf087e4e"
+    "../README.md": "9d498983bed64f3ae52040aab311c20795f2128cb02421ed652ddf3a8d62656f",
+    "../docs/session-events.json": "1a9196d0bd6e3821f4cb712617f9aac1aac8cce2582474db70a3bf143b6386b7",
+    "../docs/session-metadata.json": "f2d0209f7881b1bf605507ebe5ecedbf4d30b7de44270ec0e55e652bb76c326b",
+    "../docs/metric-contract.md": "0cff7ebac16edff5e13b8b2ace72c724766f3844f439da1406c7850211d4fb89",
+    "../docs/replay-contract.md": "d9589fc0e1690335f32f85272fc270ba577062d815daba0c57e70e01223e9553",
+    "../docs/preflight-contract.md": "57c61b6d717b810e3a1cfeecc2cab5938ae55bb346937edba8590fb6c1c6c7a1",
+    "package.json": "a1da848682a38fed85b6edf880aa9064f0f08cd5c4ddec1497da5294ba3e2187",
+    "lab-contract.json": "9cd962148fc50b7b9d5093797ea159215026b9f3d47bdc4d8e2e0e502dba853f",
+    "src/labContract.ts": "19051658901d702855a76bc5bbeb8d9587b336fdde07deb10a464b71c38ce915",
+    "scripts/run-analysis-tests.mjs": "b3a228216448b82818d3fa531e5fa41c05c75f910c333b8d60a818c53bb5ab47",
+    "scripts/retro-verification.mjs": "632daa79ffc5f680811ffb02effde05b67663fad448912b4683d0ca00653328c",
+    "scripts/test-retro-verifier.mjs": "ec1535807b53e23b6231c142feccaa18d791161b11ea0761e65dff73e808387e",
+    "scripts/verify-retro-submission.mjs": "f78818edc941406f40fd0d1cc812b0cd86ee1908a12f74419f642c8848919b9e",
+    "submission-contract.json": "3e1e128d52d75bb0dfdae9869287a306517fc130bb157f1823e81670593c4d35"
   }
 }

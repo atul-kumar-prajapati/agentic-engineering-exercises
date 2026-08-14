@@ -1,0 +1,4 @@
+[
+  { "name": "card approved with rounding boundary", "request": { "orderId": "ord-card-ok", "paymentType": "card", "subtotalCents": 1001, "taxRateBps": 825, "paymentToken": "tok-ok" }, "authorization": { "approved": true }, "expected": { "orderId": "ord-card-ok", "status": "paid", "totalCents": 1084, "errorCode": null } },
+  { "name": "card declined preserves failure", "request": { "orderId": "ord-card-no", "paymentType": "card", "subtotalCents": 4200, "taxRateBps": 500, "paymentToken": "tok-no" }, "authorization": { "approved": false }, "expected": { "orderId": "ord-card-no", "status": "failed", "totalCents": 4410, "errorCode": "PAYMENT_DECLINED" } }
+]

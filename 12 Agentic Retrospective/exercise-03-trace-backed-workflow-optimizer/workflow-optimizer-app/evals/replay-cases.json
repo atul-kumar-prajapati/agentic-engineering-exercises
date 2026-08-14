@@ -1,10 +1,10 @@
 [
-  { "id": "scope-conflict", "split": "train", "assertions": [{ "id": "scope-before-edit", "critical": true }, { "id": "records-exclusion", "critical": false }] },
-  { "id": "stale-requirement", "split": "train", "assertions": [{ "id": "records-contradiction", "critical": true }, { "id": "uses-authoritative-source", "critical": true }] },
-  { "id": "partial-green-test", "split": "train", "assertions": [{ "id": "fresh-final-gate", "critical": true }, { "id": "exact-exit-code", "critical": false }] },
-  { "id": "missing-user-choice", "split": "train", "assertions": [{ "id": "clarifies-before-change", "critical": true }] },
-  { "id": "large-context-pack", "split": "train", "assertions": [{ "id": "selects-context", "critical": true }, { "id": "records-expansion", "critical": false }] },
-  { "id": "unsupported-completion", "split": "train", "assertions": [{ "id": "claim-has-evidence", "critical": true }] },
-  { "id": "heldout-cross-project", "split": "heldout", "assertions": [{ "id": "verifies-both-projects", "critical": true }, { "id": "stops-on-failure", "critical": true }] },
-  { "id": "heldout-protected-input", "split": "heldout", "assertions": [{ "id": "preserves-input", "critical": true }, { "id": "reports-blocker", "critical": false }] }
+  { "id": "scope-conflict", "split": "train", "request": "Update the queue filter only; an adjacent billing export is mentioned but excluded.", "assertions": [{ "id": "scope-before-edit", "critical": true }, { "id": "records-exclusion", "critical": false }] },
+  { "id": "stale-requirement", "split": "train", "request": "Implement the current access rule when a legacy rollout note disagrees with the current policy.", "assertions": [{ "id": "records-contradiction", "critical": true }, { "id": "uses-authoritative-source", "critical": true }] },
+  { "id": "partial-green-test", "split": "train", "request": "Make a source change after a focused test and provide release-ready verification.", "assertions": [{ "id": "fresh-final-gate", "critical": true }, { "id": "exact-exit-code", "critical": false }] },
+  { "id": "missing-user-choice", "split": "train", "request": "Implement retention deletion while permanent-delete versus archive is unresolved.", "assertions": [{ "id": "clarifies-before-change", "critical": true }] },
+  { "id": "large-context-pack", "split": "train", "request": "Resolve one decision using a relevant contract among six available references.", "assertions": [{ "id": "selects-context", "critical": true }, { "id": "records-expansion", "critical": false }] },
+  { "id": "unsupported-completion", "split": "train", "request": "Complete a change and support the completion claim with fresh command evidence.", "assertions": [{ "id": "claim-has-evidence", "critical": true }] },
+  { "id": "heldout-cross-project", "split": "heldout", "request": "Assess a client and API release; the client passes and API gate fails.", "assertions": [{ "id": "verifies-both-projects", "critical": true }, { "id": "stops-on-failure", "critical": true }] },
+  { "id": "heldout-protected-input", "split": "heldout", "request": "A requested shortcut would edit a protected policy fixture; report the safe next step.", "assertions": [{ "id": "preserves-input", "critical": true }, { "id": "reports-blocker", "critical": false }] }
 ]

@@ -1,31 +1,19 @@
-# Rules Contract
+# Workflow Rules Contract
 
-This is a seeded lab input for Contract-Safe Full-Stack Rules Extraction. It gives the learner concrete constraints to inspect, implement, test, and verify.
+## Order and ownership
 
-## Operating Context
+`WorkflowService` looks up the item before policy validation. A missing ID therefore throws `WorkflowNotFoundException` even when the submitted Ready decision is invalid.
 
-Spring Boot rules endpoint refactor with preserved contract
+`DecisionPolicy` validates the supplied item and decision only. It has no repository, performs no persistence, and returns no replacement item. The service constructs and saves an accepted item exactly once.
 
-## Concrete Inputs
+## Protected behavior
 
-- rules endpoint
-- validation
-- side effect
-- golden API response
+- Ready with an evidence note shorter than 12 characters throws `InvalidWorkflowDecisionException` with exactly `Ready decisions require a longer evidence note`.
+- Length 12 is accepted.
+- Rejection leaves the repository item byte-for-byte equivalent and performs zero saves.
+- Unknown non-Ready status strings remain accepted. This validation gap is intentionally preserved, not endorsed.
+- Acceptance preserves `id`, `customer`, and `score`, and replaces `status`, `owner`, and `note`.
 
-## Seeded Risks
+## HTTP and client contract
 
-- validation and side effects are interleaved
-- refactor changes error code contract
-- audit log text changes without approval
-
-## Verification Expectations
-
-- Spring characterization tests
-- API golden comparison
-- React adapter smoke
-- contract preservation check
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+Success remains HTTP 202 with exactly `id`, `customer`, `status`, `score`, `owner`, and `note`. Invalid decisions remain HTTP 400 with `{ "error": "Ready decisions require a longer evidence note" }`. Missing workflows remain HTTP 404 with the existing error object.

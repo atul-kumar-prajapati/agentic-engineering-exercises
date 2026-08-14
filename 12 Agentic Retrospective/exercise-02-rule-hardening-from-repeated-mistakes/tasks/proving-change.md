@@ -1,5 +1,5 @@
-# Proving Change: Saved Owner Filter
+# Proving Change: Saved Work-Queue Filter
 
-Add persistence for a saved work-queue filter. Store the selected owner's stable ID, normalize the status to the canonical lower-case value, and use the caller-provided clock for `updatedAt`.
+Implement `buildSavedFilter` so the selected owner and status can be restored in a later session and each saved record includes `updatedAt`.
 
-Do not store display labels and do not call the system clock inside business logic. Use the existing persistence boundary and add focused tests.
+Use the existing persistence boundary and add focused tests. Keep the change limited to this feature.

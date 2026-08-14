@@ -1,62 +1,60 @@
-import { DecisionLog } from "./components/DecisionLog";
-import { EvidenceLedger } from "./components/EvidenceLedger";
-import { SkillPatternBoard } from "./components/SkillPatternBoard";
-import { labContract } from "./labContract";
-import { evidenceStatus, readinessScore, riskSummary } from "./skillWorkflow";
+import board from "./data/agent-board.json";
+import { incidents } from "./data/incidents";
+import { SeverityBadge } from "./components/SeverityBadge";
 import "./styles.css";
 
 export default function App() {
-  const score = readinessScore(labContract);
-  const risks = riskSummary(labContract.backlog);
-  const evidence = evidenceStatus(labContract.evidence);
+  const activeReservations = board.cards.flatMap((card) => card.reservedPaths.map((reservedPath) => ({
+    card: card.id,
+    path: reservedPath,
+  })));
 
   return (
     <main className="app-shell">
       <section className="hero">
         <div>
-          <p className="kicker">{labContract.competency}</p>
-          <h1>{labContract.title}</h1>
-          <p>{labContract.mission}</p>
+          <p className="kicker">Multi-Agent Control Plane</p>
+          <h1>Escalation agent board</h1>
+          <p>Assign work only when evidence, ownership, paths, and verification are ready.</p>
         </div>
         <div className="score-card">
-          <span>Readiness</span>
-          <strong>{score}%</strong>
-          <small>{score >= 75 ? "ready for review" : "needs implementation evidence"}</small>
+          <span>Active reservations</span>
+          <strong>{activeReservations.length}</strong>
+          <small>across {board.cards.length} cards</small>
         </div>
-      </section>
-
-      <section className="metrics">
-        <article>
-          <span>Entities</span>
-          <strong>{labContract.entities.length}</strong>
-          <small>{labContract.entities.join(", ")}</small>
-        </article>
-        <article>
-          <span>High risk cards</span>
-          <strong>{risks.high + risks.critical}</strong>
-          <small>must be handled before merge</small>
-        </article>
-        <article>
-          <span>Ready evidence</span>
-          <strong>{evidence.ready ?? 0}</strong>
-          <small>of {labContract.evidence.length} gates</small>
-        </article>
-      </section>
-
-      <section className="grid">
-        <SkillPatternBoard contract={labContract} />
-        <EvidenceLedger contract={labContract} />
-        <DecisionLog contract={labContract} />
       </section>
 
       <section className="panel wide">
-        <p className="kicker">Outcome</p>
-        <h2>What Good Looks Like</h2>
-        <ul className="signal-list">
-          {labContract.masterySignals.map((signal) => (
-            <li key={signal}>{signal}</li>
+        <div className="section-heading">
+          <div><p className="kicker">Canonical board</p><h2>Agent assignments</h2></div>
+          <span>schema v{board.schemaVersion}</span>
+        </div>
+        <div className="card-list">
+          {board.cards.map((card) => (
+            <article className="work-card" data-state={card.state} key={card.id}>
+              <div><strong>{card.id}</strong><p>{card.title}</p></div>
+              <dl>
+                <dt>State</dt><dd>{card.state}</dd>
+                <dt>Owner</dt><dd>{card.owner}</dd>
+                <dt>Reserved</dt><dd>{card.reservedPaths.length || "none"}</dd>
+              </dl>
+            </article>
           ))}
-        </ul>
+        </div>
+      </section>
+
+      <section className="panel wide">
+        <div className="section-heading">
+          <div><p className="kicker">ESC-120 reproduction</p><h2>Inherited incident severity</h2></div>
+        </div>
+        <div className="incident-list">
+          {incidents.map((incident) => (
+            <article className="incident-card" key={incident.id}>
+              <div><strong>{incident.id}</strong><p>{incident.summary}</p></div>
+              <SeverityBadge incident={incident} />
+            </article>
+          ))}
+        </div>
       </section>
     </main>
   );

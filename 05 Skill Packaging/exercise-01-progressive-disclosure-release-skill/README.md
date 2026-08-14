@@ -2,42 +2,61 @@
 
 ## Your Mission
 
-Your mission is to turn a long release-note prompt into a reusable Agent Skill that loads only the context needed for the current task.
+Your team produces unreliable release notes from one large prompt that loads every rule and example for every request. Your mission is to package a reusable Agent Skill that selects only the needed guidance and extracts release facts deterministically from Git.
 
-You are given a real Git bundle, scattered release rules, and a monolithic skill draft that mixes trigger guidance, policy, examples, and deterministic extraction steps. It is expensive to load and easy to apply incorrectly.
+The supplied draft triggers for unrelated work, publishes an internal refactor, misses a breaking migration, and treats missing evidence as passed. The real Git bundle contains customer, breaking, and internal-only changes.
 
-Use the Agent Skills structure to create a concise `SKILL.md`, move detailed policy to references, and put repeatable Git extraction in a script.
+Build the skill, then prove whether it improves the same agent's release notes while using less irrelevant context.
 
-Prove that the packaged skill produces better release notes than the original raw prompt.
-
-The duration for this challenge is 30 min or less.
+The duration for this challenge is 45 min or less.
 
 ## Project
 
-[release-notes-app](./release-notes-app) contains the verifier. [release-history.bundle](./fixtures/release-history.bundle) and the files under [docs](./docs) are protected source inputs.
+[release-notes-app](./release-notes-app) contains the skill, extractor, output, and evidence checks. [release-history.bundle](./fixtures/release-history.bundle) and the files under [docs](./docs) are protected inputs.
+
+Use this request in both agent sessions:
+
+> Create customer release notes for `exercise-base..origin/exercise-head`. Trace every published item to Git, identify breaking and migration impact, report missing verification evidence, and exclude internal-only work.
+
+Materialize the protected bundle with `npm run fixture:materialize -- <target-directory>` before each run.
 
 ## How To Go About It
 
-Install the official [skill-creator skill](https://github.com/anthropics/skills/tree/main/skills/skill-creator) and follow the [Agent Skills specification](https://agentskills.io/specification).
+1. Create two branches from the same starting commit and materialize identical fixture repositories. The second branch must not contain the output produced in the first branch.
 
-Run the release request once without the new skill and save the first result. Then create `.agents/skills/release-notes/` with a focused `SKILL.md`, `references/`, `scripts/`, and `evals/evals.json`.
+2. In the first branch, start a fresh agent session with the monolithic draft but without your packaged skill. Give it the request exactly as written. Do not provide hints, corrections, or retries. Save the output, `evidence/before.md`, and `evidence/before.patch`.
 
-Start a fresh agent with the skill enabled and the same conditions. The skill must inspect the real Git range, trace published claims, flag the breaking change and missing evidence, and exclude internal telemetry.
+3. Install the official [skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator) and follow the [Agent Skills specification](https://agentskills.io/specification). Review the first result, release policy, fixture, and eval scenarios.
+
+4. In the second branch, create `.agents/skills/release-notes/` with a concise `SKILL.md`, focused publication, evidence, and migration references, one reusable `scripts/extract-release.mjs`, quality evals, and trigger-boundary evals.
+
+5. Start a fresh session with the skill enabled. Use the same agent, model, tools, permissions, request, repository state, time limit, and first-attempt condition. Do not provide hints, corrections, or retries.
+
+6. Run the full, hotfix-only, and internal-only scenarios. Record the resources actually read and prove unrelated references were not loaded. The extractor must work with arbitrary repositories and Git ranges without fixture answers embedded in it.
+
+7. Save the outputs, before-and-after evidence, resource usage, eval results, and comparison. Raise the final PR only from the second branch.
 
 ## Evidence
 
-Submit the complete skill folder, generated notes, `evidence/before.md`, `evidence/before-output.md`, `evidence/after.md`, `evidence/after-output.md`, and `evidence/comparison.md`.
+Submit:
 
-Run `npm run fixture:smoke`, `npm run skill:validate`, `npm run release:verify -- <cloned-fixture-path> <release-notes.md>`, `npm run test:submission`, and `npm run agent:check` from `release-notes-app`.
+- The complete `.agents/skills/release-notes/` package.
+- `evidence/before.md`, `evidence/before.patch`, and `evidence/before-output.md`.
+- `evidence/after.md`, `evidence/after.patch`, and `evidence/after-output.md`.
+- Hotfix and internal-only outputs, the skill record, `resource-usage.json`, `eval-results.json`, and `evidence/comparison.md`.
+- Output from `npm run verify:exercise`.
+- A focused pull request containing only the exercise changes.
 
-Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, application quality, skill structure, deterministic extraction, release accuracy, selective resource use, eval results, and required evidence.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Reviewers will check valid metadata, precise trigger boundaries, progressive disclosure, linked references, a reusable extraction script, realistic evals, and a fair before-and-after run.
+## Completion Criteria
 
-The final notes must be derived from Git, trace every customer-facing item, flag breaking and missing-evidence work, and exclude internal-only changes.
+The challenge is complete when:
 
-The exercise is incomplete if the skill is one large prompt, resources are duplicated, expected notes are hard-coded, protected inputs are changed, or required checks fail.
-
-See the [Progressive Disclosure Release Skill rubric](../../docs/EVALUATION_RUBRICS.md#progressive-disclosure-release-skill).
+- Both runs use identical conditions except the packaged skill.
+- The skill has valid metadata, concise main instructions, clear trigger boundaries, and focused resources loaded only when needed.
+- The extractor accepts arbitrary repositories and ranges without hard-coded fixture answers.
+- Final notes trace both customer changes, identify breaking migration and missing evidence, and exclude internal telemetry.
+- Hotfix and internal-only runs avoid unrelated context, `npm run verify:exercise` passes, and all required proof is present.

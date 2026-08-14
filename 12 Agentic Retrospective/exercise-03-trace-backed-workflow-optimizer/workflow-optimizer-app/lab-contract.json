@@ -1,45 +1,48 @@
 {
   "title": "Trace-Backed Workflow Optimizer",
-  "competency": "12. Agentic Retrospective",
-  "skillPattern": "trace-backed skill optimizer",
-  "domain": "Alert triage agent for on-call incidents, service ownership, SLO impact, customer comms, and escalation notes.",
-  "mission": "Analyze failed agent traces and turn repeated skill mistakes into a measured skill improvement, hook, or team rule.",
-  "outcome": "A broken alert-triage skill improves because trace evidence reveals trigger misses, repeated reads, skipped checks, and weak output contracts.",
+  "competency": "12. Agentic Retrospective - Session review, waste reduction, and improvement",
+  "skillPattern": "trace-backed workflow optimization",
+  "domain": "Deterministically graded workflow optimization with held-out replays",
+  "mission": "Turn repeated trace failures into one general workflow revision and adopt it only when raw matched runs prove quality and cost gates.",
+  "outcome": "A one-file workflow change generalizes to held-out tasks without critical regressions or excessive context cost.",
   "entities": [
-    "Alert",
-    "ServiceOwner",
-    "SloImpact",
-    "EscalationNote",
-    "TraceEvent",
-    "SkillPatch"
+    "failure trace",
+    "workflow instruction",
+    "raw replay response",
+    "deterministic grade"
   ],
   "seededDefects": [
-    "The skill triggers for generic debugging questions and wastes context.",
-    "Agents repeatedly read service ownership files instead of using the cached map.",
-    "The workflow skips customer-impact classification when logs are noisy.",
-    "Retros produce complaints but no skill patch or eval case."
+    "baseline guidance does not establish scope or authority",
+    "partial checks can support completion",
+    "broad context is loaded before decisions are known"
   ],
   "verificationGates": [
-    "Trace analysis identifies repeated reads, retry loops, skipped checks, and trigger misses.",
-    "At least one skill patch is backed by a failing trace case.",
-    "A hook or rule is added only when it prevents a repeated mistake.",
-    "Post-change eval shows fewer misses or a clearer remaining risk."
+    "trace-backed failure clusters",
+    "48 matched raw runs",
+    "held-out critical quality",
+    "variance and cost thresholds",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
   ],
   "agentWorkflow": [
-    "Read traces and group mistakes by cause.",
-    "Choose skill, rule, hook, or habit as the corrective mechanism.",
-    "Patch the smallest durable artifact.",
-    "Add an eval or check so the same mistake is visible next time."
+    "Benchmark the unchanged workflow.",
+    "Cluster repeated causes before editing.",
+    "Commit only general workflow instructions.",
+    "Rerun all lanes and adopt from deterministic evidence.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
   ],
   "workingDeliverables": [
-    "Trace retro with ranked waste and failure patterns.",
-    "Patched skill or team rule.",
-    "Regression case from a real trace.",
-    "Before and after evidence for the improvement."
+    "Candidate workflow.",
+    "Raw hashed baseline and candidate runs.",
+    "Generated benchmark.",
+    "Failure analysis, adoption decision, and Git proof.",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
   ],
   "masterySignals": [
-    "Retros produce operating-system changes.",
-    "Fixes target repeated causes, not one-off annoyance.",
-    "The team can measure whether the skill improved."
+    "Uses all runs rather than selecting winners.",
+    "Keeps grading independent from agent claims.",
+    "Improves both train and held-out quality.",
+    "Rejects quality gains that violate critical or cost gates."
   ]
 }

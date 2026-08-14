@@ -2,21 +2,19 @@
 
 ## Your Mission
 
-Your mission is to fix a billing incident whose rules and dependencies are spread across code and conflicting documents.
+Your team cannot safely fix a billing incident because the calculation, account mapping, consumers, ownership, and current rules are spread across code and conflicting documents. Your mission is to build and query a repository knowledge graph before changing the billing flow.
 
-The dashboard and scheduled snapshot overstate recognized revenue and split one billing account across multiple tenants. A previous agent followed stale metric and ownership information and incorrectly marked the work complete.
+The dashboard and scheduled snapshot overstate recognized revenue and split one billing account across tenants. A previous agent followed stale metric and ownership information and incorrectly marked the work complete.
 
-Use Graphify to identify the calculation, mapping, consumers, current rules, and owning team before implementing the fix.
-
-Compare the agent's implementation before and after using graph-first context.
+Use Graphify, then prove whether graph-first context improves the same agent's first-attempt result.
 
 The duration for this challenge is 30 min or less.
 
 ## Project
 
-[billing-graph-app](./billing-graph-app) contains the application code, partial fix, and conflicting incident information.
+[billing-graph-app](./billing-graph-app) is a billing application with a partial fix, two downstream consumers, mapping rules, and conflicting incident documents.
 
-Use this request for both agent runs:
+Use this incident request in both implementation sessions:
 
 > Correct recognized-revenue totals in the dashboard and scheduled snapshot. Use the current metric rules and billing-account boundaries, preserve gross-volume behaviour, and reject events without a valid account mapping.
 
@@ -24,45 +22,43 @@ The request does not identify the safe edit path or authoritative sources. Answe
 
 ## How To Go About It
 
-Install [Graphify](https://github.com/Graphify-Labs/graphify) and register its skill for your coding agent:
+1. Create two branches from the same starting commit. The second branch must not contain the implementation produced in the first branch.
 
-```bash
-uv tool install graphifyy
-graphify install --project --platform agents
-```
+2. In the first branch, start a fresh agent session without Graphify. Give it the incident request, answer the graph questions using normal repository search, and keep its first implementation without hints, corrections, or retries. Save `evidence/before.md` and `evidence/before.patch`.
 
-Start a fresh agent session without Graphify. Provide the incident request and repository, answer the graph questions using normal search, save the first implementation and observations, then revert the implementation.
+3. Install [Graphify](https://github.com/Graphify-Labs/graphify) and register its skill for your coding agent. Build a graph for the complete exercise directory so code and documents are both included.
 
-Build a graph for the complete exercise directory so it includes both code and documents. Use `graphify query`, `graphify path`, and `graphify explain` to answer the same questions before opening source files.
+4. Use `graphify query`, `graphify path`, and `graphify explain` to answer the same questions before opening source files. Record commands and relevant results in `evidence/graph-queries.md`. Treat inferred or ambiguous edges only as leads and verify important claims against their sources.
 
-Record every command and relevant result in `evidence/graph-queries.md`. Treat `INFERRED` or `AMBIGUOUS` edges as leads only and verify important ones against their source files.
+5. In the second branch, start a fresh agent session with the graph available. Give it the same incident request and graph questions using the same agent, model, tools, permissions, time limit, and first-attempt condition.
 
-Start another fresh agent session with the graph available. Provide the same request and graph questions. The agent must query the graph before inspecting source and implementing the fix.
+6. The agent must query the graph before inspecting source and implementing the fix. Do not provide hints, corrections, or retries. Keep its implementation and regression tests.
 
-Use the same agent, model, tools, permissions, prompt, time limit, and first attempt for both runs. Do not rerun either implementation.
+7. Save the graph outputs, `evidence/after.md`, `evidence/after.patch`, `evidence/graph-audit.md`, and `evidence/comparison.md`. Raise the final PR only from the second branch.
 
 ## Evidence
 
 Submit:
 
-- The completed recognized-revenue fix and regression tests.
+- The completed billing fix and regression tests.
 - `graphify-out/graph.json`, `graphify-out/graph.html`, and `graphify-out/GRAPH_REPORT.md`.
-- `evidence/graph-queries.md` containing the questions, commands, results, and source verification.
-- `evidence/graph-audit.md` showing current sources retained and stale or unsupported claims excluded.
+- `evidence/graph-queries.md` and `evidence/graph-audit.md`.
 - `evidence/before.md` and `evidence/before.patch`.
 - `evidence/after.md` and `evidence/after.patch`.
-- `evidence/comparison.md` comparing file access, assumptions, and implementation results.
-- Output from `npm run test:billing`, `npm run test:graph`, and `npm run agent:check`.
+- `evidence/comparison.md` comparing discovery, assumptions, implementation, and verification.
+- Output from `npm run verify:exercise`.
 - A focused pull request containing only the exercise changes.
 
-Use the [evidence template](./docs/evidence-template.md) and follow the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, application quality, billing behavior, graph outputs, source verification, comparable sessions, and required evidence.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-The graph must identify the calculation, tenant-to-account mapping, dashboard and snapshot consumers, current metric contract, and owning team. Important inferred or ambiguous edges must be source verified.
+## Completion Criteria
 
-The final implementation must calculate net recognized revenue, group it by billing account, reject missing mappings, preserve gross volume, and keep both consumers consistent.
+The challenge is complete when:
 
-The exercise is incomplete if the graph is fabricated, the runs are not comparable, source files are opened before graph queries in the graph-first run, stale guidance is treated as current, protected inputs are changed, or the required checks fail.
-
-See the [evaluation rubric](../../docs/EVALUATION_RUBRICS.md#graphify-billing-knowledge-graph).
+- Both branches start from the same commit and both implementation sessions use the same request and working conditions.
+- The graph identifies the calculation, tenant-to-account mapping, both consumers, current metric contract, and owning team.
+- Important inferred or ambiguous edges are verified against source files before use.
+- The final implementation calculates net recognized revenue by billing account, rejects missing mappings, preserves gross volume, and keeps both consumers consistent.
+- `npm run verify:exercise` passes and the final PR contains genuine graph outputs and all required proof.

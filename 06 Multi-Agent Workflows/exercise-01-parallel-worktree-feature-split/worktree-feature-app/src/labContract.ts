@@ -15,42 +15,46 @@ export interface LabContract {
 export const labContract: LabContract = {
   "title": "Parallel Worktree Conflict Rescue",
   "competency": "06. Multi-Agent Workflows - Parallel agents on isolated tasks",
-  "domain": "Three-lane worktree plan for independent UI improvements",
-  "mission": "Split three independent improvements across worktrees or subagents and integrate them without overlapping file edits.",
-  "outcome": "Independent changes run in parallel lanes and integrate cleanly under one accountable owner.",
+  "domain": "A work queue application with three product changes that need isolated implementation and one shared-type integration point",
+  "mission": "Deliver saved filters, due-today risk, and evidence export through three real Git worktrees while preserving independent verification and inspectable integration history.",
+  "outcome": "Three lane commits remain independently reviewable, their shared contracts are promoted once by the integration owner, and the final product passes protected acceptance tests.",
   "entities": [
-    "worktree lane",
-    "branch owner",
-    "file ownership",
-    "integration gate"
+    "common base SHA",
+    "linked worktree and lane branch",
+    "owned path and shared-type request",
+    "lane handoff and verification output",
+    "ordered merge commit and product head"
   ],
   "seededDefects": [
-    "two lanes claim the same shared filter file",
-    "one lane lacks a verification command",
-    "integration owner is not assigned"
+    "saved-filter and evidence-export work both need new shared types but do not own src/types.ts",
+    "due-today risk, saved filters, and evidence export are absent from the starter application",
+    "declared lane evidence can drift from the actual Git parents, paths, branches, and output files"
   ],
   "verificationGates": [
-    "file ownership audit",
-    "lane verification reports",
-    "merge-order simulation",
-    "final integration check"
+    "protected focused acceptance test for each lane",
+    "Git history, branch, ownership, trailer, handoff, output-hash, and worktree audit",
+    "ordered B, A, C no-ff merge audit with lane blob preservation",
+    "single shared-type commit and complete integrated acceptance suite",
+    "linked-worktree cleanup and repository checks"
   ],
   "agentWorkflow": [
-    "Ask the coding agent to inspect this lab contract, starter code, docs, and tests before proposing a plan.",
-    "Revise the agent plan so it exercises the competency practice and avoids the common mistake.",
-    "Implement the smallest working change that addresses the seeded defects.",
-    "Run the verification gates and capture command evidence before writing the final review note."
+    "Record one clean base SHA and create the three required lane branches in linked worktrees.",
+    "Give each lane agent only its task, owned paths, shared request, and focused verification command.",
+    "Review one independently tested commit and evidence-backed handoff from every lane.",
+    "Merge B, A, and C with no-ff, then promote both shared contracts in one integration commit.",
+    "Run integrated checks, verify the submission against Git, and remove the linked worktrees."
   ],
   "workingDeliverables": [
-    "Three isolated change slices with ownership notes.",
-    "Working integrated code in the starter.",
-    "Conflict/risk log and final verification output.",
-    "Main-thread integration summary."
+    "Three lane branches, linked worktrees, one-parent commits, and lane-owned tests.",
+    "Saved filters, due-today risk, and JSON evidence export in the integrated application.",
+    "Machine-readable lane handoffs, integration record, command outputs, and worktree captures.",
+    "Integration review covering conflicts, risk, cleanup, and rollback."
   ],
   "masterySignals": [
-    "Split the requested work into three non-overlapping slices with explicit file ownership.",
-    "Use separate branches/worktrees or simulated agent lanes for implementation.",
-    "Integrate results deliberately, resolving conflicts instead of hiding them.",
-    "Run the full verification gate after integration."
+    "All lane commits share one parent and change only their fixed ownership paths.",
+    "Each lane stays independently testable and requests shared contracts without editing src/types.ts.",
+    "No-ff merges preserve lane commits and content in the required B, A, C order.",
+    "One shared-type commit resolves both requests without hiding unrelated work.",
+    "Captured evidence matches Git history and passing command output byte for byte."
   ]
 };

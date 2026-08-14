@@ -1,15 +1,12 @@
-import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
+import { verifyLaneSubmission } from "./worktree-verification.mjs";
 
-const evidencePath = path.resolve(import.meta.dirname, "..", "..", "evidence", "lane-handoffs.json");
-const handoffs = JSON.parse(readFileSync(evidencePath, "utf8"));
-for (const lane of ["A", "B", "C"]) {
-  const handoff = handoffs.find((item) => item.lane === lane);
-  if (!handoff) throw new Error(`Missing lane ${lane}`);
-  for (const field of ["baseSha", "branch", "ownedPaths", "command", "result", "commitSha", "rollback"]) {
-    if (!handoff[field] || handoff[field].length === 0) throw new Error(`Lane ${lane} is missing ${field}`);
-  }
-  execFileSync("git", ["cat-file", "-e", `${handoff.commitSha}^{commit}`]);
+const appRoot = process.cwd();
+const repositoryRoot = path.resolve(execFileSync("git", ["rev-parse", "--show-toplevel"], { cwd: appRoot, encoding: "utf8" }).trim());
+const failures = verifyLaneSubmission({ repositoryRoot, appRoot, exerciseRoot: path.resolve(appRoot, "..") });
+if (failures.length) {
+  console.error("Parallel worktree verification failed:\n" + failures.map((failure) => `- ${failure}`).join("\n"));
+  process.exit(1);
 }
-console.log("All lane commits and required handoff fields are inspectable.");
+console.log("Verified three isolated lane commits, ordered no-ff merges, one shared-type resolution, worktree evidence, and command outputs.");

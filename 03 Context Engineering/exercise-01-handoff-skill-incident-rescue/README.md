@@ -2,45 +2,39 @@
 
 ## Your Mission
 
-Your mission is to complete a production bug fix from a long and unreliable agent session.
+Your team cannot finish a production incident because the previous agent session is long, contradictory, and incorrectly claims the fix is complete. Your mission is to create a compact, verified handoff that lets a fresh agent finish the work without repeating the same mistakes.
 
-The previous session contains current requirements, outdated guidance, failed assumptions, noisy output, and an incorrect completion claim.
+The raw session mixes current requirements with an outdated rollout proposal, failed assumptions, noisy output, and a partial implementation. Passing all of that context to another agent makes the problem worse.
 
-Use the Handoff skill to create a compact, verified handoff that helps a fresh agent complete the fix without repeating those mistakes.
-
-Compare the agent's implementation before and after using the handoff.
+Use the Handoff skill, then prove whether verified context improves the same agent's first-attempt result.
 
 The duration for this challenge is 30 min or less.
 
 ## Project
 
-[bugfix-context-app](./bugfix-context-app) contains the application code, partial implementation, and conflicting incident files.
+[bugfix-context-app](./bugfix-context-app) is a work-queue application with a partial escalation fix and conflicting incident files.
 
-Use this request for both agent runs:
+Use this incident request in both implementation sessions:
 
 > Complete the automatic escalation fix for at-risk cases. Use the current SLA rules, preserve existing ownership and manual escalation behaviour, and keep the queue totals and saved workflow state consistent.
 
-The request does not contain every implementation rule. Identify the authoritative information from the supplied incident files.
+The request does not contain every rule. The challenge is to identify which repository sources are current before changing the implementation.
 
 ## How To Go About It
 
-Install the [Handoff skill](https://github.com/mattpocock/skills/blob/main/docs/productivity/handoff.md):
+1. Create two branches from the same starting commit. The second branch must not contain the implementation produced in the first branch.
 
-```bash
-npx skills add mattpocock/skills --skill=handoff
-```
+2. In the first branch, start a fresh agent session without the Handoff skill. Give it the incident request and raw session history. Do not provide hints, corrections, or retries. Commit the result and save `evidence/before.md` and `evidence/before.patch`.
 
-Start a fresh agent session without using the skill. Provide the incident request and raw session history, save the first implementation and observations, then revert the implementation.
+3. Install the [Handoff skill](https://github.com/mattpocock/skills/blob/main/docs/productivity/handoff.md). In a preparation session, inspect the raw history, current policy, outdated proposal, partial implementation, source code, and tests. Separate verified facts from stale or unsupported claims.
 
-Start a preparation session and inspect the raw history, current requirements, partial implementation, source code, and tests. Separate verified facts from outdated instructions, assumptions, and unsupported claims.
+4. Invoke the Handoff skill and save its output without rewriting it as `evidence/handoff.md`. Keep it within 1,200 words. Audit every retained or excluded claim in `evidence/handoff-audit.md` with its source path.
 
-Invoke the Handoff skill for a fresh agent that will complete and verify the fix. Copy the generated output without rewriting it to `evidence/handoff.md`. Keep it within 1,200 words.
+5. In the second branch, start another fresh implementation session. Give it only the incident request and `evidence/handoff.md`. It may inspect files named by the handoff, but it must not receive the raw session history or extra explanations.
 
-If the handoff is incorrect, improve the preparation session and generate it again before starting the final implementation session.
+6. Use the same agent, model, tools, permissions, time limit, and first-attempt condition as the first run. Do not provide hints, corrections, or retries. Keep the second implementation.
 
-Start another fresh agent session. Provide only the incident request and `evidence/handoff.md`. The agent may inspect files referenced by the handoff but must not receive the raw session history or additional explanations.
-
-Use the same agent, model, tools, permissions, prompt, time limit, and first attempt for both implementation runs. Do not rerun either implementation.
+7. Save `evidence/after.md`, `evidence/after.patch`, and `evidence/comparison.md`. Raise the final PR only from the second branch.
 
 ## Evidence
 
@@ -48,21 +42,22 @@ Submit:
 
 - The completed escalation fix and regression tests.
 - `evidence/before.md` and `evidence/before.patch`.
-- `evidence/handoff.md` containing the unmodified Handoff skill output.
-- `evidence/handoff-audit.md` showing verified facts retained and outdated claims excluded.
+- `evidence/handoff.md` and `evidence/handoff-audit.md`.
 - `evidence/after.md` and `evidence/after.patch`.
-- `evidence/comparison.md` explaining what improved.
-- Output from `npm run test:incident`, `npm run test:handoff`, and `npm run agent:check`.
+- `evidence/comparison.md` comparing requirement selection, context size, implementation, and verification.
+- Output from `npm run verify:exercise`.
 - A focused pull request containing only the exercise changes.
 
-Use the [evidence template](./docs/evidence-template.md) and follow the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, application quality, incident behavior, handoff size and contents, context boundaries, comparable sessions, and required evidence.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-The handoff must identify the authoritative requirements, completed work, remaining work, protected behaviour, and verification commands without carrying outdated guidance.
+## Completion Criteria
 
-The final implementation must use the current SLA boundary, preserve ownership and manual escalations, and keep queue totals and saved state consistent.
+The challenge is complete when:
 
-The exercise is incomplete if the runs are not comparable, the handoff is manually rewritten, the final agent receives the raw session history, protected inputs are changed, or the required checks fail.
-
-See the [evaluation rubric](../../docs/EVALUATION_RUBRICS.md#handoff-skill-incident-rescue).
+- Both branches start from the same commit and both implementation sessions use the same request and working conditions.
+- The handoff identifies current requirements, completed work, remaining work, protected behavior, and verification commands without carrying stale guidance.
+- The second agent receives no raw session history or extra human explanation.
+- The final fix uses the current SLA boundary, preserves ownership and manual escalation, and keeps queue totals and saved state consistent.
+- `npm run verify:exercise` passes and the final PR contains the handoff audit and all required proof.

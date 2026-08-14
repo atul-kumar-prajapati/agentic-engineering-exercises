@@ -2,9 +2,20 @@
   "name": "Performance and Accessibility Release Gate",
   "root": "..",
   "requiredFiles": [
-    { "path": "lighthouserc.json", "validJson": true, "includeAll": ["numberOfRuns", "pessimistic", "categories:performance", "categories:accessibility"] },
-    { "path": "evidence/lighthouse-after.json", "validJson": true, "includeAll": ["commitSha", "runs", "performance", "largestContentfulPaintMs"] },
-    { "path": "evidence/a11y-after.json", "validJson": true, "includeAll": ["commitSha", "violations"] },
-    { "path": "evidence/comparison.md", "minCharacters": 350, "includeAll": ["baseline", "after", "environment", "residual risk"] }
+    { "path": "quality-gate-app/lighthouserc.json", "validJson": true, "minCharacters": 500, "includeAll": ["staticDistDir", "http://localhost/", "numberOfRuns", "onlyCategories", "categories:performance", "categories:accessibility", "largest-contentful-paint", "pessimistic"] },
+    { "path": "quality-gate-app/scripts/quality-gate.mjs", "minCharacters": 1200, "includeAll": ["--lighthouse-dir", "--axe", "--contract", "--sha", "--output", "worstCase", "releaseDecision", "process.exitCode"] },
+    { "path": "evidence/raw/lighthouse/run-1.json", "validJson": true, "minCharacters": 50000, "includeAll": ["lighthouseVersion", "fetchTime", "finalUrl", "categories", "performance", "accessibility", "largest-contentful-paint", "environment"] },
+    { "path": "evidence/raw/lighthouse/run-2.json", "validJson": true, "minCharacters": 50000, "includeAll": ["lighthouseVersion", "fetchTime", "finalUrl", "categories", "performance", "accessibility", "largest-contentful-paint", "environment"] },
+    { "path": "evidence/raw/lighthouse/run-3.json", "validJson": true, "minCharacters": 50000, "includeAll": ["lighthouseVersion", "fetchTime", "finalUrl", "categories", "performance", "accessibility", "largest-contentful-paint", "environment"] },
+    { "path": "evidence/raw/axe.json", "validJson": true, "minCharacters": 250, "includeAll": ["schemaVersion", "sourceSha", "testedUrl", "generatedAt", "browser", "violations"] },
+    { "path": "evidence/quality-summary.json", "validJson": true, "minCharacters": 2500, "includeAll": ["schemaVersion", "sourceSha", "pessimistic", "thresholds", "lighthouseRuns", "sha256", "worstCase", "axeViolations", "releaseDecision", "passed"] },
+    { "path": "evidence/comparison.md", "minCharacters": 1400, "includeAll": ["Source SHA", "Release decision: PASSED", "Before and after", "Comparable environment", "Raw artifact trace", "Failure-path proof", "Residual risk"] },
+    { "path": "evidence/commands/quality-verify.txt", "minCharacters": 350, "includeAll": ["Source SHA", "PASS three raw Lighthouse", "PASS pessimistic performance", "PASS raw artifact", "PASS performance and axe negative", "PASS Git source binding"] }
+  ],
+  "requiredDirectories": [
+    "evidence",
+    "evidence/raw",
+    "evidence/raw/lighthouse",
+    "evidence/commands"
   ]
 }

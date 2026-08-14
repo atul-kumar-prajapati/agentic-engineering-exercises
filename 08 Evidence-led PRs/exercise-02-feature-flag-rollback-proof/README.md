@@ -2,36 +2,55 @@
 
 ## Your Mission
 
-Your mission is to prove that a risky invoice preview can be disabled without calling its new API or emitting misleading telemetry.
+Your team cannot safely release an invoice preview because disabling its flag still calls the new service and emits telemetry. Your mission is to repair the flag boundary and prove the feature can be disabled immediately without a code deployment.
 
-You are given a seeded implementation where the disabled path still calls the preview service, evaluation errors fail open, and rollback leaves the new telemetry active.
+The current code fails open when the provider errors, uses side effects on disabled paths, and has no atomic rollback command that reviewers can run.
 
-Implement a provider-independent feature-flag boundary, verify enabled and disabled behavior, and perform a timed rollback drill.
+Compare an ordinary implementation attempt with an evidence-led rollout and rollback result.
 
-The duration for this challenge is 30 min or less.
+The duration for this challenge is 45 min or less.
 
 ## Project
 
-[feature-flag-app](./feature-flag-app) contains the rollout boundary. [flag brief](./docs/flag-brief.md) defines defaults, evaluation context, telemetry, and rollback expectations.
+[feature-flag-app](./feature-flag-app) contains the rollout boundary and verification harness. The protected flag brief, [rollback contract](./docs/rollback-contract.md), configuration, and scenarios define the required behavior.
 
 ## How To Go About It
 
-Use [OpenFeature](https://openfeature.dev/) or an equivalent abstraction. Default safely when evaluation fails, keep a stable targeting key, and ensure the disabled path uses the legacy view without calling the new service.
+1. Create two branches from the same starting commit. In the first branch, ask a fresh coding agent to repair the flag and provide rollback proof from the product request. Do not provide hints, corrections, or retries. Save `evidence/before.md` and `evidence/before.patch`.
 
-Test enabled, disabled, provider-error, and rollback states. Record the flag change, observable result, elapsed rollback time, and remaining cleanup work.
+2. Review the first result against the flag and rollback contracts. Record any unproved disabled, error, targeting, side-effect, or rollback behavior.
+
+3. In the second branch, use the provider-independent `getBooleanValue` interface. Evaluate `invoice-preview-v2` with a safe `false` default and the unchanged account targeting key.
+
+4. Only the enabled path may call the preview API or emit `invoice_preview_viewed`. Invalid context, disabled evaluation, provider failure, and preview API failure must return the legacy experience without those side effects.
+
+5. Create `scripts/rollback-invoice-preview.mjs` with the required CLI. It must validate input first, atomically disable the flag, clear targeting, and record the required audit fields.
+
+6. Start a fresh agent session under the same agent, model, tools, permissions, prompt, time limit, and first-attempt conditions. Capture enabled, disabled, provider-error, invalid-input, and rollback behavior without correction or retry.
+
+7. Save `evidence/after.md`, `evidence/after.patch`, generated scenario proof, rollback drill, and comparison. Raise the PR only from the second branch.
 
 ## Evidence
 
-Submit the implementation and tests, `evidence/enabled.json`, `evidence/disabled.json`, and `evidence/rollback-drill.md` using the supplied template.
+Submit:
 
-Run `npm run test:rollout`, `npm run test:submission`, and `npm run agent:check` from `feature-flag-app`.
+- The corrected rollout boundary and rollback command.
+- `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, and `evidence/after.patch`.
+- Generated enabled, disabled, and provider-error results.
+- Generated rollback drill JSON and Markdown, captured command output, and `evidence/comparison.md`.
+- Output from `npm run verify:exercise`.
+- A focused pull request containing only this exercise.
 
-Raise a focused PR containing only this exercise. Follow the [submission standard](../../docs/SUBMISSION_STANDARD.md).
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, application quality, all flag states, side effects, stable targeting, rollback atomicity, generated evidence, and required comparison proof.
 
-## Evaluation
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
 
-Reviewers will check safe defaults, stable targeting, API suppression, telemetry accuracy, both flag states, and a reproducible rollback drill.
+## Completion Criteria
 
-The exercise is incomplete if disabled users still reach the new API, evaluation errors enable the feature, rollback evidence is descriptive only, or protected inputs change.
+The challenge is complete when:
 
-See the [Feature Flag Kill-Switch Proof rubric](../../docs/EVALUATION_RUBRICS.md#feature-flag-kill-switch-proof).
+- Both agent attempts use matching conditions and genuine first-attempt patches.
+- Only enabled evaluation calls the preview API and emits preview telemetry, exactly once.
+- Invalid context, disabled state, provider error, and preview API failure return legacy behavior with zero new side effects.
+- The rollback drill rejects invalid input without change, then atomically disables a live configuration and proves the same account receives legacy behavior.
+- `npm run verify:exercise` passes and all generated proof matches one implementation source SHA.

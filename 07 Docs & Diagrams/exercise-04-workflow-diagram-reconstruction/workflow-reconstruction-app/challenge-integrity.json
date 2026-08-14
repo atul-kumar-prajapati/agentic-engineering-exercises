@@ -1,9 +1,0 @@
-{
-  "algorithm": "sha256-normalized-lf",
-  "protectedFiles": {
-    "../README.md": "837eb24fdcbb86757c13828dede1b3d73f01a86bef300907126197200ea06a1e",
-    "../docs/legacy-workflow-description.md": "39562918f5642cf500246fc941341862d2fd8b364c2bb9419ad929aeccc266c4",
-    "src/workflow.tsx": "fe09c63f97177ecc668e5393e9da97b499cd54d70059213d9f06ac43ce29d3d9",
-    "submission-contract.json": "c87206aacff68b9eb8a35ed741c33ad464ad6cf23bbf4119d990e028b32d8d5e"
-  }
-}
