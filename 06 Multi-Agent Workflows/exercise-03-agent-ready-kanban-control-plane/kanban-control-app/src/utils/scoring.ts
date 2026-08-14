@@ -1,6 +1,21 @@
 import type { Incident, Severity } from "../data/incidents";
 
+const severityRank: Record<Severity, number> = {
+  Low: 0,
+  Medium: 1,
+  High: 2,
+  Critical: 3,
+};
+
 export function calculateSeverity(incident: Incident): Severity {
-  // Seeded ESC-120 defect: inherited parent severity is ignored.
+  const inheritedSeverity = incident.inheritedSeverity;
+
+  if (
+    inheritedSeverity &&
+    severityRank[inheritedSeverity] > severityRank[incident.declaredSeverity]
+  ) {
+    return inheritedSeverity;
+  }
+
   return incident.declaredSeverity;
 }
