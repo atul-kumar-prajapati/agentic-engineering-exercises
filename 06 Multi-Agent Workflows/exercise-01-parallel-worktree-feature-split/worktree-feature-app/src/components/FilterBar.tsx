@@ -1,4 +1,9 @@
-import type { Filters } from "../utils/filters";
+import {
+  applyPreset,
+  HIGH_PRIORITY_BLOCKED_PRESET,
+  isPresetActive,
+  type Filters,
+} from "../utils/filters";
 
 interface FilterBarProps {
   filters: Filters;
@@ -9,8 +14,17 @@ const priorities = ["All", "Low", "Medium", "High"] as const;
 const statuses = ["All", "Queued", "Ready", "In Review", "Blocked", "Escalated"] as const;
 
 export function FilterBar({ filters, onChange }: FilterBarProps) {
+  const presetIsActive = isPresetActive(filters, HIGH_PRIORITY_BLOCKED_PRESET);
+
   return (
     <section className="filter-bar" aria-label="Filters">
+      <button
+        aria-pressed={presetIsActive}
+        onClick={() => onChange(applyPreset(filters, HIGH_PRIORITY_BLOCKED_PRESET))}
+        type="button"
+      >
+        {HIGH_PRIORITY_BLOCKED_PRESET.label}
+      </button>
       <label>
         Search
         <input
