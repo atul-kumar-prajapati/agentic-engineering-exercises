@@ -1,0 +1,20 @@
+Command: npm run verify:exercise
+Reviewed SHA: 64cae058c0355fd457ad8b9a53e99eeb062e0576
+Exit code: 0
+
+PASS: agent:check
+- Verified 19 protected challenge inputs.
+- lint-check passed.
+- kanban control-plane verifier self-test passed.
+- agent-check passed for Agent Kanban Collision Control.
+- format-check passed.
+- TypeScript typecheck passed.
+- Production build passed: 33 modules transformed by Vite.
+
+PASS: verify:implementation
+- ESC-120 feature verification passed: 2 test files, 5 tests.
+- Board verification passed: mirrors, histories, blockers, reservation releases, ownership, and integration records are consistent.
+
+PASS: verify:submission
+- Control-plane verification passed: one owned lane commit, exact review, no-ff integration, synchronized control artifacts, and hashed evidence.
+- Submission contract passed: 8 required files and 1 required directory verified.
