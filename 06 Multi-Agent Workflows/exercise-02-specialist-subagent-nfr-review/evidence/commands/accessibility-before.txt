@@ -1,0 +1,32 @@
+
+> nfr-swarm-app@0.1.0 review:accessibility
+> node ./scripts/run-specialist-check.mjs accessibility
+
+Reviewed SHA: d41347c7a0249193e53a06d0c7717e361216ab89
+Specialist: accessibility
+
+ RUN  v4.1.10 /Users/codewalnut/Projects/agentic engineering/agentic-engineering-full-exercises-set/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app
+
+ ❯ acceptance/accessibility.review.test.tsx (1 test | 1 failed) 5ms
+     × uses keyboard-native controls and exposes the selected review 4ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  acceptance/accessibility.review.test.tsx > accessibility specialist gate > uses keyboard-native controls and exposes the selected review
+AssertionError: Target cannot be null or undefined.
+ ❯ acceptance/accessibility.review.test.tsx:11:38
+      9|       <AccessReviewQueue reviews={accessReviews} selectedId={accessRev…
+     10|     );
+     11|     expect(markup.match(/<button/g)).toHaveLength(accessReviews.length…
+       |                                      ^
+     12|     expect(markup).toContain('aria-pressed="true"');
+     13|     expect(markup).not.toMatch(/<div[^>]+onClick/i);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed (1)
+   Start at  22:05:14
+   Duration  80ms (transform 14ms, setup 0ms, import 26ms, tests 5ms, environment 0ms)
+

@@ -1,0 +1,77 @@
+
+> nfr-swarm-app@0.1.0 verify:exercise
+> npm run agent:check && npm run verify:implementation && npm run verify:submission
+
+
+> nfr-swarm-app@0.1.0 agent:check
+> npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build
+
+
+> nfr-swarm-app@0.1.0 test:integrity
+> node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json
+
+Verified 22 protected challenge inputs.
+
+> nfr-swarm-app@0.1.0 lint
+> node ./scripts/lint-check.mjs
+
+lint-check passed
+
+> nfr-swarm-app@0.1.0 test
+> node ./scripts/test-specialist-review-verifier.mjs && node ./scripts/agent-check.mjs
+
+specialist review verifier self-test passed
+agent-check passed for Specialist Review Merge Gate
+
+> nfr-swarm-app@0.1.0 format
+> node ./scripts/format-check.mjs
+
+format-check passed
+
+> nfr-swarm-app@0.1.0 typecheck
+> tsc -b --pretty false
+
+
+> nfr-swarm-app@0.1.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 34 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.41 kB │ gzip:  0.28 kB
+dist/assets/index-B8NY3R59.css    1.00 kB │ gzip:  0.50 kB
+dist/assets/index-hnQRHKqz.js   195.66 kB │ gzip: 61.67 kB
+✓ built in 277ms
+
+> nfr-swarm-app@0.1.0 verify:implementation
+> npm run review:all
+
+
+> nfr-swarm-app@0.1.0 review:all
+> vitest run acceptance tests
+
+
+ RUN  v4.1.10 /Users/codewalnut/Projects/agentic engineering/agentic-engineering-full-exercises-set/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app
+
+
+ Test Files  4 passed (4)
+      Tests  8 passed (8)
+   Start at  23:58:41
+   Duration  98ms (transform 70ms, setup 0ms, import 119ms, tests 11ms, environment 0ms)
+
+
+> nfr-swarm-app@0.1.0 verify:submission
+> npm run test:submission
+
+
+> nfr-swarm-app@0.1.0 test:submission
+> npm run reviews:verify && node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json
+
+
+> nfr-swarm-app@0.1.0 reviews:verify
+> node ./scripts/verify-specialist-reviews.mjs
+
+Verified four same-SHA specialist reviews, complete triage, remediation-only source changes, fresh rechecks, and comparable performance evidence.
+Verified Specialist Review Merge Gate: 21 files and 2 directories.

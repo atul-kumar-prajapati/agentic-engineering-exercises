@@ -1,0 +1,15 @@
+
+> nfr-swarm-app@0.1.0 review:security
+> node ./scripts/run-specialist-check.mjs security
+
+Reviewed SHA: 92a6bf13692ece72499c53fa23d1678d85a0693b
+Specialist: security
+
+ RUN  v4.1.10 /Users/codewalnut/Projects/agentic engineering/agentic-engineering-full-exercises-set/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  23:56:15
+   Duration  96ms (transform 22ms, setup 0ms, import 38ms, tests 4ms, environment 0ms)
+

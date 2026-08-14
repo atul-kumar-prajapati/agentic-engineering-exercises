@@ -1,0 +1,65 @@
+
+> nfr-swarm-app@0.1.0 review:testability
+> node ./scripts/run-specialist-check.mjs testability
+
+Reviewed SHA: d41347c7a0249193e53a06d0c7717e361216ab89
+Specialist: testability
+
+ RUN  v4.1.10 /Users/codewalnut/Projects/agentic engineering/agentic-engineering-full-exercises-set/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app
+
+ ❯ acceptance/testability.review.test.ts (2 tests | 2 failed) 3ms
+     × approves deterministically with an injected wait dependency 1ms
+     × does not reference the browser window in the approval service 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  acceptance/testability.review.test.ts > testability specialist gate > approves deterministically with an injected wait dependency
+ReferenceError: window is not defined
+ ❯ src/services/accessReviewApi.ts:3:72
+      1| import type { AccessReview } from "../data/accessReviews";
+      2|
+      3| const wait = (milliseconds: number) => new Promise((resolve) => window…
+       |                                                                        ^
+      4|
+      5| export async function approveAccessReview(review: AccessReview): Promi…
+ ❯ wait src/services/accessReviewApi.ts:3:40
+ ❯ approveAccessReview src/services/accessReviewApi.ts:6:9
+ ❯ acceptance/testability.review.test.ts:11:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  acceptance/testability.review.test.ts > testability specialist gate > does not reference the browser window in the approval service
+AssertionError: expected 'import type { AccessReview } from "..…' not to contain 'window'
+
+- Expected
++ Received
+
+- window
++ import type { AccessReview } from "../data/accessReviews";
++
++ const wait = (milliseconds: number) => new Promise((resolve) => window.setTimeout(resolve, milliseconds));
++
++ export async function approveAccessReview(review: AccessReview): Promise<AccessReview> {
++   await wait(120);
++   // Seeded boundary defect: the API simulation trusts the UI and does not
++   // reject privileged requests whose evidence is incomplete.
++   return { ...review, status: "approved" };
++ }
++
+
+ ❯ acceptance/testability.review.test.ts:19:32
+     17|   it("does not reference the browser window in the approval service", …
+     18|     const implementation = fs.readFileSync(path.resolve("src/services/…
+     19|     expect(implementation).not.toContain("window");
+       |                                ^
+     20|   });
+     21| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  22:05:14
+   Duration  75ms (transform 13ms, setup 0ms, import 19ms, tests 3ms, environment 0ms)
+

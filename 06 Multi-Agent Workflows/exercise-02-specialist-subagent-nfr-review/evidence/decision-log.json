@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "baseline_sha": "d41347c7a0249193e53a06d0c7717e361216ab89",
+  "remediation_sha": "92a6bf13692ece72499c53fa23d1678d85a0693b",
+  "merge_decision": "approve",
+  "rollback": "git revert 92a6bf13692ece72499c53fa23d1678d85a0693b",
+  "changed_paths": [
+    "src/App.tsx",
+    "src/components/AccessReviewQueue.tsx",
+    "src/components/ReviewNote.tsx",
+    "src/services/accessReviewApi.ts",
+    "src/utils/accessReviewRisk.ts"
+  ],
+  "decisions": [
+    {
+      "finding_id": "SEC-01",
+      "decision": "fix",
+      "owner": "accountable integration owner",
+      "rationale": "Dynamic untrusted HTML is a required blocker with direct script-capable markup impact.",
+      "verification": "npm run review:security passed at the remediation SHA with hostile-note escaping assertions.",
+      "residual_risk": "Rich HTML notes are intentionally unsupported; all note content is rendered as plain text."
+    },
+    {
+      "finding_id": "SEC-02",
+      "decision": "fix",
+      "owner": "accountable integration owner",
+      "rationale": "Privileged authorization and evidence must be enforced at the service trust boundary.",
+      "verification": "npm run review:security passed structured NOT_AUTHORIZED and MISSING_EVIDENCE assertions.",
+      "residual_risk": "The browser service is a simulation; a production backend must enforce the same policy server-side."
+    },
+    {
+      "finding_id": "A11Y-01",
+      "decision": "fix",
+      "owner": "accountable integration owner",
+      "rationale": "Mouse-only selection prevents keyboard completion and is a required accessibility blocker.",
+      "verification": "npm run review:accessibility passed native button and aria-pressed keyboard contract assertions.",
+      "residual_risk": "No known keyboard-selection risk remains in the scoped queue interaction."
+    },
+    {
+      "finding_id": "PERF-01",
+      "decision": "fix",
+      "owner": "accountable integration owner",
+      "rationale": "The measured synchronous loop exceeded the protected budget and produced an incorrect score.",
+      "verification": "npm run review:performance passed and the comparable benchmark improved from 106.914 ms to 0.022 ms.",
+      "residual_risk": "Benchmark timings vary by host, but the algorithmic loop was removed and protected threshold passed."
+    },
+    {
+      "finding_id": "TEST-01",
+      "decision": "fix",
+      "owner": "accountable integration owner",
+      "rationale": "Browser globals and real time made the critical approval boundary nondeterministic and unverifiable.",
+      "verification": "npm run review:testability passed injected-wait and platform-neutral source assertions.",
+      "residual_risk": "The default timer remains asynchronous by design; tests use the supported injected dependency."
+    }
+  ]
+}

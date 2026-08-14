@@ -1,0 +1,72 @@
+
+> nfr-swarm-app@0.1.0 review:security
+> node ./scripts/run-specialist-check.mjs security
+
+Reviewed SHA: d41347c7a0249193e53a06d0c7717e361216ab89
+Specialist: security
+
+ RUN  v4.1.10 /Users/codewalnut/Projects/agentic engineering/agentic-engineering-full-exercises-set/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app
+
+ ❯ acceptance/security.review.test.tsx (3 tests | 3 failed) 6ms
+     × renders an untrusted request note as text 4ms
+     × rejects incomplete privileged evidence at the service boundary 2ms
+     × rejects an actor without privileged approval permission 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  acceptance/security.review.test.tsx > security specialist gate > renders an untrusted request note as text
+AssertionError: expected '<div class="request-note"><img src=x …' not to contain '<img'
+
+Expected: "<img"
+Received: "<div class="request-note"><img src=x onerror="alert(1)"><strong>urgent</strong></div>"
+
+ ❯ acceptance/security.review.test.tsx:18:24
+     16|     const hostile = '<img src=x onerror="alert(1)"><strong>urgent</str…
+     17|     const markup = renderToStaticMarkup(<ReviewNote note={hostile} />);
+     18|     expect(markup).not.toContain("<img");
+       |                        ^
+     19|     expect(markup).not.toContain("<strong>");
+     20|     expect(markup).toContain("&lt;img");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  acceptance/security.review.test.tsx > security specialist gate > rejects incomplete privileged evidence at the service boundary
+AssertionError: expected ReferenceError: window is not defined to match object { code: 'MISSING_EVIDENCE' }
+
+- Expected
++ Received
+
+- {
+-   "code": "MISSING_EVIDENCE",
++ ReferenceError {
++   "message": "window is not defined",
+  }
+
+ ❯ acceptance/security.review.test.tsx:24:90
+     22|
+     23|   it("rejects incomplete privileged evidence at the service boundary",…
+     24|     await expect(approveAccessReview(accessReviews[0], authorizedActor…
+       |                                                                                          ^
+     25|       code: "MISSING_EVIDENCE",
+     26|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  acceptance/security.review.test.tsx > security specialist gate > rejects an actor without privileged approval permission
+AssertionError: The instanceof assertion needs a constructor but undefined was given.
+ ❯ acceptance/security.review.test.tsx:31:92
+     29|   it("rejects an actor without privileged approval permission", async …
+     30|     const unauthorizedActor: ApprovalActor = { id: "operator-2", canAp…
+     31|     await expect(approveAccessReview(accessReviews[2], unauthorizedAct…
+       |                                                                                            ^
+     32|     await expect(approveAccessReview(accessReviews[2], unauthorizedAct…
+     33|       code: "NOT_AUTHORIZED",
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed (3)
+   Start at  22:05:13
+   Duration  85ms (transform 16ms, setup 0ms, import 29ms, tests 6ms, environment 0ms)
+

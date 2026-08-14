@@ -1,0 +1,128 @@
+diff --git a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/App.tsx b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/App.tsx
+index 2ae8e16..08d072e 100644
+--- a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/App.tsx	
++++ b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/App.tsx	
+@@ -1,43 +1,43 @@
+ import { useState } from "react";
+-import { accessReviews, type AccessReview } from "./data/accessReviews";
++import { AccessReviewQueue } from "./components/AccessReviewQueue";
++import { ReviewNote } from "./components/ReviewNote";
++import { accessReviews } from "./data/accessReviews";
+ import { approveAccessReview } from "./services/accessReviewApi";
++import { calculatePortfolioRisk } from "./utils/accessReviewRisk";
+ import "./styles.css";
+ 
+-function calculatePortfolioRisk(items: AccessReview[]) {
+-  let score = 0;
+-  for (let pass = 0; pass < 150_000; pass += 1) {
+-    score = items.reduce((total, item) => total + item.risk + (item.privileged ? 20 : 0), pass % 7);
+-  }
+-  return Math.round(score / Math.max(items.length, 1));
+-}
+-
+ export default function App() {
+   const [reviews, setReviews] = useState(accessReviews);
+   const [selectedId, setSelectedId] = useState(reviews[0].id);
++  const [error, setError] = useState("");
+   const selected = reviews.find((item) => item.id === selectedId) ?? reviews[0];
+   const portfolioRisk = calculatePortfolioRisk(reviews);
+ 
+   async function approve() {
+-    const updated = await approveAccessReview(selected);
+-    setReviews((items) => items.map((item) => item.id === updated.id ? updated : item));
++    setError("");
++    try {
++      const updated = await approveAccessReview(selected);
++      setReviews((items) => items.map((item) => item.id === updated.id ? updated : item));
++    } catch (cause) {
++      setError(cause instanceof Error ? cause.message : "Approval failed");
++    }
+   }
+ 
+   return (
+     <main className="review-shell">
+-      <header><p className="eyebrow">Identity Operations</p><h1>Access review queue</h1><p>Portfolio risk: {portfolioRisk}</p></header>
++      <header>
++        <p className="eyebrow">Identity Operations</p>
++        <h1>Access review queue</h1>
++        <p>Portfolio risk: {portfolioRisk}</p>
++      </header>
+       <div className="review-grid">
+-        <section className="queue" aria-label="Access reviews">
+-          {reviews.map((item) => (
+-            <div className={item.id === selected.id ? "queue-row selected" : "queue-row"} onClick={() => setSelectedId(item.id)} key={item.id}>
+-              <strong>{item.requester}</strong><span>{item.resource}</span><small>{item.status}</small>
+-            </div>
+-          ))}
+-        </section>
++        <AccessReviewQueue reviews={reviews} selectedId={selected.id} onSelect={setSelectedId} />
+         <section className="detail">
+           <h2>{selected.resource}</h2>
+           <p>Requested by {selected.requester}</p>
+-          <div className="request-note" dangerouslySetInnerHTML={{ __html: selected.note }} />
+-          <button onClick={() => void approve()}>Approve access</button>
++          <ReviewNote note={selected.note} />
++          <button onClick={() => void approve()} type="button">Approve access</button>
++          {error ? <p role="alert">{error}</p> : null}
+         </section>
+       </div>
+     </main>
+diff --git a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/AccessReviewQueue.tsx b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/AccessReviewQueue.tsx
+new file mode 100644
+index 0000000..2e5d28d
+--- /dev/null
++++ b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/AccessReviewQueue.tsx	
+@@ -0,0 +1,25 @@
++import type { AccessReview } from "../data/accessReviews";
++
++interface AccessReviewQueueProps {
++  reviews: AccessReview[];
++  selectedId: string;
++  onSelect: (id: string) => void;
++}
++
++export function AccessReviewQueue({ reviews, selectedId, onSelect }: AccessReviewQueueProps) {
++  return (
++    <section className="queue" aria-label="Access reviews">
++      {reviews.map((item) => (
++        <div
++          className={item.id === selectedId ? "queue-row selected" : "queue-row"}
++          onClick={() => onSelect(item.id)}
++          key={item.id}
++        >
++          <strong>{item.requester}</strong>
++          <span>{item.resource}</span>
++          <small>{item.status}</small>
++        </div>
++      ))}
++    </section>
++  );
++}
+diff --git a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/ReviewNote.tsx b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/ReviewNote.tsx
+new file mode 100644
+index 0000000..c1feaa5
+--- /dev/null
++++ b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/components/ReviewNote.tsx	
+@@ -0,0 +1,7 @@
++interface ReviewNoteProps {
++  note: string;
++}
++
++export function ReviewNote({ note }: ReviewNoteProps) {
++  return <div className="request-note" dangerouslySetInnerHTML={{ __html: note }} />;
++}
+diff --git a/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/utils/accessReviewRisk.ts b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/utils/accessReviewRisk.ts
+new file mode 100644
+index 0000000..6aa1576
+--- /dev/null
++++ b/06 Multi-Agent Workflows/exercise-02-specialist-subagent-nfr-review/nfr-swarm-app/src/utils/accessReviewRisk.ts	
+@@ -0,0 +1,9 @@
++import type { AccessReview } from "../data/accessReviews";
++
++export function calculatePortfolioRisk(items: AccessReview[]) {
++  let score = 0;
++  for (let pass = 0; pass < 150_000; pass += 1) {
++    score = items.reduce((total, item) => total + item.risk + (item.privileged ? 20 : 0), pass % 7);
++  }
++  return Math.round(score / Math.max(items.length, 1));
++}
