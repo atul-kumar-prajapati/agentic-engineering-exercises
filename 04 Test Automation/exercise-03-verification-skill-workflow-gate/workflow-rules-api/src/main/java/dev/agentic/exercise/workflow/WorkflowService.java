@@ -19,9 +19,17 @@ public class WorkflowService {
     WorkflowItem item = repository.findById(id)
         .orElseThrow(() -> new WorkflowNotFoundException(id));
 
-    if ("Ready".equals(decision.status()) && decision.evidenceNote().length() < 12) {
-      throw new InvalidWorkflowDecisionException("Ready decisions require a longer evidence note");
-    }
+    String decisionState = switch (decision.status()) {
+      case "Blocked" -> "needs-evidence";
+      case "Ready" -> {
+        if (decision.evidenceNote().length() < 12) {
+          throw new InvalidWorkflowDecisionException("Ready decisions require a longer evidence note");
+        }
+        yield "accepted";
+      }
+      default -> throw new InvalidWorkflowDecisionException(
+          "Unsupported workflow transition: " + decision.status());
+    };
 
     return repository.save(new WorkflowItem(
         item.id(),
@@ -29,6 +37,7 @@ public class WorkflowService {
         decision.status(),
         item.score(),
         decision.owner(),
-        decision.evidenceNote()));
+        decision.evidenceNote(),
+        decisionState));
   }
 }

@@ -8,9 +8,12 @@ export interface ContractWorkflow {
   decisionState: string;
 }
 
-// Seeded previous-agent shortcut: a TypeScript assertion does not validate a
-// provider response at runtime.
 export function parseWorkflowResponse(value: unknown): ContractWorkflow {
+  if (typeof value !== "object" || value === null || !("decisionState" in value)
+      || typeof value.decisionState !== "string") {
+    throw new Error("Workflow response is missing decisionState");
+  }
+
   return value as ContractWorkflow;
 }
 

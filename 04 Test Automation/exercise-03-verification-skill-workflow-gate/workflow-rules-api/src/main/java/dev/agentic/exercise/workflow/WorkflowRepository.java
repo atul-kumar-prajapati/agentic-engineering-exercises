@@ -16,9 +16,12 @@ public class WorkflowRepository {
 
   public void reset() {
     items.clear();
-    items.put("wf-101", new WorkflowItem("wf-101", "Atlas Co", "Blocked", 91, "Asha", "Evidence missing"));
-    items.put("wf-102", new WorkflowItem("wf-102", "Brightline", "In Review", 74, "Mateo", "Waiting on approval"));
-    items.put("wf-103", new WorkflowItem("wf-103", "Cedar Labs", "Ready", 48, "Rina", "Ready for release"));
+    items.put("wf-101", new WorkflowItem(
+        "wf-101", "Atlas Co", "Blocked", 91, "Asha", "Evidence missing", "needs-evidence"));
+    items.put("wf-102", new WorkflowItem(
+        "wf-102", "Brightline", "In Review", 74, "Mateo", "Waiting on approval", "pending"));
+    items.put("wf-103", new WorkflowItem(
+        "wf-103", "Cedar Labs", "Ready", 48, "Rina", "Ready for release", "accepted"));
   }
 
   public Collection<WorkflowItem> findAll() {

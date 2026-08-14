@@ -6,5 +6,6 @@ public record WorkflowItem(
     String status,
     int score,
     String owner,
-    String note) {
+    String note,
+    String decisionState) {
 }
