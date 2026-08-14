@@ -2,7 +2,7 @@ diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-pla
 new file mode 100644
 index 0000000..9815688
 --- /dev/null
-+++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json	
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json
 @@ -0,0 +1,85 @@
 +{
 +  "schemaVersion": 1,
@@ -91,18 +91,18 @@ index 0000000..9815688
 +}
 diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md
 index 75c8349..dccd57d 100644
---- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md	
-+++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md	
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md
 @@ -1,9 +1,12 @@
  # Agent Board Seed
- 
+
 -| Card | State | Area | Risk |
 -|---|---|---|---|
 -| ESC-118 | needs-info | schedules | medium |
 -| ESC-120 | ready-for-agent | severity | high |
 -| ESC-121 | ready-for-human | exports | high |
 +The canonical structured board is [agent-board.json](./agent-board.json). The application copy must remain identical.
- 
+
 -The board is incomplete until ownership, commands, and merge order are filled.
 +| Card | Seed state | Unsafe condition |
 +|---|---|---|
@@ -116,7 +116,7 @@ diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-pla
 new file mode 100644
 index 0000000..47eec07
 --- /dev/null
-+++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md	
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md
 @@ -0,0 +1,10 @@
 +# Integration Log Seed
 +
@@ -132,7 +132,7 @@ diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-pla
 new file mode 100644
 index 0000000..e26b9ad
 --- /dev/null
-+++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md	
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md
 @@ -0,0 +1,10 @@
 +# Ownership Map Seed
 +
@@ -148,7 +148,7 @@ diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-pla
 new file mode 100644
 index 0000000..9815688
 --- /dev/null
-+++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json	
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json
 @@ -0,0 +1,85 @@
 +{
 +  "schemaVersion": 1,

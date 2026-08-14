@@ -1,7 +1,7 @@
 diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json
 index 9815688..1d0dcaa 100644
---- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json	
-+++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json	
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json
 @@ -10,7 +10,7 @@
        "owner": "unassigned",
        "reviewer": "support-platform",
@@ -50,15 +50,15 @@ index 9815688..1d0dcaa 100644
        "verificationCommand": "not run",
 diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md
 index dccd57d..d1f4a4f 100644
---- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md	
-+++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md	
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md
 @@ -1,12 +1,12 @@
 -# Agent Board Seed
 +# Final Agent Board
- 
+
 -The canonical structured board is [agent-board.json](./agent-board.json). The application copy must remain identical.
 +The canonical structured board is [agent-board.json](./agent-board.json), and the application mirror is synchronized with it. There are no active reservations after integration.
- 
+
 -| Card | Seed state | Unsafe condition |
 +| Card | Final state | Assignment and control decision |
  |---|---|---|
@@ -70,17 +70,17 @@ index dccd57d..d1f4a4f 100644
 +| ESC-120 | merged | The severity-agent lane passed review and verification; its three owned paths were released after the no-ff merge. |
 +| ESC-122 | blocked | Unassigned. The shared paths were released and `RULE-ESC-122` remains the only blocker. |
 +| ESC-121 | cancelled | Unassigned. `exportApi.ts` was released while the cancellation and unsafe-fixture history remain visible. |
- 
+
 -The final board keeps unsafe work visible, marks ESC-120 merged, releases every reservation, and records the full transition history.
 +ESC-120 retains its full `incoming` → `triaged` → `ready-for-agent` → `in-progress` → `in-review` → `merged` history. The other cards retain their original terminal or waiting histories without being reopened.
 diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md
 index 47eec07..dd238ec 100644
---- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md	
-+++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md	
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md
 @@ -1,10 +1,12 @@
 -# Integration Log Seed
 +# Integration Log
- 
+
 -| Sequence | Card | Control decision |
 -|---:|---|---|
 -| 0 | ESC-118 | Keep needs-info and release its invalid reservation. |
@@ -101,12 +101,12 @@ index 47eec07..dd238ec 100644
 +- Rollback order: revert merge commit `d47a1a7de5152336f40f1b55a37d7d0fef57586a`; then restore the pre-integration control records if rollback is approved.
 diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md
 index e26b9ad..3162ded 100644
---- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md	
-+++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md	
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md
 @@ -1,10 +1,13 @@
 -# Ownership Map Seed
 +# Final Ownership Map
- 
+
 -| Requested path | Active reservation | Waiting card | Required action |
 +There are no active reservations. Requested paths remain on the cards for audit history, but waiting, blocked, merged, and cancelled work owns no file reservation.
 +
@@ -121,17 +121,17 @@ index e26b9ad..3162ded 100644
 +| `tests/esc-120/` | ESC-120 | none | Released after the regression test was reviewed and merged. |
 +| `src/services/workflowApi.ts` | ESC-118 | none | Released until `REPRO-118` supplies deterministic evidence. |
 +| `src/services/exportApi.ts` | ESC-121 | none | Released because ESC-121 is cancelled; unsafe input was not used. |
- 
+
 -After integration, no card owns an active reservation. ESC-122 still requests the scoring paths but remains blocked by `RULE-ESC-122`.
 +ESC-118, ESC-120, ESC-121, and ESC-122 remain visible, while exclusive ownership has ended cleanly for the completed lane.
 diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/components/SeverityBadge.tsx b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/components/SeverityBadge.tsx
 index 978f14e..d10d0c7 100644
---- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/components/SeverityBadge.tsx	
-+++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/components/SeverityBadge.tsx	
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/components/SeverityBadge.tsx
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/components/SeverityBadge.tsx
 @@ -1,6 +1,12 @@
  import type { Incident } from "../data/incidents";
 +import { calculateSeverity } from "../utils/scoring";
- 
+
  export function SeverityBadge({ incident }: { incident: Incident }) {
 -  // Seeded ESC-120 defect: the UI bypasses the scoring rule.
 -  return <span className="severity-badge" data-severity={incident.declaredSeverity}>{incident.declaredSeverity}</span>;
@@ -145,8 +145,8 @@ index 978f14e..d10d0c7 100644
  }
 diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json
 index 9815688..1d0dcaa 100644
---- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json	
-+++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json	
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json
 @@ -10,7 +10,7 @@
        "owner": "unassigned",
        "reviewer": "support-platform",
@@ -195,11 +195,11 @@ index 9815688..1d0dcaa 100644
        "verificationCommand": "not run",
 diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/utils/scoring.ts b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/utils/scoring.ts
 index d52492d..33032f3 100644
---- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/utils/scoring.ts	
-+++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/utils/scoring.ts	
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/utils/scoring.ts
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/utils/scoring.ts
 @@ -1,6 +1,21 @@
  import type { Incident, Severity } from "../data/incidents";
- 
+
 +const severityRank: Record<Severity, number> = {
 +  Low: 0,
 +  Medium: 1,
@@ -224,7 +224,7 @@ diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-pla
 new file mode 100644
 index 0000000..3fbab93
 --- /dev/null
-+++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/tests/esc-120/inherited-severity.test.tsx	
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/tests/esc-120/inherited-severity.test.tsx
 @@ -0,0 +1,37 @@
 +import { renderToStaticMarkup } from "react-dom/server";
 +import { describe, expect, it } from "vitest";
