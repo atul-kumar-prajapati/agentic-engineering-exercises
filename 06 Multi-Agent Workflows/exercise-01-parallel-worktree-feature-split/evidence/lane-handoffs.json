@@ -1,0 +1,56 @@
+[
+  {
+    "lane": "A",
+    "feature": "saved High-priority Blocked filter preset",
+    "baseSha": "f714944e792ad1107695a343d630b080eb4e43a9",
+    "branch": "codex/exercise-06-01-lane-a-saved-filters",
+    "worktree": "/private/tmp/codex-ex06-lane-a",
+    "commitSha": "95d951783312db7ab1e552c0629cd906086fc10d",
+    "integratedCommitSha": "e08254db2d8121de604b0b4d8d345fb1b764b816",
+    "ownedPaths": [
+      "src/components/FilterBar.tsx",
+      "src/utils/filters.ts",
+      "src/utils/filters.test.mjs"
+    ],
+    "command": "node --experimental-strip-types --test src/utils/filters.test.mjs",
+    "result": "passed: 1/1",
+    "rollback": "git revert 95d951783312db7ab1e552c0629cd906086fc10d",
+    "sharedTypeRequest": "Promote FilterPreset to src/types.ts during integration"
+  },
+  {
+    "lane": "B",
+    "feature": "due-today SLA risk indicator",
+    "baseSha": "f714944e792ad1107695a343d630b080eb4e43a9",
+    "branch": "codex/exercise-06-01-lane-b-sla-risk",
+    "worktree": "/private/tmp/codex-ex06-lane-b",
+    "commitSha": "32daa1480474f045e9e1d34f9c41cd6431645cc9",
+    "integratedCommitSha": "e1158cfc7ffbc4743ba9259834e5ac4a6312703f",
+    "ownedPaths": [
+      "src/components/MetricStrip.tsx",
+      "src/utils/scoring.ts",
+      "src/utils/scoring.test.mjs"
+    ],
+    "command": "node --experimental-strip-types --test src/utils/scoring.test.mjs",
+    "result": "passed: 2/2",
+    "rollback": "git revert 32daa1480474f045e9e1d34f9c41cd6431645cc9",
+    "sharedTypeRequest": "none"
+  },
+  {
+    "lane": "C",
+    "feature": "JSON evidence bundle export",
+    "baseSha": "f714944e792ad1107695a343d630b080eb4e43a9",
+    "branch": "codex/exercise-06-01-lane-c-evidence-export",
+    "worktree": "/private/tmp/codex-ex06-lane-c",
+    "commitSha": "4bfe29dc0abcf83d470b662bb83bd100340d1910",
+    "integratedCommitSha": "122dddaaa9e06dda4a7776762994af0d8a6c3df3",
+    "ownedPaths": [
+      "src/components/EvidencePanel.tsx",
+      "src/services/workflowApi.ts",
+      "src/services/workflowApi.evidence.test.mjs"
+    ],
+    "command": "node src/services/workflowApi.evidence.test.mjs",
+    "result": "passed: evidence export contract",
+    "rollback": "git revert 4bfe29dc0abcf83d470b662bb83bd100340d1910",
+    "sharedTypeRequest": "Promote EvidenceBundle to src/types.ts during integration"
+  }
+]
