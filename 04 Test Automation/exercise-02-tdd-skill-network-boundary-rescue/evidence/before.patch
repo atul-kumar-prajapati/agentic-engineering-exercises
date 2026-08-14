@@ -1,0 +1,169 @@
+diff --git a/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.network.test.tsx b/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.network.test.tsx
+new file mode 100644
+index 0000000..afa8247
+--- /dev/null
++++ b/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.network.test.tsx	
+@@ -0,0 +1,125 @@
++import { render, screen } from "@testing-library/react";
++import userEvent from "@testing-library/user-event";
++import { delay, http, HttpResponse } from "msw";
++import { describe, expect, it } from "vitest";
++import App from "./App";
++import { server } from "./test/server";
++
++describe("case dashboard network states", () => {
++  it("announces loading while GET /api/cases is pending", () => {
++    server.use(
++      http.get("/api/cases", async () => {
++        await delay("infinite");
++        return HttpResponse.json([]);
++      }),
++    );
++
++    render(<App />);
++
++    expect(screen.getByRole("status")).toHaveTextContent("Loading cases...");
++  });
++
++  it("shows a filtered-empty message without sending another request", async () => {
++    const user = userEvent.setup();
++    let requests = 0;
++    server.use(
++      http.get("/api/cases", () => {
++        requests += 1;
++        return HttpResponse.json([
++          {
++            id: "CASE-104",
++            customer: "Northstar Health",
++            owner: "billing",
++            summary: "Invoice export is blocked",
++            status: "investigating",
++          },
++        ]);
++      }),
++    );
++
++    render(<App />);
++    await screen.findByText("Northstar Health");
++
++    await user.type(screen.getByRole("textbox", { name: "Filter cases" }), "unknown customer");
++
++    expect(screen.getByText('No cases match "unknown customer".')).toBeInTheDocument();
++    expect(screen.queryByText("No cases are assigned yet.")).not.toBeInTheDocument();
++    expect(requests).toBe(1);
++  });
++
++  it("shows case details returned by GET /api/cases", async () => {
++    server.use(
++      http.get("/api/cases", () =>
++        HttpResponse.json([
++          {
++            id: "CASE-104",
++            customer: "Northstar Health",
++            owner: "billing",
++            summary: "Invoice export is blocked",
++            status: "investigating",
++          },
++        ]),
++      ),
++    );
++
++    render(<App />);
++
++    expect(await screen.findByText("Northstar Health")).toBeInTheDocument();
++    expect(screen.getByText("Invoice export is blocked")).toBeInTheDocument();
++    expect(screen.getByText(/CASE-104/)).toBeInTheDocument();
++  });
++
++  it("shows the server-empty message for an empty response", async () => {
++    server.use(http.get("/api/cases", () => HttpResponse.json([])));
++
++    render(<App />);
++
++    expect(await screen.findByText("No cases are assigned yet.")).toBeInTheDocument();
++    expect(screen.queryByRole("list", { name: "Cases" })).not.toBeInTheDocument();
++  });
++
++  it("shows an alert and Retry action when the request fails", async () => {
++    server.use(
++      http.get("/api/cases", () =>
++        HttpResponse.json({ message: "unavailable" }, { status: 503 }),
++      ),
++    );
++
++    render(<App />);
++
++    expect(await screen.findByRole("alert")).toHaveTextContent("We could not load cases");
++    expect(screen.getByRole("button", { name: "Retry" })).toBeInTheDocument();
++  });
++
++  it("sends exactly one retry request and recovers", async () => {
++    const user = userEvent.setup();
++    let requests = 0;
++    server.use(
++      http.get("/api/cases", async () => {
++        requests += 1;
++        if (requests === 1) {
++          return HttpResponse.json({ message: "temporary" }, { status: 503 });
++        }
++        await delay(50);
++        return HttpResponse.json([
++          {
++            id: "CASE-220",
++            customer: "Recovered Co",
++            owner: "support",
++            summary: "Retry worked",
++            status: "new",
++          },
++        ]);
++      }),
++    );
++
++    render(<App />);
++    await screen.findByRole("alert");
++
++    await user.click(screen.getByRole("button", { name: "Retry" }));
++
++    expect(screen.getByRole("status")).toHaveTextContent("Loading cases...");
++    expect(await screen.findByText("Recovered Co")).toBeInTheDocument();
++    expect(requests).toBe(2);
++  });
++});
+diff --git a/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.tsx b/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.tsx
+index a9205b1..a6e21a7 100644
+--- a/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.tsx	
++++ b/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/App.tsx	
+@@ -39,10 +39,10 @@ export default function App() {
+       <header><p className="eyebrow">Support Operations</p><h1>Case dashboard</h1></header>
+       <label className="search-label">Filter cases<input aria-label="Filter cases" value={query} onChange={(event) => setQuery(event.target.value)} /></label>
+ 
+-      {cases === null && !error && null}
+-      {error && <section role="alert"><p>We could not load cases. {error}</p><button onClick={() => setError("")}>Retry</button></section>}
++      {cases === null && !error && <p role="status">Loading cases...</p>}
++      {error && <section role="alert"><p>We could not load cases. {error}</p><button onClick={() => void loadCases()}>Retry</button></section>}
+       {cases?.length === 0 && <p>No cases are assigned yet.</p>}
+-      {cases && cases.length > 0 && filteredCases.length === 0 && <p>No cases are assigned yet.</p>}
++      {cases && cases.length > 0 && filteredCases.length === 0 && <p>No cases match "{query}".</p>}
+       {filteredCases.length > 0 && (
+         <ul className="case-list" aria-label="Cases">
+           {filteredCases.map((item) => (
+diff --git a/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/test/setup.ts b/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/test/setup.ts
+index e0c7a7b..568adce 100644
+--- a/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/test/setup.ts	
++++ b/04 Test Automation/exercise-02-tdd-skill-network-boundary-rescue/case-dashboard-app/src/test/setup.ts	
+@@ -1,8 +1,11 @@
+ import "@testing-library/jest-dom/vitest";
+-import { afterAll, beforeAll } from "vitest";
++import { cleanup } from "@testing-library/react";
++import { afterAll, afterEach, beforeAll } from "vitest";
+ import { server } from "./server";
+ 
+-// Intentionally weak starter setup: learners must make unhandled requests fail
+-// and reset handlers after every test.
+-beforeAll(() => server.listen({ onUnhandledRequest: "warn" }));
++beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
++afterEach(() => {
++  server.resetHandlers();
++  cleanup();
++});
+ afterAll(() => server.close());
