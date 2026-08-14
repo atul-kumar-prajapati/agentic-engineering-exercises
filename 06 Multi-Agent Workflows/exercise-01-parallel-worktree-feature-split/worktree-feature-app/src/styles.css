@@ -95,7 +95,7 @@ button {
 .metric-strip {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   margin: 12px 0 18px;
 }
 
@@ -135,9 +135,33 @@ button {
   align-items: end;
   display: grid;
   gap: 12px;
-  grid-template-columns: 1.8fr 1fr 1fr;
+  grid-template-columns: auto 1.8fr 1fr 1fr;
   margin-bottom: 18px;
   padding: 14px;
+}
+
+.filter-bar > button {
+  background: #e8eef8;
+  border: 1px solid #b9c7dc;
+  border-radius: 8px;
+  color: #19415f;
+  font-weight: 800;
+  min-height: 40px;
+  padding: 8px 14px;
+}
+
+.filter-bar > button[aria-pressed="true"] {
+  background: #19415f;
+  color: #ffffff;
+}
+
+.empty-state {
+  background: #ffffff;
+  border: 1px dashed #a8b4c7;
+  border-radius: 8px;
+  color: #59647a;
+  padding: 24px;
+  text-align: center;
 }
 
 label {

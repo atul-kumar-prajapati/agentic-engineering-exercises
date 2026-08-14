@@ -1,15 +1,9 @@
-import type { Priority, WorkItem, WorkflowStatus } from "../types";
+import type { FilterPreset, Priority, WorkItem, WorkflowStatus } from "../types";
 
 export interface Filters {
   query: string;
   priority: Priority | "All";
   status: WorkflowStatus | "All";
-}
-
-export interface FilterPreset {
-  id: string;
-  label: string;
-  filters: Pick<Filters, "priority" | "status">;
 }
 
 export const HIGH_PRIORITY_BLOCKED_PRESET: FilterPreset = {

@@ -1,15 +1,6 @@
-import type { ActionDraft, WorkItem } from "../types";
+import type { ActionDraft, EvidenceBundle, WorkItem } from "../types";
 import { workItems } from "../data/workItems";
 import { calculateRisk } from "../utils/scoring";
-
-// Lane-local until the integration owner adds EvidenceBundle to src/types.ts.
-export interface EvidenceBundle {
-  id: string;
-  owner: string;
-  status: WorkItem["status"];
-  calculatedRisk: number;
-  evidence: string[];
-}
 
 const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
