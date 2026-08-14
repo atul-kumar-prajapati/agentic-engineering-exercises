@@ -3,5 +3,5 @@ interface ReviewNoteProps {
 }
 
 export function ReviewNote({ note }: ReviewNoteProps) {
-  return <div className="request-note" dangerouslySetInnerHTML={{ __html: note }} />;
+  return <div className="request-note">{note}</div>;
 }

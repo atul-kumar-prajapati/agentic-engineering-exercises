@@ -10,15 +10,17 @@ export function AccessReviewQueue({ reviews, selectedId, onSelect }: AccessRevie
   return (
     <section className="queue" aria-label="Access reviews">
       {reviews.map((item) => (
-        <div
+        <button
+          aria-pressed={item.id === selectedId}
           className={item.id === selectedId ? "queue-row selected" : "queue-row"}
           onClick={() => onSelect(item.id)}
           key={item.id}
+          type="button"
         >
           <strong>{item.requester}</strong>
           <span>{item.resource}</span>
           <small>{item.status}</small>
-        </div>
+        </button>
       ))}
     </section>
   );
