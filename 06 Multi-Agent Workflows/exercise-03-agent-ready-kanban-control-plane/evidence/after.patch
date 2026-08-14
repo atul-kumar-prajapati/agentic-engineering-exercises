@@ -1,0 +1,265 @@
+diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json
+index 9815688..1d0dcaa 100644
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json	
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json	
+@@ -10,7 +10,7 @@
+       "owner": "unassigned",
+       "reviewer": "support-platform",
+       "requestedPaths": ["src/services/workflowApi.ts"],
+-      "reservedPaths": ["src/services/workflowApi.ts"],
++      "reservedPaths": [],
+       "blockedBy": ["REPRO-118"],
+       "collisionRule": "No reservation or agent assignment until reproduction evidence exists.",
+       "verificationCommand": "not available",
+@@ -24,13 +24,13 @@
+     {
+       "id": "ESC-120",
+       "title": "Preserve inherited incident severity",
+-      "state": "ready-for-agent",
+-      "stateHistory": ["incoming", "triaged", "ready-for-agent"],
++      "state": "merged",
++      "stateHistory": ["incoming", "triaged", "ready-for-agent", "in-progress", "in-review", "merged"],
+       "evidence": "INC-120-C is declared Low but inherits Critical severity from INC-120-P.",
+       "owner": "severity-agent",
+       "reviewer": "risk-owner",
+       "requestedPaths": ["src/utils/scoring.ts", "src/components/SeverityBadge.tsx", "tests/esc-120/"],
+-      "reservedPaths": ["src/utils/scoring.ts", "src/components/SeverityBadge.tsx", "tests/esc-120/"],
++      "reservedPaths": [],
+       "blockedBy": [],
+       "collisionRule": "Exclusive reservation while the lane is active; release after merge or rejection.",
+       "verificationCommand": "npm run feature:verify",
+@@ -50,8 +50,8 @@
+       "owner": "unassigned",
+       "reviewer": "risk-owner",
+       "requestedPaths": ["src/utils/scoring.ts", "src/components/SeverityBadge.tsx"],
+-      "reservedPaths": ["src/utils/scoring.ts"],
+-      "blockedBy": ["ESC-120", "RULE-ESC-122"],
++      "reservedPaths": [],
++      "blockedBy": ["RULE-ESC-122"],
+       "collisionRule": "Do not reserve shared paths until ESC-120 releases them and the product rule is approved.",
+       "verificationCommand": "not available",
+       "acceptanceCriteria": ["An approved boost and cap are documented before implementation."],
+@@ -70,7 +70,7 @@
+       "owner": "unassigned",
+       "reviewer": "security-owner",
+       "requestedPaths": ["src/services/exportApi.ts"],
+-      "reservedPaths": ["src/services/exportApi.ts"],
++      "reservedPaths": [],
+       "blockedBy": [],
+       "collisionRule": "Cancelled cards cannot own paths, branches, worktrees, or commits.",
+       "verificationCommand": "not run",
+diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md
+index dccd57d..d1f4a4f 100644
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md	
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md	
+@@ -1,12 +1,12 @@
+-# Agent Board Seed
++# Final Agent Board
+ 
+-The canonical structured board is [agent-board.json](./agent-board.json). The application copy must remain identical.
++The canonical structured board is [agent-board.json](./agent-board.json), and the application mirror is synchronized with it. There are no active reservations after integration.
+ 
+-| Card | Seed state | Unsafe condition |
++| Card | Final state | Assignment and control decision |
+ |---|---|---|
+-| ESC-118 | needs-info | Holds `workflowApi.ts` without a reproduction. |
+-| ESC-120 | ready-for-agent | Correctly reserves the inherited-severity lane. |
+-| ESC-122 | blocked | Illegally reserves `scoring.ts` while waiting. |
+-| ESC-121 | cancelled | Still reserves `exportApi.ts` after cancellation. |
++| ESC-118 | needs-info | Unassigned. `REPRO-118` is still required, so `workflowApi.ts` was released. |
++| ESC-120 | merged | The severity-agent lane passed review and verification; its three owned paths were released after the no-ff merge. |
++| ESC-122 | blocked | Unassigned. The shared paths were released and `RULE-ESC-122` remains the only blocker. |
++| ESC-121 | cancelled | Unassigned. `exportApi.ts` was released while the cancellation and unsafe-fixture history remain visible. |
+ 
+-The final board keeps unsafe work visible, marks ESC-120 merged, releases every reservation, and records the full transition history.
++ESC-120 retains its full `incoming` → `triaged` → `ready-for-agent` → `in-progress` → `in-review` → `merged` history. The other cards retain their original terminal or waiting histories without being reopened.
+diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md
+index 47eec07..dd238ec 100644
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md	
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md	
+@@ -1,10 +1,12 @@
+-# Integration Log Seed
++# Integration Log
+ 
+-| Sequence | Card | Control decision |
+-|---:|---|---|
+-| 0 | ESC-118 | Keep needs-info and release its invalid reservation. |
+-| 1 | ESC-121 | Preserve cancellation and release its invalid reservation. |
+-| 2 | ESC-122 | Keep blocked, release its collision, and retain `RULE-ESC-122`. |
+-| 3 | ESC-120 | Run the only agent-ready lane, review its exact commit, and integrate only if its focused check passes. |
+-
+-Replace this seed with the actual base SHA, lane commit, reviewer decision, merge commit, command evidence, reservation releases, remaining blockers, final decision, and rollback order.
++- Base SHA: `3761a42840cbbc4ee9143ecc914519b4f8c6cc0c` from `upstream/main`.
++- Lane commit: `f9ca1b9a7f2c62c1a8f476b533ed5a26b4cc6c55` on `lane/esc-120-inherited-severity`.
++- Reviewer: `risk-owner`; decision: accept the exact lane commit after scope, protected-input, behavior, and feature command review.
++- Feature command: `npm run feature:verify` passed 2 files and 5 tests at the reviewed lane SHA.
++- Merge commit: `d47a1a7de5152336f40f1b55a37d7d0fef57586a`, created with `--no-ff` from the recorded base.
++- Reservation releases: ESC-118 released `workflowApi.ts`; ESC-121 released `exportApi.ts`; ESC-122 released the colliding scoring path; ESC-120 released all lane paths after merge.
++- Remaining blocker: ESC-122 is still blocked only by `RULE-ESC-122`; no product rule was invented.
++- Board command: `npm run board:verify` is required against the following control commit and its captured output is recorded in evidence.
++- Final decision: accept ESC-120 and leave ESC-118, ESC-121, and ESC-122 unassigned in their evidence-backed states.
++- Rollback order: revert merge commit `d47a1a7de5152336f40f1b55a37d7d0fef57586a`; then restore the pre-integration control records if rollback is approved.
+diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md
+index e26b9ad..3162ded 100644
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md	
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md	
+@@ -1,10 +1,13 @@
+-# Ownership Map Seed
++# Final Ownership Map
+ 
+-| Requested path | Active reservation | Waiting card | Required action |
++There are no active reservations. Requested paths remain on the cards for audit history, but waiting, blocked, merged, and cancelled work owns no file reservation.
++
++| Requested path | Historical requester | Final owner | Control decision |
+ |---|---|---|---|
+-| `src/utils/scoring.ts` | ESC-120 and ESC-122 | ESC-122 | Keep ESC-120 only; release ESC-122. |
+-| `src/components/SeverityBadge.tsx` | ESC-120 | ESC-122 | Release after ESC-120 integration. |
+-| `src/services/workflowApi.ts` | ESC-118 | ESC-118 | Release until reproduction exists. |
+-| `src/services/exportApi.ts` | ESC-121 | none | Release because the card is cancelled. |
++| `src/utils/scoring.ts` | ESC-120 and ESC-122 | none | ESC-120 was integrated and released; ESC-122 remains blocked by `RULE-ESC-122`. |
++| `src/components/SeverityBadge.tsx` | ESC-120 and ESC-122 | none | Released after the accepted ESC-120 merge; ESC-122 cannot reserve it. |
++| `tests/esc-120/` | ESC-120 | none | Released after the regression test was reviewed and merged. |
++| `src/services/workflowApi.ts` | ESC-118 | none | Released until `REPRO-118` supplies deterministic evidence. |
++| `src/services/exportApi.ts` | ESC-121 | none | Released because ESC-121 is cancelled; unsafe input was not used. |
+ 
+-After integration, no card owns an active reservation. ESC-122 still requests the scoring paths but remains blocked by `RULE-ESC-122`.
++ESC-118, ESC-120, ESC-121, and ESC-122 remain visible, while exclusive ownership has ended cleanly for the completed lane.
+diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/components/SeverityBadge.tsx b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/components/SeverityBadge.tsx
+index 978f14e..d10d0c7 100644
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/components/SeverityBadge.tsx	
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/components/SeverityBadge.tsx	
+@@ -1,6 +1,12 @@
+ import type { Incident } from "../data/incidents";
++import { calculateSeverity } from "../utils/scoring";
+ 
+ export function SeverityBadge({ incident }: { incident: Incident }) {
+-  // Seeded ESC-120 defect: the UI bypasses the scoring rule.
+-  return <span className="severity-badge" data-severity={incident.declaredSeverity}>{incident.declaredSeverity}</span>;
++  const severity = calculateSeverity(incident);
++
++  return (
++    <span className="severity-badge" data-severity={severity}>
++      {severity}
++    </span>
++  );
+ }
+diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json
+index 9815688..1d0dcaa 100644
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json	
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json	
+@@ -10,7 +10,7 @@
+       "owner": "unassigned",
+       "reviewer": "support-platform",
+       "requestedPaths": ["src/services/workflowApi.ts"],
+-      "reservedPaths": ["src/services/workflowApi.ts"],
++      "reservedPaths": [],
+       "blockedBy": ["REPRO-118"],
+       "collisionRule": "No reservation or agent assignment until reproduction evidence exists.",
+       "verificationCommand": "not available",
+@@ -24,13 +24,13 @@
+     {
+       "id": "ESC-120",
+       "title": "Preserve inherited incident severity",
+-      "state": "ready-for-agent",
+-      "stateHistory": ["incoming", "triaged", "ready-for-agent"],
++      "state": "merged",
++      "stateHistory": ["incoming", "triaged", "ready-for-agent", "in-progress", "in-review", "merged"],
+       "evidence": "INC-120-C is declared Low but inherits Critical severity from INC-120-P.",
+       "owner": "severity-agent",
+       "reviewer": "risk-owner",
+       "requestedPaths": ["src/utils/scoring.ts", "src/components/SeverityBadge.tsx", "tests/esc-120/"],
+-      "reservedPaths": ["src/utils/scoring.ts", "src/components/SeverityBadge.tsx", "tests/esc-120/"],
++      "reservedPaths": [],
+       "blockedBy": [],
+       "collisionRule": "Exclusive reservation while the lane is active; release after merge or rejection.",
+       "verificationCommand": "npm run feature:verify",
+@@ -50,8 +50,8 @@
+       "owner": "unassigned",
+       "reviewer": "risk-owner",
+       "requestedPaths": ["src/utils/scoring.ts", "src/components/SeverityBadge.tsx"],
+-      "reservedPaths": ["src/utils/scoring.ts"],
+-      "blockedBy": ["ESC-120", "RULE-ESC-122"],
++      "reservedPaths": [],
++      "blockedBy": ["RULE-ESC-122"],
+       "collisionRule": "Do not reserve shared paths until ESC-120 releases them and the product rule is approved.",
+       "verificationCommand": "not available",
+       "acceptanceCriteria": ["An approved boost and cap are documented before implementation."],
+@@ -70,7 +70,7 @@
+       "owner": "unassigned",
+       "reviewer": "security-owner",
+       "requestedPaths": ["src/services/exportApi.ts"],
+-      "reservedPaths": ["src/services/exportApi.ts"],
++      "reservedPaths": [],
+       "blockedBy": [],
+       "collisionRule": "Cancelled cards cannot own paths, branches, worktrees, or commits.",
+       "verificationCommand": "not run",
+diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/utils/scoring.ts b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/utils/scoring.ts
+index d52492d..33032f3 100644
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/utils/scoring.ts	
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/utils/scoring.ts	
+@@ -1,6 +1,21 @@
+ import type { Incident, Severity } from "../data/incidents";
+ 
++const severityRank: Record<Severity, number> = {
++  Low: 0,
++  Medium: 1,
++  High: 2,
++  Critical: 3,
++};
++
+ export function calculateSeverity(incident: Incident): Severity {
+-  // Seeded ESC-120 defect: inherited parent severity is ignored.
++  const inheritedSeverity = incident.inheritedSeverity;
++
++  if (
++    inheritedSeverity &&
++    severityRank[inheritedSeverity] > severityRank[incident.declaredSeverity]
++  ) {
++    return inheritedSeverity;
++  }
++
+   return incident.declaredSeverity;
+ }
+diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/tests/esc-120/inherited-severity.test.tsx b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/tests/esc-120/inherited-severity.test.tsx
+new file mode 100644
+index 0000000..3fbab93
+--- /dev/null
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/tests/esc-120/inherited-severity.test.tsx	
+@@ -0,0 +1,37 @@
++import { renderToStaticMarkup } from "react-dom/server";
++import { describe, expect, it } from "vitest";
++import { SeverityBadge } from "../../src/components/SeverityBadge";
++import type { Incident } from "../../src/data/incidents";
++import { calculateSeverity } from "../../src/utils/scoring";
++
++function incident(
++  declaredSeverity: Incident["declaredSeverity"],
++  inheritedSeverity?: Incident["inheritedSeverity"],
++): Incident {
++  return {
++    id: "INC-ESC-120",
++    summary: "Inherited severity regression",
++    declaredSeverity,
++    inheritedSeverity,
++  };
++}
++
++describe("ESC-120 inherited severity regression", () => {
++  it("uses an inherited severity when it is higher than the declared severity", () => {
++    expect(calculateSeverity(incident("Low", "Critical"))).toBe("Critical");
++  });
++
++  it("does not let inherited severity lower the declared severity", () => {
++    expect(calculateSeverity(incident("High", "Medium"))).toBe("High");
++    expect(calculateSeverity(incident("Medium"))).toBe("Medium");
++  });
++
++  it("renders the calculated severity in the badge", () => {
++    const markup = renderToStaticMarkup(
++      <SeverityBadge incident={incident("Low", "Critical")} />,
++    );
++
++    expect(markup).toContain('data-severity="Critical"');
++    expect(markup).toContain(">Critical<");
++  });
++});

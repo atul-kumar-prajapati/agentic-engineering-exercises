@@ -1,0 +1,4 @@
+Command: npm run board:verify
+Reviewed SHA: 86fbc95fa7f6526f72b83ac45fd2e26faf95ff2c
+PASS: board mirrors, card histories, blockers, reservation releases, ownership, and integration records are consistent.
+Exit code: 0

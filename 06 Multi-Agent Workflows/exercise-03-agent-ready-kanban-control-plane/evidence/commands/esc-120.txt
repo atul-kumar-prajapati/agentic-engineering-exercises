@@ -1,0 +1,7 @@
+Command: npm run feature:verify
+Reviewed SHA: f9ca1b9a7f2c62c1a8f476b533ed5a26b4cc6c55
+Card: ESC-120
+PASS: acceptance/esc-120.inherited-severity.test.tsx and tests/esc-120/inherited-severity.test.tsx passed.
+Test Files: 2 passed (2)
+Tests: 5 passed (5)
+Exit code: 0

@@ -1,0 +1,237 @@
+diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json
+new file mode 100644
+index 0000000..9815688
+--- /dev/null
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.json	
+@@ -0,0 +1,85 @@
++{
++  "schemaVersion": 1,
++  "cards": [
++    {
++      "id": "ESC-118",
++      "title": "Reproduce escalation order after schedule override",
++      "state": "needs-info",
++      "stateHistory": ["incoming", "needs-info"],
++      "evidence": "No deterministic reproduction or affected schedule ID is available.",
++      "owner": "unassigned",
++      "reviewer": "support-platform",
++      "requestedPaths": ["src/services/workflowApi.ts"],
++      "reservedPaths": ["src/services/workflowApi.ts"],
++      "blockedBy": ["REPRO-118"],
++      "collisionRule": "No reservation or agent assignment until reproduction evidence exists.",
++      "verificationCommand": "not available",
++      "acceptanceCriteria": ["A deterministic failing reproduction identifies the incorrect order."],
++      "mergeCriteria": ["A replacement card passes a focused schedule-order test."],
++      "dependencies": [],
++      "mergeOrder": null,
++      "rollback": "Close without code changes.",
++      "cancellationReason": null
++    },
++    {
++      "id": "ESC-120",
++      "title": "Preserve inherited incident severity",
++      "state": "ready-for-agent",
++      "stateHistory": ["incoming", "triaged", "ready-for-agent"],
++      "evidence": "INC-120-C is declared Low but inherits Critical severity from INC-120-P.",
++      "owner": "severity-agent",
++      "reviewer": "risk-owner",
++      "requestedPaths": ["src/utils/scoring.ts", "src/components/SeverityBadge.tsx", "tests/esc-120/"],
++      "reservedPaths": ["src/utils/scoring.ts", "src/components/SeverityBadge.tsx", "tests/esc-120/"],
++      "blockedBy": [],
++      "collisionRule": "Exclusive reservation while the lane is active; release after merge or rejection.",
++      "verificationCommand": "npm run feature:verify",
++      "acceptanceCriteria": ["Inherited Critical remains Critical in scoring and the rendered badge."],
++      "mergeCriteria": ["Lane test passes.", "Reviewer accepts the exact lane commit.", "Integration uses --no-ff."],
++      "dependencies": [],
++      "mergeOrder": 1,
++      "rollback": "Revert the accepted ESC-120 merge commit.",
++      "cancellationReason": null
++    },
++    {
++      "id": "ESC-122",
++      "title": "Add a due-today severity boost",
++      "state": "blocked",
++      "stateHistory": ["incoming", "triaged", "ready-for-agent", "blocked"],
++      "evidence": "The requested boost has no approved value or severity cap.",
++      "owner": "unassigned",
++      "reviewer": "risk-owner",
++      "requestedPaths": ["src/utils/scoring.ts", "src/components/SeverityBadge.tsx"],
++      "reservedPaths": ["src/utils/scoring.ts"],
++      "blockedBy": ["ESC-120", "RULE-ESC-122"],
++      "collisionRule": "Do not reserve shared paths until ESC-120 releases them and the product rule is approved.",
++      "verificationCommand": "not available",
++      "acceptanceCriteria": ["An approved boost and cap are documented before implementation."],
++      "mergeCriteria": ["ESC-120 is resolved.", "The approved rule has a focused regression test."],
++      "dependencies": ["ESC-120"],
++      "mergeOrder": 2,
++      "rollback": "Cancel the lane if the product rule remains unanswered.",
++      "cancellationReason": null
++    },
++    {
++      "id": "ESC-121",
++      "title": "Export very large account data",
++      "state": "cancelled",
++      "stateHistory": ["incoming", "ready-for-human", "cancelled"],
++      "evidence": "The supplied fixture contains production-like names and email addresses.",
++      "owner": "unassigned",
++      "reviewer": "security-owner",
++      "requestedPaths": ["src/services/exportApi.ts"],
++      "reservedPaths": ["src/services/exportApi.ts"],
++      "blockedBy": [],
++      "collisionRule": "Cancelled cards cannot own paths, branches, worktrees, or commits.",
++      "verificationCommand": "not run",
++      "acceptanceCriteria": ["A new card supplies a security-approved synthetic fixture."],
++      "mergeCriteria": ["A new approved card is required."],
++      "dependencies": [],
++      "mergeOrder": null,
++      "rollback": "Delete any unmerged lane work and retain the cancellation record.",
++      "cancellationReason": "Production-like personal data is not approved for this exercise."
++    }
++  ]
++}
+diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md
+index 75c8349..dccd57d 100644
+--- a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md	
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/agent-board.md	
+@@ -1,9 +1,12 @@
+ # Agent Board Seed
+ 
+-| Card | State | Area | Risk |
+-|---|---|---|---|
+-| ESC-118 | needs-info | schedules | medium |
+-| ESC-120 | ready-for-agent | severity | high |
+-| ESC-121 | ready-for-human | exports | high |
++The canonical structured board is [agent-board.json](./agent-board.json). The application copy must remain identical.
+ 
+-The board is incomplete until ownership, commands, and merge order are filled.
++| Card | Seed state | Unsafe condition |
++|---|---|---|
++| ESC-118 | needs-info | Holds `workflowApi.ts` without a reproduction. |
++| ESC-120 | ready-for-agent | Correctly reserves the inherited-severity lane. |
++| ESC-122 | blocked | Illegally reserves `scoring.ts` while waiting. |
++| ESC-121 | cancelled | Still reserves `exportApi.ts` after cancellation. |
++
++The final board keeps unsafe work visible, marks ESC-120 merged, releases every reservation, and records the full transition history.
+diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md
+new file mode 100644
+index 0000000..47eec07
+--- /dev/null
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/integration-log.md	
+@@ -0,0 +1,10 @@
++# Integration Log Seed
++
++| Sequence | Card | Control decision |
++|---:|---|---|
++| 0 | ESC-118 | Keep needs-info and release its invalid reservation. |
++| 1 | ESC-121 | Preserve cancellation and release its invalid reservation. |
++| 2 | ESC-122 | Keep blocked, release its collision, and retain `RULE-ESC-122`. |
++| 3 | ESC-120 | Run the only agent-ready lane, review its exact commit, and integrate only if its focused check passes. |
++
++Replace this seed with the actual base SHA, lane commit, reviewer decision, merge commit, command evidence, reservation releases, remaining blockers, final decision, and rollback order.
+diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md
+new file mode 100644
+index 0000000..e26b9ad
+--- /dev/null
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/docs/ownership-map.md	
+@@ -0,0 +1,10 @@
++# Ownership Map Seed
++
++| Requested path | Active reservation | Waiting card | Required action |
++|---|---|---|---|
++| `src/utils/scoring.ts` | ESC-120 and ESC-122 | ESC-122 | Keep ESC-120 only; release ESC-122. |
++| `src/components/SeverityBadge.tsx` | ESC-120 | ESC-122 | Release after ESC-120 integration. |
++| `src/services/workflowApi.ts` | ESC-118 | ESC-118 | Release until reproduction exists. |
++| `src/services/exportApi.ts` | ESC-121 | none | Release because the card is cancelled. |
++
++After integration, no card owns an active reservation. ESC-122 still requests the scoring paths but remains blocked by `RULE-ESC-122`.
+diff --git a/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json
+new file mode 100644
+index 0000000..9815688
+--- /dev/null
++++ b/06 Multi-Agent Workflows/exercise-03-agent-ready-kanban-control-plane/kanban-control-app/src/data/agent-board.json	
+@@ -0,0 +1,85 @@
++{
++  "schemaVersion": 1,
++  "cards": [
++    {
++      "id": "ESC-118",
++      "title": "Reproduce escalation order after schedule override",
++      "state": "needs-info",
++      "stateHistory": ["incoming", "needs-info"],
++      "evidence": "No deterministic reproduction or affected schedule ID is available.",
++      "owner": "unassigned",
++      "reviewer": "support-platform",
++      "requestedPaths": ["src/services/workflowApi.ts"],
++      "reservedPaths": ["src/services/workflowApi.ts"],
++      "blockedBy": ["REPRO-118"],
++      "collisionRule": "No reservation or agent assignment until reproduction evidence exists.",
++      "verificationCommand": "not available",
++      "acceptanceCriteria": ["A deterministic failing reproduction identifies the incorrect order."],
++      "mergeCriteria": ["A replacement card passes a focused schedule-order test."],
++      "dependencies": [],
++      "mergeOrder": null,
++      "rollback": "Close without code changes.",
++      "cancellationReason": null
++    },
++    {
++      "id": "ESC-120",
++      "title": "Preserve inherited incident severity",
++      "state": "ready-for-agent",
++      "stateHistory": ["incoming", "triaged", "ready-for-agent"],
++      "evidence": "INC-120-C is declared Low but inherits Critical severity from INC-120-P.",
++      "owner": "severity-agent",
++      "reviewer": "risk-owner",
++      "requestedPaths": ["src/utils/scoring.ts", "src/components/SeverityBadge.tsx", "tests/esc-120/"],
++      "reservedPaths": ["src/utils/scoring.ts", "src/components/SeverityBadge.tsx", "tests/esc-120/"],
++      "blockedBy": [],
++      "collisionRule": "Exclusive reservation while the lane is active; release after merge or rejection.",
++      "verificationCommand": "npm run feature:verify",
++      "acceptanceCriteria": ["Inherited Critical remains Critical in scoring and the rendered badge."],
++      "mergeCriteria": ["Lane test passes.", "Reviewer accepts the exact lane commit.", "Integration uses --no-ff."],
++      "dependencies": [],
++      "mergeOrder": 1,
++      "rollback": "Revert the accepted ESC-120 merge commit.",
++      "cancellationReason": null
++    },
++    {
++      "id": "ESC-122",
++      "title": "Add a due-today severity boost",
++      "state": "blocked",
++      "stateHistory": ["incoming", "triaged", "ready-for-agent", "blocked"],
++      "evidence": "The requested boost has no approved value or severity cap.",
++      "owner": "unassigned",
++      "reviewer": "risk-owner",
++      "requestedPaths": ["src/utils/scoring.ts", "src/components/SeverityBadge.tsx"],
++      "reservedPaths": ["src/utils/scoring.ts"],
++      "blockedBy": ["ESC-120", "RULE-ESC-122"],
++      "collisionRule": "Do not reserve shared paths until ESC-120 releases them and the product rule is approved.",
++      "verificationCommand": "not available",
++      "acceptanceCriteria": ["An approved boost and cap are documented before implementation."],
++      "mergeCriteria": ["ESC-120 is resolved.", "The approved rule has a focused regression test."],
++      "dependencies": ["ESC-120"],
++      "mergeOrder": 2,
++      "rollback": "Cancel the lane if the product rule remains unanswered.",
++      "cancellationReason": null
++    },
++    {
++      "id": "ESC-121",
++      "title": "Export very large account data",
++      "state": "cancelled",
++      "stateHistory": ["incoming", "ready-for-human", "cancelled"],
++      "evidence": "The supplied fixture contains production-like names and email addresses.",
++      "owner": "unassigned",
++      "reviewer": "security-owner",
++      "requestedPaths": ["src/services/exportApi.ts"],
++      "reservedPaths": ["src/services/exportApi.ts"],
++      "blockedBy": [],
++      "collisionRule": "Cancelled cards cannot own paths, branches, worktrees, or commits.",
++      "verificationCommand": "not run",
++      "acceptanceCriteria": ["A new card supplies a security-approved synthetic fixture."],
++      "mergeCriteria": ["A new approved card is required."],
++      "dependencies": [],
++      "mergeOrder": null,
++      "rollback": "Delete any unmerged lane work and retain the cancellation record.",
++      "cancellationReason": "Production-like personal data is not approved for this exercise."
++    }
++  ]
++}
