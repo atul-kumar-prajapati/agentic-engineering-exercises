@@ -1,0 +1,4 @@
+interface:
+  display_name: "Release Notes"
+  short_description: "Draft evidence-backed release notes"
+  default_prompt: "Use $release-notes to draft customer-facing notes from a Git comparison."

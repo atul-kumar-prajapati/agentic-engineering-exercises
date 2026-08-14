@@ -12,6 +12,7 @@
                     "fixture:smoke":  "node ./scripts/verify-fixture.mjs",
                     "release:verify":  "node ./scripts/verify-release-notes.mjs",
                     "skill:validate":  "node ./scripts/validate-skill.mjs",
+                    "skill:test":  "node --test ./.agents/skills/release-notes/scripts/extract-release.test.mjs",
                     "test:submission":  "node ./scripts/verify-skill-submission.mjs",
                     "test:integrity":  "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
                     "lint":  "node ./scripts/lint-check.mjs",

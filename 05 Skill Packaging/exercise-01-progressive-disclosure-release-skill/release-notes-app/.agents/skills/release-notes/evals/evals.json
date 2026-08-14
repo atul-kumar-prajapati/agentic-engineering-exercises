@@ -1,0 +1,41 @@
+{
+  "skill_name": "release-notes",
+  "evals": [
+    {
+      "id": "draft-from-git-range",
+      "prompt": "Draft customer-facing release notes for v2.3.0..v2.4.0 and use the supplied PR and CI evidence.",
+      "should_trigger": true,
+      "expectations": [
+        "Runs the Git extractor for the exact range",
+        "Publishes only customer-visible behavior",
+        "Traces every published item and reports missing evidence"
+      ]
+    },
+    {
+      "id": "audit-existing-notes",
+      "prompt": "Audit release-notes.md against release-17..release-18 and correct unsupported claims.",
+      "should_trigger": true,
+      "expectations": [
+        "Checks each claim against the Git comparison",
+        "Surfaces breaking changes and verification gaps",
+        "Excludes internal-only changes"
+      ]
+    },
+    {
+      "id": "internal-commit-summary",
+      "prompt": "Summarize today's internal refactor commits for the engineering stand-up.",
+      "should_trigger": false,
+      "expectations": [
+        "Does not invoke the release-notes skill because no publication request exists"
+      ]
+    },
+    {
+      "id": "incident-report",
+      "prompt": "Write an incident timeline and root-cause report from these production logs.",
+      "should_trigger": false,
+      "expectations": [
+        "Does not invoke the release-notes skill for incident analysis"
+      ]
+    }
+  ]
+}
