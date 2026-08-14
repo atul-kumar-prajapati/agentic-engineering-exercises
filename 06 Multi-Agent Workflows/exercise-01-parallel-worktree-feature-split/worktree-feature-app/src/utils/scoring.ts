@@ -9,7 +9,13 @@ const priorityWeight = {
 export function calculateRisk(item: WorkItem): number {
   const urgency = item.dueInDays === 0 ? 24 : Math.max(0, 20 - item.dueInDays);
   const statusPenalty = item.status === "Blocked" || item.status === "Escalated" ? 18 : 6;
-  return Math.min(100, item.score + priorityWeight[item.priority] * 7 + urgency + statusPenalty);
+  const risk = Math.min(100, item.score + priorityWeight[item.priority] * 7 + urgency + statusPenalty);
+
+  if (item.status === "Blocked" && item.dueInDays === 0) {
+    return Math.max(90, risk);
+  }
+
+  return risk;
 }
 
 export function riskLabel(score: number): "Watch" | "Needs review" | "Critical" {
@@ -26,6 +32,7 @@ export function summarizePortfolio(items: WorkItem[]) {
   return {
     critical,
     blocked,
+    dueToday: items.filter((item) => item.dueInDays === 0).length,
     averageRisk,
     ready: items.filter((item) => item.status === "Ready").length,
   };
