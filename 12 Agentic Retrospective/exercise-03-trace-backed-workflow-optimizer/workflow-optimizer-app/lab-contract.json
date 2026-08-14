@@ -1,0 +1,48 @@
+{
+  "title": "Trace-Backed Workflow Optimizer",
+  "competency": "12. Agentic Retrospective - Session review, waste reduction, and improvement",
+  "skillPattern": "trace-backed workflow optimization",
+  "domain": "Deterministically graded workflow optimization with held-out replays",
+  "mission": "Turn repeated trace failures into one general workflow revision and adopt it only when raw matched runs prove quality and cost gates.",
+  "outcome": "A one-file workflow change generalizes to held-out tasks without critical regressions or excessive context cost.",
+  "entities": [
+    "failure trace",
+    "workflow instruction",
+    "raw replay response",
+    "deterministic grade"
+  ],
+  "seededDefects": [
+    "baseline guidance does not establish scope or authority",
+    "partial checks can support completion",
+    "broad context is loaded before decisions are known"
+  ],
+  "verificationGates": [
+    "trace-backed failure clusters",
+    "48 matched raw runs",
+    "held-out critical quality",
+    "variance and cost thresholds",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
+  ],
+  "agentWorkflow": [
+    "Benchmark the unchanged workflow.",
+    "Cluster repeated causes before editing.",
+    "Commit only general workflow instructions.",
+    "Rerun all lanes and adopt from deterministic evidence.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
+  ],
+  "workingDeliverables": [
+    "Candidate workflow.",
+    "Raw hashed baseline and candidate runs.",
+    "Generated benchmark.",
+    "Failure analysis, adoption decision, and Git proof.",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
+  ],
+  "masterySignals": [
+    "Uses all runs rather than selecting winners.",
+    "Keeps grading independent from agent claims.",
+    "Improves both train and held-out quality.",
+    "Rejects quality gains that violate critical or cost gates."
+  ]
+}

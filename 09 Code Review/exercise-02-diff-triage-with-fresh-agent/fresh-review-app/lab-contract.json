@@ -1,42 +1,48 @@
 {
-  "title": "Diff Triage With Fresh Agent",
-  "competency": "09. Code Review - Code quality and risk review for merge confidence",
-  "domain": "Fresh-agent review of cache and workflow-state changes",
-  "mission": "Use a fresh review pass to find what the implementing agent missed, then decide which findings are merge blockers.",
-  "outcome": "A fresh agent review produces signal, and the accountable owner decides what actually blocks merge.",
+  "title": "Independent Diff Triage",
+  "competency": "09. Code Review - independent risk review and evidence-based triage",
+  "domain": "Browser cache persistence in a workflow queue",
+  "mission": "Use a fresh agent session to review the protected caching diff, verify its findings, and fix only supported merge blockers.",
+  "outcome": "The cache survives save, filter, reload, malformed data, and read-only evidence scenarios without mutating shared fixtures.",
   "entities": [
-    "fresh review prompt",
-    "local storage cache",
-    "mutable fixture",
-    "triage table"
+    "protected review range",
+    "fresh reviewer session",
+    "workflow cache",
+    "structured findings"
   ],
   "seededDefects": [
-    "cached state is never updated after save",
-    "sort mutates shared fixtures",
-    "cache clear erases legitimate user work"
+    "filter changes delete saved state",
+    "cached JSON is trusted",
+    "default sorting mutates fixtures",
+    "evidence collection writes stale state"
   ],
   "verificationGates": [
-    "fresh-agent finding verification",
-    "cache regression test",
-    "human triage",
-    "merge confidence note"
+    "protected fixture verification",
+    "fresh-context evidence verification",
+    "cache acceptance tests",
+    "source-SHA scope gate",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
   ],
   "agentWorkflow": [
-    "Ask the coding agent to inspect this lab contract, starter code, docs, and tests before proposing a plan.",
-    "Revise the agent plan so it exercises the competency practice and avoids the common mistake.",
-    "Implement the smallest working change that addresses the seeded defects.",
-    "Run the verification gates and capture command evidence before writing the final review note."
+    "Run a fresh review with only the allowed context.",
+    "Verify every finding and the seeded claim against the head.",
+    "Fix confirmed blockers and add learner regression tests.",
+    "Bind findings, tests, and command output to the focused source commit.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
   ],
   "workingDeliverables": [
-    "Fresh-agent review prompt and findings.",
-    "Code/test fixes for verified blockers.",
-    "Triage evidence separating signal from noise.",
-    "Final merge confidence note."
+    "Fresh prompt and session record.",
+    "Structured and Markdown review.",
+    "Focused fixes and regression tests.",
+    "Fixture, test, and verifier output.",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
   ],
   "masterySignals": [
-    "Ask a fresh model/session to review the diff with explicit NFR checks.",
-    "Verify each finding manually against the surrounding code.",
-    "Fix true merge blockers in code and tests.",
-    "Record why noisy findings were dismissed."
+    "Reviewer independence is explicit and auditable.",
+    "Blockers have concrete scenarios and impact.",
+    "Unsupported noise is dismissed with code evidence.",
+    "Source history contains no unrelated changes."
   ]
 }

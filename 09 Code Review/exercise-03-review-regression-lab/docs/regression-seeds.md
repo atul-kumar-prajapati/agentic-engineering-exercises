@@ -1,31 +1,5 @@
-# Regression Seeds
+# Protected Regression Catalog
 
-This is a seeded lab input for Review Regression Lab. It gives the learner concrete constraints to inspect, implement, test, and verify.
+The historical diff contains five observable regressions across search, status filtering, risk scoring, summary metrics, and queue completeness. The security diff contains independent cache-parse and authorization failures. The clean control replaces `slice().sort()` with an equivalent spread-copy sort.
 
-## Operating Context
-
-Regression review for filtering, risk scoring, and hidden work
-
-## Concrete Inputs
-
-- fresh review
-- NFR checklist
-- regression test
-- triage decision
-
-## Seeded Risks
-
-- blocked work disappears under all-status filter
-- partial search no longer matches owner or note
-- risk scoring lowers due-today blocked work
-
-## Verification Expectations
-
-- fresh model review
-- NFR checklist
-- failing-then-passing tests
-- fix/defer/dismiss triage
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+These outcomes belong in the evaluator and human judgment process, not in the candidate prompt. A prompt that names these cases, finding IDs, exact APIs, or diff tokens has memorized the benchmark and is rejected.

@@ -1,56 +1,19 @@
 export interface LabContract {
-  title: string;
-  competency: string;
-  domain: string;
-  mission: string;
-  outcome: string;
-  entities: string[];
-  seededDefects: string[];
-  verificationGates: string[];
-  agentWorkflow: string[];
-  workingDeliverables: string[];
-  masterySignals: string[];
+  title: string; competency: string; domain: string; mission: string; outcome: string;
+  entities: string[]; seededDefects: string[]; verificationGates: string[];
+  agentWorkflow: string[]; workingDeliverables: string[]; masterySignals: string[];
 }
 
 export const labContract: LabContract = {
-  "title": "Review Regression Lab",
-  "competency": "09. Code Review - Code quality and risk review for merge confidence",
-  "domain": "Regression review for filtering, risk scoring, and hidden work",
-  "mission": "Find subtle regressions in a large agent-written UI diff that appears clean at first glance.",
-  "outcome": "Subtle clean-looking regressions are caught by behavior tests and review discipline.",
-  "entities": [
-    "fresh review",
-    "NFR checklist",
-    "regression test",
-    "triage decision"
-  ],
-  "seededDefects": [
-    "blocked work disappears under all-status filter",
-    "partial search no longer matches owner or note",
-    "risk scoring lowers due-today blocked work"
-  ],
-  "verificationGates": [
-    "fresh model review",
-    "NFR checklist",
-    "failing-then-passing tests",
-    "fix/defer/dismiss triage"
-  ],
-  "agentWorkflow": [
-    "Ask the coding agent to inspect this lab contract, starter code, docs, and tests before proposing a plan.",
-    "Revise the agent plan so it exercises the competency practice and avoids the common mistake.",
-    "Implement the smallest working change that addresses the seeded defects.",
-    "Run the verification gates and capture command evidence before writing the final review note."
-  ],
-  "workingDeliverables": [
-    "Failing-then-passing regression tests.",
-    "Code fixes for the regressions.",
-    "Review summary with severity and evidence.",
-    "Residual risk notes for anything deferred."
-  ],
-  "masterySignals": [
-    "Ask a fresh model or session to review the supplied diff for behavior drift and NFR risk.",
-    "Verify each finding yourself against filtering, sorting, risk scoring, permissions, empty states, accessibility, and performance.",
-    "Write tests that fail on the true regressions, then patch the implementation to restore intended behavior.",
-    "Triage every finding as fix, defer, or dismiss with evidence, then re-review after the patch."
-  ]
+  title: "Code Review Regression Gate",
+  competency: "09. Code Review - measured recall and precision",
+  domain: "Real-model prompt regression testing over bad and clean diffs",
+  mission: "Improve a review prompt using repeated real-model evidence without adding false merge blockers or benchmark answers.",
+  outcome: "The candidate clears protected recall, precision, and no-regression thresholds across 18 uncached samples.",
+  entities: ["baseline prompt", "candidate prompt", "protected cases", "response judgments", "scorecard"],
+  seededDefects: ["overcautious candidate invites false blockers", "case IDs previously leaked meaning", "candidate-only evaluation hid regression", "unbound prose scores could be fabricated"],
+  verificationGates: ["answer-leak check", "real-provider sample gate", "response hash binding", "deterministic metric scorer", "prompt-only source commit"],
+  agentWorkflow: ["Run baseline and starter candidate against all cases.", "Label responses against the protected catalog.", "Improve only the candidate from measured misses and false blockers.", "Rerun all samples and adopt only if every gate passes."],
+  workingDeliverables: ["Final prompt.", "Raw outputs and run metadata.", "Response-bound judgments and scorecard.", "Review report and verifier output."],
+  masterySignals: ["Recall and clean precision are both measured.", "Repeated samples expose variance.", "The provider does not encode answers.", "The adoption decision follows every threshold."],
 };

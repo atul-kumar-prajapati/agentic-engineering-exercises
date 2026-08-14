@@ -1,0 +1,61 @@
+{
+  "skill_name": "incident-summary",
+  "evals": [
+    {
+      "id": 1,
+      "name": "checkout-retry-recovery-boundary",
+      "split": "train",
+      "prompt": "Prepare an engineering post-incident summary from evals/files/incident-a.md. Preserve the evidence state and do not add facts that are not supported by the file.",
+      "files": ["evals/files/incident-a.md"],
+      "expectations": [
+        { "id": "a-timeline-source", "critical": true, "text": "Detection, mitigation, and recovery cite their event sources.", "checks": [{ "type": "contains_all", "values": ["[EVT-A1]", "[EVT-A3]", "[EVT-A5]"] }] },
+        { "id": "a-recovery-boundary", "critical": true, "text": "Recovery is tied to the 09:24 healthy signal, not the earlier mitigation.", "checks": [{ "type": "contains_all", "values": ["09:24", "[EVT-A5]"] }, { "type": "not_matches", "pattern": "(?:recovered|recovery)[^\\n.]{0,40}09:11|09:11[^\\n.]{0,40}(?:recovered|recovery)" }] },
+        { "id": "a-impact-source", "critical": false, "text": "The exact failed-attempt impact is cited.", "checks": [{ "type": "contains_all", "values": ["318", "[IMP-A2]"] }] },
+        { "id": "a-followup-state", "critical": false, "text": "The alerting follow-up remains proposed and not started.", "checks": [{ "type": "contains_all", "values": ["[FUP-A1]"] }, { "type": "contains_any", "values": ["proposed", "not started", "open"] }] },
+        { "id": "a-output-contract", "critical": false, "text": "The report uses every required incident-summary section.", "checks": [{ "type": "contains_all", "values": ["## Timeline", "## Impact", "## Cause and uncertainty", "## Resolution", "## Follow-up actions"] }] }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "export-cause-conflict",
+      "split": "train",
+      "prompt": "Write a leadership incident brief from evals/files/incident-b.md. Keep it concise, accurate, and explicit about anything the evidence has not resolved.",
+      "files": ["evals/files/incident-b.md"],
+      "expectations": [
+        { "id": "b-impact-source", "critical": true, "text": "The exact customer impact cites its source.", "checks": [{ "type": "contains_all", "values": ["41", "[IMP-B2]"] }] },
+        { "id": "b-uncertainty", "critical": true, "text": "Both cause hypotheses are cited and remain unresolved.", "checks": [{ "type": "contains_all", "values": ["[NOTE-B3a]", "[NOTE-B3b]"] }, { "type": "contains_any", "values": ["unresolved", "uncertain", "not confirmed", "conflict"] }] },
+        { "id": "b-remediation", "critical": false, "text": "The deployed worker-pool remediation is cited.", "checks": [{ "type": "contains_all", "values": ["worker pool", "[REM-B4]"] }] },
+        { "id": "b-followup-state", "critical": false, "text": "The cause review remains open.", "checks": [{ "type": "contains_all", "values": ["[ACT-B5]"] }, { "type": "contains_any", "values": ["open", "pending", "not complete", "in progress"] }] },
+        { "id": "b-output-contract", "critical": false, "text": "The report uses every required incident-summary section.", "checks": [{ "type": "contains_all", "values": ["## Timeline", "## Impact", "## Cause and uncertainty", "## Resolution", "## Follow-up actions"] }] }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "cache-hypothesis-separation",
+      "split": "held-out",
+      "prompt": "Produce a post-incident report for engineering review from evals/files/incident-c.md. Make the report useful without overstating what is known.",
+      "files": ["evals/files/incident-c.md"],
+      "expectations": [
+        { "id": "c-facts", "critical": true, "text": "Verified cache saturation is separated from the deployment hypothesis.", "checks": [{ "type": "contains_all", "values": ["[OBS-C2]", "[HYP-C3]"] }, { "type": "contains_any", "values": ["hypothesis", "inference", "unconfirmed", "may have"] }] },
+        { "id": "c-timeline", "critical": true, "text": "Detection and recovery cite the correct events.", "checks": [{ "type": "contains_all", "values": ["[EVT-C1]", "[EVT-C6]", "03:14", "03:49"] }] },
+        { "id": "c-impact", "critical": false, "text": "The delayed-request impact is cited without converting it to customers.", "checks": [{ "type": "contains_all", "values": ["12,400", "requests", "[IMP-C4]"] }, { "type": "not_matches", "pattern": "12,?400\\s+(?:customers|tenants)" }] },
+        { "id": "c-action", "critical": false, "text": "The reproduction action remains open with its owner.", "checks": [{ "type": "contains_all", "values": ["[ACT-C2]", "Platform"] }, { "type": "contains_any", "values": ["open", "pending", "not complete", "not started"] }] },
+        { "id": "c-output-contract", "critical": false, "text": "The report uses every required incident-summary section.", "checks": [{ "type": "contains_all", "values": ["## Timeline", "## Impact", "## Cause and uncertainty", "## Resolution", "## Follow-up actions"] }] }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "dashboard-duration-conflict",
+      "split": "held-out",
+      "prompt": "Summarize evals/files/incident-d.md for an engineering review. Preserve conflicting evidence and avoid filling gaps with estimates.",
+      "files": ["evals/files/incident-d.md"],
+      "expectations": [
+        { "id": "d-conflict", "critical": true, "text": "Both duration sources are cited and the conflict remains unresolved.", "checks": [{ "type": "contains_all", "values": ["18 minutes", "23 minutes", "[EVT-D1]", "[LOG-D4]"] }, { "type": "contains_any", "values": ["unresolved", "conflict", "disagree", "difference"] }] },
+        { "id": "d-impact", "critical": true, "text": "The affected group is cited without an invented customer count.", "checks": [{ "type": "contains_all", "values": ["EU tenants", "[IMP-D3]"] }, { "type": "not_matches", "pattern": "\\b\\d+\\s+(?:customers|tenants)\\b" }] },
+        { "id": "d-remediation", "critical": false, "text": "The cache invalidation remediation is cited.", "checks": [{ "type": "contains_all", "values": ["cache invalidation", "[REM-D5]"] }] },
+        { "id": "d-owner", "critical": false, "text": "The timing-reconciliation action remains open with its owner.", "checks": [{ "type": "contains_all", "values": ["[ACT-D2]", "Data Experience"] }, { "type": "contains_any", "values": ["open", "pending", "not complete", "not started"] }] },
+        { "id": "d-output-contract", "critical": false, "text": "The report uses every required incident-summary section.", "checks": [{ "type": "contains_all", "values": ["## Timeline", "## Impact", "## Cause and uncertainty", "## Resolution", "## Follow-up actions"] }] }
+      ]
+    }
+  ]
+}

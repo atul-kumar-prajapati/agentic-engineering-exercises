@@ -1,0 +1,19 @@
+export interface LabContract {
+  title: string; competency: string; domain: string; mission: string; outcome: string;
+  entities: string[]; seededDefects: string[]; verificationGates: string[];
+  agentWorkflow: string[]; workingDeliverables: string[]; masterySignals: string[];
+}
+
+export const labContract: LabContract = {
+  title: "Domain Modeling Skill Product Rules Rescue",
+  competency: "03. Context Engineering",
+  domain: "Workspace AI-history export authorization",
+  mission: "Stop a cross-workspace authorization bug caused by overloaded account language.",
+  outcome: "A fresh agent uses compact, source-backed domain context to implement the correct export boundary.",
+  entities: ["billing customer", "user", "workspace", "workspace membership", "membership role", "data residency"],
+  seededDefects: ["billing ownership incorrectly grants product access", "Growth is incorrectly eligible", "membership user, scope, and status are ignored", "data residency is ignored"],
+  verificationGates: ["eight protected behavior checks", "source-backed context check", "decision and audit checks", "fair before-and-after evidence"],
+  agentWorkflow: ["capture an unskilled first attempt", "separate current rules from legacy language", "build the domain model with the skill", "run a fresh context-only attempt", "compare behavior and verify"],
+  workingDeliverables: ["CONTEXT.md", "decision record", "domain audit", "policy and regression tests", "before-and-after patches and reports"],
+  masterySignals: ["terms have one scoped meaning", "rule sources are ranked", "billing and workspace authorization are separate", "all boundaries are executable"],
+};

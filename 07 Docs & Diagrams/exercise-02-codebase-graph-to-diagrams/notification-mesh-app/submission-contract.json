@@ -1,0 +1,17 @@
+{
+  "name": "Source-Verified Code Graph Rescue",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "artifacts/code-graph.json", "validJson": true, "minCharacters": 1500, "includeAll": ["source_sha", "selectNotificationRoute", "hasSmsConsent", "durableQueueRoute", "source_lines"] },
+    { "path": "diagrams/notification-dependencies.mmd", "minCharacters": 240, "includeAll": ["flowchart LR", "ChannelRouter", "ProviderStatus", "ConsentPolicy", "ImmediateRoute", "DurableQueue", "DEP-01", "DEP-06"] },
+    { "path": "diagrams/fallback-sequence.mmd", "minCharacters": 500, "includeAll": ["sequenceDiagram", "sms not consented", "email selected", "email unavailable", "durable queue selected", "DEP-01", "DEP-06"] },
+    { "path": "evidence/traceability.json", "validJson": true, "includeAll": ["source_sha", "DEP-01", "DEP-06", "graph_edge_id", "source_lines", "source_excerpts", "diagram_paths"] },
+    { "path": "evidence/stale-claims.md", "minCharacters": 700, "includeAll": ["STALE-01", "STALE-06", "Result: supported", "Result: rejected"] },
+    { "path": "evidence/graph-manifest.json", "validJson": true, "includeAll": ["source_sha", "sha256", "graph_build", "graph_query", "graph_path"] },
+    { "path": "evidence/verification.md", "minCharacters": 350, "includeAll": ["source SHA", "graph regeneration", "Mermaid parser", "semantic edge", "routing test", "stale claim", "remaining uncertainty", "final conclusion"] },
+    { "path": "evidence/commands/graph-build.txt", "minCharacters": 100, "includeAll": ["Source SHA", "Nodes", "Edges", "PASS"] },
+    { "path": "evidence/commands/graph-query.txt", "minCharacters": 300, "includeAll": ["Source SHA", "selectNotificationRoute", "Outgoing", "PASS"] },
+    { "path": "evidence/commands/graph-path.txt", "minCharacters": 150, "includeAll": ["Source SHA", "selectNotificationRoute", "durableQueueRoute", "PASS"] }
+  ],
+  "requiredDirectories": ["artifacts", "diagrams", "evidence", "evidence/commands"]
+}

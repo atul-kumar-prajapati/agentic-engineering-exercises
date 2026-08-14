@@ -1,31 +1,36 @@
-# Task Board
+# Three-Lane Product Task Board
 
-This is a seeded lab input for Parallel Worktree Feature Split. It gives the learner concrete constraints to inspect, implement, test, and verify.
+All lanes start from the same clean base SHA. Each lane creates one commit and remains inside its owned paths.
 
-## Operating Context
+## Lane A: Saved queue filters
 
-Three-lane worktree plan for independent UI improvements
+Add a `High-priority Blocked` preset to the filter bar. Applying it sets priority to `High` and status to `Blocked` while preserving the current search query.
 
-## Concrete Inputs
+- Owned paths: `src/components/FilterBar.tsx`, `src/utils/filters.ts`, and `tests/lane-a/**`.
+- Required API: export `savedFilterPresets` and `applyFilterPreset` from `filters.ts`.
+- Focused verification: `npm run test:lane-a`.
+- Shared request: promote the lane-local `FilterPreset` interface to `src/types.ts` during integration.
 
-- worktree lane
-- branch owner
-- file ownership
-- integration gate
+## Lane B: SLA risk indicator
 
-## Seeded Risks
+Add a `Due today` portfolio metric. Count all items where `dueInDays` is zero and preserve the rule that a due-today Blocked item is `Critical`.
 
-- two lanes claim the same shared filter file
-- one lane lacks a verification command
-- integration owner is not assigned
+- Owned paths: `src/utils/scoring.ts`, `src/components/MetricStrip.tsx`, and `tests/lane-b/**`.
+- Required API: `summarizePortfolio` returns `dueToday`; `MetricStrip` renders the metric.
+- Focused verification: `npm run test:lane-b`.
+- No shared-file ownership.
 
-## Verification Expectations
+## Lane C: Evidence export
 
-- file ownership audit
-- lane verification reports
-- merge-order simulation
-- final integration check
+Add an `Export JSON` action for collected evidence. The serialized bundle contains the selected item's ID, owner, status, calculated risk, evidence entries, and generation time.
 
-## Agent Workflow Constraint
+- Owned paths: `src/components/EvidencePanel.tsx`, `src/services/workflowApi.ts`, and `tests/lane-c/**`.
+- Required API: export `createEvidenceBundle` and `serializeEvidenceBundle` from `workflowApi.ts`; render `Export JSON` only when evidence exists.
+- Focused verification: `npm run test:lane-c`.
+- Shared request: promote the lane-local `EvidenceBundle` interface to `src/types.ts` during integration.
 
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+## Controlled Conflict
+
+Lanes A and C define temporary structural interfaces inside their owned utility or service file so their commits remain independently testable. They must request promotion without editing `src/types.ts`.
+
+The integration owner merges B, A, and C with `--no-ff`, then creates one commit that adds both interfaces to `src/types.ts` and replaces the two temporary definitions with imports. Do not merge a lane whose focused check fails.

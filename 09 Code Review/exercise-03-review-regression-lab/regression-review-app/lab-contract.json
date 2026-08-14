@@ -1,42 +1,50 @@
 {
-  "title": "Review Regression Lab",
-  "competency": "09. Code Review - Code quality and risk review for merge confidence",
-  "domain": "Regression review for filtering, risk scoring, and hidden work",
-  "mission": "Find subtle regressions in a large agent-written UI diff that appears clean at first glance.",
-  "outcome": "Subtle clean-looking regressions are caught by behavior tests and review discipline.",
+  "title": "Code Review Regression Gate",
+  "competency": "09. Code Review - measured recall and precision",
+  "domain": "Real-model prompt regression testing over bad and clean diffs",
+  "mission": "Improve a review prompt using repeated real-model evidence without adding false merge blockers or benchmark answers.",
+  "outcome": "The candidate clears protected recall, precision, and no-regression thresholds across 18 uncached samples.",
   "entities": [
-    "fresh review",
-    "NFR checklist",
-    "regression test",
-    "triage decision"
+    "baseline prompt",
+    "candidate prompt",
+    "protected cases",
+    "response judgments",
+    "scorecard"
   ],
   "seededDefects": [
-    "blocked work disappears under all-status filter",
-    "partial search no longer matches owner or note",
-    "risk scoring lowers due-today blocked work"
+    "overcautious candidate invites false blockers",
+    "case IDs previously leaked meaning",
+    "candidate-only evaluation hid regression",
+    "unbound prose scores could be fabricated"
   ],
   "verificationGates": [
-    "fresh model review",
-    "NFR checklist",
-    "failing-then-passing tests",
-    "fix/defer/dismiss triage"
+    "answer-leak check",
+    "real-provider sample gate",
+    "response hash binding",
+    "deterministic metric scorer",
+    "prompt-only source commit",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
   ],
   "agentWorkflow": [
-    "Ask the coding agent to inspect this lab contract, starter code, docs, and tests before proposing a plan.",
-    "Revise the agent plan so it exercises the competency practice and avoids the common mistake.",
-    "Implement the smallest working change that addresses the seeded defects.",
-    "Run the verification gates and capture command evidence before writing the final review note."
+    "Run baseline and starter candidate against all cases.",
+    "Label responses against the protected catalog.",
+    "Improve only the candidate from measured misses and false blockers.",
+    "Rerun all samples and adopt only if every gate passes.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
   ],
   "workingDeliverables": [
-    "Failing-then-passing regression tests.",
-    "Code fixes for the regressions.",
-    "Review summary with severity and evidence.",
-    "Residual risk notes for anything deferred."
+    "Final prompt.",
+    "Raw outputs and run metadata.",
+    "Response-bound judgments and scorecard.",
+    "Review report and verifier output.",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
   ],
   "masterySignals": [
-    "Ask a fresh model or session to review the supplied diff for behavior drift and NFR risk.",
-    "Verify each finding yourself against filtering, sorting, risk scoring, permissions, empty states, accessibility, and performance.",
-    "Write tests that fail on the true regressions, then patch the implementation to restore intended behavior.",
-    "Triage every finding as fix, defer, or dismiss with evidence, then re-review after the patch."
+    "Recall and clean precision are both measured.",
+    "Repeated samples expose variance.",
+    "The provider does not encode answers.",
+    "The adoption decision follows every threshold."
   ]
 }

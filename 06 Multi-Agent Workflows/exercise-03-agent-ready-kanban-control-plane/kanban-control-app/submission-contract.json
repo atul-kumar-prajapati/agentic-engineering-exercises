@@ -1,0 +1,15 @@
+{
+  "name": "Agent Kanban Collision Control",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "docs/agent-board.json", "validJson": true, "includeAll": ["schemaVersion", "stateHistory", "requestedPaths", "reservedPaths", "blockedBy", "cancellationReason"] },
+    { "path": "docs/agent-board.md", "minCharacters": 300, "includeAll": ["ESC-118", "ESC-120", "ESC-121", "ESC-122", "merged", "no active reservations"] },
+    { "path": "docs/ownership-map.md", "minCharacters": 250, "includeAll": ["ESC-118", "ESC-120", "ESC-121", "ESC-122", "RULE-ESC-122", "no active reservations"] },
+    { "path": "docs/integration-log.md", "minCharacters": 350, "includeAll": ["base SHA", "lane commit", "reviewer", "feature command", "merge commit", "board command", "decision", "rollback"] },
+    { "path": "evidence/control-plane.json", "validJson": true, "includeAll": ["base_sha", "commit_sha", "changed_paths", "review_sha256", "merge_commit_sha", "control_commit_sha", "output_sha256"] },
+    { "path": "evidence/completed-lane.md", "minCharacters": 350, "includeAll": ["base SHA", "lane commit", "owned paths", "changed paths", "feature command", "reviewer decision", "merge commit", "rollback", "remaining risk"] },
+    { "path": "evidence/commands/esc-120.txt", "minCharacters": 120, "includeAll": ["Reviewed SHA", "PASS"] },
+    { "path": "evidence/commands/board.txt", "minCharacters": 120, "includeAll": ["Reviewed SHA", "PASS"] }
+  ],
+  "requiredDirectories": ["evidence/commands"]
+}

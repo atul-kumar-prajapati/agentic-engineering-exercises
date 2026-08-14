@@ -1,0 +1,40 @@
+{
+  "name": "workflow-gate-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc -b --pretty false",
+    "test": "node ./scripts/agent-check.mjs",
+    "test:shortcut": "node ../scripts/previous-release-check.mjs",
+    "test:release": "vitest run tests/release/workflow.release.test.ts --pool=forks --maxWorkers=1",
+    "test:gate": "node ./scripts/verify-gate-contract.mjs",
+    "test:submission": "node ./scripts/verify-release-submission.mjs",
+    "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
+    "lint": "node ./scripts/lint-check.mjs",
+    "format": "node ./scripts/format-check.mjs",
+    "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
+    "verify:implementation": "npm run test:release && npm run test:gate && node ../scripts/verification-gate.mjs",
+    "verify:submission": "npm run test:submission",
+    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
+  },
+  "engines": {
+    "node": ">=22.12.0 <25"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.0.4",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12",
+    "vitest": "^3.2.4"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "8a17ef6afd6ab9a3e6058213f481d1222928a8b8fcf940187c6f18f2c16f3cc8",
+    "../docs/checkout-contract.md": "d89414b2cc3f781756071c109e9acb062b6e87028d476363674b61d7a8e9ae91",
+    "../docs/checkout-legacy-map.md": "e178a8ffdbef89161bdb7d1f784d3794c575b9c1f99385ec14f21893972b2484",
+    "../docs/checkout-cases.json": "62a4806ef8e79f407daec97f1c8135cc5dd43f2ed73dc94c0b2c8b5405231b3b",
+    "package.json": "42a8b2060087a640478df03e936e54c737b8090f90e5d87b871012247e7ad997",
+    "lab-contract.json": "2680f3fc545440a8918dc2c87bc409bcaf29c4b99eec805dd20763a90da22bd2",
+    "src/labContract.ts": "5f8d48c2a116ad7a69c1c71e217ed024e72909d728a526220698ebbdff395109",
+    "src/checkout/legacyCheckout.mjs": "b42a2471c5b2624388a2bee2bb1cc765d14bd0244f2737b0406d03f82b06725e",
+    "scripts/run-checkout-tests.mjs": "77eb81ccd0029af32185ce941e708a1edf680a62b5ef34481966c363fe27b953",
+    "scripts/strangler-verification.mjs": "53b5579f2ff705536400ccf97cf934ab570a8b798efc4082cdb3b935cf93dacd",
+    "scripts/test-strangler-verifier.mjs": "d3f1c7585df1701b756f46021bb95fb66bb1759704062b973864b971fea0b1e9",
+    "scripts/verify-strangler-submission.mjs": "18b568b4a71a0dcedf726100d7f6e4c4f3ed0630b5741d2f1789ee2b6a4de4f3",
+    "submission-contract.json": "7c5d82239be01c124c7dc3d7576319c05ef993ba6d73683deccc03914536cdfe"
+  }
+}

@@ -1,10 +1,13 @@
 node_modules/
 dist/
 build/
+target/
 coverage/
 .next/
 .turbo/
 .vite/
+playwright-report/
+test-results/
 
 *.log
 *.tsbuildinfo
@@ -13,7 +16,5 @@ coverage/
 .env.*
 !.env.example
 
-package-lock.json
 yarn.lock
 pnpm-lock.yaml
-

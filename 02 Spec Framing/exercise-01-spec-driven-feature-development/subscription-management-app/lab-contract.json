@@ -1,38 +1,44 @@
 {
-  "title": "Spec Driven Feature Development",
-  "competency": "02. Spec Framing - Requirements decomposition and testable spec creation",
-  "mission": "Convert a vague product request into a complete engineering specification before implementation.",
-  "domain": "Subscription management dashboard with active plans, billing cadence, renewal dates, account roles, and pending plan-change requests.",
-  "outcome": "The learner produces Spec Kit artifacts that define requirements, assumptions, technical plan, and implementation tasks without implementing the feature.",
+  "title": "Spec-Driven Feature Development",
+  "competency": "02. Spec Framing - Requirements decomposition and testable specification creation",
+  "mission": "Turn a vague and conflicting subscription request into an implementation-ready specification before any feature code is written.",
+  "domain": "Subscription management with account roles, billing timing, prorated changes, pending requests, asynchronous provider results, and recovery states.",
+  "outcome": "The learner proves that explicit clarification produces a safer, traceable specification than an agent's first unframed attempt.",
   "entities": [
-    "Subscription",
-    "Billing account",
-    "Plan catalog",
-    "Plan change request",
-    "Spec Kit artifact"
+    "Subscription account",
+    "Account role",
+    "Plan-change request",
+    "Billing preview",
+    "Asynchronous provider result"
   ],
   "seededDefects": [
-    "The product request is intentionally vague.",
-    "The app exposes subscription status but no self-service management flow.",
-    "Cancellation, downgrade, renewal, and permission rules are unspecified.",
-    "The implementation tasks must be derived from repository inspection."
+    "The product request does not define what subscription management means.",
+    "Stakeholder notes conflict on permissions and when changes take effect.",
+    "Pending changes, asynchronous failures, retries, and recovery behavior are unresolved.",
+    "A coding agent can silently convert guesses into confident-looking requirements."
   ],
   "verificationGates": [
-    "specs/spec.md captures user scenarios and acceptance criteria.",
-    "specs/plan.md captures technical decisions and implementation approach.",
-    "specs/tasks.md breaks the work into testable tasks.",
-    "The app code is not modified for feature implementation."
+    "Three to five evidence-based clarifications cover authorization, billing, failure, and scope.",
+    "Requirements and acceptance criteria are testable and trace into the plan and tasks.",
+    "Before and after evidence uses the same agent conditions and contains genuine patches.",
+    "Starter application code and challenge evidence remain unchanged.",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
   ],
   "agentWorkflow": [
-    "Inspect the subscription dashboard, data model, and service layer.",
-    "Clarify missing assumptions before planning implementation.",
-    "Write Spec Kit artifacts from repository evidence.",
-    "Stop at the executable contract instead of coding the feature."
+    "Capture an unframed specification attempt in a fresh agent session.",
+    "Inspect source code, stakeholder conflicts, and billing constraints.",
+    "Record confirmed decisions or explicit assumptions with consequences.",
+    "Generate the final specification in another fresh session under identical conditions.",
+    "Compare both results and stop before implementation.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
   ],
   "workingDeliverables": [
+    "specs/clarifications.md",
     "specs/spec.md",
     "specs/plan.md",
     "specs/tasks.md",
-    "Evidence that no implementation was added"
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
   ]
 }

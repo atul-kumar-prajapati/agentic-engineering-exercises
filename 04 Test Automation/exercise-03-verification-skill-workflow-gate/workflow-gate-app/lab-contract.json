@@ -1,0 +1,55 @@
+{
+  "title": "Verification Skill Workflow Gate",
+  "competency": "04. Test Automation",
+  "skillPattern": "verification-before-completion",
+  "domain": "React and Spring workflow release boundary",
+  "mission": "Replace an unsupported provider-only claim with one fresh, fail-closed full-stack release command.",
+  "outcome": "The client contract, provider behavior, builds, and gate failure handling must pass before completion is claimed.",
+  "entities": [
+    "workflow response",
+    "decision state",
+    "transition",
+    "release surface",
+    "verification command",
+    "exit code"
+  ],
+  "seededDefects": [
+    "client trusts an unchecked response cast",
+    "provider omits derived decisionState",
+    "provider saves an unknown transition",
+    "release gate runs one focused provider test"
+  ],
+  "verificationGates": [
+    "gate contract",
+    "client release contract",
+    "client quality and production build",
+    "complete Maven verify lifecycle",
+    "submission evidence verifier",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
+  ],
+  "agentWorkflow": [
+    "reproduce and limit the old claim",
+    "map every requirement to observable proof",
+    "repair behavior and the fail-closed gate",
+    "run one fresh full gate",
+    "report only proven claims",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
+  ],
+  "workingDeliverables": [
+    "comparable before and after patches",
+    "runtime client and provider fixes",
+    "fail-closed release gate",
+    "skill provenance",
+    "fresh command output and claim audit",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
+  ],
+  "masterySignals": [
+    "claims follow fresh commands",
+    "all release surfaces run once",
+    "failures stop later work",
+    "spawn errors return non-zero",
+    "evidence identifies the verified implementation"
+  ]
+}

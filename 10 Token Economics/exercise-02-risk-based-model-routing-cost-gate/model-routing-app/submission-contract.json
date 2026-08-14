@@ -1,0 +1,14 @@
+{
+  "name": "Risk-Based Model Routing Cost Gate",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "model-routing-app/tests/route-task.test.mjs", "minCharacters": 850, "includeAll": ["fast", "balanced", "reasoning", "clarify", "unknown", "cross-boundary", "case IDs"] },
+    { "path": "evidence/raw-responses.json", "minCharacters": 7000, "validJson": true, "includeAll": ["docs-typo:fast:1", "authorization-boundary:reasoning:3", "incident-query-fix:balanced:2"] },
+    { "path": "evidence/raw-runs.json", "minCharacters": 14000, "validJson": true, "includeAll": ["sampleKey", "responseSha256", "inputTokens", "outputTokens", "latencyMs", "qualityScore", "safetyPassed", "gradingRationale"] },
+    { "path": "evidence/run-metadata.json", "minCharacters": 500, "validJson": true, "includeAll": ["providerFamily", "models", "runsPerLane", "temperature", "cacheDisabled", "sourceSha"] },
+    { "path": "evidence/cost-model.json", "minCharacters": 3500, "validJson": true, "includeAll": ["firstCallCost", "expectedAddedCost", "totalExpectedCost", "allReasoningExpectedCost", "savingsPercent", "adoption"] },
+    { "path": "evidence/routing-policy.md", "minCharacters": 1000, "includeAll": ["fast", "balanced", "reasoning", "clarify", "escalation", "field"] },
+    { "path": "evidence/adoption.md", "minCharacters": 1200, "includeAll": ["quality", "safety", "cost", "latency", "variance", "three", "held-out", "adopt"] },
+    { "path": "evidence/commands/routing-verify.txt", "minCharacters": 300, "includeAll": ["36 response-bound", "retry and escalation", "all-reasoning", "evidence-only history"] }
+  ]
+}

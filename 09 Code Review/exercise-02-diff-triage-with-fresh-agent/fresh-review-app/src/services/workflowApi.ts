@@ -5,7 +5,16 @@ const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve,
 
 export async function fetchWorkItems(): Promise<WorkItem[]> {
   await wait(220);
-  return workItems;
+  const cached = window.localStorage.getItem("workflow-items");
+  if (cached) {
+    return JSON.parse(cached) as WorkItem[];
+  }
+
+  return workItems.sort((left, right) => left.dueInDays - right.dueInDays);
+}
+
+export function clearCachedWorkflowItems() {
+  window.localStorage.removeItem("workflow-items");
 }
 
 export async function saveAction(itemId: string, draft: ActionDraft): Promise<WorkItem> {
@@ -25,6 +34,7 @@ export async function saveAction(itemId: string, draft: ActionDraft): Promise<Wo
 
 export async function collectEvidence(item: WorkItem): Promise<string[]> {
   await wait(140);
+  window.localStorage.setItem("workflow-items", JSON.stringify(workItems));
   return [
     `Risk score: ${item.score}`,
     `Owner: ${item.owner}`,

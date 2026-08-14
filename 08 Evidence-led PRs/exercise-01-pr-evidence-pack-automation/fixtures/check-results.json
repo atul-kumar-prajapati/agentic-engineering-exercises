@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "checks": [
+    {
+      "name": "unit-tests",
+      "command": "npm test",
+      "exitCode": 0,
+      "result": "passed",
+      "outputPath": "artifacts/unit-tests.txt",
+      "risk": "Low: unit behavior passed for this revision.",
+      "reviewerAction": "Confirm the unit-test artifact digest and result.",
+      "rollback": "Revert the PR commit if later regression evidence appears."
+    },
+    {
+      "name": "checkout-smoke",
+      "command": "npm run test:smoke",
+      "exitCode": 1,
+      "result": "failed",
+      "outputPath": "artifacts/checkout-smoke.txt",
+      "risk": "High: checkout cannot complete in the smoke scenario.",
+      "reviewerAction": "Block merge until the smoke failure is explained and corrected.",
+      "rollback": "Do not deploy; if already deployed, revert the checkout change."
+    },
+    {
+      "name": "ui-screenshot",
+      "command": "npm run screenshot",
+      "exitCode": 0,
+      "result": "passed",
+      "outputPath": "artifacts/checkout.svg",
+      "risk": "Medium: a screenshot proves rendering but not successful checkout.",
+      "reviewerAction": "Compare the screenshot with the expected checkout state.",
+      "rollback": "Revert the UI change if the visual state is not approved."
+    }
+  ]
+}

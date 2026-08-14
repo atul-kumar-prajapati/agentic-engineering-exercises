@@ -9,9 +9,18 @@
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc -b --pretty false",
     "test": "node ./scripts/agent-check.mjs",
+    "test:policy-engine": "node --test ./tests/policy-engine.test.mjs",
+    "test:guardrails": "node ./scripts/check-submission.mjs",
     "lint": "node ./scripts/lint-check.mjs",
     "format": "node ./scripts/format-check.mjs",
-    "agent:check": "npm run lint && npm run test && npm run format && npm run typecheck && npm run build"
+    "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
+    "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
+    "verify:implementation": "node ./scripts/verify-implementation.mjs",
+    "verify:submission": "npm run test:policy-engine && npm run test:guardrails",
+    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
+  },
+  "engines": {
+    "node": ">=22.12.0 <25"
   },
   "dependencies": {
     "react": "^19.2.0",

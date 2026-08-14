@@ -1,0 +1,13 @@
+{
+  "name": "Minimal-Diff Scope Budget",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "evidence/scope-plan.json", "minCharacters": 500, "validJson": true, "includeAll": ["maximumFiles", "maximumChangedLines", "allowedSourceFiles", "excludedPaths"] },
+    { "path": "evidence/scope-plan.md", "minCharacters": 600, "includeAll": ["before", "two", "40", "exportButton.mjs", "export-button.test.mjs", "excluded"] },
+    { "path": "minimal-diff-app/tests/export-button.test.mjs", "minCharacters": 500, "includeAll": ["export", "checkout", "delete", "unknown", "legacy-primary", "legacy-danger", "ds-secondary"] },
+    { "path": "evidence/scope-budget.json", "minCharacters": 600, "validJson": true, "includeAll": ["planSha", "sourceSha", "planned", "actual", "files", "additions", "deletions", "changedLines"] },
+    { "path": "evidence/avoided-work.md", "minCharacters": 600, "includeAll": ["checkout", "destructive", "shared", "styles", "cleanup", "reason"] },
+    { "path": "evidence/verification.md", "minCharacters": 500, "includeAll": ["export", "checkout", "delete", "unknown", "pass", "exit code: 0"] },
+    { "path": "evidence/commands/scope-verify.txt", "minCharacters": 250, "includeAll": ["Plan SHA", "Source SHA", "Actual scope", "evidence only"] }
+  ]
+}

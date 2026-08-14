@@ -1,31 +1,7 @@
 # Legacy Behavior Notes
 
-This is a seeded lab input for Vitest Characterization Test Refactor. It gives the learner concrete constraints to inspect, implement, test, and verify.
+Treat the golden file as observations, not desired product policy.
 
-## Operating Context
+Preserve exact output shape and strings. Pay special attention to the 12-month and 6-month boundaries, two-late-payment threshold, support override precedence, zero discount on override, negative late-payment acceptance, and `plan-not-supported` on otherwise mature accounts.
 
-Characterization-first refactor of legacy rule evaluation
-
-## Concrete Inputs
-
-- behavior spec
-- golden case
-- legacy branch
-- refactor step
-
-## Seeded Risks
-
-- current behavior around overdue high-risk items is undocumented
-- refactor changes log text used by support
-- test is patched to match new behavior
-
-## Verification Expectations
-
-- green baseline
-- golden case tests
-- preserve/change/bug table
-- stepwise refactor proof
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+Record questionable behavior as a suspected bug for a separate approved change. Do not add validation or change precedence during this structural refactor.

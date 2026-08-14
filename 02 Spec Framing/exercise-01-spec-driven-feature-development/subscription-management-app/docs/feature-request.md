@@ -1,7 +1,7 @@
 # Feature Request
 
-"Allow users to manage their subscriptions"
+> Allow users to manage their subscriptions.
 
-The request came from product after several account admins asked for self-service subscription changes. No acceptance criteria, permission rules, billing edge cases, or implementation plan have been written yet.
+Several customers have asked for self-service upgrades, downgrades, cancellations, and seat changes. Product wants the workflow to reduce support tickets without creating billing mistakes.
 
-Use Spec Kit to turn this request into `specs/spec.md`, `specs/plan.md`, and `specs/tasks.md` before implementation begins.
+No acceptance criteria or final decisions have been approved. Inspect the repository evidence, identify the decisions that block safe implementation, and frame the work before any feature code is written.

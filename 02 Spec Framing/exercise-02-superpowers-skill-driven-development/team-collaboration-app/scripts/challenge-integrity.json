@@ -1,0 +1,25 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "c9e23b57da38d79ed2bfda8c7b0f0d28e6cc49e98f453c3fbc23067d998d33f9",
+    "../docs/evidence-template.md": "9902b569d525fad144c3eddcb913984de140d8bdbe159d330273d7830b153fab",
+    "../docs/invitation-contract.md": "b6135dc848f9b2d9fc3fa4fbe3293c7faad05dee8b9736aec1f150a2c3f19b17",
+    "docs/feature-request.md": "4ee246918074e50d7d47e112d7acbc29f2c3360de03c88814bfefcb39ac1f6b8",
+    "docs/support-incidents.md": "13c30da8ef3778fece02ee23a8590721cbccd010c18bb81b51165ce781758f3c",
+    "lab-contract.json": "1a60cd59178495832adc0c72fc8ac17a16ee7c3501d7613ca152dfd0f772f06d",
+    "package-lock.json": "fabf62c92eeb2d81e8f15b2812569d1ce9f9e7438dd209d230a4b7a383610592",
+    "package.json": "a5eef9409deac4781221287771cae3b8d3c8bd09941e7aa3f0ca7738538203f1",
+    "scripts/agent-check.mjs": "683f6570b1575042320d5b4fad13415587b7870f10ae56f5e47506f5b9ccdd48",
+    "scripts/format-check.mjs": "d6380a0b108d5b6625c159321abbc2481eacb8ff8a3bcbd9c67d6c4b53b6c886",
+    "scripts/lint-check.mjs": "07e61dd995625bf59b3a32fc60a3fc523529a29748286987e699175f3e6bcea2",
+    "scripts/run-invitation-tests.mjs": "af1866d4b3c41b2bf9e7d6d859722fb1a287145339bd0d47e2deb194bc8c573c",
+    "scripts/verify-submission.mjs": "62f996d941b7fdbb86c57eb76329259130e2020117db2165ffd64d24c2920ba6",
+    "src/data/team.ts": "0dc4775a9bd2d9a616364b9fa055cb16b91aaddc386d5bcdecf892b3f55f85a6",
+    "src/legacy/quickInvite.ts": "9890a45e4238f42bee4f53095d9a1674cc1cd7a695b63d2593f6cab48407b691",
+    "src/services/teamPolicy.ts": "d6625c28944bd05c8a817adcc57e22379f34580da593be04e2478f641047c7a3",
+    "src/types.ts": "2fcd1f698f017607ba8e1e2a333efb4ae6f77f05f6b78b7bef6453e33d7d0423",
+    "tests/invitationService.test.ts": "d9ecfaab0923a178737b7d84dcc478724488e48fd9ca625fe0268f08f366b69f",
+    "tsconfig.json": "9fa41f46d737fc74ebc0af2202337c116e241de60582f224cba2e866aea9fe83",
+    "vite.config.ts": "93eba443475df591a4cfede2cb4aa47b5d0263316d3a86147536cb5ac380abaa"
+  }
+}

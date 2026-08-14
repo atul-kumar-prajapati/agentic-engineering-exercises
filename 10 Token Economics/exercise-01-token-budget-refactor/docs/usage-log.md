@@ -1,31 +1,10 @@
-# Usage Log
+# Baseline Context Usage
 
-This is a seeded lab input for Token Budget Refactor. It gives the learner concrete constraints to inspect, implement, test, and verify.
+The starter selects all six catalog entries.
 
-## Operating Context
+- Selected cost: 2,580 UTF-8 bytes.
+- Relevant current sources for the initial adapter task: 1,136 bytes.
+- Waste: stale migration notes plus unrelated UI, audit, and error guidance.
+- Failure: maximum-byte input is ignored and no skipped-source reason exists.
 
-Token-budgeted refactor of a noisy rules component
-
-## Concrete Inputs
-
-- context budget
-- model effort choice
-- deterministic script
-- refactor test
-
-## Seeded Risks
-
-- plan loads whole app instead of change path
-- routine rename spends high-effort review turns
-- deterministic migration is done manually
-
-## Verification Expectations
-
-- context manifest
-- model routing log
-- refactor test
-- automation savings estimate
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+Recompute planned and actual values from the protected catalog; do not copy this baseline into the final ledger as if it were a completed run.

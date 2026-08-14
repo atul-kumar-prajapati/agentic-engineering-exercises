@@ -1,0 +1,16 @@
+{
+  "name": "Trace-Measured Session Waste Reduction",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "session-waste-app/src/retro/preflightPolicy.mjs", "minCharacters": 600, "includeAll": ["evaluateCommandAttempt", "DIAGNOSIS_OR_CHANGE_REQUIRED", "FIRST_OR_INFORMED_ATTEMPT"] },
+    { "path": "session-waste-app/src/retro/analyzeSession.test.mjs", "minCharacters": 900, "includeAll": ["analyzeSession", "duplicateReads", "unchangedFailureRetries", "finalVerificationRuns"] },
+    { "path": "evidence/baseline.json", "minCharacters": 180, "validJson": true, "includeAll": ["duplicateReads", "unchangedFailureRetries", "oversizedContextLoads", "finalVerificationRuns", "preventableCalls"] },
+    { "path": "evidence/after.json", "minCharacters": 180, "validJson": true, "includeAll": ["duplicateReads", "unchangedFailureRetries", "oversizedContextLoads", "finalVerificationRuns", "preventableCalls"] },
+    { "path": "evidence/replay-events.json", "minCharacters": 1200, "validJson": true, "includeAll": ["diagnosis", "final-verification", "workspaceRevision"] },
+    { "path": "evidence/replay-metadata.json", "minCharacters": 250, "validJson": true, "includeAll": ["POLICY-217", "sessionId", "agent", "model", "promptHash", "timeLimitMinutes"] },
+    { "path": "evidence/retrospective.md", "minCharacters": 900, "includeAll": ["definition", "unchanged failure", "root cause", "preflight", "correctness", "remaining waste"] },
+    { "path": "evidence/replay.md", "minCharacters": 700, "includeAll": ["POLICY-217", "same agent", "same model", "same prompt", "new session", "before", "after", "final verification"] },
+    { "path": "evidence/history.json", "minCharacters": 70, "validJson": true, "includeAll": ["sourceSha"] },
+    { "path": "evidence/commands/retro-verify.txt", "minCharacters": 220, "includeAll": ["Source SHA", "preventable calls", "PASS", "exit code: 0"] }
+  ]
+}

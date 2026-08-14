@@ -1,0 +1,14 @@
+{
+  "name": "Code Review Regression Gate",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "regression-review-app/eval/review-prompt-candidate.md", "minCharacters": 180, "excludeAll": ["HIST-", "MULTI-", "startsWith", "JSON.parse", "authorization bypass", "slice(0"] },
+    { "path": "evidence/raw-results.json", "minCharacters": 5000, "validJson": true, "includeAll": ["baseline", "candidate", "provider", "response"] },
+    { "path": "evidence/run.json", "minCharacters": 500, "validJson": true, "includeAll": ["candidatePromptSourceSha", "rawResultsSha256", "sampleCountPerPromptCase", "cacheDisabled"] },
+    { "path": "evidence/judgments.json", "minCharacters": 6000, "validJson": true, "includeAll": ["sampleKey", "responseSha256", "foundFindingIds", "falseBlocker", "rationale"] },
+    { "path": "evidence/scorecard.json", "minCharacters": 1800, "validJson": true, "includeAll": ["historicalRecall", "multiBugRecall", "cleanPrecision", "regressionLimit", "adopt"] },
+    { "path": "evidence/review-eval.md", "minCharacters": 1800, "includeAll": ["provider", "sample", "historical", "multi-bug", "clean", "variance", "false blocker", "limitation", "adopt"] },
+    { "path": "evidence/commands/eval-verify.txt", "minCharacters": 300, "includeAll": ["18 uncached", "response judgments", "adoption thresholds", "evidence-only history"] },
+    { "path": "evidence/commands/agent-check.txt", "minCharacters": 200, "includeAll": ["agent-check", "exit code: 0"] }
+  ]
+}

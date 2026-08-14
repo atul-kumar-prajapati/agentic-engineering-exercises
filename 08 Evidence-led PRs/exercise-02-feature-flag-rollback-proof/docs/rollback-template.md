@@ -1,31 +1,14 @@
-# Rollback Template
+# Rollback Evidence Template
 
-This is a seeded lab input for Feature Flag Rollback Proof. It gives the learner concrete constraints to inspect, implement, test, and verify.
+The supplied drill creates both rollback evidence files. Review them before submission.
 
-## Operating Context
+`rollback-drill.json` must record the source SHA, command, actor, reason, timestamp, start time, end time, elapsed milliseconds, configuration digests, configuration before and after, and observed behavior before and after.
 
-Risky UI rollout guarded by feature flag and rollback proof
+`rollback-drill.md` must clearly state:
 
-## Concrete Inputs
-
-- feature flag
-- rollback config
-- telemetry event
-- disabled state
-
-## Seeded Risks
-
-- flag default differs between dev and CI
-- rollback path leaves telemetry enabled
-- disabled state still calls the new API
-
-## Verification Expectations
-
-- flag on/off tests
-- rollback script
-- telemetry assertion
-- PR evidence capture
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+- Source SHA and exact rollback command.
+- Before: flag enabled, preview selected, one API call, one telemetry event.
+- After: flag disabled, allowlist empty, legacy selected, zero API calls, zero telemetry events.
+- Previous and rollback revisions.
+- Start time, end time, elapsed milliseconds, result, and remaining cleanup.
+- A passing invalid-input check proving the configuration was not changed.

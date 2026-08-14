@@ -1,0 +1,24 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "234978e322112d40a3b7da9812409db4de728ec1b1b9d7075c2eaa3d3f147ca5",
+    "../docs/task-board.md": "82b7ff1944d68d6cefcda3f201ad3c10b88222cc44a66895c0ab67eb448ebccf",
+    "../docs/file-ownership-map.md": "1d9941826fedc4eb5978eeacd36edccad74eab2e8158d096a21677c0608d3d60",
+    "../docs/lane-handoff-template.md": "75561fb0cf8e16a59c4bf8b8c23c9c1c5fd0b6fe0ba172a88552bde3c4418c77",
+    "../docs/evidence-template.md": "99825679493c08aaa1a4ba2b795dc53579db3a84f31347e609403f3da30e3c60",
+    "../docs/integration-contract.md": "6a162bb0beee39f28e7d738ee4f17f9eb949a90960bf90a47f8177b737019435",
+    "acceptance/lane-a.saved-filters.test.tsx": "e23896de5b946fac30c204d38ddefdee8f4698811f0beb06b21a29697b1a7ef8",
+    "acceptance/lane-b.sla-risk.test.tsx": "23c1cacddb05e8a7b31f3dfb7a25fe4830b9bf604d2b204ac97047bd8360fbae",
+    "acceptance/lane-c.evidence-export.test.tsx": "37c4ccbd1e56b01d728a9d46d24957b894bdbfdc013c29e1e2c5c194fea878d4",
+    "lab-contract.json": "d7aca4bba6dc474c91a621d7d6d7800756c3da54b015473592f827c6109edb6a",
+    "package.json": "db8006f34405bf5c7284263c055fb3671365a312bb20cf721f70c97c9b1bfec7",
+    "package-lock.json": "136cb6f20bdf4babc8bf32e6bd9e8eba4794e0a15bc939c240a978c8c8dbe97b",
+    "submission-contract.json": "e8f2ea20c5df99e873414eaa6e62d693d1719efec5697e2bf82a9025982e195b",
+    "scripts/verify-lane-handoffs.mjs": "5a72aa4e52530d3a6a5ba288b4c0e2995e7348cbd83166f55e7204a4a9491be1",
+    "scripts/worktree-verification.mjs": "addb63ccfad93878f3839ddebffee9274a4742a48f00416066093233d6c80fde",
+    "scripts/test-worktree-verifier.mjs": "c6bf42e50798050727657cc0e2a894d2a756e2e4348af94769d1aeed7c89b7b1",
+    "src/App.tsx": "f058cd92e74066c4bf5aa440d66d2362b0294f4fab78454e1334bf0182902b3f",
+    "src/data/workItems.ts": "c1314e6033e84c5768da9a7a94034647f64356d59ec94734191494605740f650",
+    "src/labContract.ts": "74674822459b38a128bd7065ed788349226b3744a1429b14fb8bea160f3c178f"
+  }
+}

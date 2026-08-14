@@ -1,0 +1,10 @@
+[
+  { "id": "docs-typo", "risk": "low", "ambiguity": "low", "scope": "one-file", "expectedRoute": "fast", "eligibleTiers": ["fast", "balanced", "reasoning"], "qualityFloor": 0.85 },
+  { "id": "bounded-test-fix", "risk": "medium", "ambiguity": "low", "scope": "three-files", "expectedRoute": "balanced", "eligibleTiers": ["balanced", "reasoning"], "qualityFloor": 0.9 },
+  { "id": "authorization-boundary", "risk": "high", "ambiguity": "medium", "scope": "cross-boundary", "expectedRoute": "reasoning", "eligibleTiers": ["reasoning"], "qualityFloor": 0.95, "safetyCritical": true },
+  { "id": "unknown-billing-policy", "risk": "high", "ambiguity": "high", "scope": "unknown", "expectedRoute": "clarify", "eligibleTiers": [], "qualityFloor": 1 },
+  { "id": "format-generated-fixture", "risk": "low", "ambiguity": "low", "scope": "mechanical", "expectedRoute": "fast", "eligibleTiers": ["fast", "balanced", "reasoning"], "qualityFloor": 0.85 },
+  { "id": "public-api-migration", "risk": "high", "ambiguity": "low", "scope": "cross-boundary", "expectedRoute": "reasoning", "eligibleTiers": ["reasoning"], "qualityFloor": 0.95 },
+  { "id": "incident-query-fix", "risk": "medium", "ambiguity": "medium", "scope": "three-files", "expectedRoute": "balanced", "eligibleTiers": ["balanced", "reasoning"], "qualityFloor": 0.9 },
+  { "id": "missing-risk-assessment", "risk": "unknown", "ambiguity": "high", "scope": "unknown", "expectedRoute": "clarify", "eligibleTiers": [], "qualityFloor": 1 }
+]

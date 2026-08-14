@@ -1,31 +1,19 @@
-# Flag Brief
+# Invoice Preview Flag Contract
 
-This is a seeded lab input for Feature Flag Rollback Proof. It gives the learner concrete constraints to inspect, implement, test, and verify.
+Flag key: `invoice-preview-v2`.
 
-## Operating Context
+Evaluation requirements:
 
-Risky UI rollout guarded by feature flag and rollback proof
+- Call `flagClient.getBooleanValue(flagKey, false, context)` exactly once for a valid request.
+- Pass both `targetingKey` and `accountId` unchanged. They must be equal, non-empty strings.
+- Treat a disabled result or evaluation exception as disabled.
+- Return `{ experience: "legacy", reason: <reason> }` for every non-enabled result.
 
-## Concrete Inputs
+Side-effect requirements:
 
-- feature flag
-- rollback config
-- telemetry event
-- disabled state
+- Only an enabled result may call `api.loadPreview(accountId)`.
+- Emit `invoice_preview_viewed` only after a successful API response.
+- The telemetry payload contains the unchanged `targetingKey`, `accountId`, and `flagKey`.
+- If the preview API fails, return legacy with reason `preview-unavailable` and emit no preview telemetry.
 
-## Seeded Risks
-
-- flag default differs between dev and CI
-- rollback path leaves telemetry enabled
-- disabled state still calls the new API
-
-## Verification Expectations
-
-- flag on/off tests
-- rollback script
-- telemetry assertion
-- PR evidence capture
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+Required legacy reasons are `invalid-context`, `flag-disabled`, `flag-evaluation-error`, and `preview-unavailable`.

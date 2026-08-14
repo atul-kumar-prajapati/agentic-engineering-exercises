@@ -1,0 +1,49 @@
+{
+  "title": "Minimal-Diff Scope Budget",
+  "competency": "10. Token Economics - bounded implementation scope",
+  "skillPattern": "Pre-committed minimal-diff budget",
+  "domain": "Single-action design-system variant migration",
+  "mission": "Ship the export variant migration within a pre-declared Git scope budget while preserving legacy actions.",
+  "outcome": "One helper and one test change, with exact history-backed scope evidence and no unrelated cleanup.",
+  "entities": [
+    "pre-change scope plan",
+    "variant helper",
+    "learner regression test",
+    "Git numstat ledger"
+  ],
+  "seededDefects": [
+    "export remains legacy-primary",
+    "declared scope can be self-reported",
+    "shared cleanup is tempting",
+    "unknown legacy fallback is easy to lose"
+  ],
+  "verificationGates": [
+    "protected behavior test",
+    "plan-before-source history",
+    "allowed-path check",
+    "two-file 40-line numstat gate",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
+  ],
+  "agentWorkflow": [
+    "Commit the exact scope plan.",
+    "Change only export helper and focused test.",
+    "Run protected and learner checks.",
+    "Record Git-derived scope and avoided work.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
+  ],
+  "workingDeliverables": [
+    "Plan commit.",
+    "Minimal source commit.",
+    "Scope ledger.",
+    "Avoided-work and verification evidence.",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
+  ],
+  "masterySignals": [
+    "The request, not nearby cleanup, defines scope.",
+    "Actual Git data proves the budget.",
+    "Unchanged legacy behavior is tested.",
+    "Evidence follows rather than contaminates the source commit."
+  ]
+}

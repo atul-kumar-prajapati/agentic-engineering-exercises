@@ -1,0 +1,56 @@
+{
+  "title": "Skill Trigger Boundary Evals",
+  "competency": "05. Skill Packaging",
+  "skillPattern": "skill-creator trigger optimization",
+  "domain": "Routing code-change reviews without colliding with implementation, release communication, incident reporting, or document review",
+  "mission": "Measure a vague skill description, repair only its trigger boundary, and prove the change with repeated train and held-out decisions.",
+  "outcome": "The real description activates for evidence-backed review of supplied code changes and abstains for neighboring workflows.",
+  "entities": [
+    "skill description",
+    "protected trigger request",
+    "model decision",
+    "raw routing response hash",
+    "training split",
+    "held-out split",
+    "confusion matrix"
+  ],
+  "seededDefects": [
+    "description does not identify code artifacts",
+    "description collides with summaries and implementation work",
+    "description omits explicit non-use boundaries"
+  ],
+  "verificationGates": [
+    "20 protected substantive cases",
+    "three decisions per request and description",
+    "provider, environment, timestamp, and response-hash parity",
+    "7 of 8 held-out majority accuracy",
+    "recall and specificity thresholds",
+    "phrase-leakage check",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
+  ],
+  "agentWorkflow": [
+    "record the unchanged baseline",
+    "analyze training confusion",
+    "edit only description metadata",
+    "rerun under identical conditions",
+    "select using held-out score and stability",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
+  ],
+  "workingDeliverables": [
+    "updated SKILL.md",
+    "120 response-bound raw trigger decisions",
+    "skill provenance",
+    "training error analysis",
+    "scored comparison and adoption decision",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
+  ],
+  "masterySignals": [
+    "clear positive and negative boundaries",
+    "fair repeated comparison with reproducible routing provenance",
+    "balanced precision and recall",
+    "held-out improvement",
+    "no prompt overfitting"
+  ]
+}

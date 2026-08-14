@@ -1,0 +1,58 @@
+{
+  "title": "Progressive Disclosure Release Skill",
+  "competency": "05. Skill Packaging",
+  "skillPattern": "Agent Skills progressive disclosure",
+  "domain": "Evidence-backed customer release notes from arbitrary Git ranges",
+  "mission": "Replace a broad monolithic prompt with a focused, portable release-notes skill that loads resources conditionally.",
+  "outcome": "The packaged skill improves release-note accuracy while measurably reducing the context loaded for each request.",
+  "entities": [
+    "SKILL.md metadata",
+    "conditional reference",
+    "Git extractor",
+    "quality eval",
+    "trigger eval",
+    "release trace"
+  ],
+  "seededDefects": [
+    "trigger includes unrelated engineering summaries",
+    "all rules and examples load for every task",
+    "Git range is selected manually",
+    "internal telemetry is published",
+    "missing artifacts are treated as passing"
+  ],
+  "verificationGates": [
+    "three-range fixture smoke",
+    "Agent Skills structure validation",
+    "fixture-independent extractor test",
+    "Git-derived release-note score",
+    "exact context-byte and resource evidence verifier",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
+  ],
+  "agentWorkflow": [
+    "capture the monolithic first attempt",
+    "separate core workflow from conditional policy",
+    "replace copied Git output with one reusable script",
+    "define quality and trigger evals",
+    "run a fresh skill attempt and selective scenarios",
+    "verify and compare",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
+  ],
+  "workingDeliverables": [
+    "portable skill folder",
+    "three focused references",
+    "range-agnostic Git extractor",
+    "quality and trigger eval sets",
+    "comparable release outputs",
+    "byte-measured resource-use and evaluation evidence",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
+  ],
+  "masterySignals": [
+    "valid cross-agent metadata",
+    "precise positive and negative routing",
+    "exact context bytes prove resources load only when relevant",
+    "extractor survives an unrelated repository",
+    "customer output is traced and evidence-safe"
+  ]
+}

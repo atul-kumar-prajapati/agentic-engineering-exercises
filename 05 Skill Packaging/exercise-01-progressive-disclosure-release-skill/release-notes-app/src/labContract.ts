@@ -1,0 +1,19 @@
+export interface LabContract {
+  title: string; competency: string; domain: string; mission: string; outcome: string;
+  entities: string[]; seededDefects: string[]; verificationGates: string[];
+  agentWorkflow: string[]; workingDeliverables: string[]; masterySignals: string[];
+}
+
+export const labContract: LabContract = {
+  title: "Progressive Disclosure Release Skill",
+  competency: "05. Skill Packaging",
+  domain: "Evidence-backed customer release notes",
+  mission: "Replace a monolithic release prompt with a standards-compliant reusable skill package.",
+  outcome: "The skill loads concise instructions, detailed policy, and deterministic Git extraction only when needed.",
+  entities: ["SKILL.md", "reference", "script", "eval", "release trace"],
+  seededDefects: ["trigger is too broad", "policy and examples are mixed", "missing evidence is treated as passing"],
+  verificationGates: ["fixture smoke", "skill structure validation", "Git-derived note verification", "fair comparison evidence"],
+  agentWorkflow: ["capture raw-prompt baseline", "package with progressive disclosure", "run fresh skill attempt", "verify and compare"],
+  workingDeliverables: ["skill folder", "Git helper", "evals", "before-and-after release outputs"],
+  masterySignals: ["valid metadata", "precise routing", "no duplicated context", "derived and traceable output"],
+};

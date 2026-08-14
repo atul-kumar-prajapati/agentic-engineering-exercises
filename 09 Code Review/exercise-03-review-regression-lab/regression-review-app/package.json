@@ -1,27 +1,46 @@
 {
-    "name":  "regression-review-app",
-    "version":  "0.1.0",
-    "private":  true,
-    "type":  "module",
-    "scripts":  {
-                    "dev":  "vite --host 127.0.0.1",
-                    "build":  "tsc -b \u0026\u0026 vite build",
-                    "preview":  "vite preview --host 127.0.0.1",
-                    "typecheck":  "tsc -b --pretty false",
-                    "test":  "node ./scripts/agent-check.mjs",
-                    "lint":  "node ./scripts/lint-check.mjs",
-                    "format":  "node ./scripts/format-check.mjs",
-                    "agent:check":  "npm run lint \u0026\u0026 npm run test \u0026\u0026 npm run format \u0026\u0026 npm run typecheck \u0026\u0026 npm run build"
-                },
-    "dependencies":  {
-                         "react":  "^19.2.0",
-                         "react-dom":  "^19.2.0"
-                     },
-    "devDependencies":  {
-                            "@types/react":  "^19.2.7",
-                            "@types/react-dom":  "^19.2.3",
-                            "@vitejs/plugin-react":  "^5.0.4",
-                            "typescript":  "^5.9.3",
-                            "vite":  "^7.1.12"
-                        }
+  "name": "regression-review-app",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc -b --pretty false",
+    "test": "node ./scripts/test-review-eval-verifier.mjs && node ./scripts/agent-check.mjs",
+    "eval:smoke": "node ./eval/verify-catalog.mjs && node ./scripts/test-review-eval-verifier.mjs",
+    "eval:model": "promptfoo eval --no-cache -c ./promptfooconfig.mjs -o ../evidence/raw-results.json",
+    "eval:score": "node ./scripts/score-review-eval.mjs",
+    "eval:verify": "node ./scripts/verify-review-eval-submission.mjs",
+    "audit:remote": "npm audit --omit=optional --audit-level=high",
+    "test:submission": "npm run eval:verify && node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json",
+    "lint": "node ./scripts/lint-check.mjs",
+    "format": "node ./scripts/format-check.mjs",
+    "agent:check": "npm run test:integrity && npm run audit:remote && npm run eval:smoke && npm run test && npm run lint && npm run format && npm run typecheck && npm run build",
+    "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
+    "verify:implementation": "npm run eval:verify",
+    "verify:submission": "npm run test:submission",
+    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
+  },
+  "engines": {
+    "node": ">=22.22.0 <25"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.0.4",
+    "promptfoo": "0.122.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.12"
+  },
+  "overrides": {
+    "@ai-sdk/provider-utils": {
+      "undici": "6.28.0"
+    }
+  }
 }

@@ -1,0 +1,60 @@
+{
+  "title": "TDD Skill Network Boundary Rescue",
+  "competency": "04. Test Automation",
+  "skillPattern": "tdd",
+  "domain": "Network-backed support case states",
+  "mission": "Use a popular TDD skill to repair three user-visible defects through ordered red and green vertical slices.",
+  "outcome": "Six independent states and a strict GET /api/cases boundary are protected by behaviour-focused component tests.",
+  "entities": [
+    "loading announcement",
+    "case list",
+    "server-empty state",
+    "filtered-empty state",
+    "request error",
+    "retry request",
+    "MSW handler"
+  ],
+  "seededDefects": [
+    "loading has no user-visible feedback",
+    "filtered-empty is reported as server-empty",
+    "retry clears the error without requesting",
+    "unhandled requests only warn",
+    "runtime handlers leak"
+  ],
+  "verificationGates": [
+    "green weak smoke",
+    "failing protected acceptance",
+    "six-state participant suite",
+    "three shuffled-order runs",
+    "tamper-evident command capture and TDD evidence verifier",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
+  ],
+  "agentWorkflow": [
+    "capture a without-skill first attempt",
+    "install and record the TDD skill",
+    "confirm the public seam",
+    "complete three red-green vertical slices",
+    "add independent boundary checks",
+    "run shuffled orders and compare attempts",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
+  ],
+  "workingDeliverables": [
+    "repaired dashboard",
+    "strict MSW setup",
+    "independent component tests",
+    "before-and-after patches",
+    "skill provenance",
+    "machine-captured TDD command records and stability evidence",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
+  ],
+  "masterySignals": [
+    "hashed command evidence proves red precedes each production change",
+    "one behaviour is completed per cycle",
+    "tests use public UI and network seams",
+    "unexpected requests fail",
+    "handler overrides reset",
+    "retry proves exactly one new request"
+  ]
+}

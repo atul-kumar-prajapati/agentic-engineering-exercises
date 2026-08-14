@@ -1,38 +1,46 @@
 {
-  "title": "Superpowers Skill Driven Development",
-  "competency": "02. Spec Framing - Requirements decomposition and testable spec creation",
-  "mission": "Use agent skills to turn a vague feature request into a well-planned engineering implementation.",
-  "domain": "Team collaboration workspace with roles, workspace membership, invitation policy questions, and no implemented invitation workflow.",
-  "outcome": "The learner installs Superpowers skills, uses them to investigate and plan, then implements team invitation functionality safely with evidence.",
+  "title": "Superpowers Skill-Driven Development",
+  "competency": "02. Spec Framing - Skill-driven design, planning, test-first implementation, review, and verification",
+  "mission": "Compare an unstructured agent implementation with a Superpowers-driven implementation of a failure-prone invitation lifecycle.",
+  "domain": "Team invitations with actor permissions, target-role policy, normalized identity, expiry, single-use state transitions, and immutable rejection behavior.",
+  "outcome": "The learner produces a working invitation feature and evidence that connects the Superpowers workflow to design, tests, implementation, review, and verification.",
   "entities": [
-    "Workspace",
+    "Workspace policy",
     "Team member",
-    "Role permission",
-    "Invitation",
-    "Superpowers workflow evidence"
+    "Invitation actor",
+    "Team invitation",
+    "Invitation lifecycle state"
   ],
   "seededDefects": [
-    "The request does not define who can invite users.",
-    "Invitation expiry, rejection, and duplicate-email behavior are unspecified.",
-    "Roles exist in the codebase but are not connected to invitation policy.",
-    "There is no implementation plan or skill workflow evidence."
+    "The application has no invitation lifecycle or user interface.",
+    "An unsafe legacy helper mutates membership without authorization or validation.",
+    "Case-insensitive duplicates, expiry, guest policy, and repeated transitions can corrupt state.",
+    "The starter service throws until a test-driven implementation replaces it."
   ],
   "verificationGates": [
-    ".superpowers evidence exists.",
-    "implementation-plan.md explains assumptions, small changes, and verification.",
-    "Team invitation behavior is implemented safely.",
-    "The final result is verified with project checks."
+    "Protected invitation lifecycle tests pass without modification.",
+    "The Team Invitations interface delegates lifecycle behavior to the invitation service.",
+    "Superpowers design, plan, skill usage, TDD, review, and verification evidence is present.",
+    "Before and after runs use the same conditions and contain genuine, different patches.",
+    "Protected challenge files remain unchanged.",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
   ],
   "agentWorkflow": [
-    "Install and configure Superpowers skills.",
-    "Use the skills to explore code before coding.",
-    "Plan role, expiry, rejection, and failure scenarios.",
-    "Implement in small verified changes."
+    "Capture a first implementation without Superpowers.",
+    "Use Superpowers brainstorming and approve the design before planning.",
+    "Create the implementation plan and follow the selected execution workflow.",
+    "Record a failing invitation test before production implementation.",
+    "Request code review and verify the completed feature before claiming success.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
   ],
   "workingDeliverables": [
-    ".superpowers workflow evidence",
-    "implementation-plan.md",
-    "Working team invitation functionality",
-    "Verification output"
+    "Working invitation service and Team Invitations interface",
+    "Superpowers design and implementation plan",
+    "Before and after session evidence and patches",
+    "Skill usage, TDD, review, and comparison evidence",
+    "Passing invitation, submission, and agent checks",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
   ]
 }

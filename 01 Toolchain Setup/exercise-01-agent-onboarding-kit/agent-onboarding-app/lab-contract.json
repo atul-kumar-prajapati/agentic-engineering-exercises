@@ -1,39 +1,45 @@
 {
   "title": "Agent Onboarding Kit",
   "competency": "01. Toolchain Setup - Project rules, hooks, guardrails, and CLI or MCP wiring",
-  "mission": "Configure a coding agent so it can understand and work on a repository like a new engineering teammate.",
-  "domain": "Internal support case router with limited documentation, mixed data-access patterns, hidden ownership rules, and missing onboarding instructions.",
-  "outcome": "A fresh coding agent can inspect the repository, follow documented boundaries, run the correct checks, and produce a reviewable change without repeated human re-explanation.",
+  "mission": "Create onboarding instructions that help a coding agent understand the repository, make correct code changes, and run the required checks without human guidance.",
+  "domain": "Internal support case router where undocumented architecture, mixed patterns, hidden ownership decisions, and scattered verification expectations produce inconsistent agent PRs.",
+  "outcome": "Before-and-after evidence and an independent reviewer task show whether concise repository onboarding helps fresh agents produce correct, focused, maintainable, and verified changes.",
   "entities": [
     "Support case queue",
     "Escalation routing policy",
     "Customer segment ownership",
-    "Agent setup documentation"
+    "Before-and-after agent evidence"
   ],
   "seededDefects": [
     "The repository has no agent rules or architecture map.",
-    "The data and routing layers use different naming conventions.",
-    "Testing and review expectations are spread across package scripts and sparse notes.",
-    "Ownership rules are only implied by code and sample data."
+    "Existing patterns do not clearly identify the correct implementation boundary.",
+    "Related interface behavior can drift when changes are made in isolation.",
+    "Testing and review expectations must be discovered across scripts, source, and sparse notes."
   ],
   "verificationGates": [
-    "Agent setup files exist in .agent with concrete repository guidance.",
-    "AGENTS.md or CLAUDE.md explains safe commands, avoided commands, and PR expectations.",
-    "Architecture notes name the app, service, data, and ownership boundaries.",
-    "Testing notes tell a fresh agent which commands prove the work."
+    "AGENTS.md provides concise safe-start guidance and links every participant-created supporting document.",
+    "Integrity verification prevents changes to the challenge instructions, contracts, fixtures, and verification scripts.",
+    "Both agent-run branches start from the same application commit.",
+    "Before and after sessions use the same feature request and working conditions.",
+    "The final Needs Attention behavior is internally consistent and respects the discovered architecture.",
+    "The implementation-only check can measure the feature result on either branch.",
+    "Evidence includes both patches, session results, comparison, and passing checks.",
+    "The verify:exercise command checks application quality and exercise completion in one step.",
+    "The onboarding is reusable for a different reviewer-assigned feature without being rewritten."
   ],
   "agentWorkflow": [
-    "Inspect package scripts, src folders, services, data, and docs before writing rules.",
-    "Map architecture boundaries from code rather than inventing a generic template.",
-    "Document safe commands and risky commands with repository-specific reasons.",
-    "Create the onboarding layer without refactoring unrelated application behavior."
+    "Create two branches from the same commit and run the feature request without onboarding in the first branch.",
+    "Inspect package scripts, source folders, services, data, and docs before writing rules.",
+    "Create concise, reusable AGENTS.md guidance and any supporting documents justified by the repository in the second branch.",
+    "Run the same feature request in a fresh session on the second branch without retries or human correction.",
+    "Raise the final PR from the second branch with evidence from both runs.",
+    "Allow a reviewer to test the unchanged onboarding with a different repository task.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
   ],
   "workingDeliverables": [
-    ".agent/rules.md",
-    ".agent/architecture.md",
-    ".agent/workflows.md",
-    ".agent/testing.md",
-    ".agent/conventions.md",
-    "AGENTS.md or CLAUDE.md"
+    "AGENTS.md and any participant-selected supporting documents",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
   ]
 }

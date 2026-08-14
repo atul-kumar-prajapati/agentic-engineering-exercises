@@ -1,0 +1,25 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "a65a30660d04e3dcfe0501d4f93a556dd30cf7946b7f361877b3ed8eab5e1c6c",
+    "../docs/checkout-contract.md": "ba5fabd527105610b7412969d7ae618a39a6051733eea43d3c2a8ffeae6179bb",
+    "../docs/evidence-template.md": "a1c79d0f857ea5fd90a876485049f2be720613962ac5f5eeefa4f5ac9794ae01",
+    "../docs/flaky-test-notes.md": "0fe199a47b2c419b200fe5a11690e11c09eac85f40feccf1c56ffc84027d4805",
+    "index.html": "81111f8450a6a60eeaec3899840fd32523847e60512de9de1750936d34d6547a",
+    "lab-contract.json": "d542a5fec85a74b248d3d3237396f2f43d27e5a55e20702bea69c2edff41bde2",
+    "package-lock.json": "2bc673a924393b5c0eaee9c408008d72344dd431dd1f2ed5dc9d7e55ccdf6c7f",
+    "package.json": "aaf19aa125a203d0c11750dbdba00bccb05dc016d169bf5f652630f8ade2ce79",
+    "playwright.config.ts": "eb512df6eab8e7a12601961b93d9d055f14ab5d86dab56cf48317c920309af9b",
+    "scripts/agent-check.mjs": "9e24824c7ef20743505fb1787d83608278c7a8e4e81c568f56f57bbf24dbe125",
+    "scripts/check-playwright-setup.mjs": "641a26261e30d9ee6eddd7442350f2b977f51e602d595c2cadb1fe5a118ecd7d",
+    "scripts/format-check.mjs": "2b404502159a61cc97468297e9d7b18e7fca5101fae7126ed4ac271395aada30",
+    "scripts/lint-check.mjs": "f8046db589aee4e610d87c6725cb64e8f7f62235267ddc6a39166754f6af1784",
+    "scripts/verify-checkout-submission.mjs": "d9e239ff6a353954d5eb30ba549d45f9e99f30f4f2498035305b93812443d930",
+    "src/App.tsx": "9a8dabfae9d2aa53408e047f95984c45a73959b8f9653cd64237c9b8e2cfcbfb",
+    "src/main.tsx": "f1c4cc4c4068974f55fbbf78153ac5e461142246bcdd558be6d08b25bb86caa0",
+    "src/styles.css": "02c3f257c5cd65e878800ce540a3c01461ca0cf568113dcccecca39080bfb76c",
+    "tests/e2e/starter-smoke.spec.ts": "467503250939534759731e39f7a7d11b0124b9d49737ed9bc25089f24613372b",
+    "tsconfig.json": "b72b825b933563195288d4b0ebb158673891a811f0cb5ea5d3fc286920c2f7f9",
+    "vite.config.ts": "2446481b45b78925c72ceb0b7b154d55c026253083784afd6c66dbd847d46142"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "4856a36e33c5c43779b8d189b46eb4187b0b9f0f22bb1ec41236251e10e9dd2b",
+    "../docs/evidence-template.md": "5f49737c2f07cc20179997a69977808be5f0b30fea7cf3d5bd7fae7519356af5",
+    "../docs/guardrail-contract.md": "422e2c736cf03bdfa0ab9d3ca797bfb0ca6370f136839633620c3c99bc482a67",
+    "config/production.json": "adecd95d1806672937acc0d794208bbfd447e4c397866df35f0606b7db188f3a",
+    "db/migrations/001_create_release_audit.sql": "a104778c0a53cc24b79ec45ecbe42f875e3e9102487695e35c5e85c0691ee82d",
+    "fixtures/production-customer-export.json": "a88823abf6404cc4846e131bd678ecd6eeec80777ccf23a2ff66c648e5253c67",
+    "fixtures/public-workflow-sample.json": "a1bd5724d33dda26a1b4be99a5879527c9fe57fff5c77dd8eca2522bff78fcc0",
+    "generated/api-client.ts": "9d7f5b35a7d6285b6c294fff9b1a9afd44a6a5abf95c048e51778fcbfb33f87a",
+    "lab-contract.json": "804ef65d064f3db3fcf099db10b27b66fe4b1292747d8aa65a3107e28d4fa7ae",
+    "legacy/release-runner.md": "e8e79ad0eb5fca5f92c4589baa94e1452033ec584d3c77298b340a4be040434e",
+    "package-lock.json": "23a03f05ed558318a46466193a41b0d2422099616662aa9786107832a2f2f92d",
+    "package.json": "bbf6a21694624efabab38884b893e6349a6ac8e379aae0d4f1265876f7429e35",
+    "scripts/agent-check.mjs": "59e9e27acceb603175dd03bfe2381c903663afc0b2105ffb96c36958caf9b229",
+    "scripts/check-submission.mjs": "1a986445b9062b3d096d55e3c3b5a2b45f93608d0154ede828d42fb28d23de7e",
+    "scripts/format-check.mjs": "a2668ed5b488aa15500cd405de2c7c885f9a47734ef785895c07f9e3aa026611",
+    "scripts/lint-check.mjs": "1bc9b75a92a423e36028da2f2795c7d0e117e9fa104e197269cfa3ad981d1ae6",
+    "scripts/verify-implementation.mjs": "850872d17e1e77e590b9150ed78e4d444119e645bee0d19a83cb2af23044d158",
+    "secrets/production.env": "e179cfdc79d631db5c3825afbb436bd24fff3e20d6b021164898ca720b26df16",
+    "src/data/workflows.ts": "c29d11269964d63694903c5c334a0dc2bbd95c5a0255d2fdc6569e644aa2bef7",
+    "src/main.tsx": "a3c01e26da2169530930ba2e7124859d5d7083d1a0215f171b9eb7c74236997b",
+    "src/services/approvalEngine.ts": "4ee72c234fc7b8f0441f1c1831d81d2a7298c07764bac84f17afc88a39489577",
+    "src/styles.css": "c34fedb1438911847e5732fc499fc0389b3e36f417cbf38cefb1cdc49e37d4fa",
+    "src/types.ts": "ab125cd93e1df0b8e47c06c79e80197b261e69f71bf7d3849d66a1d24101ee3e",
+    "tasks/release-readiness.md": "0396a904dd39108d46834cda2f01112ac4e606ca18cfa5be358d6d0197ce2129",
+    "tests/policy-engine.test.mjs": "fedc61a8409198e3ed6c38435c97eb37cdf007e5cf7f508a0c255d7a6abbbbff",
+    "tsconfig.json": "9b6c1124c2a3e5ad413f9439744750fc7a6a581530cd1c561b2160461febf19e",
+    "vite.config.ts": "66b8101926000c415c3f9f2e9b711a9c6e5c6991bf1e64fd709fe2e86fd0d200"
+  }
+}

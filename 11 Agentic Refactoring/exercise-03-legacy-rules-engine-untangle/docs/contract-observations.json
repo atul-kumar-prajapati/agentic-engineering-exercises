@@ -1,0 +1,6 @@
+[
+  { "case": "ready-note-length-11", "outcome": "rejected", "type": "InvalidWorkflowDecisionException", "message": "Ready decisions require a longer evidence note", "saveCount": 0 },
+  { "case": "ready-note-length-12", "outcome": "accepted", "result": { "id": "wf-101", "customer": "Atlas Co", "status": "Ready", "score": 91, "owner": "Asha", "note": "123456789012" }, "saveCount": 1 },
+  { "case": "missing-id-precedes-policy", "outcome": "rejected", "type": "WorkflowNotFoundException", "message": "Workflow item not found: missing", "saveCount": 0 },
+  { "case": "unknown-status-gap", "outcome": "accepted", "result": { "id": "wf-102", "customer": "Brightline", "status": "Escalated Later", "score": 74, "owner": "Rina", "note": "Legacy accepts this status" }, "saveCount": 1 }
+]

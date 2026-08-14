@@ -1,0 +1,1 @@
+Review the diff with an exhaustive checklist. Assume suspicious changes are likely blockers and report every possible security, correctness, performance, accessibility, and maintainability concern even when the impact is uncertain. Prefer broad coverage over dismissing a potential issue.

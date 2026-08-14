@@ -1,11 +1,13 @@
-# Graph Extract
+# Historical Graph Extract
 
-| Node | Type | Edges | Risk |
-|---|---|---|---|
-| RevenueDashboard | React route | reads MetricDefinition, AccountFilter | high |
-| billing_events | warehouse table | feeds RevenueDashboard, RetentionJob | high |
-| IngestBillingEvents | scheduled job | writes billing_events | high |
-| finance-metrics.md | doc | defines gross revenue copy | medium |
-| support-dashboard.md | doc | defines net revenue copy | medium |
+Status: Stale and incomplete
+Generated: 2025-10-02
 
-The extract is intentionally incomplete. Learners must repair missing owner and terminology edges.
+| Node | Claimed relationship | Confidence |
+|---|---|---|
+| `RevenueDashboard` | reads gross revenue grouped by tenant | ambiguous |
+| `publishRevenueSnapshot` | owns the revenue formula | inferred |
+| `finance-metrics.md` | defines recognized revenue | extracted |
+| Support Analytics | owns calculation changes | inferred |
+
+This extract predates credits, billing-account consolidation, and the shared revenue summary. It is historical input, not the Graphify artifact required for submission.

@@ -1,0 +1,16 @@
+{
+  "name": "Implementation-Backed Workflow Reconstruction",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "diagrams/access-state.mmd", "minCharacters": 500, "includeAll": ["stateDiagram-v2", "security_review", "failed_provisioning", "rollback_requested", "rolled_back", "high risk", "normal risk", "unhealthy"] },
+    { "path": "diagrams/access-approval-sequence.mmd", "minCharacters": 650, "includeAll": ["sequenceDiagram", "PolicyEngine", "Security", "DataOwner", "IdentityProvider", "alt High risk", "else Normal risk"] },
+    { "path": "diagrams/access-failure-sequence.mmd", "minCharacters": 450, "includeAll": ["sequenceDiagram", "IdentityProvider", "IdentityAdmin", "failed", "rollback request", "partial access", "rolled back"] },
+    { "path": "evidence/traceability.json", "validJson": true, "includeAll": ["source_sha", "WF-01", "WF-10", "source_line", "source_excerpt", "diagram_paths"] },
+    { "path": "evidence/diagram-manifest.json", "validJson": true, "includeAll": ["source_sha", "sha256", "workflow_trace", "diagram_parse"] },
+    { "path": "evidence/contradictions.md", "minCharacters": 700, "includeAll": ["LEG-01", "LEG-02", "LEG-03", "LEG-04", "CODE-01", "Source:", "Decision:"] },
+    { "path": "evidence/verification.md", "minCharacters": 350, "includeAll": ["source SHA", "Mermaid parser", "semantic verifier", "scenario trace", "unsupported edge", "five contradictions", "remaining ambiguity", "final conclusion"] },
+    { "path": "evidence/commands/workflow-trace.txt", "minCharacters": 300, "includeAll": ["Source SHA", "normal", "highRisk", "failure", "PASS"] },
+    { "path": "evidence/commands/diagram-parse.txt", "minCharacters": 220, "includeAll": ["Source SHA", "access-state.mmd", "access-approval-sequence.mmd", "access-failure-sequence.mmd", "PASS"] }
+  ],
+  "requiredDirectories": ["diagrams", "evidence", "evidence/commands"]
+}

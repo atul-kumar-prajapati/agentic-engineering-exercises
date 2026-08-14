@@ -1,0 +1,31 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "52ad03fefeea5e5289d3d34972ed906d990861b975bbe7b416d9fa2ce674b6f2",
+    "../docs/payment-feature-brief.md": "966fdaaeddd7de25be3d10672f5a8d0fc83964eb6e482887c048d04df42de95d",
+    "../docs/duplicate-webhook-incident.md": "7d0044db9c0962c54ec608d58414d07674fa10258437a4e2a8cd18a492aaf4dd",
+    "../docs/diagram-contract.md": "8dcb5789b14801132ec483f8ee08230efa8436151cc2bc49658008e777a41ef4",
+    "../docs/evidence-template.md": "9cb51fbb2074195cc096e8ec59191ca8115eafc2889b7d5b20ccbd79cd480cdd",
+    "package.json": "ad89af37110aaaabe97e99d2b03464789e1b4f401ac09f24230564db6a330773",
+    "package-lock.json": "d09f5bfc0b1c3718a4b4fe0dfd49d307e3b6204975656e650b9ac1f628380b6c",
+    "lab-contract.json": "c722918ac1cb3b097eab2d16c7a30bd021f4583ff6e535289214f4b9f1a96996",
+    "submission-contract.json": "321c0a31bc74b58ec0428350ea94527d652a4a53381e4ef4a6b6bab5291a9886",
+    "scripts/agent-check.mjs": "7ed435e2f021c085ace66c9932cb1512369d86e869fce3e95c75d170558d0d32",
+    "scripts/format-check.mjs": "0857e47af5a41a17f36241d06ee246454dbc727d55f119fe689904c1bac91198",
+    "scripts/lint-check.mjs": "0b9ce2d831b5f7127907b966424339ac6bbef8967d2cc4cb93739b406547706e",
+    "scripts/run-payment-tests.ts": "7de3ae734a6fcecd407daea19d56bbebad91e0d4fd89dce8bdad5ad271227498",
+    "scripts/run-webhook-tests.mjs": "a87d04a1cbbdb554a0f5595d9b53a418fd8473bce674c2eeb7bba05de50c98f5",
+    "scripts/trace-payment.ts": "4edf7eac6c5a341026b0d373a552e51f0d852434a7b53ce4709afe7fd4788081",
+    "scripts/mermaid-parser.mjs": "56923be6791aa2d415513294d6d3ae3359c822c1e12587b41f5db7cb99264fae",
+    "scripts/parse-diagrams.mjs": "1a4c4c8aee9946999ece05e01b2cb1ea245a77d6aad29827b47c895ec348ae25",
+    "scripts/visualization-verification.mjs": "019e0b1e012baccab5d1119762e39d9666d4804fee2b29f16cff3a281c6dce8f",
+    "scripts/verify-visualization.mjs": "74333dba8807f6539e2533a14653a7c17facfae2652e139a4ebc544cb6050d28",
+    "scripts/test-visualization-verifier.mjs": "452e265927f3684500d911422c3bd84e283072edf5c3ac04ebc8bc0a9595be4c",
+    "src/App.tsx": "6e2aeba15d4e1bf0147c001bc29b5551c3f30035007c6814c3ee8275f8cd8ceb",
+    "src/labContract.ts": "4a4249c3a5aa731d57e01d78d755fdcecf9d4a4786584538b780b67579c48a38",
+    "src/payment/paymentFixtures.ts": "4225a671435fc246fd4a0fb22a162bfcdd6f1aa4c19e8ffa7c390be0777e933a",
+    "src/payment/paymentGateway.ts": "60969542cb595b0ddd39338757b0e737797443cb3385affaf55b8fd80c36aad9",
+    "src/payment/paymentOrchestrator.ts": "1ae345fa2a2322786dfdd9b7d73ae1f18bacee73288ca7c85bc216b0136e0b84",
+    "src/payment/paymentTypes.ts": "391f2734349cbf2a260e66e0c3d715760b4f0a7adcb54a016bc23b6b05eb4a0e"
+  }
+}

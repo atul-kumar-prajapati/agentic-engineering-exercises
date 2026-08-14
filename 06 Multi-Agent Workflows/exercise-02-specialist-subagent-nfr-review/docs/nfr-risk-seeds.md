@@ -1,31 +1,13 @@
-# Nfr Risk Seeds
+# Protected NFR Risk Seeds
 
-This is a seeded lab input for Specialist Subagent NFR Review. It gives the learner concrete constraints to inspect, implement, test, and verify.
+The access-review queue has five review targets:
 
-## Operating Context
+| ID | Specialist | Risk to investigate | Required proof |
+|---|---|---|---|
+| `SEC-01` | Security | Request notes reach dynamic HTML rendering. | Render a hostile note and inspect the output. |
+| `SEC-02` | Security | The approval service accepts privileged requests without authorization or complete evidence. | Call the service directly, bypassing the UI. |
+| `A11Y-01` | Accessibility | Queue rows are clickable `div` elements. | Complete selection using keyboard-native controls. |
+| `PERF-01` | Performance | Portfolio risk repeats expensive work on every render. | Compare the protected benchmark at both SHAs. |
+| `TEST-01` | Testability | Approval timing and failures are not deterministic outside a browser. | Test success and failure without real timers or `window`. |
 
-Specialist NFR swarm for a risky generated change
-
-## Concrete Inputs
-
-- security review
-- accessibility review
-- performance review
-- main-thread decision log
-
-## Seeded Risks
-
-- specialist findings are merged without triage
-- accessibility pass lacks keyboard coverage
-- performance finding has no measurement
-
-## Verification Expectations
-
-- specialist report schema
-- fix/defer/dismiss table
-- implemented top fixes
-- post-fix recheck
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+Required blockers may not be deferred or dismissed. Specialists may add other findings, but every added finding must satisfy the same evidence standard and be triaged.

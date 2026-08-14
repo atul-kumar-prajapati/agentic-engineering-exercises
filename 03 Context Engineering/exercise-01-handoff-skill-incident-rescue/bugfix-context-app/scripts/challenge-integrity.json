@@ -1,0 +1,28 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "74500e6fc6866a1bee8c3b9bd87a2d6f22d9eb52cd8daaac9425b0149e07bf1a",
+    "../docs/evidence-template.md": "c50972740b43deabf168dff018ff270f5cce1c40bc65476b542448ebbde8cd02",
+    "incidents/INC-2047.md": "b6803430d9bb749b9693c34de35e3be4693ffba243e40dc6d1a645d307ac2784",
+    "docs/current-sla-policy.md": "c805a1d7bfdba095c8aed79dde413a7b6ddecc67472d3c1ac77f6eddb5010af6",
+    "docs/sla-rollout-proposal.md": "f1abc87784ae2539df6aba67b7a4d0430a3c4b74827a92bcafa3cf318d5a9e54",
+    "docs/workflow-api-contract.md": "ab3136ac344fa05b969ba9d2c8f03674156c90a7e2647ffac6e7f27567dd30be",
+    "docs/previous-agent-progress.md": "f0898991453bba77db0cb5ddf69cca2bfd37e5111aef7b3c43f80de82b3e8f97",
+    "docs/failed-test-output.txt": "9c79d229e73f5cdbbc177b89c000a84b5a6c7f4c902430f81656d37138bab87e",
+    "docs/raw-session-history.md": "2fe2ecb5e21836a2694c67e76805ec528d1e37022cdec4dedf97d1da59dea9fc",
+    "docs/abandoned-fix.patch": "40ec5bea90960811ce22a9e6ea7f8eebc1ddac5d88a3e2d0bcb8a9d39c9f2263",
+    "lab-contract.json": "7b7351400ee189399476019cba7e9df762edaea0e7da7481730a7094a584dbb5",
+    "package-lock.json": "a63545fafc996afb4e1465c7cdf3de2bc197be693810a4d5ed3bffd6254214e1",
+    "package.json": "d4708a79aad383aad2bd8a789a1ae1c1aea2b51a4f2313da5ff9a559af8dfd92",
+    "scripts/agent-check.mjs": "c85543b82e28184b36d5eca9a47d9d51ee981aaf81e78cbfac959a6649dac9b8",
+    "scripts/format-check.mjs": "d6380a0b108d5b6625c159321abbc2481eacb8ff8a3bcbd9c67d6c4b53b6c886",
+    "scripts/lint-check.mjs": "f8046db589aee4e610d87c6725cb64e8f7f62235267ddc6a39166754f6af1784",
+    "scripts/run-incident-tests.mjs": "a812ab6ed3e601812b8d76f8765644ac61e17c6977c1ce810f987f2bfb209f43",
+    "scripts/verify-handoff.mjs": "ffc1b271c1e813f8e1f9fdf389127be8ed572a2233ec4412a6b4277cc1d58174",
+    "src/data/workItems.ts": "17075fde8a5f9412096feddced4247f5d3d772f59157b077268c320bb88a1436",
+    "src/types.ts": "ff142477effed6e1e77c0cd845c3eae89dfc2f76489c609387e40c5a2fd58d9d",
+    "src/utils/scoring.ts": "7524ae27c2f0cbf0a0e7b69d01ef02306c0e2c20e49cf36268bf657541d75990",
+    "tsconfig.json": "b72b825b933563195288d4b0ebb158673891a811f0cb5ea5d3fc286920c2f7f9",
+    "vite.config.ts": "4f9fbbdbc10bf58253a12eb98c949427d351c61ade1ed8250a3c9705ef0b50ba"
+  }
+}

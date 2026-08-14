@@ -1,0 +1,27 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "eba76f7546ce45189dc533a825adbb4b8ced17e072d3edd199475d65d1caf524",
+    "../docs/evidence-template.md": "a31d037f66129bc23d34d84997a58b7108e5c47ac17e9105400c50c3c1aff4ee",
+    "../docs/network-contract.md": "52a02572a2838cc2c4507ac2e247597f1b66e1d9e79d8a388b8fc937c61d98b2",
+    "index.html": "f827c410009b1e94bd1563db9fa81bf7704014fecd90f2d8d898d518edb739d2",
+    "lab-contract.json": "440fb9e31469c754e6add4eba333d0a6d55db8ba98ff68455bc9a21036b40da4",
+    "package-lock.json": "c87f67f71131919532e38b1fc22aa44c0564c0402691a8a73cb97bd97cd69756",
+    "package.json": "d3e043041faf2b8d862d407dd64ff1c9116e564340ddb92ef5fde19581b717f2",
+    "vitest.config.ts": "a723651893bca4fe1bb395ade37b92e12420bce7ed896f3f06bb95c7afb7d53e",
+    "scripts/agent-check.mjs": "9e24824c7ef20743505fb1787d83608278c7a8e4e81c568f56f57bbf24dbe125",
+    "scripts/capture-command.mjs": "c46328acbbcfd8484536daac9f3864be20e1754c5d5d050076672284f544fa5e",
+    "scripts/format-check.mjs": "2b404502159a61cc97468297e9d7b18e7fca5101fae7126ed4ac271395aada30",
+    "scripts/lint-check.mjs": "f8046db589aee4e610d87c6725cb64e8f7f62235267ddc6a39166754f6af1784",
+    "scripts/run-network-stability.mjs": "b62ea016406ef20c454ede86521d6d3e4932dc76c85894d7235d81575b476055",
+    "scripts/verify-tdd-submission.mjs": "950426f595738b983432bb9480f3dda71ab2e348900f7ce1889a77d68b4b6ac8",
+    "src/App.acceptance.test.tsx": "e964dd7fd561e234864917d3251c34535e175d86e26433447559097e3cbc4a58",
+    "src/App.weak.test.tsx": "22fe3a2901367896df9da02463b34a1897afe87d478e77b447b256f6c6c5be4c",
+    "src/labContract.ts": "2da126c469b431fff9a361ea4e3ad71ba452b070781ab3d7106309608d158b5a",
+    "src/main.tsx": "f1c4cc4c4068974f55fbbf78153ac5e461142246bcdd558be6d08b25bb86caa0",
+    "src/styles.css": "0a6f4215215237144a8523835457fea2379eacdccac14e34ab59d7c909881623",
+    "src/test/handlers.ts": "9945fae004a04f06fbf70985eafbae028aac16132ef967a92b9733d4285908c7",
+    "src/test/server.ts": "83a51eb356c17ca185e7259ad42122fb6da4af234b226a7d0d7fb5f73e14a093",
+    "tsconfig.json": "b72b825b933563195288d4b0ebb158673891a811f0cb5ea5d3fc286920c2f7f9"
+  }
+}

@@ -1,125 +1,70 @@
 import type { LabContract } from "./types";
 
 export const labContract = {
-  "title": "Agent-Ready Kanban Control Plane",
-  "competency": "06. Multi-Agent Workflows",
-  "skillPattern": "triage / to-issues / kanban board",
-  "domain": "Support escalation workspace with customer-impact cards, reproduction links, severity, owner routing, and integration queue.",
-  "mission": "Turn a noisy backlog into agent-ready cards, isolated worktrees, review queues, and integration ownership.",
-  "outcome": "Multiple agents can work in parallel because the board encodes issue state, ownership, blockers, review gates, and merge order.",
-  "entities": [
-    "Escalation",
-    "TriageState",
-    "Worktree",
-    "AgentCard",
-    "ReviewQueue",
-    "MergePlan"
+  title: "Agent Kanban Collision Control",
+  competency: "06. Multi-Agent Workflows - Agent-ready work and collision control",
+  skillPattern: "evidence-first triage, exclusive reservations, isolated execution, and accountable integration",
+  domain: "An escalation queue where unclear, colliding, and cancelled cards can cause unsafe agent assignments",
+  mission: "Repair an invalid agent board, execute only the inherited-severity card, and prove that the lane, review, integration, and final control state match Git.",
+  outcome: "Unsafe cards remain visible but unassigned, one ready lane is integrated without overlap, and all control-plane mirrors agree.",
+  entities: [
+    "agent-ready card and state history",
+    "requested path and active reservation",
+    "blocker and cancellation reason",
+    "isolated lane commit and focused check",
+    "review decision, merge commit, and control commit",
   ],
-  "seededDefects": [
-    "Two cards ask agents to edit the shared escalation schema at the same time.",
-    "A ready-for-agent label is applied before reproduction steps exist.",
-    "The merge queue has no owner for resolving cross-card conflicts.",
-    "Human-review cards are mixed with autonomous bugfix cards."
+  seededDefects: [
+    "a needs-info card owns workflowApi.ts without a reproduction",
+    "ESC-120 and blocked ESC-122 both reserve scoring.ts",
+    "a cancelled export card still owns exportApi.ts",
+    "inherited Critical severity is reduced to the child's declared Low value",
+    "the original verifier trusts board declarations without checking Git or product behavior",
   ],
-  "verificationGates": [
-    "Backlog states distinguish needs-info, ready-for-agent, ready-for-human, blocked, and done.",
-    "Every agent card has ownership, touched area, commands, and merge criteria.",
-    "Worktree plan avoids overlapping edits where possible.",
-    "Integration evidence records which agent outputs were accepted, revised, or rejected."
+  verificationGates: [
+    "protected inherited-severity source and rendering acceptance tests",
+    "exact card states, histories, blockers, released reservations, and board mirrors",
+    "one-parent lane history, fixed path ownership, commit trailers, and hashed output",
+    "reviewed lane content preserved in a no-ff integration merge",
+    "exact control commit followed only by evidence changes",
   ],
-  "agentWorkflow": [
-    "Triage cards before spawning or assigning agents.",
-    "Split work by ownership and conflict risk.",
-    "Use isolated branches or worktrees for implementation.",
-    "Keep the main thread responsible for review, integration, and final evidence."
+  agentWorkflow: [
+    "Validate all incoming cards and release reservations held by unsafe states.",
+    "Create one isolated ESC-120 lane from the recorded clean base.",
+    "Review its exact commit, paths, regression test, and focused output.",
+    "Integrate with no-ff and synchronize every board and ownership artifact.",
+    "Capture evidence, verify it against Git, and retain unresolved and cancelled work.",
   ],
-  "workingDeliverables": [
-    "Updated triage board.",
-    "Worktree or branch plan with collision warnings.",
-    "At least one working card implementation in React.",
-    "Integration note with accepted and rejected agent outputs."
+  workingDeliverables: [
+    "A fixed inherited-severity implementation and lane-owned regression test.",
+    "Synchronized structured and rendered Kanban board data.",
+    "Updated ownership map and integration log.",
+    "Machine-readable control-plane evidence and hashed command output.",
+    "An inspectable lane, merge, control, and evidence history.",
   ],
-  "masterySignals": [
-    "Parallelism is intentional, not chaotic.",
-    "The main owner keeps control of integration.",
-    "Cards are small enough for independent agent execution."
+  masterySignals: [
+    "Readiness is proven before assignment instead of inferred from a label.",
+    "Blocked, unclear, and cancelled work cannot hold active reservations.",
+    "One agent owns the feature lane while one human remains accountable for review and integration.",
+    "Terminal and unresolved cards remain visible with complete histories.",
+    "Automated verification detects board drift, illegal scope, fabricated evidence, and hidden integration edits.",
   ],
-  "backlog": [
-    {
-      "id": "04-01",
-      "title": "Two cards ask agents to edit the shared escalation schema at the same time.",
-      "owner": "agent candidate",
-      "skill": "triage / to-issues / kanban board",
-      "risk": "high",
-      "done": false
-    },
-    {
-      "id": "04-02",
-      "title": "A ready-for-agent label is applied before reproduction steps exist.",
-      "owner": "accountable owner",
-      "skill": "triage / to-issues / kanban board",
-      "risk": "medium",
-      "done": false
-    },
-    {
-      "id": "04-03",
-      "title": "The merge queue has no owner for resolving cross-card conflicts.",
-      "owner": "agent candidate",
-      "skill": "triage / to-issues / kanban board",
-      "risk": "critical",
-      "done": false
-    },
-    {
-      "id": "04-04",
-      "title": "Human-review cards are mixed with autonomous bugfix cards.",
-      "owner": "accountable owner",
-      "skill": "triage / to-issues / kanban board",
-      "risk": "medium",
-      "done": false
-    }
+  backlog: [
+    { id: "ESC-118", title: "Needs reproduction and must release its path", owner: "unassigned", skill: "triage", risk: "high", done: false },
+    { id: "ESC-120", title: "Preserve inherited Critical severity", owner: "severity-agent", skill: "isolated execution", risk: "critical", done: false },
+    { id: "ESC-122", title: "Blocked by collision and missing product rule", owner: "unassigned", skill: "collision control", risk: "high", done: false },
+    { id: "ESC-121", title: "Cancelled because its fixture is unsafe", owner: "unassigned", skill: "safety triage", risk: "critical", done: false },
   ],
-  "evidence": [
-    {
-      "gate": "Backlog states distinguish needs-info, ready-for-agent, ready-for-human, blocked, and done.",
-      "status": "missing",
-      "proof": "needs learner evidence"
-    },
-    {
-      "gate": "Every agent card has ownership, touched area, commands, and merge criteria.",
-      "status": "partial",
-      "proof": "seeded check ready for implementation"
-    },
-    {
-      "gate": "Worktree plan avoids overlapping edits where possible.",
-      "status": "ready",
-      "proof": "seeded check ready for implementation"
-    },
-    {
-      "gate": "Integration evidence records which agent outputs were accepted, revised, or rejected.",
-      "status": "partial",
-      "proof": "seeded check ready for implementation"
-    }
+  evidence: [
+    { gate: "Feature behavior", status: "missing", proof: "ESC-120 protected suite must pass" },
+    { gate: "Final board", status: "missing", proof: "all board and ownership mirrors must agree" },
+    { gate: "Git history", status: "missing", proof: "lane, merge, and control commits must be inspectable" },
+    { gate: "Submission evidence", status: "missing", proof: "hashes and SHAs must match actual artifacts" },
   ],
-  "decisions": [
-    {
-      "question": "How will the team prove step 1?",
-      "decision": "Triage cards before spawning or assigning agents.",
-      "status": "decided"
-    },
-    {
-      "question": "How will the team prove step 2?",
-      "decision": "Split work by ownership and conflict risk.",
-      "status": "decided"
-    },
-    {
-      "question": "How will the team prove step 3?",
-      "decision": "Use isolated branches or worktrees for implementation.",
-      "status": "open"
-    },
-    {
-      "question": "How will the team prove step 4?",
-      "decision": "Keep the main thread responsible for review, integration, and final evidence.",
-      "status": "open"
-    }
-  ]
+  decisions: [
+    { question: "Can ESC-118 start?", decision: "No, reproduction is missing.", status: "decided" },
+    { question: "Can ESC-122 start?", decision: "No, the severity rule is unanswered.", status: "decided" },
+    { question: "Can ESC-121 reopen?", decision: "No, a new safe card is required.", status: "decided" },
+    { question: "Can ESC-120 merge?", decision: "Only after exact-commit review and focused verification.", status: "open" },
+  ],
 } satisfies LabContract;

@@ -1,31 +1,18 @@
-# Pr Brief
+# PR Evidence Brief
 
-This is a seeded lab input for PR Evidence Pack Automation. It gives the learner concrete constraints to inspect, implement, test, and verify.
+The pull-request workflow applies only when this exercise or its dedicated workflow changes.
 
-## Operating Context
+Required controls:
 
-Automated PR evidence pack for generated code
+- Trigger with `pull_request`, never `pull_request_target`.
+- Grant `contents: read` and no write permission.
+- Pin third-party actions to complete 40-character commit SHAs.
+- Use the protected revisions in [action-pins.json](./action-pins.json), and set checkout `persist-credentials` to `false`.
+- Use `ubuntu-24.04`, a timeout of ten minutes or less, `.nvmrc`, and the exercise lockfile as the npm cache dependency path.
+- Install from the committed lockfile with `npm ci`.
+- Pass `${{ github.sha }}` to the evidence generator.
+- Run evidence verification and artifact upload with `if: always()`.
+- Upload `08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/generated` with `if-no-files-found: error` and retention of seven days or less.
+- Do not use `continue-on-error`; the generator's failing exit must keep the job red.
 
-## Concrete Inputs
-
-- PR template
-- check output
-- screenshot artifact
-- risk note
-
-## Seeded Risks
-
-- evidence pack omits failed smoke output
-- PR template asks reviewers to infer rollback risk
-- artifact path is not stable for CI
-
-## Verification Expectations
-
-- evidence generator
-- artifact path check
-- PR template fill
-- failure-output capture
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+The artifact name must contain the commit SHA so reviewers cannot confuse evidence from different revisions.

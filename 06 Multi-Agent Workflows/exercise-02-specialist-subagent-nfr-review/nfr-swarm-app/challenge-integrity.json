@@ -1,0 +1,27 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "fb36af28dbae71073d8d67413f1eb9b4d4c6425e7cc78fa2e13adaba6d6af7de",
+    "../docs/nfr-risk-seeds.md": "c5e95815403a1e5c9b37e200d17fffa8309b7a41921cd5f1ba9138ef719ff5d0",
+    "../docs/specialist-prompts.md": "07b9f299d934f33c2a11cf3ad0473fdb280d859749d95fedf8a311039f1bf1a7",
+    "../docs/specialist-report-template.md": "f77c887170a483946632dac173a8de256ee17347db9b59fe5c79e182d2482c05",
+    "../docs/decision-log-template.md": "474661858178c1b7497c2629dd613fda3c8adaa2f9c3494a8d60ee067ac49396",
+    "../docs/evidence-template.md": "3c54fcfade06a9d69e97ecf214976389513e511620001eeec5bf2a791679ce91",
+    "../docs/remediation-contract.md": "da8ef4e6c1368f894d76705c90ea7835a982af73870cd194f1234c8861940340",
+    "acceptance/security.review.test.tsx": "9292a11d4fbb125fb738cf45cb9e3229af4d15d0080e8544f4ce151ae741e9b5",
+    "acceptance/accessibility.review.test.tsx": "1f2424a3e8bc164cbe2ed54ded1aa7c3ba0d36a20a7610d4fb089e4820942855",
+    "acceptance/performance.review.test.ts": "1f8888044d3140621eb21b57f3eea2eae4167a19e6a8485c47f81b0aff57b07c",
+    "acceptance/testability.review.test.ts": "8486c4064c9eb17c03a65ee3e6568b6fcb4f0991ce4b26621974fc14786fb8b8",
+    "lab-contract.json": "3036ceade15fdec53c3971094c263f24fbe5dc2c7d91adfee1de52a6c0ec632f",
+    "package.json": "01fa139c761c450f38d322051f6cab36f6552464cd0d39daa192f3efc85de0b4",
+    "package-lock.json": "43221e9c5ffb212c5d2b6a874cfb3a1d05e40a63076b9292811bafb90481a6b9",
+    "submission-contract.json": "9f940f2485d8741730cf97acb339f195a30c839c776888e10b9d4b6787acdb73",
+    "scripts/measure-performance.mjs": "a7b28a9b5285c6fbb0470c6ebab916badedb74830d33d4fca777082bc51ec148",
+    "scripts/run-specialist-check.mjs": "680bd06992ad05c38800e5e24686a73d80d43688ad5420780c35ae117f947aed",
+    "scripts/specialist-review-verification.mjs": "13f96c5a11cb9aaf145b2212dbc2c51c2ca7784dd67f9bab8c3c1e25a7b7835a",
+    "scripts/verify-specialist-reviews.mjs": "c8cb7f6db41435021ac09ae6c453791876394a116e0ad939a8b7eec691023314",
+    "scripts/test-specialist-review-verifier.mjs": "5cf1b9369dbdaef77974857d0f8c1df8201e42aed7edab56e82058c2621844f9",
+    "src/data/accessReviews.ts": "0d96360d3685b678523d964c88a0484b031d087d83e8352c073d6e7408f96dd8",
+    "src/labContract.ts": "3aca2959a6f9ed5bb5c8c83ea1a5d63691e460586bd345f5a2ab7953da5825c5"
+  }
+}

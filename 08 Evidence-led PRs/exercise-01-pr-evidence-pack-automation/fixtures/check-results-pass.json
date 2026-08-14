@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "checks": [
+    {
+      "name": "unit-tests",
+      "command": "npm test",
+      "exitCode": 0,
+      "result": "passed",
+      "outputPath": "artifacts/unit-tests.txt",
+      "risk": "Low: unit behavior passed for this revision.",
+      "reviewerAction": "Confirm the unit-test artifact digest and result.",
+      "rollback": "Revert the PR commit if later regression evidence appears."
+    },
+    {
+      "name": "production-build",
+      "command": "npm run build",
+      "exitCode": 0,
+      "result": "passed",
+      "outputPath": "artifacts/build.txt",
+      "risk": "Low: the production bundle compiled successfully.",
+      "reviewerAction": "Confirm the build artifact digest and result.",
+      "rollback": "Revert the PR commit if deployment verification later fails."
+    }
+  ]
+}

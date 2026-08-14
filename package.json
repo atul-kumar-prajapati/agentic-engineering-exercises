@@ -1,0 +1,11 @@
+{
+  "name": "agentic-engineering-exercises",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "verify:contracts": "node ./scripts/verify-exercise-contracts.mjs"
+  },
+  "engines": {
+    "node": ">=22.12.0 <25"
+  }
+}

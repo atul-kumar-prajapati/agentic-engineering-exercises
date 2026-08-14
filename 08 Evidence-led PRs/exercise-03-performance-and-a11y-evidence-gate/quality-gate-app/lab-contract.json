@@ -1,42 +1,51 @@
 {
-  "title": "Performance and A11y Evidence Gate",
-  "competency": "08. Evidence-led PRs - PR gate evidence and handoff",
-  "domain": "Performance and accessibility gate for a generated UI change",
-  "mission": "Attach performance and accessibility evidence to a UI change so reviewers can judge risk quickly.",
-  "outcome": "Performance and accessibility are measured and improved before review.",
+  "title": "Performance and Accessibility Release Gate",
+  "competency": "08. Evidence-led PRs",
+  "domain": "Production-build Lighthouse and axe evidence used for an enforceable pull-request release decision.",
+  "mission": "Fix measured UI regressions and build a pessimistic gate that rejects one bad browser run or any axe violation.",
+  "outcome": "Reviewers receive raw, digest-bound browser evidence and a reproducible pass or fail decision from one source commit.",
   "entities": [
-    "Lighthouse report",
-    "a11y violation",
-    "budget threshold",
-    "before/after capture"
+    "source commit",
+    "production build",
+    "Lighthouse run",
+    "axe scan",
+    "quality threshold",
+    "release decision"
   ],
   "seededDefects": [
-    "largest contentful section regresses past budget",
-    "button has no accessible name",
-    "report is generated but not attached to evidence"
+    "The first render is delayed beyond the LCP budget.",
+    "An icon-only action has no accessible name.",
+    "No executable gate aggregates the worst of three Lighthouse runs.",
+    "Existing evidence can be hand-written and does not prove a failing exit code."
   ],
   "verificationGates": [
-    "a11y check",
-    "performance budget",
-    "before/after report",
-    "evidence pack link"
+    "Exactly three comparable raw Lighthouse reports meet protected thresholds.",
+    "A real Chrome axe scan reports zero violations.",
+    "A generated summary matches raw artifact SHA-256 digests and metrics.",
+    "Performance and accessibility negative controls both return non-zero.",
+    "Git history binds implementation and evidence to one source SHA.",
+    "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
   ],
   "agentWorkflow": [
-    "Ask the coding agent to inspect this lab contract, starter code, docs, and tests before proposing a plan.",
-    "Revise the agent plan so it exercises the competency practice and avoids the common mistake.",
-    "Implement the smallest working change that addresses the seeded defects.",
-    "Run the verification gates and capture command evidence before writing the final review note."
+    "Inspect the UI, thresholds, gate CLI contract, and baseline reports.",
+    "Fix the measured render and accessible-name defects.",
+    "Implement Lighthouse configuration and the quality-gate CLI.",
+    "Commit the implementation, capture browser evidence, and verify the submission.",
+    "Capture comparable before and after results using the conditions defined in the exercise README."
   ],
   "workingDeliverables": [
-    "Performance/a11y check configuration.",
-    "Code fixes for measured issues.",
-    "Before/after reports or screenshots.",
-    "Thresholds documented in the PR evidence pack."
+    "Corrected dashboard startup and accessible action.",
+    "Pessimistic Lighthouse CI configuration.",
+    "Quality-gate CLI that writes a decision before exiting.",
+    "Raw reports, generated summary, comparison, and verification output.",
+    "evidence/before.md and evidence/before.patch",
+    "evidence/after.md and evidence/after.patch",
+    "evidence/comparison.md"
   ],
   "masterySignals": [
-    "Run or add automated performance and accessibility checks relevant to the starter.",
-    "Fix at least one real issue discovered by those checks.",
-    "Capture before/after evidence.",
-    "Fail the gate when regressions exceed the chosen threshold."
+    "One failing run cannot be hidden by better runs.",
+    "Any axe violation blocks release.",
+    "Every reported metric and claim traces to a raw artifact digest.",
+    "A reviewer can reproduce the exact decision from the source commit."
   ]
 }

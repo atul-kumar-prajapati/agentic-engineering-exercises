@@ -1,74 +1,45 @@
-import { calculateReadiness, groupByRisk } from "./domainReadiness";
-import { labContract } from "./labContract";
+import { useState } from "react";
+import { AccessReviewQueue } from "./components/AccessReviewQueue";
+import { ReviewNote } from "./components/ReviewNote";
+import { accessReviews } from "./data/accessReviews";
+import { approveAccessReview } from "./services/accessReviewApi";
+import { calculatePortfolioRisk } from "./utils/accessReviewRisk";
 import "./styles.css";
 
 export default function App() {
-  const readiness = calculateReadiness(labContract);
-  const groupedRisks = groupByRisk(labContract.seededDefects);
+  const [reviews, setReviews] = useState(accessReviews);
+  const [selectedId, setSelectedId] = useState(reviews[0].id);
+  const [error, setError] = useState("");
+  const selected = reviews.find((item) => item.id === selectedId) ?? reviews[0];
+  const portfolioRisk = calculatePortfolioRisk(reviews);
+
+  async function approve() {
+    setError("");
+    try {
+      const updated = await approveAccessReview(selected);
+      setReviews((items) => items.map((item) => item.id === updated.id ? updated : item));
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Approval failed");
+    }
+  }
 
   return (
-    <main className="app-shell">
-      <section className="page-header">
-        <div>
-          <p className="eyebrow">{labContract.competency}</p>
-          <h1>{labContract.title}</h1>
-          <p>{labContract.domain}</p>
-        </div>
-        <div className="metric-card">
-          <span>Readiness</span>
-          <strong>{readiness.score}%</strong>
-          <small>{readiness.status}</small>
-        </div>
-      </section>
-
-      <section className="workspace-grid">
-        <article className="panel">
-          <h2>Domain Model</h2>
-          <ul>
-            {labContract.entities.map((entity) => (
-              <li key={entity}>{entity}</li>
-            ))}
-          </ul>
-        </article>
-
-        <article className="panel">
-          <h2>Seeded Defects</h2>
-          <ul>
-            {labContract.seededDefects.map((defect) => (
-              <li key={defect}>{defect}</li>
-            ))}
-          </ul>
-        </article>
-
-        <article className="panel">
-          <h2>Verification Gates</h2>
-          <ul>
-            {labContract.verificationGates.map((gate) => (
-              <li key={gate}>{gate}</li>
-            ))}
-          </ul>
-        </article>
-      </section>
-
-      <section className="workspace-grid">
-        <article className="panel wide">
-          <h2>Agent Workflow</h2>
-          <ol>
-            {labContract.agentWorkflow.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
-        </article>
-
-        <article className="panel">
-          <h2>Risk Groups</h2>
-          {Object.entries(groupedRisks).map(([risk, items]) => (
-            <p key={risk}>
-              <strong>{risk}</strong>: {items.length}
-            </p>
-          ))}
-        </article>
-      </section>
+    <main className="review-shell">
+      <header>
+        <p className="eyebrow">Identity Operations</p>
+        <h1>Access review queue</h1>
+        <p>Portfolio risk: {portfolioRisk}</p>
+      </header>
+      <div className="review-grid">
+        <AccessReviewQueue reviews={reviews} selectedId={selected.id} onSelect={setSelectedId} />
+        <section className="detail">
+          <h2>{selected.resource}</h2>
+          <p>Requested by {selected.requester}</p>
+          <ReviewNote note={selected.note} />
+          <button onClick={() => void approve()} type="button">Approve access</button>
+          {error ? <p role="alert">{error}</p> : null}
+        </section>
+      </div>
     </main>
   );
 }

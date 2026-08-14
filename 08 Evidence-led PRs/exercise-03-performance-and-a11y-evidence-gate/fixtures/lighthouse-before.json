@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "sourceSha": "baseline-protected",
+  "route": "/",
+  "runs": [
+    { "performance": 0.84, "accessibility": 0.91, "largestContentfulPaintMs": 3290 },
+    { "performance": 0.82, "accessibility": 0.91, "largestContentfulPaintMs": 3380 },
+    { "performance": 0.83, "accessibility": 0.91, "largestContentfulPaintMs": 3340 }
+  ],
+  "worstCase": { "performance": 0.82, "accessibility": 0.91, "largestContentfulPaintMs": 3380 }
+}

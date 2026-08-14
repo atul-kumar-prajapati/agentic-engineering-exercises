@@ -8,10 +8,21 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc -b --pretty false",
-    "test": "node ./scripts/agent-check.mjs",
+    "test": "node ./scripts/test-control-plane-verifier.mjs && node ./scripts/agent-check.mjs",
+    "feature:verify": "node ./scripts/run-feature-check.mjs",
+    "board:verify": "node ./scripts/verify-board.mjs",
+    "control:verify": "node ./scripts/verify-control-plane.mjs",
+    "test:submission": "npm run control:verify && node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json",
     "lint": "node ./scripts/lint-check.mjs",
     "format": "node ./scripts/format-check.mjs",
-    "agent:check": "npm run lint && npm run test && npm run format && npm run typecheck && npm run build"
+    "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
+    "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
+    "verify:implementation": "npm run feature:verify && npm run board:verify",
+    "verify:submission": "npm run test:submission",
+    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
+  },
+  "engines": {
+    "node": ">=22.12.0 <25"
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -22,6 +33,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.4",
     "typescript": "^5.9.3",
-    "vite": "^7.1.12"
+    "vite": "^7.1.12",
+    "vitest": "^4.1.10"
   }
 }

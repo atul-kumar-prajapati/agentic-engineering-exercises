@@ -1,25 +1,56 @@
-# Exercise 02 : OpenFeature Rollback Proof
+# Exercise 02 : Feature Flag Kill-Switch Proof
 
 ## Your Mission
 
-Your mission is to prove a risky feature is gated, observable, and reversible.
+Your team cannot safely release an invoice preview because disabling its flag still calls the new service and emits telemetry. Your mission is to repair the flag boundary and prove the feature can be disabled immediately without a code deployment.
 
-You are given a repository with a partially built feature that needs a safe rollout path before review.
+The current code fails open when the provider errors, uses side effects on disabled paths, and has no atomic rollback command that reviewers can run.
 
-The duration for this challenge is 30 min or less.
+Compare an ordinary implementation attempt with an evidence-led rollout and rollback result.
+
+The duration for this challenge is 45 min or less.
 
 ## Project
 
-[feature-flag-app](./feature-flag-app) contains the feature flag workflow for this exercise.
+[feature-flag-app](./feature-flag-app) contains the rollout boundary and verification harness. The protected flag brief, [rollback contract](./docs/rollback-contract.md), configuration, and scenarios define the required behavior.
 
 ## How To Go About It
 
-Use [OpenFeature](https://openfeature.dev/) or an equivalent feature-flag abstraction.
+1. Create two branches from the same starting commit. In the first branch, ask a fresh coding agent to repair the flag and provide rollback proof from the product request. Do not provide hints, corrections, or retries. Save `evidence/before.md` and `evidence/before.patch`.
 
-Ask your coding agent to inspect `feature-flag-app/`, gate the feature, add rollback proof, and verify both enabled and disabled states.
+2. Review the first result against the flag and rollback contracts. Record any unproved disabled, error, targeting, side-effect, or rollback behavior.
+
+3. In the second branch, use the provider-independent `getBooleanValue` interface. Evaluate `invoice-preview-v2` with a safe `false` default and the unchanged account targeting key.
+
+4. Only the enabled path may call the preview API or emit `invoice_preview_viewed`. Invalid context, disabled evaluation, provider failure, and preview API failure must return the legacy experience without those side effects.
+
+5. Create `scripts/rollback-invoice-preview.mjs` with the required CLI. It must validate input first, atomically disable the flag, clear targeting, and record the required audit fields.
+
+6. Start a fresh agent session under the same agent, model, tools, permissions, prompt, time limit, and first-attempt conditions. Capture enabled, disabled, provider-error, invalid-input, and rollback behavior without correction or retry.
+
+7. Save `evidence/after.md`, `evidence/after.patch`, generated scenario proof, rollback drill, and comparison. Raise the PR only from the second branch.
 
 ## Evidence
 
-Produce the gated feature, rollback notes, and verification output for both states.
+Submit:
 
-Raise the completed work as a PR for getting verified with our team.
+- The corrected rollout boundary and rollback command.
+- `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, and `evidence/after.patch`.
+- Generated enabled, disabled, and provider-error results.
+- Generated rollback drill JSON and Markdown, captured command output, and `evidence/comparison.md`.
+- Output from `npm run verify:exercise`.
+- A focused pull request containing only this exercise.
+
+Run `npm run verify:exercise` before raising the PR. It checks protected inputs, application quality, all flag states, side effects, stable targeting, rollback atomicity, generated evidence, and required comparison proof.
+
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
+
+## Completion Criteria
+
+The challenge is complete when:
+
+- Both agent attempts use matching conditions and genuine first-attempt patches.
+- Only enabled evaluation calls the preview API and emits preview telemetry, exactly once.
+- Invalid context, disabled state, provider error, and preview API failure return legacy behavior with zero new side effects.
+- The rollback drill rejects invalid input without change, then atomically disables a live configuration and proves the same account receives legacy behavior.
+- `npm run verify:exercise` passes and all generated proof matches one implementation source SHA.

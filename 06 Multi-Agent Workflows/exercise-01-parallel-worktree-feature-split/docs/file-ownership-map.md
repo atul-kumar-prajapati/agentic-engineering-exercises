@@ -1,31 +1,10 @@
 # File Ownership Map
 
-This is a seeded lab input for Parallel Worktree Feature Split. It gives the learner concrete constraints to inspect, implement, test, and verify.
+| Lane | Branch | Owned paths | Forbidden shared path | Reviewer |
+|---|---|---|---|---|
+| A, saved filters | `lane/saved-filters` | `src/components/FilterBar.tsx`, `src/utils/filters.ts`, `tests/lane-a/**` | `src/types.ts` | integration owner |
+| B, SLA risk | `lane/sla-risk` | `src/utils/scoring.ts`, `src/components/MetricStrip.tsx`, `tests/lane-b/**` | `src/types.ts` | integration owner |
+| C, evidence export | `lane/evidence-export` | `src/components/EvidencePanel.tsx`, `src/services/workflowApi.ts`, `tests/lane-c/**` | `src/types.ts` | integration owner |
+| Integration | `integration/parallel-features` | `src/types.ts`, `src/utils/filters.ts`, `src/services/workflowApi.ts`, `evidence/**` | lane implementation files | accountable engineer |
 
-## Operating Context
-
-Three-lane worktree plan for independent UI improvements
-
-## Concrete Inputs
-
-- worktree lane
-- branch owner
-- file ownership
-- integration gate
-
-## Seeded Risks
-
-- two lanes claim the same shared filter file
-- one lane lacks a verification command
-- integration owner is not assigned
-
-## Verification Expectations
-
-- file ownership audit
-- lane verification reports
-- merge-order simulation
-- final integration check
-
-## Agent Workflow Constraint
-
-The learner must use an agent to inspect and plan, but the final implementation, review, and verification remain owned by the accountable engineer.
+A lane must stop and record a request if it needs any other path. Silent cross-lane edits fail scope control. Only the integration owner may resolve the two declared shared-type requests.

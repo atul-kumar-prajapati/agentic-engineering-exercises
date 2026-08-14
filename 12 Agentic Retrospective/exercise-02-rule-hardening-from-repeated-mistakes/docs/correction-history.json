@@ -1,0 +1,8 @@
+[
+  { "id": "COR-101", "change": "saved owner filter", "mistake": "stored owner display label", "correction": "persist stable owner ID", "rootCause": "identity-vs-presentation" },
+  { "id": "COR-102", "change": "dashboard preference", "mistake": "stored translated team label", "correction": "persist stable team ID", "rootCause": "identity-vs-presentation" },
+  { "id": "COR-103", "change": "queue status filter", "mistake": "stored title-case status", "correction": "trim and store canonical lowercase status", "rootCause": "canonical-enum-storage" },
+  { "id": "COR-104", "change": "notification preference", "mistake": "stored uppercase channel value", "correction": "store canonical lowercase channel", "rootCause": "canonical-enum-storage" },
+  { "id": "COR-105", "change": "saved search", "mistake": "called system clock inside builder", "correction": "use caller-provided clock", "rootCause": "ambient-time" },
+  { "id": "COR-106", "change": "audit bookmark", "mistake": "constructed current date inside domain function", "correction": "inject the clock at the boundary", "rootCause": "ambient-time" }
+]

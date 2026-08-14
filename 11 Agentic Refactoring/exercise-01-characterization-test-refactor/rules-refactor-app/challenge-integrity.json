@@ -1,0 +1,16 @@
+{
+  "algorithm": "sha256-normalized-lf",
+  "protectedFiles": {
+    "../README.md": "8100cd33d5fa96fbee875d90652720affc6d514785226fb95fe06bad44a74612",
+    "../docs/renewal-golden-cases.json": "c9ae57fe6e9cc2074cc90c55b5ee30ceff2e69ca37396595a7902e770ea5c66c",
+    "../docs/legacy-behavior-notes.md": "8f130a5a03ce2de9ac4019416d2f49fef55533aeb553820b7a02d9c2dd4a1d0b",
+    "package.json": "34bea6a430a8b602c965e075c0d617f084e80927dfe19ce426d343d8a4473cdf",
+    "lab-contract.json": "589c3b4ad10ee7c164482b44334c42ee5831c1cfdd2ceda3e921afba2e2fe2f5",
+    "src/labContract.ts": "edcead27d9ea907928a30f81916e7ed934e8923ac12004d7f79dc147591b4080",
+    "scripts/run-characterization-oracle.mjs": "459081434b6a463c4ccb986a3b8de7dcfdcfeb9fd3dcb008e2955f503fdbefee",
+    "scripts/refactor-verification.mjs": "3e853f04aad964b72452bcc9f908da94349867034459a65ad0b1c5614295ef6c",
+    "scripts/test-refactor-verifier.mjs": "325fcd47101f5a6c8e7baf355d6746e8ba23bbfd3df98f39de34e1e4fa3ce69d",
+    "scripts/verify-refactor-submission.mjs": "7d4c443e9804a9cdba31f708b74719c0aff0153fa35e1ce5f85c59ba857c391e",
+    "submission-contract.json": "5c1d6a3f8921cf899f199ca15969a83b27a30da43a74b48678315379238a1112"
+  }
+}

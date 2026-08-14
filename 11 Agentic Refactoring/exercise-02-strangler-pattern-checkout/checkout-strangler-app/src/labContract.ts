@@ -1,56 +1,19 @@
 export interface LabContract {
-  title: string;
-  competency: string;
-  domain: string;
-  mission: string;
-  outcome: string;
-  entities: string[];
-  seededDefects: string[];
-  verificationGates: string[];
-  agentWorkflow: string[];
-  workingDeliverables: string[];
-  masterySignals: string[];
+  title: string; competency: string; domain: string; mission: string; outcome: string;
+  entities: string[]; seededDefects: string[]; verificationGates: string[];
+  agentWorkflow: string[]; workingDeliverables: string[]; masterySignals: string[];
 }
 
 export const labContract: LabContract = {
-  "title": "jscodeshift Strangler Checkout Slice",
-  "competency": "11. Agentic Refactoring - Test-driven tech-debt cleanup",
-  "domain": "Strangler replacement for one checkout decision branch",
-  "mission": "Replace one path of a tangled checkout workflow with a new module while preserving external behavior.",
-  "outcome": "One branch of a tangled checkout workflow is replaced safely behind an adapter or flag.",
-  "entities": [
-    "legacy checkout path",
-    "adapter",
-    "feature flag",
-    "golden output"
-  ],
-  "seededDefects": [
-    "new path changes tax rounding",
-    "adapter does not preserve error shape",
-    "flag rollback still calls new module"
-  ],
-  "verificationGates": [
-    "old/new comparison",
-    "adapter contract test",
-    "flag rollback test",
-    "golden screenshot/output"
-  ],
-  "agentWorkflow": [
-    "Ask the coding agent to inspect this lab contract, starter code, docs, and tests before proposing a plan.",
-    "Revise the agent plan so it exercises the competency practice and avoids the common mistake.",
-    "Implement the smallest working change that addresses the seeded defects.",
-    "Run the verification gates and capture command evidence before writing the final review note."
-  ],
-  "workingDeliverables": [
-    "New checkout module and adapter/flag wiring.",
-    "Comparison tests for old vs new behavior.",
-    "Updated app behavior for the selected branch.",
-    "Rollback and residual-risk evidence."
-  ],
-  "masterySignals": [
-    "Characterize the existing checkout path with tests and sample outputs.",
-    "Build the new module behind an adapter, flag, or routing seam.",
-    "Compare old and new outputs for preserved cases.",
-    "Roll out only one branch of behavior, leaving the rest untouched."
-  ]
+  title: "Strangler Checkout Route",
+  competency: "11. Agentic Refactoring - Test-driven tech-debt cleanup",
+  domain: "Card-payment strangler with authorization-safe fallback",
+  mission: "Move only card checkout behind a new slice while every legacy consumer and public result remains stable.",
+  outcome: "An injectable and reversible router proves safe rollout without duplicate authorization.",
+  entities: ["checkout request", "public payment result", "legacy path", "card authorization"],
+  seededDefects: ["all payment types still use legacy", "card slice is absent", "authorization-safe fallback is unimplemented"],
+  verificationGates: ["legacy-to-card result comparison", "protected route matrix", "flag-off rollback", "focused source history"],
+  agentWorkflow: ["Inspect the immutable route and result contract.", "Build the card slice behind the injected seam.", "Move only enabled card requests and preserve safe failure behavior.", "Run protected checks and capture evidence after the source commit."],
+  workingDeliverables: ["Card slice, router, and participant test.", "Route and contract comparison evidence.", "Rollback and authorization-safety proof.", "Focused source commit record."],
+  masterySignals: ["Keeps gift-card, invoice, and unknown types legacy.", "Matches exact approved and declined outputs including rounding.", "Falls back only before authorization.", "Disables the new slice without deleting legacy code."],
 };

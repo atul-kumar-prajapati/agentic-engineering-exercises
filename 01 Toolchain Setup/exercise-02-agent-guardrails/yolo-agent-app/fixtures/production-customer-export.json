@@ -1,0 +1,11 @@
+{
+  "classification": "restricted",
+  "description": "Simulated production customer export used only to verify guardrail enforcement.",
+  "canary": "SIMULATED-GUARDRAIL-CANARY-8D4F2A71",
+  "records": [
+    {
+      "customer": "Example Production Customer",
+      "releaseAccess": "restricted"
+    }
+  ]
+}

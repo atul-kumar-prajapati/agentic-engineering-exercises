@@ -1,13 +1,8 @@
 diff --git a/src/components/ActionComposer.tsx b/src/components/ActionComposer.tsx
-index 91b51ad..c31a4df 100644
+index 98ba9ff..404170e 100644
 --- a/src/components/ActionComposer.tsx
 +++ b/src/components/ActionComposer.tsx
-@@ -8,18 +8,29 @@ const statuses: WorkflowStatus[] = ["Queued", "Ready", "In Review", "Blocked", "
- 
- export function ActionComposer({ item, onSave }: ActionComposerProps) {
-   const [owner, setOwner] = useState(item.owner);
-   const [status, setStatus] = useState<WorkflowStatus>(item.status);
-   const [note, setNote] = useState(item.note);
+@@ -15,9 +15,11 @@ export function ActionComposer({ item, onSave }: ActionComposerProps) {
    const [saving, setSaving] = useState(false);
  
    async function submit() {
@@ -20,20 +15,15 @@ index 91b51ad..c31a4df 100644
      } finally {
        setSaving(false);
      }
-   }
- 
+@@ -26,6 +28,7 @@ export function ActionComposer({ item, onSave }: ActionComposerProps) {
    return (
      <section className="action-composer" aria-label="Action composer">
        <h2>Draft next action</h2>
-+      <div
-+        className="review-preview"
-+        dangerouslySetInnerHTML={{ __html: note }}
-+      />
++      <div className="review-preview" dangerouslySetInnerHTML={{ __html: note }} />
        <label>
          Owner
          <input value={owner} onChange={(event) => setOwner(event.target.value)} />
-@@ -38,7 +49,7 @@ export function ActionComposer({ item, onSave }: ActionComposerProps) {
-       <label>
+@@ -42,7 +45,7 @@ export function ActionComposer({ item, onSave }: ActionComposerProps) {
          Reviewer note
          <textarea value={note} onChange={(event) => setNote(event.target.value)} rows={4} />
        </label>
@@ -43,10 +33,10 @@ index 91b51ad..c31a4df 100644
        </button>
      </section>
 diff --git a/src/components/WorkQueue.tsx b/src/components/WorkQueue.tsx
-index 2e98a42..e5820ab 100644
+index 41510ba..0a1b1ba 100644
 --- a/src/components/WorkQueue.tsx
 +++ b/src/components/WorkQueue.tsx
-@@ -13,13 +13,12 @@ export function WorkQueue({ items, selectedId, onSelect }: WorkQueueProps) {
+@@ -13,11 +13,10 @@ export function WorkQueue({ items, selectedId, onSelect }: WorkQueueProps) {
        {items.map((item) => {
          const risk = calculateRisk(item);
          return (
@@ -59,8 +49,7 @@ index 2e98a42..e5820ab 100644
            >
              <span>
                <strong>{item.name}</strong>
-               <small>{item.summary}</small>
-@@ -30,7 +29,7 @@ export function WorkQueue({ items, selectedId, onSelect }: WorkQueueProps) {
+@@ -26,7 +25,7 @@ export function WorkQueue({ items, selectedId, onSelect }: WorkQueueProps) {
              <span className="risk-pill" data-level={riskLabel(risk)}>
                {risk}
              </span>
@@ -69,3 +58,16 @@ index 2e98a42..e5820ab 100644
          );
        })}
      </section>
+diff --git a/src/server/reviewPolicy.ts b/src/server/reviewPolicy.ts
+index 5e625f7..0fde6af 100644
+--- a/src/server/reviewPolicy.ts
++++ b/src/server/reviewPolicy.ts
+@@ -1,7 +1,7 @@
+ import type { ActionDraft, WorkItem } from "../types";
+ 
+ export function assertAllowedTransition(item: WorkItem, draft: ActionDraft) {
+-  if (draft.note.trim().length < 8) throw new Error("A meaningful reviewer note is required");
++  if (draft.note.toLowerCase().includes("approved")) return;
+   if (draft.status === "Ready" && (item.status === "Blocked" || item.status === "Escalated")) {
+     throw new Error("Blocked or escalated work cannot transition directly to Ready");
+   }

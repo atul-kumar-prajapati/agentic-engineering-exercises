@@ -1,0 +1,18 @@
+{
+  "name": "Repeated Mistake to Repository Rule",
+  "root": "..",
+  "requiredFiles": [
+    { "path": "AGENTS.md", "minCharacters": 180, "maxCharacters": 1200, "includeAll": [".agent/persistence.md", "persistence", "npm run test:persistence"] },
+    { "path": ".agent/persistence.md", "minCharacters": 600, "includeAll": ["stable ID", "display label", "trim", "lowercase", "caller-provided clock", "exception", "product contract", "UI", "export", "log", "npm run test:persistence"] },
+    { "path": "rule-hardening-app/src/services/filterPersistence.test.mjs", "minCharacters": 800, "includeAll": ["buildSavedFilter", "ownerId", "blocked", "updatedAt", "clock"] },
+    { "path": "evidence/before.patch", "minCharacters": 180, "includeAll": ["filterPersistence.mjs"] },
+    { "path": "evidence/after.patch", "minCharacters": 180, "includeAll": ["filterPersistence.mjs"] },
+    { "path": "evidence/before-metadata.json", "minCharacters": 300, "validJson": true, "includeAll": ["sessionId", "agent", "model", "promptHash", "timeLimitMinutes", "repositorySha", "patchSha256", "firstAttempt", "edited"] },
+    { "path": "evidence/after-metadata.json", "minCharacters": 300, "validJson": true, "includeAll": ["sessionId", "agent", "model", "promptHash", "timeLimitMinutes", "repositorySha", "patchSha256", "firstAttempt", "edited"] },
+    { "path": "evidence/rule-map.md", "minCharacters": 900, "includeAll": ["COR-101", "COR-106", "identity-vs-presentation", "canonical-enum-storage", "ambient-time", "AGENTS.md", "persistence.md", "test:persistence"] },
+    { "path": "evidence/comparison.md", "minCharacters": 800, "includeAll": ["same task", "same agent", "same model", "first attempt", "baseline", "after", "rule", "defect", "verification"] },
+    { "path": "evidence/history.json", "minCharacters": 190, "validJson": true, "includeAll": ["baselineSha", "rulesSha", "implementationSha"] },
+    { "path": "evidence/commands/rules-verify.txt", "minCharacters": 300, "includeAll": ["Rules SHA", "Implementation SHA", "baseline defects", "PASS", "exit code: 0"] }
+  ],
+  "requiredDirectories": [".agent", "evidence"]
+}
