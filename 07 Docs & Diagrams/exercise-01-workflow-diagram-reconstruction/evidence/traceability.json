@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "source_sha": "c72673b2cf45d21d29e7b21f5f5cd4de32b10c43",
+  "edges": [
+    {
+      "id": "WF-01",
+      "from": "draft",
+      "to": "submitted",
+      "condition": "The request status is draft.",
+      "actor": "Employee",
+      "source_path": "workflow-reconstruction-app/src/workflow.tsx",
+      "source_line": 52,
+      "source_excerpt": "// EDGE: WF-01",
+      "diagram_paths": ["diagrams/access-state.mmd", "diagrams/access-approval-sequence.mmd"]
+    },
+    {
+      "id": "WF-02",
+      "from": "submitted",
+      "to": "manager-approved",
+      "condition": "The request status is submitted.",
+      "actor": "Manager",
+      "source_path": "workflow-reconstruction-app/src/workflow.tsx",
+      "source_line": 62,
+      "source_excerpt": "// EDGE: WF-02",
+      "diagram_paths": ["diagrams/access-state.mmd", "diagrams/access-approval-sequence.mmd"]
+    },
+    {
+      "id": "WF-03",
+      "from": "manager-approved",
+      "to": "security-review",
+      "condition": "The request is manager-approved and risk is high.",
+      "actor": "Policy engine",
+      "source_path": "workflow-reconstruction-app/src/workflow.tsx",
+      "source_line": 71,
+      "source_excerpt": "// EDGE: WF-03",
+      "diagram_paths": ["diagrams/access-state.mmd", "diagrams/access-approval-sequence.mmd"]
+    },
+    {
+      "id": "WF-04",
+      "from": "manager-approved",
+      "to": "data-owner-review",
+      "condition": "The request is manager-approved after the high-risk guard does not match; protected fixtures call this normal risk.",
+      "actor": "Data owner",
+      "source_path": "workflow-reconstruction-app/src/workflow.tsx",
+      "source_line": 80,
+      "source_excerpt": "// EDGE: WF-04",
+      "diagram_paths": ["diagrams/access-state.mmd", "diagrams/access-approval-sequence.mmd"]
+    },
+    {
+      "id": "WF-05",
+      "from": "security-review",
+      "to": "data-owner-review",
+      "condition": "The request status is security-review.",
+      "actor": "Security",
+      "source_path": "workflow-reconstruction-app/src/workflow.tsx",
+      "source_line": 89,
+      "source_excerpt": "// EDGE: WF-05",
+      "diagram_paths": ["diagrams/access-state.mmd", "diagrams/access-approval-sequence.mmd"]
+    },
+    {
+      "id": "WF-06",
+      "from": "data-owner-review",
+      "to": "provisioning",
+      "condition": "The request status is data-owner-review.",
+      "actor": "Data owner",
+      "source_path": "workflow-reconstruction-app/src/workflow.tsx",
+      "source_line": 98,
+      "source_excerpt": "// EDGE: WF-06",
+      "diagram_paths": ["diagrams/access-state.mmd", "diagrams/access-approval-sequence.mmd", "diagrams/access-failure-sequence.mmd"]
+    },
+    {
+      "id": "WF-07",
+      "from": "provisioning",
+      "to": "provisioned",
+      "condition": "The request is provisioning and provisioningHealthy is true.",
+      "actor": "Provisioning system",
+      "source_path": "workflow-reconstruction-app/src/workflow.tsx",
+      "source_line": 109,
+      "source_excerpt": "// EDGE: WF-07 when provisioningHealthy is true.",
+      "diagram_paths": ["diagrams/access-state.mmd", "diagrams/access-approval-sequence.mmd"]
+    },
+    {
+      "id": "WF-08",
+      "from": "provisioning",
+      "to": "failed-provisioning",
+      "condition": "The request is provisioning and provisioningHealthy is false.",
+      "actor": "Provisioning system",
+      "source_path": "workflow-reconstruction-app/src/workflow.tsx",
+      "source_line": 110,
+      "source_excerpt": "// EDGE: WF-08 when provisioningHealthy is false.",
+      "diagram_paths": ["diagrams/access-state.mmd", "diagrams/access-failure-sequence.mmd"]
+    },
+    {
+      "id": "WF-09",
+      "from": "failed-provisioning",
+      "to": "rollback-requested",
+      "condition": "The request status is failed-provisioning.",
+      "actor": "Provisioning system",
+      "source_path": "workflow-reconstruction-app/src/workflow.tsx",
+      "source_line": 125,
+      "source_excerpt": "// EDGE: WF-09",
+      "diagram_paths": ["diagrams/access-state.mmd", "diagrams/access-failure-sequence.mmd"]
+    },
+    {
+      "id": "WF-10",
+      "from": "rollback-requested",
+      "to": "rolled-back",
+      "condition": "The request status is rollback-requested.",
+      "actor": "Identity admin",
+      "source_path": "workflow-reconstruction-app/src/workflow.tsx",
+      "source_line": 134,
+      "source_excerpt": "// EDGE: WF-10",
+      "diagram_paths": ["diagrams/access-state.mmd", "diagrams/access-failure-sequence.mmd"]
+    }
+  ]
+}

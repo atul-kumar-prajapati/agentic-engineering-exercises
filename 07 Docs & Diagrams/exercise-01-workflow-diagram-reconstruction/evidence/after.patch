@@ -1,0 +1,124 @@
+diff --git a/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-state.mmd b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-state.mmd
+new file mode 100644
+index 0000000..69bd8a3
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-state.mmd
+@@ -0,0 +1,48 @@
++stateDiagram-v2
++    direction LR
++
++    state "Draft" as draft
++    state "Submitted" as submitted
++    state "Manager approved" as manager_approved
++    state "Security review" as security_review
++    state "Data owner review" as data_owner_review
++    state "Provisioning" as provisioning
++    state "Provisioned" as provisioned
++    state "Failed provisioning" as failed_provisioning
++    state "Rollback requested" as rollback_requested
++    state "Rolled back" as rolled_back
++
++    [*] --> draft
++
++    %% EDGE: WF-01
++    draft --> submitted
++
++    %% EDGE: WF-02
++    submitted --> manager_approved
++
++    %% EDGE: WF-03
++    manager_approved --> security_review: high risk
++
++    %% EDGE: WF-04
++    manager_approved --> data_owner_review: normal risk
++
++    %% EDGE: WF-05
++    security_review --> data_owner_review
++
++    %% EDGE: WF-06
++    data_owner_review --> provisioning
++
++    %% EDGE: WF-07
++    provisioning --> provisioned: healthy
++
++    %% EDGE: WF-08
++    provisioning --> failed_provisioning: unhealthy
++
++    %% EDGE: WF-09
++    failed_provisioning --> rollback_requested
++
++    %% EDGE: WF-10
++    rollback_requested --> rolled_back
++
++    provisioned --> [*]
++    rolled_back --> [*]
+diff --git a/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-approval-sequence.mmd b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-approval-sequence.mmd
+new file mode 100644
+index 0000000..9ee3319
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-approval-sequence.mmd
+@@ -0,0 +1,37 @@
++sequenceDiagram
++    title Access approval and successful provisioning
++    participant Employee
++    participant Application
++    participant Manager
++    participant PolicyEngine
++    participant Security
++    participant DataOwner
++    participant IdentityProvider
++
++    %% EDGE: WF-01
++    Employee->>Application: Submit access request
++    Application->>Manager: Open manager review
++
++    %% EDGE: WF-02
++    Manager-->>Application: Approve manager review
++    Application->>PolicyEngine: Evaluate request risk
++
++    alt High risk
++        %% EDGE: WF-03
++        PolicyEngine-->>Application: Route high-risk request to security review
++        Application->>Security: Open security review
++
++        %% EDGE: WF-05
++        Security-->>Application: Approve high-risk access
++        Application->>DataOwner: Open data owner review
++    else Normal risk
++        %% EDGE: WF-04
++        DataOwner->>Application: Open data owner review
++    end
++
++    %% EDGE: WF-06
++    DataOwner-->>Application: Approve data access
++    Application->>IdentityProvider: Start provisioning
++
++    %% EDGE: WF-07
++    IdentityProvider-->>Application: Access granted and identity group synced
+diff --git a/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-failure-sequence.mmd b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-failure-sequence.mmd
+new file mode 100644
+index 0000000..f209ce0
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-failure-sequence.mmd
+@@ -0,0 +1,21 @@
++sequenceDiagram
++    title Provisioning failure and rollback
++    participant Application
++    participant DataOwner
++    participant IdentityProvider
++    participant IdentityAdmin
++
++    %% EDGE: WF-06
++    DataOwner->>Application: Approve data access
++    Application->>IdentityProvider: Start provisioning
++
++    %% EDGE: WF-08
++    IdentityProvider-->>Application: Failed to grant access
++
++    %% EDGE: WF-09
++    IdentityProvider->>Application: Rollback request for partial access grant
++    Application->>IdentityAdmin: Assign partial access removal
++
++    %% EDGE: WF-10
++    IdentityAdmin->>IdentityProvider: Remove partial access and close rollback
++    IdentityAdmin-->>Application: Partial access removed and request rolled back

@@ -1,0 +1,61 @@
+
+> workflow-reconstruction-app@0.1.0 workflow:trace
+> node ./scripts/trace-workflow.mjs
+
+Source SHA: c72673b2cf45d21d29e7b21f5f5cd4de32b10c43
+{
+  "normal": {
+    "states": [
+      "draft",
+      "submitted",
+      "manager-approved",
+      "data-owner-review",
+      "provisioning",
+      "provisioned"
+    ],
+    "actors": [
+      "Employee",
+      "Manager",
+      "Data owner",
+      "Data owner",
+      "Provisioning system"
+    ]
+  },
+  "highRisk": {
+    "states": [
+      "draft",
+      "submitted",
+      "manager-approved",
+      "security-review",
+      "data-owner-review",
+      "provisioning",
+      "provisioned"
+    ],
+    "actors": [
+      "Employee",
+      "Manager",
+      "Policy engine",
+      "Security",
+      "Data owner",
+      "Provisioning system"
+    ]
+  },
+  "failure": {
+    "states": [
+      "manager-approved",
+      "data-owner-review",
+      "provisioning",
+      "failed-provisioning",
+      "rollback-requested",
+      "rolled-back"
+    ],
+    "actors": [
+      "Data owner",
+      "Data owner",
+      "Provisioning system",
+      "Provisioning system",
+      "Identity admin"
+    ]
+  }
+}
+PASS: normal approval, high-risk security review, provisioning failure, and rollback traces match the implementation.
