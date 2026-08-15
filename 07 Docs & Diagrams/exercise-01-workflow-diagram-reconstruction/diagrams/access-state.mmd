@@ -1,0 +1,13 @@
+stateDiagram-v2
+    [*] --> Draft
+    Draft --> ManagerApproval: Submit request
+    ManagerApproval --> DataOwnerApproval: Manager approves
+    DataOwnerApproval --> Provisioning: Data owner approves
+    Provisioning --> Provisioned: Access granted
+    Provisioning --> Provisioning: Provisioning fails / retry automatically
+    Provisioned --> [*]
+
+    note right of DataOwnerApproval
+        Security review is outside the application
+        and does not affect routing.
+    end note

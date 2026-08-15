@@ -1,0 +1,19 @@
+sequenceDiagram
+    participant Application
+    participant Provisioning
+    actor Requester
+
+    Application->>Provisioning: Provision access
+    Provisioning-->>Application: Provisioning failed
+
+    loop Retry automatically until access is granted
+        Application->>Provisioning: Retry provisioning
+        alt Provisioning fails
+            Provisioning-->>Application: Provisioning failed
+        else Access is granted
+            Provisioning-->>Application: Access granted
+        end
+    end
+
+    Application-->>Requester: Request provisioned
+    Note over Application,Provisioning: Rollback and identity-administrator actions are outside the application

@@ -1,0 +1,68 @@
+diff --git a/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-state.mmd b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-state.mmd
+new file mode 100644
+index 0000000..1d9bbbb
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-state.mmd	
+@@ -0,0 +1,13 @@
++stateDiagram-v2
++    [*] --> Draft
++    Draft --> ManagerApproval: Submit request
++    ManagerApproval --> DataOwnerApproval: Manager approves
++    DataOwnerApproval --> Provisioning: Data owner approves
++    Provisioning --> Provisioned: Access granted
++    Provisioning --> Provisioning: Provisioning fails / retry automatically
++    Provisioned --> [*]
++
++    note right of DataOwnerApproval
++        Security review is outside the application
++        and does not affect routing.
++    end note
+diff --git a/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-approval-sequence.mmd b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-approval-sequence.mmd
+new file mode 100644
+index 0000000..2c4ef5f
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-approval-sequence.mmd	
+@@ -0,0 +1,18 @@
++sequenceDiagram
++    actor Requester
++    actor Manager
++    actor DataOwner as Data Owner
++    participant Application
++    participant Provisioning
++
++    Requester->>Application: Create draft request
++    Requester->>Application: Submit request
++    Application->>Manager: Request approval
++    Manager->>Application: Approve request
++    Application->>DataOwner: Request approval
++    DataOwner->>Application: Approve request
++    Application->>Provisioning: Provision access
++    Provisioning-->>Application: Access granted
++    Application-->>Requester: Request provisioned
++
++    Note over Application,DataOwner: Security review occurs outside the application and does not affect routing
+diff --git a/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-failure-sequence.mmd b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-failure-sequence.mmd
+new file mode 100644
+index 0000000..6b0e99f
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-failure-sequence.mmd	
+@@ -0,0 +1,19 @@
++sequenceDiagram
++    participant Application
++    participant Provisioning
++    actor Requester
++
++    Application->>Provisioning: Provision access
++    Provisioning-->>Application: Provisioning failed
++
++    loop Retry automatically until access is granted
++        Application->>Provisioning: Retry provisioning
++        alt Provisioning fails
++            Provisioning-->>Application: Provisioning failed
++        else Access is granted
++            Provisioning-->>Application: Access granted
++        end
++    end
++
++    Application-->>Requester: Request provisioned
++    Note over Application,Provisioning: Rollback and identity-administrator actions are outside the application

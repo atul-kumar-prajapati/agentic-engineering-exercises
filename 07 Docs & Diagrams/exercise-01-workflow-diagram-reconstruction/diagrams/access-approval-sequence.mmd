@@ -1,0 +1,18 @@
+sequenceDiagram
+    actor Requester
+    actor Manager
+    actor DataOwner as Data Owner
+    participant Application
+    participant Provisioning
+
+    Requester->>Application: Create draft request
+    Requester->>Application: Submit request
+    Application->>Manager: Request approval
+    Manager->>Application: Approve request
+    Application->>DataOwner: Request approval
+    DataOwner->>Application: Approve request
+    Application->>Provisioning: Provision access
+    Provisioning-->>Application: Access granted
+    Application-->>Requester: Request provisioned
+
+    Note over Application,DataOwner: Security review occurs outside the application and does not affect routing
