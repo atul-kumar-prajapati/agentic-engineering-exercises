@@ -1,0 +1,37 @@
+sequenceDiagram
+    title Access approval and successful provisioning
+    participant Employee
+    participant Application
+    participant Manager
+    participant PolicyEngine
+    participant Security
+    participant DataOwner
+    participant IdentityProvider
+
+    %% EDGE: WF-01
+    Employee->>Application: Submit access request
+    Application->>Manager: Open manager review
+
+    %% EDGE: WF-02
+    Manager-->>Application: Approve manager review
+    Application->>PolicyEngine: Evaluate request risk
+
+    alt High risk
+        %% EDGE: WF-03
+        PolicyEngine-->>Application: Route high-risk request to security review
+        Application->>Security: Open security review
+
+        %% EDGE: WF-05
+        Security-->>Application: Approve high-risk access
+        Application->>DataOwner: Open data owner review
+    else Normal risk
+        %% EDGE: WF-04
+        DataOwner->>Application: Open data owner review
+    end
+
+    %% EDGE: WF-06
+    DataOwner-->>Application: Approve data access
+    Application->>IdentityProvider: Start provisioning
+
+    %% EDGE: WF-07
+    IdentityProvider-->>Application: Access granted and identity group synced

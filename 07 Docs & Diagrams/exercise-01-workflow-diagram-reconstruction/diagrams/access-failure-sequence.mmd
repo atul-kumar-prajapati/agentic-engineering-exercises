@@ -1,0 +1,21 @@
+sequenceDiagram
+    title Provisioning failure and rollback
+    participant Application
+    participant DataOwner
+    participant IdentityProvider
+    participant IdentityAdmin
+
+    %% EDGE: WF-06
+    DataOwner->>Application: Approve data access
+    Application->>IdentityProvider: Start provisioning
+
+    %% EDGE: WF-08
+    IdentityProvider-->>Application: Failed to grant access
+
+    %% EDGE: WF-09
+    IdentityProvider->>Application: Rollback request for partial access grant
+    Application->>IdentityAdmin: Assign partial access removal
+
+    %% EDGE: WF-10
+    IdentityAdmin->>IdentityProvider: Remove partial access and close rollback
+    IdentityAdmin-->>Application: Partial access removed and request rolled back
