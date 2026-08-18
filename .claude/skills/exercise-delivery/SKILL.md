@@ -7,6 +7,8 @@ description: Deliver one competency exercise from this agentic-engineering exerc
 
 One exercise per branch, per PR. The exercise's own README and verifier outrank this skill wherever they are more specific.
 
+This file is self-contained. Claude Code loads it as a skill; any other agent can be pointed at the path and read it directly as its working instructions — nothing here depends on skill auto-discovery. The frontmatter above is metadata for tools that use it and can be ignored by tools that do not.
+
 ## Non-negotiables
 
 These are the rules that fail a submission when broken.

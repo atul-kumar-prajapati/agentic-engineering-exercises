@@ -1,6 +1,8 @@
 # Handoff Prompt
 
-Paste the block below into a fresh session opened at the repository root. Change only the exercise on the first line.
+Paste the block below into a fresh session opened at the repository root. Change only the exercise named on the first line.
+
+It is written to be **agent-agnostic** — it tells the agent where the conventions live instead of assuming the agent auto-discovers them. It works whether or not the tool supports Claude Code skills.
 
 ---
 
@@ -10,7 +12,27 @@ We are working through the competency exercises in this repository, one exercise
 
 **This session: `07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams` (7.2).**
 
-Use the `exercise-delivery` skill and follow it end to end. It holds the conventions, the branch-naming rule, the base-branch selection, the specialist-subagent protocol, the evidence requirements, the verification discipline, and the PR-details format. Do not restate the skill back to me — just apply it.
+**First, before anything else, read this file and follow it as your working instructions for the whole session:**
+
+```
+.claude/skills/exercise-delivery/SKILL.md
+```
+
+It holds the conventions this series already follows: base-branch selection, branch naming, the order to read the exercise contract in, the specialist-subagent protocol, evidence and hash-binding rules, verification discipline, and the PR-details format. Treat it as binding. Where it conflicts with the exercise's own README or verifier scripts, the exercise wins — the file says so itself.
+
+If that file is missing, recover it before starting:
+
+```bash
+git fetch origin chore/agentic-exercise-delivery-skill
+git checkout chore/agentic-exercise-delivery-skill -- .claude
+git reset -- .claude
+```
+
+That leaves it untracked in the working tree, which is where it must stay — see "Keeping this out of the exercise diff" at the end of this prompt.
+
+If your tool supports reusable skills, rules, or persistent instructions, install those conventions as one now so you do not have to re-read the file every session — a Claude Code skill under `.claude/skills/`, an `AGENTS.md` entry, a Cursor rule, or whatever your equivalent is. Keep it outside the exercise directories. If your tool has no such mechanism, just keep the file's rules in context for the session.
+
+Also read `docs/SUBMISSION_STANDARD.md` and `docs/EXERCISE_SETUP_AND_TIME.md`. They are short and they are repo-wide rules.
 
 Before implementing, give me a short brief covering:
 
@@ -19,7 +41,7 @@ Before implementing, give me a short brief covering:
 3. Any commit-ordering or hash-binding constraint you found by reading the verifier scripts.
 4. Your specialist lane plan, with each lane's scope and ownership boundary.
 
-Then work autonomously. Come back to me only if the skill's escalation rules say a decision is genuinely mine.
+Then work autonomously. Come back to me only if the skill file's escalation rules say a decision is genuinely mine.
 
 Finish with the PR details block. Do not open the PR — I raise it myself.
 
@@ -39,8 +61,17 @@ Finish with the PR details block. Do not open the PR — I raise it myself.
 
 **Exercises with heavy model-run requirements** — 5.3, 9.3, 10.2, 12.3 need dozens of measured runs each. `docs/EXERCISE_SETUP_AND_TIME.md` has the run matrix. Estimate the call count and confirm budget with the user before starting those four.
 
-## Keeping this skill out of the exercise diff
+## Keeping this out of the exercise diff
 
-`.claude/` is not part of any exercise. Every exercise branch must contain only files from its own exercise directory, so **never stage `.claude/`** into an exercise commit — treat it like `.DS_Store`. It lives in the working tree and survives branch switches.
+`.claude/` is not part of any exercise. Every exercise branch must contain only files from its own exercise directory, so **never stage `.claude/`** into an exercise commit — treat it like `.DS_Store`. Keeping it untracked in the working tree is deliberate: it survives branch switches and cannot be committed by accident.
 
-A committed copy is on `origin/chore/agentic-exercise-delivery-skill` if the working-tree copy is ever lost.
+The durable copy is committed on `origin/chore/agentic-exercise-delivery-skill`.
+
+## Handing the repository to someone else
+
+`.claude/` is untracked, so it does **not** travel in a fresh `git clone`. When handing off:
+
+- Copy the actual working directory, `.claude/` included, **or**
+- Have the receiver run the three recovery commands in the prompt block above.
+
+Then paste the prompt block. The prompt names the file path, so any agent that can read a file can find the conventions — no skill auto-discovery required.
