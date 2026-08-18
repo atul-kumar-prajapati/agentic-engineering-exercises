@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "source_sha": "17aa922f283a5554a3d6bb9a3f8c170ed1f051a6",
+  "relationships": [
+    {
+      "id": "VIS-01",
+      "source_path": "payment-workflow-app/src/App.tsx",
+      "source_line": 6,
+      "source_excerpt": "const payment = runPaymentScenario(); // VIS: VIS-01",
+      "diagram_paths": [
+        "diagrams/payment-architecture.mmd",
+        "diagrams/payment-sequence.mmd"
+      ]
+    },
+    {
+      "id": "VIS-02",
+      "source_path": "payment-workflow-app/src/payment/paymentOrchestrator.ts",
+      "source_line": 27,
+      "source_excerpt": "const authorization = authorizePayment({ // VIS: VIS-02",
+      "diagram_paths": [
+        "diagrams/payment-architecture.mmd",
+        "diagrams/payment-sequence.mmd"
+      ]
+    },
+    {
+      "id": "VIS-03",
+      "source_path": "payment-workflow-app/src/payment/paymentOrchestrator.ts",
+      "source_line": 60,
+      "source_excerpt": "const capture = capturePayment(authorization); // VIS: VIS-03",
+      "diagram_paths": [
+        "diagrams/payment-architecture.mmd",
+        "diagrams/payment-sequence.mmd"
+      ]
+    },
+    {
+      "id": "VIS-04",
+      "source_path": "payment-workflow-app/src/payment/paymentOrchestrator.ts",
+      "source_line": 63,
+      "source_excerpt": "const ledgerEntries = [ // VIS: VIS-04",
+      "diagram_paths": [
+        "diagrams/payment-architecture.mmd",
+        "diagrams/payment-sequence.mmd"
+      ]
+    },
+    {
+      "id": "VIS-05",
+      "source_path": "payment-workflow-app/src/payment/paymentOrchestrator.ts",
+      "source_line": 67,
+      "source_excerpt": "const receipt = createReceipt(paidOrder, demoCustomer, \"sent\"); // VIS: VIS-05",
+      "diagram_paths": [
+        "diagrams/payment-architecture.mmd",
+        "diagrams/payment-sequence.mmd"
+      ]
+    },
+    {
+      "id": "VIS-06",
+      "source_path": "payment-workflow-app/src/payment/paymentOrchestrator.ts",
+      "source_line": 68,
+      "source_excerpt": "const webhook = buildGatewayWebhook(capture); // VIS: VIS-06",
+      "diagram_paths": [
+        "diagrams/payment-architecture.mmd",
+        "diagrams/payment-sequence.mmd"
+      ]
+    },
+    {
+      "id": "VIS-07",
+      "source_path": "payment-workflow-app/src/payment/webhookReconciler.mjs",
+      "source_line": 6,
+      "source_excerpt": "state.ledgerEntries.push({ eventId: event.id, gatewayReference: event.gatewayReference, type: \"capture\" }); // VIS: VIS-07",
+      "diagram_paths": [
+        "diagrams/payment-architecture.mmd",
+        "diagrams/webhook-reconciliation-state.mmd",
+        "diagrams/payment-sequence.mmd"
+      ]
+    },
+    {
+      "id": "VIS-08",
+      "source_path": "payment-workflow-app/src/payment/webhookReconciler.mjs",
+      "source_line": 3,
+      "source_excerpt": "if (signature !== `sig_${event.gatewayReference}`) throw new Error(\"Invalid webhook signature\"); // VIS: VIS-08",
+      "diagram_paths": [
+        "diagrams/webhook-reconciliation-state.mmd",
+        "diagrams/payment-sequence.mmd"
+      ]
+    },
+    {
+      "id": "VIS-09",
+      "source_path": "payment-workflow-app/src/payment/webhookReconciler.mjs",
+      "source_line": 4,
+      "source_excerpt": "if (!state.knownGatewayReferences.has(event.gatewayReference)) throw new Error(`Unknown gateway reference: ${event.gatewayReference}`); // VIS: VIS-09",
+      "diagram_paths": [
+        "diagrams/webhook-reconciliation-state.mmd",
+        "diagrams/payment-sequence.mmd"
+      ]
+    },
+    {
+      "id": "VIS-10",
+      "source_path": "payment-workflow-app/src/payment/webhookReconciler.mjs",
+      "source_line": 5,
+      "source_excerpt": "if (state.handledEventIds.has(event.id)) return \"already-handled\"; // VIS: VIS-10",
+      "diagram_paths": [
+        "diagrams/webhook-reconciliation-state.mmd",
+        "diagrams/payment-sequence.mmd"
+      ]
+    },
+    {
+      "id": "VIS-11",
+      "source_path": "payment-workflow-app/src/payment/webhookReconciler.mjs",
+      "source_line": 7,
+      "source_excerpt": "state.handledEventIds.add(event.id); // VIS: VIS-11",
+      "diagram_paths": [
+        "diagrams/webhook-reconciliation-state.mmd",
+        "diagrams/payment-sequence.mmd"
+      ]
+    },
+    {
+      "id": "VIS-12",
+      "source_path": "payment-workflow-app/src/payment/paymentTypes.ts",
+      "source_line": 45,
+      "source_excerpt": "orderId: string; // VIS: VIS-12",
+      "diagram_paths": [
+        "diagrams/payment-data.mmd"
+      ]
+    },
+    {
+      "id": "VIS-13",
+      "source_path": "payment-workflow-app/src/payment/paymentTypes.ts",
+      "source_line": 57,
+      "source_excerpt": "intentId: string; // VIS: VIS-13",
+      "diagram_paths": [
+        "diagrams/payment-data.mmd"
+      ]
+    },
+    {
+      "id": "VIS-14",
+      "source_path": "payment-workflow-app/src/payment/paymentTypes.ts",
+      "source_line": 68,
+      "source_excerpt": "paymentIntentId: string; // VIS: VIS-14",
+      "diagram_paths": [
+        "diagrams/payment-data.mmd"
+      ]
+    },
+    {
+      "id": "VIS-15",
+      "source_path": "payment-workflow-app/src/payment/paymentTypes.ts",
+      "source_line": 76,
+      "source_excerpt": "gatewayReference: string; // VIS: VIS-15",
+      "diagram_paths": [
+        "diagrams/payment-data.mmd"
+      ]
+    },
+    {
+      "id": "VIS-16",
+      "source_path": "payment-workflow-app/src/payment/paymentTypes.ts",
+      "source_line": 84,
+      "source_excerpt": "orderId: string; // VIS: VIS-16",
+      "diagram_paths": [
+        "diagrams/payment-data.mmd"
+      ]
+    }
+  ]
+}

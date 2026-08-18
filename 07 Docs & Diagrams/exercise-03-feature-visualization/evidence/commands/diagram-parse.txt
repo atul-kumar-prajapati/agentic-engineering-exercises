@@ -1,0 +1,9 @@
+
+> docs-diagrams-feature-visualization@0.1.0 diagrams:parse
+> node ./scripts/parse-diagrams.mjs
+
+Source SHA: 17aa922f283a5554a3d6bb9a3f8c170ed1f051a6
+PASS diagrams/payment-architecture.mmd parsed as flowchart-v2
+PASS diagrams/webhook-reconciliation-state.mmd parsed as stateDiagram
+PASS diagrams/payment-sequence.mmd parsed as sequence
+PASS diagrams/payment-data.mmd parsed as er

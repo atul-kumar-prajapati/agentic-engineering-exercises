@@ -1,0 +1,12 @@
+
+> docs-diagrams-feature-visualization@0.1.0 payment:trace
+> node --import tsx ./scripts/trace-payment.ts
+
+Source SHA: 17aa922f283a5554a3d6bb9a3f8c170ed1f051a6
+Approved: order=paid intent=captured ledger=authorization_hold,capture receipt=sent
+Declined: order=payment_failed intent=declined capture=none receipt=blocked
+First webhook: result=recorded ledger=1
+Duplicate webhook: result=already-handled ledger=1
+Invalid signature: rejected
+Unknown gateway reference: rejected
+PASS all payment and reconciliation paths match the required behavior

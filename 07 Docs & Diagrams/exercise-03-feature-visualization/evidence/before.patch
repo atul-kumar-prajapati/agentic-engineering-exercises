@@ -1,0 +1,92 @@
+diff --git a/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-architecture.mmd b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-architecture.mmd
+new file mode 100644
+index 0000000..2ed6417
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-architecture.mmd	
+@@ -0,0 +1,16 @@
++flowchart LR
++    CheckoutUI[Checkout UI]
++    GatewayAdapter[External gateway service]
++    Orchestrator[Payment orchestrator]
++    LedgerRecord[Ledger record]
++    ReceiptRecord[Receipt record]
++    WebhookHandler[Webhook handler]
++
++    %% The brief states the checkout application calls the external gateway service directly.
++    CheckoutUI --> GatewayAdapter
++    CheckoutUI --> Orchestrator
++    Orchestrator --> GatewayAdapter
++    Orchestrator --> LedgerRecord
++    Orchestrator --> ReceiptRecord
++    GatewayAdapter --> WebhookHandler
++    WebhookHandler --> LedgerRecord
+diff --git a/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-data.mmd b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-data.mmd
+new file mode 100644
+index 0000000..00a9135
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-data.mmd	
+@@ -0,0 +1,10 @@
++erDiagram
++    CUSTOMER ||--o{ CHECKOUT_ORDER : places
++    CHECKOUT_ORDER ||--|{ ORDER_ITEM : contains
++    %% The brief implies orders settle directly against the external gateway.
++    CHECKOUT_ORDER ||--o{ GATEWAY_TRANSACTION : charged
++    GATEWAY_TRANSACTION ||--o{ WEBHOOK_EVENT : emits
++    WEBHOOK_EVENT ||--o{ LEDGER_ENTRY : records
++    %% The brief implies a receipt is produced for each captured payment.
++    PAYMENT_INTENT ||--|| RECEIPT : produces
++    CHECKOUT_ORDER ||--|| PAYMENT_INTENT : funds
+diff --git a/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-sequence.mmd b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-sequence.mmd
+new file mode 100644
+index 0000000..352f30c
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/payment-sequence.mmd	
+@@ -0,0 +1,32 @@
++sequenceDiagram
++    actor Shopper
++    participant CheckoutUI
++    participant GatewayAdapter
++    participant Orchestrator
++    participant Ledger
++    participant ReceiptNotifier
++    participant WebhookHandler
++
++    Shopper->>CheckoutUI: Confirm checkout
++    %% The brief says the checkout application calls the external gateway directly.
++    CheckoutUI->>GatewayAdapter: Request authorization
++    alt Authorization approved
++        Orchestrator->>GatewayAdapter: Capture authorized payment
++        Orchestrator->>Ledger: Write capture ledger record
++        Orchestrator->>ReceiptNotifier: Send receipt
++    else Authorization declined
++        %% The brief says a declined authorization is retried once before the order fails.
++        CheckoutUI->>GatewayAdapter: Retry authorization once
++        alt Retry approved
++            Orchestrator->>GatewayAdapter: Capture authorized payment
++            Orchestrator->>Ledger: Write capture ledger record
++            Orchestrator->>ReceiptNotifier: Send receipt
++        else Retry declined
++            Orchestrator->>Ledger: Record payment failure
++            Orchestrator->>ReceiptNotifier: Block receipt
++        end
++    end
++    GatewayAdapter->>WebhookHandler: Deliver capture webhook
++    %% The brief says every valid capture delivery creates a new ledger entry.
++    WebhookHandler->>Ledger: Write new ledger entry for delivery
++    WebhookHandler-->>GatewayAdapter: Acknowledge delivery
+diff --git a/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/webhook-reconciliation-state.mmd b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/webhook-reconciliation-state.mmd
+new file mode 100644
+index 0000000..434cb06
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-03-feature-visualization/diagrams/webhook-reconciliation-state.mmd	
+@@ -0,0 +1,10 @@
++stateDiagram-v2
++    [*] --> received
++    received --> signature_check
++    signature_check --> rejected : invalid signature
++    %% Per the brief, any correctly signed capture webhook belongs to a known payment,
++    %% so a valid signature is sufficient to record the capture.
++    signature_check --> ledger_recorded : valid signature
++    ledger_recorded --> handled
++    rejected --> [*]
++    handled --> [*]
