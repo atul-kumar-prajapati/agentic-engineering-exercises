@@ -1,0 +1,81 @@
+
+> pr-evidence-app@0.1.0 verify:exercise
+> npm run agent:check && npm run verify:implementation && npm run verify:submission
+
+
+> pr-evidence-app@0.1.0 agent:check
+> npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build
+
+
+> pr-evidence-app@0.1.0 test:integrity
+> node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json
+
+Verified 22 protected challenge inputs.
+
+> pr-evidence-app@0.1.0 lint
+> node ./scripts/lint-check.mjs
+
+lint-check passed
+
+> pr-evidence-app@0.1.0 test
+> node ./scripts/test-evidence-verifier.mjs && node ./scripts/agent-check.mjs
+
+PR evidence verifier self-test passed
+agent-check passed for Failure-Preserving PR Evidence Pack
+
+> pr-evidence-app@0.1.0 format
+> node ./scripts/format-check.mjs
+
+format-check passed
+
+> pr-evidence-app@0.1.0 typecheck
+> tsc -b --pretty false
+
+
+> pr-evidence-app@0.1.0 build
+> tsc -b && vite build
+
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 31 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.42 kB │ gzip:  0.28 kB
+dist/assets/index-BAmIHqwj.css    3.99 kB │ gzip:  1.44 kB
+dist/assets/index-BVqO1sBR.js   196.44 kB │ gzip: 61.84 kB
+✓ built in 281ms
+
+> pr-evidence-app@0.1.0 verify:implementation
+> npm run evidence:verify
+
+
+> pr-evidence-app@0.1.0 evidence:verify
+> node ./scripts/verify-evidence-submission.mjs
+
+Source SHA: 70def5638a1604d0d1e8708bc7f5016674144403
+PASS submitted failing pack preserves all fixture results and artifact bytes
+PASS generator preserves exit 1 for mixed results and exit 0 for all-passing results
+PASS generator rejects path traversal and inconsistent result fixtures without writing a pack
+PASS .github/workflows/evidence-led-pr-01.yml uses pull_request, read-only permissions, pinned actions, stable paths, always-run verification and upload, and no failure masking
+PASS Git history contains the generator and workflow at source SHA; later changes are evidence only
+PASS verified evidence contract for 08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation
+
+> pr-evidence-app@0.1.0 verify:submission
+> npm run test:submission
+
+
+> pr-evidence-app@0.1.0 test:submission
+> npm run evidence:verify && node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json
+
+
+> pr-evidence-app@0.1.0 evidence:verify
+> node ./scripts/verify-evidence-submission.mjs
+
+Source SHA: 70def5638a1604d0d1e8708bc7f5016674144403
+PASS submitted failing pack preserves all fixture results and artifact bytes
+PASS generator preserves exit 1 for mixed results and exit 0 for all-passing results
+PASS generator rejects path traversal and inconsistent result fixtures without writing a pack
+PASS .github/workflows/evidence-led-pr-01.yml uses pull_request, read-only permissions, pinned actions, stable paths, always-run verification and upload, and no failure masking
+PASS Git history contains the generator and workflow at source SHA; later changes are evidence only
+PASS verified evidence contract for 08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation
+Verified Failure-Preserving PR Evidence Pack: 9 files and 4 directories.
