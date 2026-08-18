@@ -4,7 +4,7 @@
 
 - Starting commit: `3761a42840cbbc4ee9143ecc914519b4f8c6cc0c`, identical to the before attempt
 - Final diagram source SHA: `c72673b2cf45d21d29e7b21f5f5cd4de32b10c43`
-- Branch: `codex/exercise-01-workflow-diagram-reconstruction`
+- Branch: `codex/exercise-07-01-workflow-diagram-reconstruction`
 - Input: the same three-diagram request, plus authority to inspect protected implementation, fixtures, UI behavior, contracts, and trace scripts
 - Agent conditions: fresh Codex subagent, inherited model, standard workspace tools and permissions, one first attempt, no corrections, retries, or verifier-guided revision
 - Time limit: 45 minutes; the attempt completed within the limit
