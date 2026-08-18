@@ -1,0 +1,23 @@
+sequenceDiagram
+actor Client
+participant ChannelRouter
+participant ProviderStatus
+participant ConsentPolicy
+participant RouteResult
+Note over Client,RouteResult: Case 1: push unavailable, SMS available, sms not consented, then email selected
+Client->>ChannelRouter: route
+%% EDGE: DEP-01
+ChannelRouter->>ProviderStatus: push unavailable
+%% EDGE: DEP-02
+ChannelRouter->>ProviderStatus: sms available
+%% EDGE: DEP-03
+ChannelRouter->>ConsentPolicy: sms not consented
+%% EDGE: DEP-04
+ChannelRouter->>ProviderStatus: email available
+%% EDGE: DEP-05
+ChannelRouter->>RouteResult: email selected
+Note over Client,RouteResult: Case 2: push unavailable, SMS not permitted, email unavailable, then durable queue selected
+Client->>ChannelRouter: route again
+ChannelRouter->>ProviderStatus: email unavailable
+%% EDGE: DEP-06
+ChannelRouter->>RouteResult: durable queue selected
