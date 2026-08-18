@@ -1,0 +1,7 @@
+flowchart TD
+  selectNotificationRoute --> pushAvailable
+  selectNotificationRoute --> smsAvailable
+  selectNotificationRoute -->|"every available provider"| immediateRoute
+  smsAvailable --> hasSmsConsent
+  emailAvailable --> hasSmsConsent
+  immediateRoute -->|"after provider failure"| durableQueueRoute

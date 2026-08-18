@@ -1,0 +1,25 @@
+sequenceDiagram
+  participant Router as selectNotificationRoute
+  participant Push as pushAvailable
+  participant SMS as smsAvailable
+  participant Email as emailAvailable
+  participant Consent as hasSmsConsent
+  participant Immediate as immediateRoute
+  participant Queue as durableQueueRoute
+
+  Router->>Push: check availability
+  alt push available
+    Router->>Immediate: immediateRoute for available provider
+    Immediate->>Queue: after provider failure
+  else SMS path
+    Router->>SMS: check availability
+    SMS->>Consent: hasSmsConsent
+    alt sms available
+      Router->>Immediate: immediateRoute for available provider
+      Immediate->>Queue: after provider failure
+    else email path
+      Email->>Consent: hasSmsConsent
+      Router->>Immediate: immediateRoute for available provider
+      Immediate->>Queue: after provider failure
+    end
+  end
