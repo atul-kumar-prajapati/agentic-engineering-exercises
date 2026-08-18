@@ -25,6 +25,8 @@ sequenceDiagram
         Security-->>Application: Approve high-risk access
         Application->>DataOwner: Open data owner review
     else Normal risk
+        PolicyEngine-->>Application: Normal risk needs no security review
+
         %% EDGE: WF-04
         DataOwner->>Application: Open data owner review
     end

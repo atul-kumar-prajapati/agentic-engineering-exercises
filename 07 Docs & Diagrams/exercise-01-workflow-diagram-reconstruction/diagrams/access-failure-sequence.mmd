@@ -14,7 +14,7 @@ sequenceDiagram
 
     %% EDGE: WF-09
     IdentityProvider->>Application: Rollback request for partial access grant
-    Application->>IdentityAdmin: Assign partial access removal
+    Application->>IdentityProvider: Mark identity provider degraded
 
     %% EDGE: WF-10
     IdentityAdmin->>IdentityProvider: Remove partial access and close rollback
