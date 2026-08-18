@@ -1,0 +1,162 @@
+diff --git a/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/scripts/rollback-invoice-preview.mjs b/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/scripts/rollback-invoice-preview.mjs
+new file mode 100644
+index 0000000..8b17489
+--- /dev/null
++++ b/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/scripts/rollback-invoice-preview.mjs	
+@@ -0,0 +1,96 @@
++#!/usr/bin/env node
++import fs from "node:fs";
++import path from "node:path";
++
++const REQUIRED_FLAG_KEY = "invoice-preview-v2";
++const REQUIRED_SCHEMA_VERSION = 1;
++
++function argument(name) {
++  const index = process.argv.indexOf(name);
++  if (index === -1 || process.argv[index + 1] === undefined) {
++    return undefined;
++  }
++  return process.argv[index + 1];
++}
++
++function fail(message) {
++  process.stderr.write(`${message}\n`);
++  process.exit(1);
++}
++
++const configPath = argument("--config");
++const actor = argument("--actor");
++const reason = argument("--reason");
++const timestamp = argument("--timestamp");
++
++if (!configPath) {
++  fail("Missing --config <path>");
++}
++if (actor === undefined) {
++  fail("Missing --actor <value>");
++}
++if (reason === undefined) {
++  fail("Missing --reason <value>");
++}
++if (timestamp === undefined) {
++  fail("Missing --timestamp <ISO-8601>");
++}
++
++if (typeof actor !== "string" || actor.trim().length === 0) {
++  fail("Actor must be a non-empty string");
++}
++if (typeof reason !== "string" || reason.trim().length === 0) {
++  fail("Reason must be a non-empty string");
++}
++
++if (Number.isNaN(Date.parse(timestamp))) {
++  fail("Timestamp must be a valid ISO-8601 value");
++}
++
++if (!fs.existsSync(configPath)) {
++  fail(`Configuration file not found: ${configPath}`);
++}
++
++let parsed;
++try {
++  parsed = JSON.parse(fs.readFileSync(configPath, "utf8"));
++} catch {
++  fail("Configuration is not valid JSON");
++}
++
++if (parsed.schemaVersion !== REQUIRED_SCHEMA_VERSION) {
++  fail(`Configuration schemaVersion must be ${REQUIRED_SCHEMA_VERSION}`);
++}
++if (parsed.flagKey !== REQUIRED_FLAG_KEY) {
++  fail(`Configuration flagKey must be ${REQUIRED_FLAG_KEY}`);
++}
++
++const previousRevision = parsed.revision;
++const updated = {
++  ...parsed,
++  enabled: false,
++  allowlist: [],
++  revision: `rollback-${timestamp.replaceAll(":", "-").replaceAll(".", "-")}`,
++  lastRollback: {
++    actor,
++    reason,
++    timestamp,
++    previousRevision,
++  },
++};
++
++const directory = path.dirname(configPath);
++const temporaryPath = path.join(directory, `.invoice-preview-rollback-${process.pid}.tmp`);
++const formatted = `${JSON.stringify(updated, null, 2)}\n`;
++
++try {
++  fs.writeFileSync(temporaryPath, formatted);
++  fs.renameSync(temporaryPath, configPath);
++} catch (error) {
++  try {
++    fs.unlinkSync(temporaryPath);
++  } catch {
++    // Best-effort cleanup of the sibling temporary file.
++  }
++  fail(`Failed to write configuration atomically: ${error.message}`);
++}
+diff --git a/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/src/rollout/invoicePreview.mjs b/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/src/rollout/invoicePreview.mjs
+index 04dee6e..2aa7df5 100644
+--- a/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/src/rollout/invoicePreview.mjs	
++++ b/08 Evidence-led PRs/exercise-02-feature-flag-rollback-proof/feature-flag-app/src/rollout/invoicePreview.mjs	
+@@ -1,19 +1,44 @@
+-/** Seeded rollout: disabled and provider-error states still touch the new service. */
++const FLAG_KEY = "invoice-preview-v2";
++
++function isValidContext(context) {
++  const targetingKey = context?.targetingKey;
++  const accountId = context?.accountId;
++  return (
++    typeof targetingKey === "string"
++    && typeof accountId === "string"
++    && targetingKey.length > 0
++    && accountId.length > 0
++    && targetingKey === accountId
++  );
++}
++
+ export async function loadInvoiceExperience({ flagClient, context, api, telemetry }) {
+-  let enabled = true;
++  if (!isValidContext(context)) {
++    return { experience: "legacy", reason: "invalid-context" };
++  }
++
++  let enabled = false;
+   try {
+-    enabled = await flagClient.getBooleanValue("invoice-preview-v2", true, context);
++    enabled = await flagClient.getBooleanValue(FLAG_KEY, false, context);
+   } catch {
+-    enabled = false;
++    return { experience: "legacy", reason: "flag-evaluation-error" };
+   }
+ 
+-  if (enabled) {
+-    const preview = await api.loadPreview(context.accountId);
+-    telemetry.emit("invoice_preview_viewed", { targetingKey: context.targetingKey });
+-    return { experience: "preview", preview };
++  if (!enabled) {
++    return { experience: "legacy", reason: "flag-disabled" };
++  }
++
++  let preview;
++  try {
++    preview = await api.loadPreview(context.accountId);
++  } catch {
++    return { experience: "legacy", reason: "preview-unavailable" };
+   }
+ 
+-  const preview = await api.loadPreview(context.accountId);
+-  telemetry.emit("invoice_preview_disabled", { targetingKey: context.targetingKey });
+-  return { experience: "legacy", reason: "flag-disabled", preview };
++  telemetry.emit("invoice_preview_viewed", {
++    targetingKey: context.targetingKey,
++    accountId: context.accountId,
++    flagKey: FLAG_KEY,
++  });
++  return { experience: "preview", preview };
+ }

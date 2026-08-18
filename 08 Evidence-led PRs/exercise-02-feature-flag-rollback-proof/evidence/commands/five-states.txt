@@ -1,0 +1,6 @@
+Source SHA: fdb2b5ccdc08936981ecbf23c0d35fe3dfc36ad1
+{"state":"enabled","outcome":{"experience":"preview","preview":{"accountId":"acct-100","total":42,"currency":"USD"}},"evaluations":1,"defaultValue":false,"apiCalls":[{"accountId":"acct-100"}],"telemetry":[{"name":"invoice_preview_viewed","attributes":{"targetingKey":"acct-100","accountId":"acct-100","flagKey":"invoice-preview-v2"}}]}
+{"state":"invalid-context","outcome":{"experience":"legacy","reason":"invalid-context"},"evaluations":0,"defaultValue":null,"apiCalls":[],"telemetry":[]}
+{"state":"disabled","outcome":{"experience":"legacy","reason":"flag-disabled"},"evaluations":1,"defaultValue":false,"apiCalls":[],"telemetry":[]}
+{"state":"provider-failure","outcome":{"experience":"legacy","reason":"flag-evaluation-error"},"evaluations":1,"defaultValue":false,"apiCalls":[],"telemetry":[]}
+{"state":"preview-api-failure","outcome":{"experience":"legacy","reason":"preview-unavailable"},"evaluations":1,"defaultValue":false,"apiCalls":[{"accountId":"acct-100"}],"telemetry":[]}

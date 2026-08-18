@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "sourceSha": "fdb2b5ccdc08936981ecbf23c0d35fe3dfc36ad1",
+  "command": "node scripts/rollback-invoice-preview.mjs --config <temporary-config> --actor release-engineer --reason \"Invoice preview error rate exceeded rollback threshold\" --timestamp 2026-08-14T10:30:00.000Z",
+  "actor": "release-engineer",
+  "reason": "Invoice preview error rate exceeded rollback threshold",
+  "timestamp": "2026-08-14T10:30:00.000Z",
+  "startTime": "2026-08-18T14:50:00.821Z",
+  "endTime": "2026-08-18T14:50:00.841Z",
+  "elapsedMs": 19.546,
+  "configBeforeSha256": "d24ea840ff3a6e2302fe5e7f8066d99d4539b9ae12f3c428d1e5b324c3dfd77a",
+  "configAfterSha256": "3303cee1a8128202dbc09adef17f78dd1f1d0f00b8520328f789e227e7095e97",
+  "configBefore": {
+    "schemaVersion": 1,
+    "flagKey": "invoice-preview-v2",
+    "enabled": true,
+    "allowlist": [
+      "acct-100",
+      "acct-200"
+    ],
+    "revision": "rollout-2026-08-14"
+  },
+  "configAfter": {
+    "schemaVersion": 1,
+    "flagKey": "invoice-preview-v2",
+    "enabled": false,
+    "allowlist": [],
+    "revision": "rollback-2026-08-14T10-30-00-000Z",
+    "lastRollback": {
+      "actor": "release-engineer",
+      "reason": "Invoice preview error rate exceeded rollback threshold",
+      "timestamp": "2026-08-14T10:30:00.000Z",
+      "previousRevision": "rollout-2026-08-14"
+    }
+  },
+  "behaviorBefore": {
+    "outcome": {
+      "experience": "preview",
+      "preview": {
+        "accountId": "acct-100",
+        "total": 42,
+        "currency": "USD"
+      }
+    },
+    "apiCalls": [
+      {
+        "accountId": "acct-100"
+      }
+    ],
+    "telemetry": [
+      {
+        "name": "invoice_preview_viewed",
+        "attributes": {
+          "targetingKey": "acct-100",
+          "accountId": "acct-100",
+          "flagKey": "invoice-preview-v2"
+        }
+      }
+    ]
+  },
+  "behaviorAfter": {
+    "outcome": {
+      "experience": "legacy",
+      "reason": "flag-disabled"
+    },
+    "apiCalls": [],
+    "telemetry": []
+  },
+  "invalidInputCheck": {
+    "rejected": true,
+    "configUnchanged": true
+  },
+  "result": "passed",
+  "remainingCleanup": "Remove invoice-preview-v2 and preview-specific telemetry after rollout retirement approval."
+}

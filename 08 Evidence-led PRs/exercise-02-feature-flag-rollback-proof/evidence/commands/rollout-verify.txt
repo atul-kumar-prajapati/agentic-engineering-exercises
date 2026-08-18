@@ -1,0 +1,10 @@
+
+> feature-flag-app@0.1.0 rollout:verify
+> node ./scripts/verify-rollout-submission.mjs
+
+Source SHA: fdb2b5ccdc08936981ecbf23c0d35fe3dfc36ad1
+PASS enabled evidence proves one evaluation, one API call, and one accurate telemetry event
+PASS disabled and provider-error evidence prove legacy behavior with zero preview side effects
+PASS rollback drill atomically disables the flag, clears targeting, records audit data, and meets the 1000 ms objective
+PASS protected scenarios and rollback drill reproduce from the submitted implementation
+PASS Git source binding and evidence-only follow-up history verified
