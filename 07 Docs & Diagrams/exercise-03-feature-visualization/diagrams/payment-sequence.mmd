@@ -1,0 +1,32 @@
+sequenceDiagram
+    actor Shopper
+    participant CheckoutUI
+    participant GatewayAdapter
+    participant Orchestrator
+    participant Ledger
+    participant ReceiptNotifier
+    participant WebhookHandler
+
+    Shopper->>CheckoutUI: Confirm checkout
+    %% The brief says the checkout application calls the external gateway directly.
+    CheckoutUI->>GatewayAdapter: Request authorization
+    alt Authorization approved
+        Orchestrator->>GatewayAdapter: Capture authorized payment
+        Orchestrator->>Ledger: Write capture ledger record
+        Orchestrator->>ReceiptNotifier: Send receipt
+    else Authorization declined
+        %% The brief says a declined authorization is retried once before the order fails.
+        CheckoutUI->>GatewayAdapter: Retry authorization once
+        alt Retry approved
+            Orchestrator->>GatewayAdapter: Capture authorized payment
+            Orchestrator->>Ledger: Write capture ledger record
+            Orchestrator->>ReceiptNotifier: Send receipt
+        else Retry declined
+            Orchestrator->>Ledger: Record payment failure
+            Orchestrator->>ReceiptNotifier: Block receipt
+        end
+    end
+    GatewayAdapter->>WebhookHandler: Deliver capture webhook
+    %% The brief says every valid capture delivery creates a new ledger entry.
+    WebhookHandler->>Ledger: Write new ledger entry for delivery
+    WebhookHandler-->>GatewayAdapter: Acknowledge delivery

@@ -1,0 +1,16 @@
+flowchart LR
+    CheckoutUI[Checkout UI]
+    GatewayAdapter[External gateway service]
+    Orchestrator[Payment orchestrator]
+    LedgerRecord[Ledger record]
+    ReceiptRecord[Receipt record]
+    WebhookHandler[Webhook handler]
+
+    %% The brief states the checkout application calls the external gateway service directly.
+    CheckoutUI --> GatewayAdapter
+    CheckoutUI --> Orchestrator
+    Orchestrator --> GatewayAdapter
+    Orchestrator --> LedgerRecord
+    Orchestrator --> ReceiptRecord
+    GatewayAdapter --> WebhookHandler
+    WebhookHandler --> LedgerRecord

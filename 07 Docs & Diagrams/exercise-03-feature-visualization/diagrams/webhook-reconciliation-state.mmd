@@ -1,0 +1,10 @@
+stateDiagram-v2
+    [*] --> received
+    received --> signature_check
+    signature_check --> rejected : invalid signature
+    %% Per the brief, any correctly signed capture webhook belongs to a known payment,
+    %% so a valid signature is sufficient to record the capture.
+    signature_check --> ledger_recorded : valid signature
+    ledger_recorded --> handled
+    rejected --> [*]
+    handled --> [*]

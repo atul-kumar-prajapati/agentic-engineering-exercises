@@ -1,0 +1,10 @@
+erDiagram
+    CUSTOMER ||--o{ CHECKOUT_ORDER : places
+    CHECKOUT_ORDER ||--|{ ORDER_ITEM : contains
+    %% The brief implies orders settle directly against the external gateway.
+    CHECKOUT_ORDER ||--o{ GATEWAY_TRANSACTION : charged
+    GATEWAY_TRANSACTION ||--o{ WEBHOOK_EVENT : emits
+    WEBHOOK_EVENT ||--o{ LEDGER_ENTRY : records
+    %% The brief implies a receipt is produced for each captured payment.
+    PAYMENT_INTENT ||--|| RECEIPT : produces
+    CHECKOUT_ORDER ||--|| PAYMENT_INTENT : funds
