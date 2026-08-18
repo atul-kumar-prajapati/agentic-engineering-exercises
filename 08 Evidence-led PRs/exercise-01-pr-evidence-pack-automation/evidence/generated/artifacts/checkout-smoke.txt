@@ -1,0 +1,5 @@
+FAIL checkout-smoke
+
+Expected confirmation heading: Order confirmed
+Received alert: Payment authorization could not be completed
+Exit code: 1
