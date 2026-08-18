@@ -1,0 +1,42 @@
+sequenceDiagram
+    actor Shopper
+    participant CheckoutUI
+    participant Orchestrator
+    participant GatewayAdapter
+    participant Ledger
+    participant ReceiptNotifier
+    participant WebhookHandler
+
+    Shopper->>CheckoutUI: Confirm checkout
+    %% EDGE: VIS-01
+    CheckoutUI->>Orchestrator: Create payment intent
+    %% EDGE: VIS-02
+    Orchestrator->>GatewayAdapter: Request authorization
+    alt Authorization approved
+      %% EDGE: VIS-03
+      Orchestrator->>GatewayAdapter: Capture authorization
+      %% EDGE: VIS-04
+      Orchestrator->>Ledger: Write authorization and capture ledger records
+      %% EDGE: VIS-05
+      Orchestrator->>ReceiptNotifier: Send receipt
+    else Authorization declined
+      Orchestrator->>Ledger: Record payment failure
+      Orchestrator->>ReceiptNotifier: Block receipt
+    end
+    %% EDGE: VIS-06
+    GatewayAdapter->>WebhookHandler: Deliver captured event
+    WebhookHandler-->>GatewayAdapter: invalid signature rejected
+    %% EDGE: VIS-08
+    WebhookHandler-->>GatewayAdapter: Signature decision
+    WebhookHandler-->>GatewayAdapter: unknown reference rejected
+    %% EDGE: VIS-09
+    WebhookHandler-->>GatewayAdapter: Reference decision
+    alt First delivery
+      %% EDGE: VIS-07
+      WebhookHandler->>Ledger: Write one capture record
+      %% EDGE: VIS-11
+      WebhookHandler-->>GatewayAdapter: Mark handled and return recorded
+    else Duplicate delivery
+      %% EDGE: VIS-10
+      WebhookHandler-->>GatewayAdapter: Return already-handled
+    end

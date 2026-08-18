@@ -1,0 +1,17 @@
+erDiagram
+    %% Implemented payment data relationships only, traced to paymentTypes.ts markers.
+    %% Orders fund exactly one payment intent; gateways emit webhook events per transaction;
+    %% ledger entries post against the intent, and receipts attach to the order.
+    CUSTOMER ||--o{ CHECKOUT_ORDER : places
+    CHECKOUT_ORDER ||--|{ ORDER_ITEM : contains
+    %% EDGE: VIS-12
+    CHECKOUT_ORDER ||--|| PAYMENT_INTENT : funds
+    PAYMENT_METHOD ||--o{ PAYMENT_INTENT : used_by
+    %% EDGE: VIS-13
+    PAYMENT_INTENT ||--o{ GATEWAY_TRANSACTION : produces
+    %% EDGE: VIS-14
+    PAYMENT_INTENT ||--o{ LEDGER_ENTRY : posts
+    %% EDGE: VIS-15
+    GATEWAY_TRANSACTION ||--o{ WEBHOOK_EVENT : emits
+    %% EDGE: VIS-16
+    CHECKOUT_ORDER ||--|| RECEIPT : receives

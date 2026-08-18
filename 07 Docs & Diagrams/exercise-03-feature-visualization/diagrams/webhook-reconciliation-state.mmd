@@ -1,0 +1,18 @@
+stateDiagram-v2
+    [*] --> received
+    received --> signature_check
+    %% EDGE: VIS-08
+    signature_check --> rejected : invalid signature
+    signature_check --> reference_check : valid signature
+    %% EDGE: VIS-09
+    reference_check --> rejected : unknown reference
+    reference_check --> duplicate_check : known reference
+    %% EDGE: VIS-10
+    duplicate_check --> already_handled : duplicate event
+    %% EDGE: VIS-07
+    duplicate_check --> ledger_recorded : new event
+    %% EDGE: VIS-11
+    ledger_recorded --> handled
+    rejected --> [*]
+    already_handled --> [*]
+    handled --> [*]

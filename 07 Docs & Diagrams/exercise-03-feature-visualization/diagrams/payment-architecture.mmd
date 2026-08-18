@@ -1,0 +1,22 @@
+flowchart LR
+    CheckoutUI[Checkout UI]
+    Orchestrator[Payment orchestrator]
+    GatewayAdapter[Gateway adapter]
+    LedgerRecord[Ledger record]
+    ReceiptRecord[Receipt record]
+    WebhookHandler[Webhook handler]
+
+    %% Implemented dependencies only; the checkout UI reaches the gateway exclusively through the orchestrator.
+    %% EDGE: VIS-01
+    CheckoutUI --> Orchestrator
+    %% EDGE: VIS-02
+    %% EDGE: VIS-03
+    Orchestrator --> GatewayAdapter
+    %% EDGE: VIS-04
+    Orchestrator --> LedgerRecord
+    %% EDGE: VIS-05
+    Orchestrator --> ReceiptRecord
+    %% EDGE: VIS-06
+    GatewayAdapter --> WebhookHandler
+    %% EDGE: VIS-07
+    WebhookHandler --> LedgerRecord
