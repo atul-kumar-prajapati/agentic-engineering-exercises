@@ -1,4 +1,5 @@
 flowchart LR
+%% ChannelRouter queries ProviderStatus for push, SMS, and email; ConsentPolicy for SMS consent; then ImmediateRoute or DurableQueue.
 %% EDGE: DEP-01
 ChannelRouter --> ProviderStatus
 %% EDGE: DEP-02
