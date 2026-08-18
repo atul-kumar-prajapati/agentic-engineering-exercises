@@ -1,0 +1,49 @@
+name: Evidence-led PR 01
+
+on:
+  pull_request:
+    paths:
+      - "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/**"
+      - ".github/workflows/evidence-led-pr-01.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/pr-evidence-app/package-lock.json"
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/pr-evidence-app"
+
+      - name: Generate evidence pack
+        run: npm run evidence:generate -- --sha "${{ github.sha }}"
+        working-directory: "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/pr-evidence-app"
+
+      - name: Verify evidence pack
+        if: ${{ always() }}
+        run: npm run evidence:verify
+        working-directory: "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/pr-evidence-app"
+
+      - name: Upload evidence pack
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: pr-evidence-${{ github.sha }}
+          path: "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/generated"
+          if-no-files-found: error
+          retention-days: 7
