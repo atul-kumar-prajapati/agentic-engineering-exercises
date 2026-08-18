@@ -19,3 +19,15 @@ The source-led attempt follows the protected normal, high-risk, healthy, unhealt
 ## Coverage Decision
 
 The final diagrams preserve the implemented behavior. The misleading normal-path progress projection is documented as `CODE-01` rather than silently added to the workflow or fixed in protected source.
+
+## Round-Two Review Delta
+
+The source-led first attempt still carried two defects that no automated gate detects, both found by independent read-only specialists and both fixed in `63601a3662358da499f72118fd4d693bcfc530da`:
+
+| Measure | Source-led first attempt | After round-two review |
+| --- | ---: | ---: |
+| Unsupported sequence messages | 1 | 0 |
+| Unanswered synchronous calls | 1 | 0 |
+| Contradiction records with understated scope | 1 | 0 |
+
+The unsupported message was `Application->>IdentityAdmin: Assign partial access removal` under `WF-09`, which no source line backs. The unanswered call was `Application->>PolicyEngine: Evaluate request risk`, replied to only on the high-risk branch. `CODE-01` had recorded the security-review projection defect for one status when the implementation exhibits it for six. The state diagram needed no correction, and `evidence/review-fixes.patch` holds the exact delta so the unaided first attempt stays measurable against the reviewed result.

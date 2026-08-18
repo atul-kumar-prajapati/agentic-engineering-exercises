@@ -32,10 +32,10 @@ Source: `workflow-reconstruction-app/src/workflow.tsx:125-140` implements rollba
 
 Decision: The failure diagram shows IdentityAdmin removing partial access, and the state diagram treats both `provisioned` and `rolled_back` as completed terminal paths.
 
-## CODE-01 — Normal progress falsely completes security review
+## CODE-01 — UI progress falsely completes security review on the normal route
 
-Disputed behavior: `completedStagesByStatus` marks `security-review` complete for every `data-owner-review` request, including normal risk.
+Disputed behavior: `completedStagesByStatus` lists `security-review` as a completed stage for six statuses — `data-owner-review`, `provisioning`, `provisioned`, `failed-provisioning`, `rollback-requested`, and `rolled-back` — so any normal-risk request past manager approval renders security review as complete even though the normal branch never enters that state.
 
-Source: `workflow-reconstruction-app/src/workflow.tsx:19` includes `security-review` in completed stages, while the normal branch at `workflow-reconstruction-app/src/workflow.tsx:80-86` never enters that state. `workflow-reconstruction-app/src/App.tsx:16` builds and later renders this projection.
+Source: `workflow-reconstruction-app/src/workflow.tsx:19-48` repeats `security-review` in the completed list for all six statuses above, while the normal branch at `workflow-reconstruction-app/src/workflow.tsx:80-86` routes `manager-approved` straight to `data-owner-review`. `workflow-reconstruction-app/src/App.tsx:16` builds and later renders this projection. The same projection helper at `workflow-reconstruction-app/src/workflow.tsx:196-205` maps every one of the ten `workflowStages` for every request, so a terminal `provisioned` request also shows `failed-provisioning`, `rollback-requested`, and `rolled-back` as waiting work.
 
-Decision: The diagrams follow `nextStepFor` and protected traces, so security review appears only on the high-risk route. The UI progress conflict is documented and deferred because the implementation inputs are protected.
+Decision: The diagrams follow `nextStepFor` and the protected traces, so `security_review` appears only on the high-risk route and both `provisioned` and `rolled_back` terminate at `[*]`. Both halves of the projection conflict are recorded here as one UI contradiction and deferred, because `src/workflow.tsx` is a protected input and the exercise requires the conflict to stay visible rather than be silently resolved.

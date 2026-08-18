@@ -2,7 +2,7 @@
 > workflow-reconstruction-app@0.1.0 diagrams:parse
 > node ./scripts/parse-diagrams.mjs
 
-Source SHA: c72673b2cf45d21d29e7b21f5f5cd4de32b10c43
+Source SHA: 63601a3662358da499f72118fd4d693bcfc530da
 PASS: diagrams/access-state.mmd parsed as stateDiagram
 PASS: diagrams/access-approval-sequence.mmd parsed as sequence
 PASS: diagrams/access-failure-sequence.mmd parsed as sequence

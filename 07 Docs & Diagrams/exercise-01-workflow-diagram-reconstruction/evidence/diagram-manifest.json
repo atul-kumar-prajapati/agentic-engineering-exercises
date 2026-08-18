@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "source_sha": "c72673b2cf45d21d29e7b21f5f5cd4de32b10c43",
+  "source_sha": "63601a3662358da499f72118fd4d693bcfc530da",
   "diagrams": [
     {
       "id": "state",
@@ -12,23 +12,23 @@
       "id": "approval",
       "path": "diagrams/access-approval-sequence.mmd",
       "type": "sequence",
-      "sha256": "e985d71a04aa4ac5a289611905f3ffe5ff083581ce42f28c747658396c0dc591"
+      "sha256": "e971030f57b44228890184ac6577dd7a80ef0f8c32f105e20741d81062e7300f"
     },
     {
       "id": "failure",
       "path": "diagrams/access-failure-sequence.mmd",
       "type": "sequence",
-      "sha256": "633a59ebbff85747e5b1456b3d2f8f872d203f1fc0ba0b600a18255cc809cf63"
+      "sha256": "a209cf86299ae27f2cca11c650a853a6e810b399c2a46f7da115caa2b0924f84"
     }
   ],
   "artifacts": {
     "traceability": {
       "path": "evidence/traceability.json",
-      "sha256": "2567220ae351c550652c1fe851fb2cce7d3417910148d4771e4506e39a9c3538"
+      "sha256": "27baacd521caa9d8a95cd8b10bc0ded9d387ba225a09a7cc2d4db32cfb604bf1"
     },
     "contradictions": {
       "path": "evidence/contradictions.md",
-      "sha256": "408d08c6a272297534bd54a9291eb029654e9ddd3d444648e8ec436335df6a33"
+      "sha256": "4f93fa3bad49e1fb2f7ab78e8d3bac27301c7e6aab93e65ed6977f02bb27acf7"
     }
   },
   "commands": {
@@ -36,13 +36,13 @@
       "command": "npm run workflow:trace",
       "exit_code": 0,
       "output_path": "evidence/commands/workflow-trace.txt",
-      "output_sha256": "737f6c7720e4239ad45ae9747b6aaca84d50450b80b0981dc208cc26dcbde4cf"
+      "output_sha256": "9373c65ffae85d8d3356ea81af7456913c70cd2cb295de162514940521ed3a13"
     },
     "diagram_parse": {
       "command": "npm run diagrams:parse",
       "exit_code": 0,
       "output_path": "evidence/commands/diagram-parse.txt",
-      "output_sha256": "3abe46cd6cf52b5341d1251f849dcae08e334a6f6f0bc056a9685314cd73d9fa"
+      "output_sha256": "aba87662cbdc16ee08110f984bd520ba7c5353161c366125ff3283e1fd0a4caa"
     }
   }
 }

@@ -20,3 +20,12 @@ Unsupported state-transition count: **0**. Missing required scenario paths: **0*
 ## Preservation
 
 `evidence/after.patch` is the genuine uncommitted Git diff of the source-led three-diagram first attempt. The diagrams were committed without revision as `c72673b2cf45d21d29e7b21f5f5cd4de32b10c43` before evidence was added.
+
+## Post-Review Correction
+
+The first attempt above is preserved unmodified in `evidence/after.patch` and in commit `c72673b2cf45d21d29e7b21f5f5cd4de32b10c43`. A later round-two specialist review found two defects the first attempt had missed, and the accountable integration owner corrected them in `63601a3662358da499f72118fd4d693bcfc530da`:
+
+- The approval sequence left `Application->>PolicyEngine: Evaluate request risk` unanswered on the `else Normal risk` branch, so normal-risk routing was never attributed to the policy engine.
+- The failure sequence carried `Application->>IdentityAdmin: Assign partial access removal` under `WF-09`, which no source line supports. `WF-09` only sets the identity provider to degraded at `src/workflow.tsx:129`; the identity admin first acts at `WF-10`.
+
+The state diagram was not changed. `evidence/review-fixes.patch` is the genuine Git diff between the first attempt and the corrected diagrams, so both the unaided result and the reviewed result stay independently inspectable. The submitted `source_sha` is the corrected commit.

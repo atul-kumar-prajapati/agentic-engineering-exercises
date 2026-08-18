@@ -1,0 +1,26 @@
+diff --git a/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-approval-sequence.mmd b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-approval-sequence.mmd
+index 9ee3319..c8ccc6f 100644
+--- a/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-approval-sequence.mmd
++++ b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-approval-sequence.mmd
+@@ -25,6 +25,8 @@ sequenceDiagram
+         Security-->>Application: Approve high-risk access
+         Application->>DataOwner: Open data owner review
+     else Normal risk
++        PolicyEngine-->>Application: Normal risk needs no security review
++
+         %% EDGE: WF-04
+         DataOwner->>Application: Open data owner review
+     end
+diff --git a/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-failure-sequence.mmd b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-failure-sequence.mmd
+index f209ce0..c357d9b 100644
+--- a/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-failure-sequence.mmd
++++ b/07 Docs & Diagrams/exercise-01-workflow-diagram-reconstruction/diagrams/access-failure-sequence.mmd
+@@ -14,7 +14,7 @@ sequenceDiagram
+
+     %% EDGE: WF-09
+     IdentityProvider->>Application: Rollback request for partial access grant
+-    Application->>IdentityAdmin: Assign partial access removal
++    Application->>IdentityProvider: Mark identity provider degraded
+
+     %% EDGE: WF-10
+     IdentityAdmin->>IdentityProvider: Remove partial access and close rollback
