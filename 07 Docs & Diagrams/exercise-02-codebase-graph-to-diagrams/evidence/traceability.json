@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "source_sha": "2ad2e9f2f287ce671e36bcc7b7f68ba12acb1d7a",
+  "edges": [
+    {
+      "id": "DEP-01",
+      "graph_edge_id": "calls:b4ecdcb068fb",
+      "caller": "selectNotificationRoute",
+      "callee": "pushAvailable",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [7],
+      "source_excerpts": ["if (pushAvailable(input)) return immediateRoute(\"push\");"],
+      "diagram_paths": ["diagrams/notification-dependencies.mmd", "diagrams/fallback-sequence.mmd"]
+    },
+    {
+      "id": "DEP-02",
+      "graph_edge_id": "calls:f625212c18d7",
+      "caller": "selectNotificationRoute",
+      "callee": "smsAvailable",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [8],
+      "source_excerpts": ["if (smsAvailable(input) && hasSmsConsent(input)) return immediateRoute(\"sms\");"],
+      "diagram_paths": ["diagrams/notification-dependencies.mmd", "diagrams/fallback-sequence.mmd"]
+    },
+    {
+      "id": "DEP-03",
+      "graph_edge_id": "calls:d718da14f1cb",
+      "caller": "selectNotificationRoute",
+      "callee": "hasSmsConsent",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [8],
+      "source_excerpts": ["if (smsAvailable(input) && hasSmsConsent(input)) return immediateRoute(\"sms\");"],
+      "diagram_paths": ["diagrams/notification-dependencies.mmd", "diagrams/fallback-sequence.mmd"]
+    },
+    {
+      "id": "DEP-04",
+      "graph_edge_id": "calls:e5c1d2e5d3ed",
+      "caller": "selectNotificationRoute",
+      "callee": "emailAvailable",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [9],
+      "source_excerpts": ["if (emailAvailable(input)) return immediateRoute(\"email\");"],
+      "diagram_paths": ["diagrams/notification-dependencies.mmd", "diagrams/fallback-sequence.mmd"]
+    },
+    {
+      "id": "DEP-05",
+      "graph_edge_id": "calls:8aa0cc10c4a0",
+      "caller": "selectNotificationRoute",
+      "callee": "immediateRoute",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [7, 8, 9],
+      "source_excerpts": [
+        "if (pushAvailable(input)) return immediateRoute(\"push\");",
+        "if (smsAvailable(input) && hasSmsConsent(input)) return immediateRoute(\"sms\");",
+        "if (emailAvailable(input)) return immediateRoute(\"email\");"
+      ],
+      "diagram_paths": ["diagrams/notification-dependencies.mmd", "diagrams/fallback-sequence.mmd"]
+    },
+    {
+      "id": "DEP-06",
+      "graph_edge_id": "calls:f5fd28b7fb8e",
+      "caller": "selectNotificationRoute",
+      "callee": "durableQueueRoute",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [10],
+      "source_excerpts": ["return durableQueueRoute();"],
+      "diagram_paths": ["diagrams/notification-dependencies.mmd", "diagrams/fallback-sequence.mmd"]
+    }
+  ]
+}

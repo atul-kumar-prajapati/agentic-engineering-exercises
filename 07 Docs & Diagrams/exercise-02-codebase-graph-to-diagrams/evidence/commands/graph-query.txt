@@ -1,0 +1,15 @@
+
+> notification-mesh-app@0.1.0 graph:query
+> node ./scripts/query-code-graph.mjs --symbol selectNotificationRoute
+
+Source SHA: 2ad2e9f2f287ce671e36bcc7b7f68ba12acb1d7a
+Node: function:src/notification/routeNotification.mjs#selectNotificationRoute (src/notification/routeNotification.mjs:6)
+Incoming: 0
+Outgoing: 6
+  calls:8aa0cc10c4a0 function:src/notification/routeNotification.mjs#selectNotificationRoute -> function:src/notification/routeResults.mjs#immediateRoute at src/notification/routeNotification.mjs:7,8,9
+  calls:b4ecdcb068fb function:src/notification/routeNotification.mjs#selectNotificationRoute -> function:src/notification/channelProviders.mjs#pushAvailable at src/notification/routeNotification.mjs:7
+  calls:d718da14f1cb function:src/notification/routeNotification.mjs#selectNotificationRoute -> function:src/notification/consentPolicy.mjs#hasSmsConsent at src/notification/routeNotification.mjs:8
+  calls:e5c1d2e5d3ed function:src/notification/routeNotification.mjs#selectNotificationRoute -> function:src/notification/channelProviders.mjs#emailAvailable at src/notification/routeNotification.mjs:9
+  calls:f5fd28b7fb8e function:src/notification/routeNotification.mjs#selectNotificationRoute -> function:src/notification/routeResults.mjs#durableQueueRoute at src/notification/routeNotification.mjs:10
+  calls:f625212c18d7 function:src/notification/routeNotification.mjs#selectNotificationRoute -> function:src/notification/channelProviders.mjs#smsAvailable at src/notification/routeNotification.mjs:8
+PASS scoped graph query completed

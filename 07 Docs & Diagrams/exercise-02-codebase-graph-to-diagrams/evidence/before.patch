@@ -1,0 +1,61 @@
+diff --git a/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/fallback-sequence.mmd b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/fallback-sequence.mmd
+new file mode 100644
+index 0000000..1a30eae
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/fallback-sequence.mmd	
+@@ -0,0 +1,25 @@
++sequenceDiagram
++  participant Router as selectNotificationRoute
++  participant Push as pushAvailable
++  participant SMS as smsAvailable
++  participant Email as emailAvailable
++  participant Consent as hasSmsConsent
++  participant Immediate as immediateRoute
++  participant Queue as durableQueueRoute
++
++  Router->>Push: check availability
++  alt push available
++    Router->>Immediate: immediateRoute for available provider
++    Immediate->>Queue: after provider failure
++  else SMS path
++    Router->>SMS: check availability
++    SMS->>Consent: hasSmsConsent
++    alt sms available
++      Router->>Immediate: immediateRoute for available provider
++      Immediate->>Queue: after provider failure
++    else email path
++      Email->>Consent: hasSmsConsent
++      Router->>Immediate: immediateRoute for available provider
++      Immediate->>Queue: after provider failure
++    end
++  end
+diff --git a/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/notification-dependencies.mmd b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/notification-dependencies.mmd
+new file mode 100644
+index 0000000..59e877d
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/notification-dependencies.mmd	
+@@ -0,0 +1,7 @@
++flowchart TD
++  selectNotificationRoute --> pushAvailable
++  selectNotificationRoute --> smsAvailable
++  selectNotificationRoute -->|"every available provider"| immediateRoute
++  smsAvailable --> hasSmsConsent
++  emailAvailable --> hasSmsConsent
++  immediateRoute -->|"after provider failure"| durableQueueRoute
+diff --git a/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/notification-mesh-app/src/notification/routeNotification.mjs b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/notification-mesh-app/src/notification/routeNotification.mjs
+index 0989bb3..e198681 100644
+--- a/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/notification-mesh-app/src/notification/routeNotification.mjs	
++++ b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/notification-mesh-app/src/notification/routeNotification.mjs	
+@@ -2,10 +2,10 @@ import { emailAvailable, pushAvailable, smsAvailable } from "./channelProviders.
+ import { hasSmsConsent } from "./consentPolicy.mjs";
+ import { durableQueueRoute, immediateRoute } from "./routeResults.mjs";
+ 
+-/** Seeded shortcut: provider availability is incorrectly treated as consent. */
++/** SMS is selected only when the provider is available and consent is present. */
+ export function selectNotificationRoute(input) {
+   if (pushAvailable(input)) return immediateRoute("push");
+-  if (smsAvailable(input)) return immediateRoute("sms");
++  if (smsAvailable(input) && hasSmsConsent(input)) return immediateRoute("sms");
+   if (emailAvailable(input)) return immediateRoute("email");
+   return durableQueueRoute();
+ }

@@ -1,0 +1,10 @@
+
+> notification-mesh-app@0.1.0 test:routing
+> node ./scripts/run-routing-tests.mjs
+
+PASS healthy push remains primary
+PASS consented SMS is the first fallback
+PASS SMS without consent falls back to email
+PASS SMS provider absence falls back to email
+PASS no permitted provider creates durable work
+PASS no available provider creates one durable route

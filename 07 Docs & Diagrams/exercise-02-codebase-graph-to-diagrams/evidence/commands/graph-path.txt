@@ -1,0 +1,9 @@
+
+> notification-mesh-app@0.1.0 graph:path
+> node ./scripts/find-graph-path.mjs --from selectNotificationRoute --to durableQueueRoute
+
+Source SHA: 2ad2e9f2f287ce671e36bcc7b7f68ba12acb1d7a
+Path length: 1
+1. selectNotificationRoute (src/notification/routeNotification.mjs:6)
+2. durableQueueRoute (src/notification/routeResults.mjs:5)
+PASS direct call path reaches the durable queue result

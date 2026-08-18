@@ -1,0 +1,86 @@
+diff --git a/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/fallback-sequence.mmd b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/fallback-sequence.mmd
+new file mode 100644
+index 0000000..b5940c7
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/fallback-sequence.mmd	
+@@ -0,0 +1,39 @@
++sequenceDiagram
++  participant Client
++  participant ChannelRouter
++  participant ProviderStatus
++  participant ConsentPolicy
++  participant RouteResult
++
++  Note over Client,RouteResult: Case 1: push unavailable, SMS available, sms not consented, then email selected
++  Client->>ChannelRouter: selectNotificationRoute
++  %% EDGE: DEP-01
++  ChannelRouter->>ProviderStatus: pushAvailable
++  ProviderStatus-->>ChannelRouter: unavailable
++  %% EDGE: DEP-02
++  ChannelRouter->>ProviderStatus: smsAvailable
++  ProviderStatus-->>ChannelRouter: available
++  %% EDGE: DEP-03
++  ChannelRouter->>ConsentPolicy: hasSmsConsent
++  ConsentPolicy-->>ChannelRouter: no consent
++  %% EDGE: DEP-04
++  ChannelRouter->>ProviderStatus: emailAvailable
++  ProviderStatus-->>ChannelRouter: available
++  %% EDGE: DEP-05
++  ChannelRouter->>RouteResult: immediateRoute email
++  RouteResult-->>Client: email selected
++
++  Note over Client,RouteResult: Case 2: push unavailable, SMS not permitted, email unavailable, then durable queue selected
++  Client->>ChannelRouter: selectNotificationRoute
++  %% EDGE: DEP-01
++  ChannelRouter->>ProviderStatus: pushAvailable
++  ProviderStatus-->>ChannelRouter: unavailable
++  %% EDGE: DEP-02
++  ChannelRouter->>ProviderStatus: smsAvailable
++  ProviderStatus-->>ChannelRouter: unavailable
++  %% EDGE: DEP-04
++  ChannelRouter->>ProviderStatus: emailAvailable
++  ProviderStatus-->>ChannelRouter: email unavailable
++  %% EDGE: DEP-06
++  ChannelRouter->>RouteResult: durableQueueRoute
++  RouteResult-->>Client: durable queue selected
+diff --git a/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/notification-dependencies.mmd b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/notification-dependencies.mmd
+new file mode 100644
+index 0000000..4e07272
+--- /dev/null
++++ b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/diagrams/notification-dependencies.mmd	
+@@ -0,0 +1,18 @@
++flowchart LR
++  ChannelRouter[ChannelRouter]
++  ProviderStatus[ProviderStatus]
++  ConsentPolicy[ConsentPolicy]
++  ImmediateRoute[ImmediateRoute]
++  DurableQueue[DurableQueue]
++  %% EDGE: DEP-01
++  ChannelRouter -->|pushAvailable| ProviderStatus
++  %% EDGE: DEP-02
++  ChannelRouter -->|smsAvailable| ProviderStatus
++  %% EDGE: DEP-03
++  ChannelRouter -->|hasSmsConsent| ConsentPolicy
++  %% EDGE: DEP-04
++  ChannelRouter -->|emailAvailable| ProviderStatus
++  %% EDGE: DEP-05
++  ChannelRouter -->|immediateRoute| ImmediateRoute
++  %% EDGE: DEP-06
++  ChannelRouter -->|durableQueueRoute| DurableQueue
+diff --git a/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/notification-mesh-app/src/notification/routeNotification.mjs b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/notification-mesh-app/src/notification/routeNotification.mjs
+index 0989bb3..a4041ad 100644
+--- a/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/notification-mesh-app/src/notification/routeNotification.mjs	
++++ b/07 Docs & Diagrams/exercise-02-codebase-graph-to-diagrams/notification-mesh-app/src/notification/routeNotification.mjs	
+@@ -2,10 +2,10 @@ import { emailAvailable, pushAvailable, smsAvailable } from "./channelProviders.
+ import { hasSmsConsent } from "./consentPolicy.mjs";
+ import { durableQueueRoute, immediateRoute } from "./routeResults.mjs";
+ 
+-/** Seeded shortcut: provider availability is incorrectly treated as consent. */
++/** Push first, then consented SMS, then email; otherwise one durable enqueue. */
+ export function selectNotificationRoute(input) {
+   if (pushAvailable(input)) return immediateRoute("push");
+-  if (smsAvailable(input)) return immediateRoute("sms");
++  if (smsAvailable(input) && hasSmsConsent(input)) return immediateRoute("sms");
+   if (emailAvailable(input)) return immediateRoute("email");
+   return durableQueueRoute();
+ }

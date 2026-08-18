@@ -1,0 +1,7 @@
+
+> notification-mesh-app@0.1.0 diagrams:parse
+> node ./scripts/parse-diagrams.mjs
+
+Source SHA: 2ad2e9f2f287ce671e36bcc7b7f68ba12acb1d7a
+PASS diagrams/notification-dependencies.mmd parsed as flowchart-v2
+PASS diagrams/fallback-sequence.mmd parsed as sequence

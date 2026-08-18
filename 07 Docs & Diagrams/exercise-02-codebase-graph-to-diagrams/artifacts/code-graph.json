@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "source_sha": "2ad2e9f2f287ce671e36bcc7b7f68ba12acb1d7a",
+  "scope": "src/notification/**/*.{js,mjs,ts,tsx}",
+  "nodes": [
+    {
+      "id": "file:src/notification/channelProviders.mjs",
+      "kind": "file",
+      "name": "channelProviders.mjs",
+      "path": "src/notification/channelProviders.mjs",
+      "line": 1
+    },
+    {
+      "id": "file:src/notification/consentPolicy.mjs",
+      "kind": "file",
+      "name": "consentPolicy.mjs",
+      "path": "src/notification/consentPolicy.mjs",
+      "line": 1
+    },
+    {
+      "id": "file:src/notification/routeNotification.mjs",
+      "kind": "file",
+      "name": "routeNotification.mjs",
+      "path": "src/notification/routeNotification.mjs",
+      "line": 1
+    },
+    {
+      "id": "file:src/notification/routeResults.mjs",
+      "kind": "file",
+      "name": "routeResults.mjs",
+      "path": "src/notification/routeResults.mjs",
+      "line": 1
+    },
+    {
+      "id": "function:src/notification/channelProviders.mjs#emailAvailable",
+      "kind": "function",
+      "name": "emailAvailable",
+      "path": "src/notification/channelProviders.mjs",
+      "line": 9
+    },
+    {
+      "id": "function:src/notification/channelProviders.mjs#pushAvailable",
+      "kind": "function",
+      "name": "pushAvailable",
+      "path": "src/notification/channelProviders.mjs",
+      "line": 1
+    },
+    {
+      "id": "function:src/notification/channelProviders.mjs#smsAvailable",
+      "kind": "function",
+      "name": "smsAvailable",
+      "path": "src/notification/channelProviders.mjs",
+      "line": 5
+    },
+    {
+      "id": "function:src/notification/consentPolicy.mjs#hasSmsConsent",
+      "kind": "function",
+      "name": "hasSmsConsent",
+      "path": "src/notification/consentPolicy.mjs",
+      "line": 1
+    },
+    {
+      "id": "function:src/notification/routeNotification.mjs#selectNotificationRoute",
+      "kind": "function",
+      "name": "selectNotificationRoute",
+      "path": "src/notification/routeNotification.mjs",
+      "line": 6
+    },
+    {
+      "id": "function:src/notification/routeResults.mjs#durableQueueRoute",
+      "kind": "function",
+      "name": "durableQueueRoute",
+      "path": "src/notification/routeResults.mjs",
+      "line": 5
+    },
+    {
+      "id": "function:src/notification/routeResults.mjs#immediateRoute",
+      "kind": "function",
+      "name": "immediateRoute",
+      "path": "src/notification/routeResults.mjs",
+      "line": 1
+    }
+  ],
+  "edges": [
+    {
+      "id": "calls:8aa0cc10c4a0",
+      "kind": "calls",
+      "from": "function:src/notification/routeNotification.mjs#selectNotificationRoute",
+      "to": "function:src/notification/routeResults.mjs#immediateRoute",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [
+        7,
+        8,
+        9
+      ],
+      "evidence": "direct"
+    },
+    {
+      "id": "calls:b4ecdcb068fb",
+      "kind": "calls",
+      "from": "function:src/notification/routeNotification.mjs#selectNotificationRoute",
+      "to": "function:src/notification/channelProviders.mjs#pushAvailable",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [
+        7
+      ],
+      "evidence": "direct"
+    },
+    {
+      "id": "calls:d718da14f1cb",
+      "kind": "calls",
+      "from": "function:src/notification/routeNotification.mjs#selectNotificationRoute",
+      "to": "function:src/notification/consentPolicy.mjs#hasSmsConsent",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [
+        8
+      ],
+      "evidence": "direct"
+    },
+    {
+      "id": "calls:e5c1d2e5d3ed",
+      "kind": "calls",
+      "from": "function:src/notification/routeNotification.mjs#selectNotificationRoute",
+      "to": "function:src/notification/channelProviders.mjs#emailAvailable",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [
+        9
+      ],
+      "evidence": "direct"
+    },
+    {
+      "id": "calls:f5fd28b7fb8e",
+      "kind": "calls",
+      "from": "function:src/notification/routeNotification.mjs#selectNotificationRoute",
+      "to": "function:src/notification/routeResults.mjs#durableQueueRoute",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [
+        10
+      ],
+      "evidence": "direct"
+    },
+    {
+      "id": "calls:f625212c18d7",
+      "kind": "calls",
+      "from": "function:src/notification/routeNotification.mjs#selectNotificationRoute",
+      "to": "function:src/notification/channelProviders.mjs#smsAvailable",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [
+        8
+      ],
+      "evidence": "direct"
+    },
+    {
+      "id": "imports:2befd951f8a7",
+      "kind": "imports",
+      "from": "file:src/notification/routeNotification.mjs",
+      "to": "file:src/notification/routeResults.mjs",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [
+        3
+      ],
+      "evidence": "direct"
+    },
+    {
+      "id": "imports:8f6a72250c74",
+      "kind": "imports",
+      "from": "file:src/notification/routeNotification.mjs",
+      "to": "file:src/notification/channelProviders.mjs",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [
+        1
+      ],
+      "evidence": "direct"
+    },
+    {
+      "id": "imports:a53e033a8028",
+      "kind": "imports",
+      "from": "file:src/notification/routeNotification.mjs",
+      "to": "file:src/notification/consentPolicy.mjs",
+      "source_path": "src/notification/routeNotification.mjs",
+      "source_lines": [
+        2
+      ],
+      "evidence": "direct"
+    }
+  ]
+}
