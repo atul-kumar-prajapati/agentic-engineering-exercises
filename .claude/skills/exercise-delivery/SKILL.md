@@ -90,6 +90,21 @@ git merge-base HEAD upstream/main    # prove it, record the SHA
 
 Check first whether the branch already exists locally or on `origin` — an exercise may already be done. If it is, run its `verify:exercise`, report honestly, and ask the user before redoing work.
 
+### If it already exists, check the exercise has not moved under it
+
+This is **our practice, not a repo rule** — nothing in `docs/SUBMISSION_STANDARD.md` asks for it. It exists because a passing gate proves the submission met *the contract it was built against*, which is not the same as today's.
+
+```bash
+git merge-base <existing-branch> upstream/main               # the base it was built on
+git diff --stat <that-base> upstream/main -- "<exercise-dir>"  # empty = still current
+```
+
+If that diff is non-empty, the exercise was revised after the work was done. Say so before doing anything else, and name what changed — the verifier, the required deliverables, the starter signature. Do not report the branch as done on the strength of a green run against a superseded contract.
+
+3.2 is the live example. Our submission was built against the Aug 10 revision and passes every gate that existed then (6/6 rule checks, `test:submission`, `agent:check`, all exit 0). Against the current revision it fails three ways: `evidence/domain-audit.md` is now required and absent, the decision record moved from `docs/decisions/001-…` to `docs/adr/0001-…`, and the policy signature gained `callerUserId`, which two of the now-eight rule checks exercise. Nothing about it looks stale from the outside — the branch is green, the PR reads fine. Only the base diff shows it.
+
+The revision history that causes this is real and ongoing: `8bc7064` → `de46ede` → `f714944` → `94687b0` → `3761a42`. Early branches are the ones at risk.
+
 ### Isolate the session before your first commit
 
 **Another agent may be working in this same checkout right now.** During 8.1 a parallel session switched the shared main worktree's `HEAD` mid-run and two commits landed on the sibling exercise's branch. Recovering cost more than preventing:
@@ -205,6 +220,22 @@ Symmetrically, do not assume the baseline is uniformly wrong. 8.2's ordinary fir
 
 `after.patch` must stay the unaided attempt. If integration later changed the code, say so and prove which blobs moved.
 
+**State the withheld set, not just what was supplied.** Say what the after run was **not** given, naming the artifacts. Listing what it received is not the same claim: the failure mode in any before/after design is *leakage* — the after run seeing the before implementation, the before patch, or a human explanation of what went wrong — and only a negative statement rules it out. A comparison that never says what was withheld cannot be audited.
+
+Some exercises gate on this and will fail you for omitting it. In 3.1 and 3.2 the verifier runs a regex over the audit file:
+
+```js
+// verify-domain-submission.mjs:172 — 3.1's verify-handoff.mjs:153 is the same shape
+if (!/(?:previous implementation|before\.patch).{0,30}(?:was not|wasn't|not).{0,20}(?:provided|given|shared)/i
+      .test(audit)) { … }
+```
+
+So the phrasing is load-bearing there: name `previous implementation` or `before.patch` within ~30 characters of a negation, and `provided`/`given`/`shared` within ~20 of that. A sentence that means the right thing in different words still fails. Read the verifier for the exact pattern rather than guessing.
+
+**Everywhere else this is our standard, not the repo's.** Only 3.1 and 3.2 enforce it; do it on every before/after exercise anyway. One sentence, in `comparison.md` or the audit file:
+
+> The after run received `<X>` only. It did not receive `<the before implementation / before.patch / any explanation of the first attempt>`.
+
 **Hashes and captured output are order-sensitive.** If a manifest records `source_sha` and file hashes:
 
 1. Commit the source/deliverable files first — that commit becomes `source_sha`.
@@ -276,6 +307,8 @@ Not a formality. Each line is a check that has failed a real submission. Fill it
 [ ] Every finding's file:line re-derived against the artifact the
     verifier compares to (working tree? bundle? pinned SHA? — name it)
 [ ] Model slug recorded for me and every subagent                        -> evidence/before.md, after.md
+[ ] Withheld set stated: what the after run did NOT receive, by name
+    (and matching the verifier's exact regex where one exists)
 [ ] Counts in prose re-derived (test cases, findings, states) — no
     number written from memory
 [ ] git diff --name-only <sourceSha> lists only evidence/
