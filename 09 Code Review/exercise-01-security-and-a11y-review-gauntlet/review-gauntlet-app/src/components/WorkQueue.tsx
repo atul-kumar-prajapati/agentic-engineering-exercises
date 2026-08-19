@@ -6,9 +6,9 @@ interface WorkQueueProps { items: WorkItem[]; selectedId: string; onSelect: (ite
 export function WorkQueue({ items, selectedId, onSelect }: WorkQueueProps) {
   return <section className="queue" aria-label="Work queue">{items.map((item) => {
     const risk = calculateRisk(item);
-    return <div className={item.id === selectedId ? "queue-item active" : "queue-item"} key={item.id} onClick={() => onSelect(item)}>
+    return <button type="button" className={item.id === selectedId ? "queue-item active" : "queue-item"} key={item.id} onClick={() => onSelect(item)}>
       <span><strong>{item.name}</strong><small>{item.summary}</small></span>
       <span className="risk-pill" data-level={riskLabel(risk)}>{risk}</span>
-    </div>;
+    </button>;
   })}</section>;
 }
