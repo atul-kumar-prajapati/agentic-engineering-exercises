@@ -1,0 +1,10 @@
+
+> quality-gate-app@0.1.0 quality:verify
+> node ./scripts/verify-quality-evidence.mjs
+
+Source SHA: 44b789f75fabffb63b664a63b7e6fe7db2e2e054
+PASS three raw Lighthouse reports use one route and Chrome environment
+PASS pessimistic performance, accessibility, LCP, and axe thresholds met
+PASS raw artifact SHA-256 digests and generated comparison verified
+PASS performance and axe negative controls return non-zero with failed decisions
+PASS Git source binding and evidence-only follow-up history verified

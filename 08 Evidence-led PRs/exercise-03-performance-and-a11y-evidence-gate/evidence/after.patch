@@ -1,0 +1,291 @@
+diff --git a/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/lighthouserc.json b/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/lighthouserc.json
+new file mode 100644
+index 0000000..8573d0b
+--- /dev/null
++++ b/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/lighthouserc.json	
+@@ -0,0 +1,55 @@
++{
++  "ci": {
++    "collect": {
++      "staticDistDir": "./dist",
++      "url": [
++        "http://localhost/"
++      ],
++      "numberOfRuns": 3,
++      "settings": {
++        "onlyCategories": [
++          "performance",
++          "accessibility"
++        ],
++        "formFactor": "mobile",
++        "throttlingMethod": "simulate",
++        "screenEmulation": {
++          "mobile": true,
++          "width": 412,
++          "height": 823,
++          "deviceScaleFactor": 1.75,
++          "disabled": false
++        }
++      }
++    },
++    "assert": {
++      "assertions": {
++        "categories:performance": [
++          "error",
++          {
++            "minScore": 0.9,
++            "aggregationMethod": "pessimistic"
++          }
++        ],
++        "categories:accessibility": [
++          "error",
++          {
++            "minScore": 1,
++            "aggregationMethod": "pessimistic"
++          }
++        ],
++        "largest-contentful-paint": [
++          "error",
++          {
++            "maxNumericValue": 2500,
++            "aggregationMethod": "pessimistic"
++          }
++        ]
++      }
++    },
++    "upload": {
++      "target": "filesystem",
++      "outputDir": ".lighthouseci"
++    }
++  }
++}
+diff --git a/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/scripts/quality-gate.mjs b/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/scripts/quality-gate.mjs
+new file mode 100644
+index 0000000..ca71c7f
+--- /dev/null
++++ b/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/scripts/quality-gate.mjs	
+@@ -0,0 +1,194 @@
++import fs from "node:fs";
++import path from "node:path";
++import {
++  expectedSummary,
++  readAxeEvidence,
++  readLighthouseReports,
++} from "./quality-verification.mjs";
++
++const FLAG_LIGHTHOUSE_DIR = "--lighthouse-dir";
++const FLAG_AXE = "--axe";
++const FLAG_CONTRACT = "--contract";
++const FLAG_SHA = "--sha";
++const FLAG_OUTPUT = "--output";
++const SHA_PATTERN = /^[a-f0-9]{40}$/;
++
++function usage() {
++  return [
++    "Quality gate CLI",
++    `Usage: node scripts/quality-gate.mjs ${FLAG_LIGHTHOUSE_DIR} <path> ${FLAG_AXE} <path> ${FLAG_CONTRACT} <path> ${FLAG_SHA} <40-character-sha> ${FLAG_OUTPUT} <path>`,
++    "Read exactly three raw Lighthouse JSON reports and one axe JSON report.",
++    "Aggregate with worstCase: minimum performance, minimum accessibility, maximum LCP, and axe violation count.",
++    "Write quality-summary.json, including releaseDecision, before setting process.exitCode.",
++    "Return 0 only when releaseDecision is passed. Invalid or failing evidence still writes a summary, then exits non-zero.",
++  ].join("\n");
++}
++
++function readFlag(argv, flag) {
++  const index = argv.indexOf(flag);
++  if (index === -1 || index >= argv.length - 1) {
++    return null;
++  }
++  const value = argv[index + 1];
++  if (typeof value !== "string" || value.length === 0 || value.startsWith("--")) {
++    return null;
++  }
++  return value;
++}
++
++function parseCli(argv) {
++  return {
++    lighthouseDir: readFlag(argv, FLAG_LIGHTHOUSE_DIR),
++    axe: readFlag(argv, FLAG_AXE),
++    contract: readFlag(argv, FLAG_CONTRACT),
++    sha: readFlag(argv, FLAG_SHA),
++    output: readFlag(argv, FLAG_OUTPUT),
++  };
++}
++
++function loadJson(filePath, label, failures) {
++  if (!filePath) {
++    failures.push(`${label} path was not provided`);
++    return null;
++  }
++  if (!fs.existsSync(filePath)) {
++    failures.push(`${label} is missing at ${filePath}`);
++    return null;
++  }
++  try {
++    return JSON.parse(fs.readFileSync(filePath, "utf8"));
++  } catch {
++    failures.push(`${label} is invalid JSON`);
++    return null;
++  }
++}
++
++function fallbackContract() {
++  return {
++    schemaVersion: 1,
++    route: "/",
++    lighthouseRuns: 3,
++    aggregation: "pessimistic",
++    thresholds: {
++      minimumPerformance: 0.9,
++      minimumAccessibility: 1,
++      maximumLargestContentfulPaintMs: 2500,
++      maximumAxeViolations: 0,
++    },
++  };
++}
++
++function failedSummary({ sourceSha, contract, runs, axe, failures }) {
++  return {
++    schemaVersion: 1,
++    sourceSha: sourceSha || null,
++    route: contract?.route ?? null,
++    aggregation: contract?.aggregation ?? "pessimistic",
++    thresholds: contract?.thresholds ?? null,
++    lighthouseRuns: runs ?? [],
++    axe: axe ?? null,
++    worstCase: {
++      performance: null,
++      accessibility: null,
++      largestContentfulPaintMs: null,
++      axeViolations: null,
++    },
++    failures,
++    releaseDecision: "failed",
++  };
++}
++
++function writeSummary(outputPath, summary) {
++  const absolute = path.resolve(outputPath);
++  fs.mkdirSync(path.dirname(absolute), { recursive: true });
++  fs.writeFileSync(absolute, `${JSON.stringify(summary, null, 2)}\n`);
++}
++
++function decide(args) {
++  const failures = [];
++  if (!args.lighthouseDir) failures.push(`missing ${FLAG_LIGHTHOUSE_DIR}`);
++  if (!args.axe) failures.push(`missing ${FLAG_AXE}`);
++  if (!args.contract) failures.push(`missing ${FLAG_CONTRACT}`);
++  if (!args.sha) failures.push(`missing ${FLAG_SHA}`);
++  if (!args.output) failures.push(`missing ${FLAG_OUTPUT}`);
++
++  const sourceSha = args.sha ?? "";
++  if (args.sha && !SHA_PATTERN.test(sourceSha)) {
++    failures.push(`${FLAG_SHA} must be a 40-character hexadecimal Git commit SHA`);
++  }
++
++  const contractDocument = args.contract ? loadJson(args.contract, "contract", failures) : null;
++  const contract = contractDocument ?? fallbackContract();
++
++  const lighthouse = args.lighthouseDir
++    ? readLighthouseReports(args.lighthouseDir, contract)
++    : { failures: ["missing raw Lighthouse directory"], runs: [] };
++  failures.push(...lighthouse.failures);
++
++  const lighthouseBrowserMajor = lighthouse.runs[0]?.environment?.browserMajor;
++  const axeResult = args.axe
++    ? readAxeEvidence(args.axe, sourceSha, contract, lighthouseBrowserMajor)
++    : { failures: ["missing raw axe evidence"], axe: null };
++  failures.push(...axeResult.failures);
++
++  const canUseExpected =
++    contractDocument !== null &&
++    SHA_PATTERN.test(sourceSha) &&
++    lighthouse.runs.length === contract.lighthouseRuns &&
++    axeResult.axe !== null;
++
++  if (!canUseExpected) {
++    return failedSummary({
++      sourceSha,
++      contract,
++      runs: lighthouse.runs,
++      axe: axeResult.axe,
++      failures: failures.length > 0 ? failures : ["quality evidence is incomplete"],
++    });
++  }
++
++  const summary = expectedSummary({
++    sourceSha,
++    contract,
++    runs: lighthouse.runs,
++    axe: axeResult.axe,
++  });
++
++  // Valid evidence must deep-equal expectedSummary, including worstCase and releaseDecision.
++  if (failures.length === 0) {
++    return summary;
++  }
++
++  return {
++    ...summary,
++    failures: [...failures, ...summary.failures],
++    releaseDecision: "failed",
++  };
++}
++
++function main() {
++  const args = parseCli(process.argv.slice(2));
++  if (!args.output) {
++    console.error(usage());
++    process.exitCode = 1;
++    return;
++  }
++
++  let summary;
++  try {
++    summary = decide(args);
++  } catch (error) {
++    summary = failedSummary({
++      sourceSha: args.sha,
++      contract: null,
++      runs: [],
++      axe: null,
++      failures: [`quality gate failed before a decision: ${error instanceof Error ? error.message : String(error)}`],
++    });
++  }
++
++  writeSummary(args.output, summary);
++  process.exitCode = summary.releaseDecision === "passed" ? 0 : 1;
++}
++
++main();
+diff --git a/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/src/App.tsx b/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/src/App.tsx
+index 8d235e0..e89dab1 100644
+--- a/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/src/App.tsx	
++++ b/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/src/App.tsx	
+@@ -14,7 +14,7 @@ export default function App() {
+           <h1>{labContract.title}</h1>
+           <p>{labContract.domain}</p>
+         </div>
+-        <button className="icon-only-action" type="button">
++        <button aria-label="Download evidence" className="icon-only-action" type="button">
+           <svg aria-hidden="true" viewBox="0 0 24 24">
+             <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" />
+           </svg>
+diff --git a/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/src/main.tsx b/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/src/main.tsx
+index f3cda67..15a96a0 100644
+--- a/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/src/main.tsx	
++++ b/08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/src/main.tsx	
+@@ -8,12 +8,6 @@ if (!root) {
+   throw new Error("Root element was not found");
+ }
+ 
+-const STARTER_MAIN_THREAD_BLOCK_MS = 3200;
+-const blockStartedAt = performance.now();
+-while (performance.now() - blockStartedAt < STARTER_MAIN_THREAD_BLOCK_MS) {
+-  // Seeded generated-code defect: first render is blocked by synchronous work.
+-}
+-
+ createRoot(root).render(
+   <StrictMode>
+     <App />
