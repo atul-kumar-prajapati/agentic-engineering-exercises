@@ -1,0 +1,22 @@
+$ semgrep scan --config <quoted-copy-of-review-gauntlet-app/semgrep.yml> --no-git-ignore src   # run in the cloned review head (8292b946c6a756980ecaf6aa1d99adf7105ea597)
+# NOTE: the supplied semgrep.yml cannot run as shipped: it is invalid YAML (the unquoted pattern contains "__html: $SOURCE", i.e. a colon+space in a plain scalar -> "mapping values are not allowed here", line 7 column 56), and its literal pattern "<... dangerouslySetInnerHTML={{ __html: $SOURCE }} ... />" also fails semgrep pattern parsing ("no pattern found") once the YAML is quoted. The rule executed below is semantically equivalent: same id react-dangerous-html-review, same message, severity WARNING, languages [typescript]; the only change is a parseable JSX pattern "<$EL dangerouslySetInnerHTML={{ __html: $SOURCE }} />" which matches the same two sinks. The protected semgrep.yml was not modified.
+
+                   
+                   
+┌─────────────────┐
+│ 2 Code Findings │
+└─────────────────┘
+                                     
+    src/components/ActionComposer.tsx
+    ❯❱ var.folders.36.50tfmfcs567flkg69pmkcww40000gn.T.opencode.semgrep-run.react-dangerous-html-review
+          Review HTML source before using dangerouslySetInnerHTML
+                                                                 
+           31┆ <div className="review-preview" dangerouslySetInnerHTML={{ __html: note }} />
+                                       
+    src/components/SafeAnnouncement.tsx
+    ❯❱ var.folders.36.50tfmfcs567flkg69pmkcww40000gn.T.opencode.semgrep-run.react-dangerous-html-review
+          Review HTML source before using dangerouslySetInnerHTML
+                                                                 
+            7┆ return <aside dangerouslySetInnerHTML={{ __html: trustedAnnouncement }} />;
+
+semgrep exit=0

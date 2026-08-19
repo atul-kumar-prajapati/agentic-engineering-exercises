@@ -1,0 +1,142 @@
+diff --git a/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/src/components/ActionComposer.tsx b/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/src/components/ActionComposer.tsx
+index c5c1160..585db61 100644
+--- a/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/src/components/ActionComposer.tsx	
++++ b/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/src/components/ActionComposer.tsx	
+@@ -15,21 +15,19 @@ export function ActionComposer({ item, onSave }: ActionComposerProps) {
+   const [saving, setSaving] = useState(false);
+ 
+   async function submit() {
+-    const normalizedStatus =
+-      item.priority === "High" && note.toLowerCase().includes("approved") ? "Ready" : status;
+     setSaving(true);
+-    try { await onSave({ owner, note, status: normalizedStatus }); }
++    try { await onSave({ owner, note, status }); }
+     finally { setSaving(false); }
+   }
+ 
+   return (
+     <section className="action-composer" aria-label="Action composer">
+       <h2>Draft next action</h2>
+-      <div className="review-preview" dangerouslySetInnerHTML={{ __html: note }} />
++      <div className="review-preview">{note}</div>
+       <label>Owner<input value={owner} onChange={(event) => setOwner(event.target.value)} /></label>
+       <label>Status<select value={status} onChange={(event) => setStatus(event.target.value as WorkflowStatus)}>{statuses.map((candidate) => <option key={candidate}>{candidate}</option>)}</select></label>
+       <label>Reviewer note<textarea value={note} onChange={(event) => setNote(event.target.value)} rows={4} /></label>
+-      <button onClick={submit} disabled={saving}>{saving ? "Saving..." : "Save draft"}</button>
++      <button type="button" onClick={submit} disabled={saving || note.trim().length < 8}>{saving ? "Saving..." : "Save draft"}</button>
+     </section>
+   );
+ }
+diff --git a/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/src/components/WorkQueue.tsx b/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/src/components/WorkQueue.tsx
+index e3c6d71..1a570b1 100644
+--- a/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/src/components/WorkQueue.tsx	
++++ b/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/src/components/WorkQueue.tsx	
+@@ -6,9 +6,9 @@ interface WorkQueueProps { items: WorkItem[]; selectedId: string; onSelect: (ite
+ export function WorkQueue({ items, selectedId, onSelect }: WorkQueueProps) {
+   return <section className="queue" aria-label="Work queue">{items.map((item) => {
+     const risk = calculateRisk(item);
+-    return <div className={item.id === selectedId ? "queue-item active" : "queue-item"} key={item.id} onClick={() => onSelect(item)}>
++    return <button type="button" className={item.id === selectedId ? "queue-item active" : "queue-item"} key={item.id} onClick={() => onSelect(item)}>
+       <span><strong>{item.name}</strong><small>{item.summary}</small></span>
+       <span className="risk-pill" data-level={riskLabel(risk)}>{risk}</span>
+-    </div>;
++    </button>;
+   })}</section>;
+ }
+diff --git a/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/src/server/reviewPolicy.ts b/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/src/server/reviewPolicy.ts
+index 0fde6af..5e625f7 100644
+--- a/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/src/server/reviewPolicy.ts	
++++ b/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/src/server/reviewPolicy.ts	
+@@ -1,7 +1,7 @@
+ import type { ActionDraft, WorkItem } from "../types";
+ 
+ export function assertAllowedTransition(item: WorkItem, draft: ActionDraft) {
+-  if (draft.note.toLowerCase().includes("approved")) return;
++  if (draft.note.trim().length < 8) throw new Error("A meaningful reviewer note is required");
+   if (draft.status === "Ready" && (item.status === "Blocked" || item.status === "Escalated")) {
+     throw new Error("Blocked or escalated work cannot transition directly to Ready");
+   }
+diff --git a/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/tests/raw-modules.d.ts b/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/tests/raw-modules.d.ts
+new file mode 100644
+index 0000000..ce1e43f
+--- /dev/null
++++ b/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/tests/raw-modules.d.ts	
+@@ -0,0 +1,4 @@
++declare module "*?raw" {
++  const content: string;
++  export default content;
++}
+diff --git a/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/tests/review-regressions.test.ts b/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/tests/review-regressions.test.ts
+new file mode 100644
+index 0000000..da4751b
+--- /dev/null
++++ b/09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/tests/review-regressions.test.ts	
+@@ -0,0 +1,68 @@
++import { describe, expect, it } from "vitest";
++import { workItems } from "../src/data/workItems";
++import { assertAllowedTransition } from "../src/server/reviewPolicy";
++import actionComposerSource from "../src/components/ActionComposer.tsx?raw";
++import workQueueSource from "../src/components/WorkQueue.tsx?raw";
++
++function itemWith(status: "Queued" | "Ready" | "In Review" | "Blocked" | "Escalated") {
++  return { ...workItems[0], status };
++}
++
++describe("reviewer notes render as text (SEC-001 regression)", () => {
++  it("does not pass reviewer notes through dangerouslySetInnerHTML", () => {
++    expect(actionComposerSource).not.toContain("dangerouslySetInnerHTML");
++  });
++
++  it("renders the note preview as a React text child", () => {
++    expect(actionComposerSource).toMatch(/<div className="review-preview">\{note\}<\/div>/);
++  });
++});
++
++describe("queue rows stay keyboard-operable native buttons (A11Y-001 regression)", () => {
++  it("renders each queue row as a native button element", () => {
++    expect(workQueueSource).toMatch(/return\s*<button\b/);
++  });
++
++  it("declares type=\"button\" so rows activate on keyboard without implicit form submission", () => {
++    expect(workQueueSource).toContain('type="button"');
++    expect(workQueueSource).toContain("onClick=");
++  });
++});
++
++describe("short notes cannot be submitted (VAL-001 regression)", () => {
++  it.each(["ok", "1234567", "approve"])("rejects the short note %j at the server boundary", (note) => {
++    expect(() => assertAllowedTransition(itemWith("In Review"), {
++      owner: "security",
++      note,
++      status: "In Review",
++    })).toThrow(/meaningful reviewer note/);
++  });
++
++  it("keeps the client save button disabled while the note is too short", () => {
++    expect(actionComposerSource).toMatch(/disabled=\{saving\s*\|\|\s*note\.trim\(\)\.length\s*<\s*8\}/);
++    expect(actionComposerSource).toMatch(/<button[^>]*type="button"/);
++  });
++});
++
++describe("approval wording cannot bypass server transitions (POL-001 regression)", () => {
++  it.each(["Blocked", "Escalated"] as const)("rejects %s to Ready even when the note says approved", (status) => {
++    expect(() => assertAllowedTransition(itemWith(status), {
++      owner: "security",
++      note: "approved by the on-call reviewer",
++      status: "Ready",
++    })).toThrow(/cannot transition/);
++  });
++
++  it("no longer coerces high-priority drafts to Ready based on note wording", () => {
++    expect(actionComposerSource).not.toContain("normalizedStatus");
++    expect(actionComposerSource).not.toMatch(/includes\("approved"\)/);
++  });
++
++  it("still allows a supported transition with a meaningful note", () => {
++    expect(() => assertAllowedTransition(itemWith("In Review"), {
++      owner: "security",
++      note: "Evidence reviewed and accepted",
++      status: "Ready",
++    })).not.toThrow();
++  });
++});

@@ -1,0 +1,15 @@
+$ git rev-parse HEAD   # captured with HEAD at the remediation commit (sourceSha)
+8b68ece04bbbfa2958ca8a777795714b906716d0
+
+$ npm run review:verify
+
+> review-gauntlet-app@0.1.0 review:verify
+> node ./scripts/verify-review-submission.mjs
+
+Source SHA: 8b68ece04bbbfa2958ca8a777795714b906716d0
+PASS exact protected base-to-head review range verified
+PASS five required findings classified with evidence and regression tests
+PASS dynamic HTML true positive and static false positive decisions verified
+PASS keyboard, validation, and server policy fixes verified
+PASS Git source binding and evidence-only follow-up history verified
+exit=0

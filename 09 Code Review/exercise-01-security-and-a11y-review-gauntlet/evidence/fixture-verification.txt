@@ -1,0 +1,6 @@
+$ npm run test:integrity -- (baseline recorded before fixes)
+Verified 42 protected challenge inputs.
+
+$ node ../scripts/verify-review-fixture.mjs
+Review fixture verified: review-base..review-head
+exit=0
