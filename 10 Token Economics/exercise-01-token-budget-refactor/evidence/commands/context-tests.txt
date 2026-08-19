@@ -1,0 +1,10 @@
+
+> token-budget-app@0.1.0 test:context
+> node ./scripts/run-context-tests.mjs && node ./tests/context-selector.test.mjs
+
+PASS real UTF-8 source costs match the protected catalog
+PASS mandatory, current, relevant, priority, and expansion rules
+PASS deterministic tight-budget and mandatory-overflow behavior
+PASS every source has an auditable selected or skipped reason
+PASS learner tests: deterministic ordering, budget, stale skip, duplicate ids, question expansion
+exit code: 0

@@ -1,0 +1,12 @@
+
+> token-budget-app@0.1.0 context:verify
+> node ./scripts/verify-context-submission.mjs
+
+Plan SHA: 8d94b4c9daa55fecba34f36c9b643aec78ec803a
+Source SHA: bb581c4941be75cebb31d57d7247e20efc192d20
+Selected bytes: 1562/1700
+PASS pre-change budget plan precedes implementation
+PASS ledger exactly matches deterministic selector output and real source costs
+PASS every context source has a selected or skipped reason
+PASS focused selector history and evidence-only follow-up verified
+exit code: 0

@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "tags": [
+      "adapter",
+      "session"
+    ],
+    "questionTags": [
+      "errors"
+    ]
+  },
+  "maximumBytes": 1700,
+  "planSha": "8d94b4c9daa55fecba34f36c9b643aec78ec803a",
+  "sourceSha": "bb581c4941be75cebb31d57d7247e20efc192d20",
+  "result": {
+    "selected": [
+      {
+        "id": "repository-rules",
+        "path": "docs/context-sources/AGENTS.md",
+        "bytes": 489,
+        "tags": [
+          "mandatory"
+        ],
+        "authority": "current",
+        "priority": 1000,
+        "mandatory": true,
+        "reason": "mandatory"
+      },
+      {
+        "id": "current-adapter-contract",
+        "path": "docs/context-sources/current-adapter-contract.md",
+        "bytes": 647,
+        "tags": [
+          "adapter",
+          "session",
+          "api"
+        ],
+        "authority": "current",
+        "priority": 100,
+        "reason": "relevant"
+      },
+      {
+        "id": "current-error-contract",
+        "path": "docs/context-sources/current-error-contract.md",
+        "bytes": 426,
+        "tags": [
+          "errors",
+          "validation"
+        ],
+        "authority": "current",
+        "priority": 90,
+        "reason": "relevant"
+      }
+    ],
+    "skipped": [
+      {
+        "id": "audit-retention",
+        "path": "docs/context-sources/audit-retention.md",
+        "bytes": 296,
+        "tags": [
+          "audit",
+          "retention",
+          "privacy"
+        ],
+        "authority": "current",
+        "priority": 70,
+        "reason": "irrelevant"
+      },
+      {
+        "id": "legacy-migration-notes",
+        "path": "docs/context-sources/legacy-migration-notes.md",
+        "bytes": 412,
+        "tags": [
+          "adapter",
+          "session",
+          "api"
+        ],
+        "authority": "stale",
+        "priority": 200,
+        "reason": "stale"
+      },
+      {
+        "id": "ui-style-guide",
+        "path": "docs/context-sources/ui-style-guide.md",
+        "bytes": 310,
+        "tags": [
+          "ui",
+          "css",
+          "accessibility"
+        ],
+        "authority": "current",
+        "priority": 80,
+        "reason": "irrelevant"
+      }
+    ],
+    "totalBytes": 1562,
+    "remainingBytes": 138,
+    "maximumBytes": 1700,
+    "requestedTags": [
+      "adapter",
+      "errors",
+      "session"
+    ],
+    "unresolvedTags": []
+  }
+}
