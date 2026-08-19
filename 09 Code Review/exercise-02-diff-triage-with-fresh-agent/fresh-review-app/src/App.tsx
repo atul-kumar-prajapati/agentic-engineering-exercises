@@ -5,7 +5,7 @@ import { FilterBar } from "./components/FilterBar";
 import { MetricStrip } from "./components/MetricStrip";
 import { PageHeader } from "./components/PageHeader";
 import { WorkQueue } from "./components/WorkQueue";
-import { clearCachedWorkflowItems, collectEvidence, fetchWorkItems, saveAction } from "./services/workflowApi";
+import { collectEvidence, fetchWorkItems, saveAction } from "./services/workflowApi";
 import type { ActionDraft, WorkItem } from "./types";
 import { defaultFilters, filterItems } from "./utils/filters";
 import { summarizePortfolio } from "./utils/scoring";
@@ -36,10 +36,6 @@ export default function DiffTriageWithFreshAgentApp() {
   async function handleCollectEvidence() {
     setEvidence(await collectEvidence(selected));
   }
-
-  useEffect(() => {
-    clearCachedWorkflowItems();
-  }, [filters.priority, filters.status]);
 
   if (!selected) return <main className="app-shell">Loading workspace...</main>;
 
