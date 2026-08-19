@@ -1,0 +1,11 @@
+$ node scripts/verify-review-fixture.mjs
+Fresh-review fixture verified: review-base..review-head
+exit code: 0
+
+Bundle heads (git bundle list-heads fixtures/review-target.bundle):
+8242a84ad8735d1a9c5051e1916d86c1c95101af refs/heads/main
+8242a84ad8735d1a9c5051e1916d86c1c95101af refs/heads/review-head
+8911d1064f74bdc7f0d4e88a2e57f122830ef6f2 refs/tags/review-base
+8242a84ad8735d1a9c5051e1916d86c1c95101af HEAD
+
+Manifest: baseSha 8911d1064f74bdc7f0d4e88a2e57f122830ef6f2 = tag review-base; headSha 8242a84ad8735d1a9c5051e1916d86c1c95101af = review-head. The generated diff from these refs matches pr/review-target.diff byte-for-byte after newline normalization (verified by the script above), so the protected review-base..review-head range is exact.

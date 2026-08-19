@@ -1,0 +1,175 @@
+commit 7f4213225b0ba7317302bd04beb7c5ef01d8ad81
+Author: Atul Kumar Prajapati <atul@codewalnut.com>
+Date:   Wed Aug 19 14:44:30 2026 +0530
+
+    fix: resolve four cache blockers in fresh-review-app with learner regression tests
+
+diff --git a/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/App.tsx b/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/App.tsx
+index 8476baf..0371886 100644
+--- a/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/App.tsx	
++++ b/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/App.tsx	
+@@ -5,7 +5,7 @@ import { FilterBar } from "./components/FilterBar";
+ import { MetricStrip } from "./components/MetricStrip";
+ import { PageHeader } from "./components/PageHeader";
+ import { WorkQueue } from "./components/WorkQueue";
+-import { clearCachedWorkflowItems, collectEvidence, fetchWorkItems, saveAction } from "./services/workflowApi";
++import { collectEvidence, fetchWorkItems, saveAction } from "./services/workflowApi";
+ import type { ActionDraft, WorkItem } from "./types";
+ import { defaultFilters, filterItems } from "./utils/filters";
+ import { summarizePortfolio } from "./utils/scoring";
+@@ -37,10 +37,6 @@ export default function DiffTriageWithFreshAgentApp() {
+     setEvidence(await collectEvidence(selected));
+   }
+ 
+-  useEffect(() => {
+-    clearCachedWorkflowItems();
+-  }, [filters.priority, filters.status]);
+-
+   if (!selected) return <main className="app-shell">Loading workspace...</main>;
+ 
+   return (
+diff --git a/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/services/workflowApi.ts b/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/services/workflowApi.ts
+index d6814ed..5065b49 100644
+--- a/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/services/workflowApi.ts	
++++ b/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/services/workflowApi.ts	
+@@ -3,14 +3,32 @@ import { workItems } from "../data/workItems";
+ 
+ const wait = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms));
+ 
++function readCachedItems(): WorkItem[] | null {
++  const cached = window.localStorage.getItem("workflow-items");
++  if (!cached) return null;
++  let parsed: unknown;
++  try {
++    parsed = JSON.parse(cached);
++  } catch {
++    parsed = null;
++  }
++  if (Array.isArray(parsed)) return parsed as WorkItem[];
++  window.localStorage.removeItem("workflow-items");
++  return null;
++}
++
++function currentWorkflowItems(): WorkItem[] {
++  return readCachedItems() ?? [...workItems];
++}
++
+ export async function fetchWorkItems(): Promise<WorkItem[]> {
+   await wait(220);
+-  const cached = window.localStorage.getItem("workflow-items");
++  const cached = readCachedItems();
+   if (cached) {
+-    return JSON.parse(cached) as WorkItem[];
++    return cached;
+   }
+ 
+-  return workItems.sort((left, right) => left.dueInDays - right.dueInDays);
++  return [...workItems].sort((left, right) => left.dueInDays - right.dueInDays);
+ }
+ 
+ export function clearCachedWorkflowItems() {
+@@ -19,22 +37,24 @@ export function clearCachedWorkflowItems() {
+ 
+ export async function saveAction(itemId: string, draft: ActionDraft): Promise<WorkItem> {
+   await wait(180);
+-  const item = workItems.find((candidate) => candidate.id === itemId);
++  const current = currentWorkflowItems();
++  const item = current.find((candidate) => candidate.id === itemId);
+   if (!item) {
+     throw new Error("Work item was not found");
+   }
+ 
+-  return {
++  const updated: WorkItem = {
+     ...item,
+     status: draft.status,
+     owner: draft.owner,
+     note: draft.note,
+   };
++  window.localStorage.setItem("workflow-items", JSON.stringify(current.map((candidate) => (candidate.id === updated.id ? updated : candidate))));
++  return updated;
+ }
+ 
+ export async function collectEvidence(item: WorkItem): Promise<string[]> {
+   await wait(140);
+-  window.localStorage.setItem("workflow-items", JSON.stringify(workItems));
+   return [
+     `Risk score: ${item.score}`,
+     `Owner: ${item.owner}`,
+diff --git a/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/tests/cache-regressions.test.ts b/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/tests/cache-regressions.test.ts
+new file mode 100644
+index 0000000..d66cb8c
+--- /dev/null
++++ b/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/tests/cache-regressions.test.ts	
+@@ -0,0 +1,71 @@
++import { beforeEach, describe, expect, it } from "vitest";
++import { workItems } from "../src/data/workItems";
++import { collectEvidence, fetchWorkItems, saveAction } from "../src/services/workflowApi";
++
++class MemoryStorage implements Storage {
++  private values = new Map<string, string>();
++  get length() { return this.values.size; }
++  clear() { this.values.clear(); }
++  getItem(key: string) { return this.values.get(key) ?? null; }
++  key(index: number) { return [...this.values.keys()][index] ?? null; }
++  removeItem(key: string) { this.values.delete(key); }
++  setItem(key: string, value: string) { this.values.set(key, String(value)); }
++}
++
++const storage = new MemoryStorage();
++const immediateTimeout = ((handler: TimerHandler) => {
++  if (typeof handler === "function") handler();
++  return 0;
++}) as typeof window.setTimeout;
++
++Object.defineProperty(globalThis, "window", {
++  configurable: true,
++  value: { localStorage: storage, setTimeout: immediateTimeout },
++});
++
++beforeEach(() => storage.clear());
++
++describe("learner cache regressions", () => {
++  it("falls back to fixture defaults when cached JSON is malformed", async () => {
++    storage.setItem("workflow-items", "{broken");
++    const loaded = await fetchWorkItems();
++    expect(loaded).toHaveLength(workItems.length);
++    expect(storage.getItem("workflow-items")).toBeNull();
++  });
++
++  it("falls back when cached JSON parses to a non-array value", async () => {
++    storage.setItem("workflow-items", JSON.stringify({ id: "not-an-array" }));
++    const loaded = await fetchWorkItems();
++    expect(loaded).toHaveLength(workItems.length);
++    expect(storage.getItem("workflow-items")).toBeNull();
++  });
++
++  it("returns defaults in due-date order without mutating the shared fixture", async () => {
++    const original = [...workItems];
++    const reversed = [...workItems].reverse();
++    workItems.splice(0, workItems.length, ...reversed);
++    try {
++      const loaded = await fetchWorkItems();
++      expect(workItems.map((item) => item.id)).toEqual(reversed.map((item) => item.id));
++      expect(loaded.map((item) => item.dueInDays)).toEqual([...loaded].map((item) => item.dueInDays).sort((a, b) => a - b));
++      expect(loaded).not.toBe(workItems);
++    } finally {
++      workItems.splice(0, workItems.length, ...original);
++    }
++  });
++
++  it("persists a saved action so it survives a filter-driven reload", async () => {
++    const target = workItems[0];
++    await saveAction(target.id, { owner: "New owner", note: "Persist this note", status: "In Review" });
++    const reloaded = await fetchWorkItems();
++    expect(reloaded.find((item) => item.id === target.id)).toMatchObject({ owner: "New owner", note: "Persist this note", status: "In Review" });
++  });
++
++  it("collects evidence without changing cached workflow data", async () => {
++    const sentinel = JSON.stringify([{ id: "saved-state" }]);
++    storage.setItem("workflow-items", sentinel);
++    const evidence = await collectEvidence(workItems[0]);
++    expect(evidence).toHaveLength(3);
++    expect(storage.getItem("workflow-items")).toBe(sentinel);
++  });
++});

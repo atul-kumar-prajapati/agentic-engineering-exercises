@@ -1,0 +1,12 @@
+$ npm run triage:verify
+
+> fresh-review-app@0.1.0 triage:verify
+> node ./scripts/verify-triage-submission.mjs
+
+Source SHA: 7f4213225b0ba7317302bd04beb7c5ef01d8ad81
+PASS fresh reviewer context and exact prompt binding verified
+PASS exact protected base-to-head comparison verified
+PASS four cache blockers and unsupported claim triaged with evidence
+PASS focused fixes and learner regression tests bound to source SHA
+PASS later history contains evidence only
+exit code: 0

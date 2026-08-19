@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "sessionId": "fresh-09-02-opencode-glm53-20260819",
+  "tool": "opencode subagent (general) running glm-5.3 (opencode-go/glm-5.3); integration owner opencode glm-5.3",
+  "startedAt": "2026-08-19T13:52:00Z",
+  "contextMode": "fresh",
+  "providedFiles": ["docs/review-brief.md", "fixtures/manifest.json", "pr/review-target.diff"],
+  "excludedContext": ["docs/implementer-notes.md", "earlier reviews", "expected finding IDs", "implementation chat"],
+  "promptSha256": "da65780380de56a31bc6c4557da558da24eff32e26bca9981d8ab7e3bf7916bc",
+  "headMount": "Complete head source (base 8911d1064f74bdc7f0d4e88a2e57f122830ef6f2, head 8242a84ad8735d1a9c5051e1916d86c1c95101af) was mounted read-only in an isolated sandbox so findings could be reproduced against the exact head, per review-brief.md. The reviewer received the brief, manifest, and diff as its only review inputs; no implementer notes, no prior review, no expected finding IDs, and no implementation chat were provided or referenced.",
+  "timeLimit": "45 minutes",
+  "notes": "Fresh session ran as a read-only subagent with no access to this delivery session's context. Reviewer completed in well under the limit and independently derived all four blockers plus the dismissal of the seeded saveAction mutation claim without any hints."
+}

@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "baseSha": "8911d1064f74bdc7f0d4e88a2e57f122830ef6f2",
+  "headSha": "8242a84ad8735d1a9c5051e1916d86c1c95101af",
+  "comparison": "review-base..review-head",
+  "sourceSha": "7f4213225b0ba7317302bd04beb7c5ef01d8ad81",
+  "reviewerSessionId": "fresh-09-02-opencode-glm53-20260819",
+  "mergeDecision": "request-changes",
+  "findings": [
+    {
+      "id": "CACHE-001",
+      "classification": "blocker",
+      "severity": "high",
+      "confidence": "high",
+      "decision": "fix",
+      "file": "src/App.tsx",
+      "line": 41,
+      "scenario": "A user saves an owner, status, or note on a work item, then changes the priority or status filter (or reloads, since the effect also fires on mount), and later reloads the workspace.",
+      "impact": "The useEffect at src/App.tsx:40-42 (head) calls clearCachedWorkflowItems() on every filter change and on mount, deleting persisted workflow state. Any saved work in the cache is destroyed by an unrelated read-only UI action, so saved edits can never survive filtering or a reload.",
+      "evidence": "src/App.tsx:41 (head 8242a84) is clearCachedWorkflowItems() inside useEffect(..., [filters.priority, filters.status]); src/services/workflowApi.ts:16-18 removes the workflow-items key. Reproduced against the mounted head; run-app-cache-checks.mjs fails on the head because App.tsx contains clearCachedWorkflowItems.",
+      "fix": "Remove the filter-keyed cache-clearing effect and the clearCachedWorkflowItems import from src/App.tsx so filter changes never touch persisted workflow data.",
+      "testPath": "tests/cache-regressions.test.ts"
+    },
+    {
+      "id": "CACHE-002",
+      "classification": "blocker",
+      "severity": "high",
+      "confidence": "high",
+      "decision": "fix",
+      "file": "src/services/workflowApi.ts",
+      "line": 10,
+      "scenario": "localStorage contains malformed JSON (e.g. {broken) or valid non-array JSON (e.g. {\"id\":\"not-an-array\"}) under workflow-items, and fetchWorkItems reads it.",
+      "impact": "JSON.parse at src/services/workflowApi.ts:10 (head) throws on malformed JSON with no fallback, so fetchWorkItems rejects and the app stays on the loading screen; a non-array value is blindly cast and returned, crashing callers. Damaged browser data leaves the workspace unusable instead of recovering.",
+      "evidence": "src/services/workflowApi.ts:8-11 (head 8242a84) has no try/catch, no Array.isArray validation, and never discards the invalid entry. Reproduced on the mounted head: protected acceptance test recovers from malformed and non-array cached JSON fails at head. The fix adds a malformed json fallback that removes the bad entry and serves defaults.",
+      "fix": "Parse the cache inside a try/catch, accept only Array.isArray results, remove the invalid entry, and fall back to fixture defaults when the cached json is unusable.",
+      "testPath": "tests/cache-regressions.test.ts"
+    },
+    {
+      "id": "CACHE-003",
+      "classification": "blocker",
+      "severity": "medium",
+      "confidence": "high",
+      "decision": "fix",
+      "file": "src/services/workflowApi.ts",
+      "line": 13,
+      "scenario": "fetchWorkItems runs on the cache-miss path (every fresh load), returning default results ordered by due date.",
+      "impact": "workItems.sort(...) at src/services/workflowApi.ts:13 (head) sorts the module-level fixture array in place and hands callers the live shared reference, so any consumer mutation leaks into later sessions and the imported fixture data does not remain unchanged.",
+      "evidence": "src/services/workflowApi.ts:13 (head 8242a84) mutates the exported workItems fixture; reproduction reverses the fixture, calls fetchWorkItems, and observes the shared array silently re-sorted. Protected acceptance test orders a copy without mutating the shared fixture fails at head because the sort mutates the fixture instead of a copy.",
+      "fix": "Return [...workItems].sort(...) so ordering happens on a copy and the shared fixture is never mutated.",
+      "testPath": "tests/cache-regressions.test.ts"
+    },
+    {
+      "id": "CACHE-004",
+      "classification": "blocker",
+      "severity": "high",
+      "confidence": "high",
+      "decision": "fix",
+      "file": "src/services/workflowApi.ts",
+      "line": 37,
+      "scenario": "A user clicks collect evidence on any work item while a cached workflow state exists.",
+      "impact": "src/services/workflowApi.ts:37 (head) writes JSON.stringify(workItems) into the workflow-items cache during evidence collection, overwriting real cached state with a stale snapshot of the never-updated fixture, so later loads serve stale state and a read-only action mutates the cache.",
+      "evidence": "src/services/workflowApi.ts:37 (head 8242a84) is a localStorage.setItem inside collectEvidence. Reproduced with a sentinel cache value: the head overwrites it with the fixture snapshot; protected acceptance test collects evidence without changing cached workflow data fails. The fix removes the write so evidence collection leaves the stale cache untouched.",
+      "fix": "Remove the localStorage.setItem from collectEvidence so evidence collection is read-only and never writes stale cache state.",
+      "testPath": "tests/cache-regressions.test.ts"
+    },
+    {
+      "id": "CLAIM-001",
+      "classification": "unsupported",
+      "severity": "info",
+      "confidence": "high",
+      "decision": "dismiss",
+      "file": "src/services/workflowApi.ts",
+      "line": 22,
+      "scenario": "Claim under evaluation: an earlier reviewer asserted that saveAction mutates the shared workItems fixture in place, so every save permanently changes later sessions.",
+      "impact": "Dismissed. saveAction does not mutate the fixture and does not mutate any shared state: it only reads workItems via .find at src/services/workflowApi.ts:22 (head) and returns a new object built with spread at lines 27-32. No element assignment, splice, or array replacement occurs, and no storage write happens inside saveAction at the head, so later sessions are not permanently changed by the function itself.",
+      "evidence": "Head 8242a84 source: const item = workItems.find((candidate) => candidate.id === itemId); then return { ...item, status: draft.status, owner: draft.owner, note: draft.note };. The spread creates a new object, proving saveAction does not mutate the fixture. The real reload data loss is CACHE-001 plus the absence of persistence, not in-place mutation. The claim is dismissed with this exact code evidence."
+    }
+  ]
+}

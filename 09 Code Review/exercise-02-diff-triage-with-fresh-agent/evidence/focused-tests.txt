@@ -1,0 +1,24 @@
+$ npx vitest run src/services/workflowApi.acceptance.test.ts tests/cache-regressions.test.ts --reporter=verbose
+
+ RUN  v3.2.7 /private/var/folders/36/50tfmfcs567flkg69pmkcww40000gn/T/opencode/ex-09-02/09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app
+
+ ✓ src/services/workflowApi.acceptance.test.ts > protected cache acceptance > recovers from malformed and non-array cached JSON 1ms
+ ✓ src/services/workflowApi.acceptance.test.ts > protected cache acceptance > orders a copy without mutating the shared fixture 0ms
+ ✓ src/services/workflowApi.acceptance.test.ts > protected cache acceptance > persists an update and reads it on the next load 0ms
+ ✓ src/services/workflowApi.acceptance.test.ts > protected cache acceptance > collects evidence without changing cached workflow data 0ms
+ ✓ tests/cache-regressions.test.ts > learner cache regressions > falls back to fixture defaults when cached JSON is malformed 1ms
+ ✓ tests/cache-regressions.test.ts > learner cache regressions > falls back when cached JSON parses to a non-array value 0ms
+ ✓ tests/cache-regressions.test.ts > learner cache regressions > returns defaults in due-date order without mutating the shared fixture 0ms
+ ✓ tests/cache-regressions.test.ts > learner cache regressions > persists a saved action so it survives a filter-driven reload 0ms
+ ✓ tests/cache-regressions.test.ts > learner cache regressions > collects evidence without changing cached workflow data 0ms
+
+ Test Files  2 passed (2)
+      Tests  9 passed (9)
+   Start at  18:31:37
+   Duration  156ms (transform 30ms, setup 0ms, collect 41ms, tests 4ms, environment 0ms, prepare 53ms)
+
+vitest exit code: 0
+$ node ./scripts/run-app-cache-checks.mjs
+PASS filter changes do not clear persisted workflow data
+run-app-cache-checks exit code: 0
+exit code: 0
