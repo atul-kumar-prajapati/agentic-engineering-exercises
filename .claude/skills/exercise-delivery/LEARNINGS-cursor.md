@@ -1,0 +1,30 @@
+# Learnings for a future Cursor run of this skill
+
+Read at the start of every delivery, alongside every other `LEARNINGS-*.md` in this directory — another agent's file is where you get lessons you have not paid for yet. Append a section per exercise; never edit another agent's file, and never edit `SKILL.md` (propose promotions to the user instead). Push this file to `chore/agentic-exercise-delivery-skill` at the end of the session — see `SKILL.md` Phase 8.
+
+**Already promoted into `SKILL.md`** — do not re-derive or re-record these, they are binding rules now: unsatisfiable gate = stop before committing; an unreported check is not evidence; never shape content to satisfy a checker; record the model slug; `file:line` on every claim including dismissed ones; the two standing guardrails (porcelain, protected-restore) with the quoting/`read`-loop fix; the unsatisfiability probe; paths-with-spaces and worktree-cwd hazards; measure the baseline rather than manufacturing one.
+
+What stays here: per-exercise specifics, and anything still too fresh or too Cursor-specific to be a shared rule.
+
+## Calibration that still holds
+
+1. An unsatisfiable required gate is a stop, not a footnote. Diagnose first; if the only way through is a protected-file edit or a self-invalidating hash, tell the user before committing.
+2. Record the exact model slug. This run: parent Cursor Grok 4.6; both first-attempt subagents launched with `cursor-grok-4.6-high`. Do not write "inherited model".
+3. Do not shape content to satisfy a checker. If a check would reward worse content, satisfy it honestly or report a design flaw.
+4. Every claim needs `file:line` (or `path:line` on a named SHA). Re-derive specialist citations against source before accepting them. Every dismissed claim needs its own evidence. Off-by-one line citations are defects; fix them before the evidence commit (`run-rollout-tests.mjs:27` was actually `:26`).
+
+## 8.2-specific
+
+- **Commit order is the 7.1 pattern, not the 7.2 trap.** `sourceSha` is passed into capture/drill as `--sha`. Implementation commit first (`invoicePreview.mjs` + `rollback-invoice-preview.mjs`), then generate evidence, then an evidence-only follow-up. `git diff --name-only <sourceSha>` after the evidence commit must list only `…/evidence/**`. This is satisfiable because generated files are not required to live inside the source commit.
+- **Capture scripts cover three of five states.** `rollout:capture` emits enabled / disabled / provider-error only. Invalid context and preview-API failure are required by the flag brief and `run-rollout-tests.mjs` but have no generated JSON. Prove them separately with `executeScenario` (keep the raw rows) and cite `invoicePreview.mjs` branches. That gap is a harness limitation, not an unsatisfiable gate.
+- **Side-effect matrix.** Enabled: one `getBooleanValue(..., false, context)`, one `loadPreview(accountId)`, one `invoice_preview_viewed` with `targetingKey` + `accountId` + `flagKey`. Invalid context: return before evaluation, zero side effects. Disabled and provider error: one evaluation, zero API, zero telemetry. API failure: one evaluation, one API call, zero telemetry. Do not emit on disabled paths; do not fail open (`defaultValue` must be `false`).
+- **Rollback CLI.** Validate actor, reason, ISO timestamp (`Date.parse`), `schemaVersion === 1`, and `flagKey === invoice-preview-v2` before any `writeFileSync`. Temp file in `path.dirname(target)`, then `renameSync`. Revision is `rollback-` plus timestamp with `:` and `.` replaced by `-` (`2026-08-14T10:30:00.000Z` → `rollback-2026-08-14T10-30-00-000Z`). `lastRollback` must include `previousRevision`. The ordinary first attempt accepted `not-a-timestamp` and mutated the file; that is the independent variable.
+- **Protected restore.** `git checkout upstream/main -- <protected paths>` must be quoted; unquoted `$(cat file)` splits on spaces in `08 Evidence-led PRs`. After a quoted restore, `verify:exercise` still passed (exit 0) and `git diff HEAD` stayed empty. `invoicePreview.mjs` is not in `challenge-integrity.json`; do not "restore" it.
+- **Porcelain.** `verify:exercise` did not mutate tracked files. `git status --porcelain --untracked-files=no` was empty before and after. Full porcelain still shows pre-existing `?? .claude/`, `?? .DS_Store`, and any in-progress sibling-exercise files (8.1 left `.github/` and `generate-pr-evidence.mjs` untracked). Do not stage those. Report tracked-empty vs pre-existing untracked; do not delete the user's untracked files to force a blank porcelain.
+- **Worktrees.** Before/after first attempts in `/tmp/ex-08-02-{before,after}` from the same starting SHA. Push the companion branches. `after.patch` must remain the unaided attempt; if integration changes code, say so. This run did not change the after implementation (blob IDs matched `44bb454` and `fdb2b5`).
+- **Shell cwd.** `working_directory` is unreliable when the path contains spaces. `cd "08 Evidence-led PRs/…/feature-flag-app"` inside the command. Never trust a persisted cwd after a worktree `cd`.
+- **Specialists.** Three read-only lanes with disjoint scope: flag side-effects, rollback atomicity, evidence integrity. Integration owner re-ran `executeScenario` and a `/tmp` rollback copy before accepting a clean verdict. A review round with zero accepted defects is only a review if dismissed claims are written down.
+
+## What was not a stop on 8.2
+
+`runReproduction` writes capture/drill output to `os.tmpdir()`, not tracked `evidence/`. `verify:exercise` includes `build` but `dist/` is gitignored. Generated JSON recording `sourceSha` does not create a 7.2-style cycle. No required gate needed a protected-file edit.

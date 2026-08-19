@@ -9,16 +9,34 @@ One exercise per branch, per PR. The exercise's own README and verifier outrank 
 
 This file is self-contained. Claude Code loads it as a skill; any other agent can be pointed at the path and read it directly as its working instructions — nothing here depends on skill auto-discovery. The frontmatter above is metadata for tools that use it and can be ignored by tools that do not.
 
+## Phase 0 — Who you are, and what the previous runs learned
+
+```bash
+ls .claude/skills/exercise-delivery/LEARNINGS-*.md
+```
+
+**Read every one of them, not just your own.** Different agents hit different walls; reading the others is how you inherit their scars instead of earning them. Rules that proved durable and agent-independent have already been promoted into this file — the `LEARNINGS-*` files hold the per-exercise specifics and the still-fresh notes.
+
+Then say, in your first message, **which agent you are** — the tool you are running as, plus the exact model slug (`opencode`, `cursor`, `claude-code`, …). That name is your identity for the whole session: it picks your `LEARNINGS-<you>.md` file in Phase 8, and it goes in the evidence.
+
+If no `LEARNINGS-<you>.md` exists, you are the first run of your kind here. Read the others, and create yours in Phase 8.
+
+You only ever write your own file. Never edit another agent's, and never edit `SKILL.md` — if a lesson deserves to become a shared rule, propose it to the user in your final message and let them promote it.
+
 ## Non-negotiables
 
 These are the rules that fail a submission when broken.
 
 1. **Never claim a check passed unless you ran it and saw exit 0.** Report the command and the exit code. If something failed, say so with the output.
-2. **Never modify a protected input** to make a gate pass. Protected files are listed in the app's `challenge-integrity.json`. This includes verifier scripts, contracts, fixtures, and starter source. When the implementation is wrong, you *document* the contradiction — you do not fix protected source.
-3. **Keep the diff inside the one exercise directory.** Nothing else. Verify this before pushing.
-4. **Never commit** `.DS_Store`, `node_modules`, build output, `.runtime/`, or `.claude/`. Preserve unrelated untracked files the user already has.
-5. **Dependencies stay local to the exercise app** (`npm ci` inside e.g. `07 Docs & Diagrams/exercise-02-.../notification-mesh-app`). Never install globally or at the repo root.
-6. **Do not create the PR.** Push the branch and emit PR details; the user raises it.
+2. **Never modify a protected input** to make a gate pass. Protected files are listed in the app's `challenge-integrity.json`. This includes verifier scripts, contracts, fixtures, and starter source — and it includes editing one merely to update a hash. When the implementation is wrong, you *document* the contradiction — you do not fix protected source.
+3. **An unsatisfiable required gate is a stop, not a footnote.** If a completion criterion can only be met by touching a protected input, or by a self-invalidating hash binding, or cannot be met at all — stop and tell the user **before committing**. A correct diagnosis filed under "remaining uncertainty" while you ship a red required check is still a failed submission. Diagnosing these is high-value work; acting on them is the other half.
+4. **An unreported check is not evidence.** Every check this file requires, and every check the user asks for, goes into `evidence/` as a committed file with the exact command, its output, and its exit code. Saying it in chat or in the PR body does not count. This was the *only* finding of both the 8.1 and the 8.2 follow-up audits — in each case the work was done correctly and the submission still failed the audit because the proof lived in a message.
+5. **Never shape content to satisfy a checker.** Truncating a diagram to hold a marker count at one, padding prose to clear a size floor — if a check rewards worse content, satisfy it honestly or report it as a design flaw. Size floors have so far always been reachable with real substance. Filler is a defect, not a pass.
+6. **Record the exact model slug** — yours and every subagent's — in the launch call and in `evidence/before.md` / `evidence/after.md`. "Inherited model" makes a before/after comparison irreproducible, which defeats its purpose.
+7. **Keep the diff inside the one exercise directory.** Nothing else. Verify this before pushing.
+8. **Never commit** `.DS_Store`, `node_modules`, build output, `.runtime/`, or `.claude/`. Preserve unrelated untracked files the user already has — never delete someone else's untracked file to force a clean `git status`.
+9. **Dependencies stay local to the exercise app** (`npm ci` inside e.g. `07 Docs & Diagrams/exercise-02-.../notification-mesh-app`). Never install globally or at the repo root.
+10. **Do not create the PR.** Push the branch and emit PR details; the user raises it.
 
 ## Phase 1 — Repository and base
 
@@ -54,6 +72,19 @@ git merge-base HEAD upstream/main    # prove it, record the SHA
 
 Check first whether the branch already exists locally or on `origin` — an exercise may already be done. If it is, run its `verify:exercise`, report honestly, and ask the user before redoing work.
 
+### Isolate the session before your first commit
+
+**Another agent may be working in this same checkout right now.** During 8.1 a parallel session switched the shared main worktree's `HEAD` mid-run and two commits landed on the sibling exercise's branch. Recovering cost more than preventing:
+
+```bash
+git worktree add /tmp/ex-<SS>-<NN> -b codex/exercise-<SS>-<NN>-<slug> <base-sha>
+cd /tmp/ex-<SS>-<NN>
+```
+
+Do this **before** the first commit, not after losing one. If you find yourself already contaminated: `git reset --soft <foreign-tip> && git restore --staged <your files>` — never rewrite or drop the other session's commits — then move into a worktree and finish there.
+
+The same isolation is what before/after companion attempts need anyway (Phase 4), so create those worktrees in the same step.
+
 ## Phase 2 — Read the contract before touching anything
 
 Read in this order. Do not skip any that exist:
@@ -77,13 +108,34 @@ grep -nE "rev-list|merge-base|diff --name-only|cat-file|sha256|hashFile|source_s
 
 In 7.1 this revealed that *every commit after `source_sha` may only touch `evidence/`*, and that diagrams must be byte-identical to their `source_sha` version. Discovering that after committing would have meant redoing the history. Find these before you plan.
 
+Where a verifier embeds a reference implementation in its own test file (8.1's `test:evidence-verifier.mjs` carried a complete reference generator and workflow), **reading that file is reading the spec.** The verifier is stricter than the README; trust it over prose.
+
+### The unsatisfiability probe — run it before you plan, not after you commit
+
+Non-negotiable 3 says an unsatisfiable gate is a stop. Settling that takes minutes if you probe deliberately, and costs a whole session if you discover it at commit time. Ask, concretely:
+
+1. **Is there a hash or SHA cycle?** Does a file that must exist *inside* commit `X` record a value derived *from* commit `X`, or from bytes that the verification step itself regenerates? That is the 7.2 trap and it is unsatisfiable. Contrast it with the benign 7.1/8.2 shape, where the SHA is an *argument* passed into a generator whose output lands in a later evidence-only commit. Distinguish the two before writing code.
+2. **Does every input the gate demands actually exist?** (8.1: does `.nvmrc` exist at root? does `action-pins.json` carry full 40-char SHAs?) Missing inputs are cheap to check and fatal to discover late.
+3. **Does the verifier compare against `HEAD` or against the working tree?** 8.1's `verifyGitBinding` diffs `--name-only sourceSha` against the **working tree** — so final verification demands a clean tree, and an uncommitted evidence file will silently pass a binding check it should not.
+4. **Does the gate's required count match what the tooling can produce?** (8.2: capture scripts emit three scenarios; the brief and the test require five states.) A shortfall like this is usually a *harness limitation you prove around*, not an unsatisfiable gate — enumerate the missing states by another honest route and cite source. Do not invent an extra fixture to close the gap.
+5. **Can any required gate only pass by editing a protected path?** If yes — stop, now, before the first commit.
+
+Report the answers in your Phase 2 brief, including the ones that came back clean. "I checked for a hash cycle and there isn't one" is worth saying.
+
 Then run the integrity gate to confirm a clean start, and install deps:
 
 ```bash
 cd "<app>" && npm ci && npm run test:integrity
 ```
 
-Present a short plan: deliverables, specialist lanes, ordering constraints found, protected files. Then work autonomously.
+Present a short brief and then work autonomously. The brief covers, in this order:
+
+1. What the exercise is about and what competency it teaches, in plain language.
+2. The required deliverables and the protected files.
+3. **Every state, case, or path the exercise's own brief names — enumerated in full, each to be proved separately.** The brief is where the real bar is set, and it is routinely stricter than the deliverable list. 8.2's flag brief required five states (enabled, disabled, invalid context, provider failure, preview-API failure) while the capture tooling emitted three; a three-state pack would have passed the verifier and missed the point. Count them yourself, from the brief, before you plan.
+4. Every ordering, ancestry, or hash-binding constraint you found **by reading the verifier scripts** — not by reading the README.
+5. The unsatisfiability probe results, including the clean ones. Anything the harness makes impossible.
+6. Your specialist lane plan, each lane's scope and its ownership boundary.
 
 ## Phase 3 — Specialist subagents
 
@@ -102,7 +154,12 @@ Each specialist gets, explicitly:
 
 Where an exercise instead wants parallel *implementation* lanes (e.g. worktree splits), give each lane a disjoint file set and use `isolation: "worktree"` so they cannot collide.
 
-**You stay accountable.** Verify every specialist claim against the source yourself before acting on it. Subagents report confidently and are sometimes wrong — in 7.1 two independent reviewers converged on a "reversed arrow" defect that was actually correct under the file's own convention, and rejecting it was the right call. Record rejected findings with the reasoning; a review round where everything is accepted is a review that did not happen.
+**You stay accountable.** Verify every specialist claim against the source yourself before acting on it. Reported is not proven. Subagents report confidently and are sometimes wrong — in 7.1 two independent reviewers converged on a "reversed arrow" defect that was actually correct under the file's own convention, and rejecting it was the right call. This applies just as hard to *clean* verdicts: in 8.1 both subagents reported accurate verification and the generator cases were still re-run inline before committing; in 8.2 the integration owner re-ran `executeScenario` and a throwaway rollback copy before accepting three clean lanes.
+
+**The evidence bar:**
+
+- Every claim carries `file:line` (or `path:line` at a named SHA). Every cited line must survive independent re-derivation — off-by-one citations are defects, and fixing them belongs before the evidence commit, not after (`run-rollout-tests.mjs:27` was actually `:26`).
+- Every **dismissed** claim gets its own evidence, written down with the reasoning. A review round where everything was accepted, or where nothing was recorded as rejected, is a review that did not happen.
 
 ## Phase 4 — Evidence
 
@@ -113,8 +170,19 @@ Produce exactly what the exercise's `docs/evidence-template.md` and `submission-
 - `evidence/specialists/<lane>-handoff.md` — one per specialist, with accept / fix / defer per finding.
 - `evidence/integration.md` — prioritisation and per-finding disposition, including what you **rejected** and why.
 - `evidence/verification.md` — exact commands, results, exit codes.
+- `evidence/guardrails.md` — the two standing guardrails from Phase 5. Always. See non-negotiable 4.
 - `evidence/commands/*.txt` — captured command output, redirected exactly as the template specifies.
 - A manifest recording SHA-256 hashes and the source SHA, when the exercise uses one.
+
+### Before/after attempts: measure, do not manufacture
+
+Run them as two parallel subagents in **disjoint worktrees** from the same starting SHA — the before attempt on a `-before` branch with a deliberately plain prompt, the after attempt with the repo's own contracts as its only extra input. That difference *is* the independent variable; name it explicitly in `comparison.md`, along with both model slugs.
+
+**A "too good" baseline is a finding, not a problem to fix.** 8.1's unstructured before attempt produced an accurate summary — every failure, digest, and guidance string survived, contradicting the exercise's own premise that "PRs look green because failures are omitted." The tempting move is to quietly degrade the baseline so the after result looks dramatic. Do not. Record the contradiction plainly and analyse what the correct-looking artifact still *cannot enforce* — in that case: no commit binding, no executable exit status, no validation, no CI upload. An honest "the baseline was already fine" comparison is worth more than a manufactured one.
+
+Symmetrically, do not assume the baseline is uniformly wrong. 8.2's ordinary first attempt got the default and the enabled telemetry payload right and still failed on mismatched targeting keys, wrong reason tokens, and a rollback that accepted `not-a-timestamp` and mutated anyway. Measure it.
+
+`after.patch` must stay the unaided attempt. If integration later changed the code, say so and prove which blobs moved.
 
 **Hashes and captured output are order-sensitive.** If a manifest records `source_sha` and file hashes:
 
@@ -140,9 +208,36 @@ Substitute the actual script names from that exercise's `package.json`. Report o
 
 Re-run `verify:exercise` **after your final commit** — verifiers inspect Git history, so a passing run before the last commit proves nothing about the submitted state.
 
+### The two standing guardrails — run both, record both in `evidence/guardrails.md`
+
+These are required on every exercise whether or not the exercise's own README mentions them. Recording them is not optional (non-negotiable 4).
+
+**1. Verification must not mutate tracked files.**
+
+```bash
+git status --porcelain --untracked-files=no   # before
+npm run verify:exercise                        # in the app dir
+git status --porcelain --untracked-files=no   # after — must be empty, and identical
+```
+
+A verification step that modifies tracked files is a **defect in the exercise** — report it as one. Capture full `git status --porcelain` before and after too, and diff the two listings. Pre-existing `??` lines outside the exercise (`.claude/`, `.DS_Store`, a sibling exercise's in-progress files) are not a violation as long as the before/after listings are identical — state that explicitly rather than silently deleting the user's untracked files to force a blank porcelain. Ignored build output (`dist/`, `*.tsbuildinfo`, `node_modules/`) is not a dirty tree.
+
+**2. Restoring every protected path must change nothing.**
+
+```bash
+while IFS= read -r p; do git checkout upstream/main -- "$p"; done < protected-paths.txt
+# then, in the app dir:
+npm run verify:exercise      # still exit 0
+git diff HEAD                # still empty
+```
+
+Quote the path and use a `read` loop — `git checkout upstream/main -- $(cat paths.txt)` word-splits on the spaces in `08 Evidence-led PRs` and silently restores the wrong things. Restore only paths actually listed in `challenge-integrity.json`; files you were *supposed* to edit are not protected and must not be "restored" (8.2's `invoicePreview.mjs` is not in the list).
+
+Record for both guardrails: the exact commands, the exit codes, and the before/after output — in `evidence/guardrails.md`, committed. Both the 8.1 and 8.2 audits failed on exactly this: the checks were run correctly and reported in chat, and that was not enough.
+
 ## Phase 6 — Commit and push
 
-Respect any ordering constraint found in Phase 2. Stage by path, never `git add -A`:
+Respect any ordering constraint found in Phase 2. **One subject per commit** — implementation, tooling, and evidence are separate honest commits, not one squashed "done" commit. Stage by path, never `git add -A`:
 
 ```bash
 git add "<exercise-dir>/<subpath>"
@@ -178,6 +273,47 @@ PR title:      Exercise <S>.<N>: <concise outcome>
 
 Then a concise description with only the sections that apply: **Summary** (what was completed and how specialists contributed) · **What Changed** (short subsections) · **Specialist Review Evidence** (scope, findings, disposition per lane) · **Integration** (how findings were prioritised, implemented, rejected, deferred) · **Verification** (only checks that actually passed) · **Notes** (base branch, base SHA, exercise branch, final commit, exercise scope, protected-input status, confirmation that unrelated files were excluded).
 
+## Phase 8 — Close the loop: write your learnings
+
+A required deliverable, not a nicety. It is the mechanism by which the next run — yours or another agent's — starts ahead of where you started.
+
+Add a section for this exercise to `.claude/skills/exercise-delivery/LEARNINGS-<you>.md`, using the identity you declared in Phase 0. Create the file if it does not exist. Append; do not rewrite history that is still true. Prune only what a later run has actually disproved, and say so when you do.
+
+Write it as instructions to a future run of yourself, not as a report of what you did. What earns a place:
+
+- A constraint the verifier encoded that no README stated, and the order it forced.
+- Something the harness makes awkward or impossible, and the honest way around it.
+- An environment or shell hazard that cost you time, with the exact recovery.
+- A habit that measurably improved the result over your last run — and one that did not.
+- The model slug you ran under.
+
+What does not: narration, a summary of the exercise, or anything already covered above in this file. If something belongs in `SKILL.md` instead, say so in your final message — do not edit it yourself.
+
+**Then commit it.** One branch holds the skill and every agent's learnings; it is not per-agent and not per-exercise:
+
+```bash
+git fetch origin chore/agentic-exercise-delivery-skill
+git worktree add /tmp/skill-branch chore/agentic-exercise-delivery-skill   # never on the exercise branch
+cp .claude/skills/exercise-delivery/LEARNINGS-<you>.md /tmp/skill-branch/.claude/skills/exercise-delivery/
+cd /tmp/skill-branch
+git add .claude/skills/exercise-delivery/LEARNINGS-<you>.md
+git commit -m "learnings(<you>): exercise <S>.<N>"
+git push origin chore/agentic-exercise-delivery-skill
+```
+
+Use a worktree so the exercise branch's tree stays clean — `.claude/` must never enter an exercise commit. If the push is rejected, `git pull --rebase` first: another agent may have landed its own learnings since you fetched. Your file and theirs never conflict.
+
+Also paste the new section in your final message, so the user sees it without checking out anything.
+
+## Session hazards
+
+Small things that have each cost a real session:
+
+- **Paths with spaces.** A tool's `working_directory` parameter is unreliable when the path contains spaces. Put `cd "08 Evidence-led PRs/<exercise>/<app>"` inside the command instead. Never trust a persisted cwd after a worktree `cd`.
+- **zsh `=word` expansion.** `echo ====` inside a `;`-chain aborts the *entire* command line, silently skipping every later redirect on it. After writing any redirected artifact, confirm it exists immediately (`wc -l <file>`).
+- **A shared checkout.** See Phase 1. Worktree first.
+- **Generator output directories.** When a generator writes into a checked-in output dir, generate the submitted pack exactly **once**, from the right SHA and the right fixture. A stale artifact left by an earlier run against a different fixture may not surface in the dynamic checks (which use temp dirs) and will only fail at the submitted-pack check.
+
 ## Cost discipline
 
 Credits are limited. Spend them on verification, not on narration.
@@ -190,4 +326,14 @@ Credits are limited. Spend them on verification, not on narration.
 
 ## Escalate only when it genuinely blocks
 
-Handle routine judgment calls yourself. Come back to the user for: a real content divergence between the two upstream branches; an exercise that is already complete and pushed; a requirement that cannot be satisfied without touching a protected input; or a missing external dependency the exercise names as the competency under test. Otherwise state your assumption in the final report and keep going.
+Handle routine judgment calls yourself. Come back to the user — **before committing**, not in a footnote afterwards — for:
+
+- A required gate that cannot be satisfied at all, or only by touching a protected input or updating a hash inside a protected file.
+- A self-invalidating binding: a required artifact that must record a value the verification step regenerates (the 7.2 cycle).
+- A check that can only pass by making the content worse.
+- A verification step that mutates tracked files.
+- A real content divergence between the two upstream branches.
+- An exercise that is already complete and pushed.
+- A missing external dependency the exercise names as the competency under test.
+
+Otherwise state your assumption in the final report and keep going.
