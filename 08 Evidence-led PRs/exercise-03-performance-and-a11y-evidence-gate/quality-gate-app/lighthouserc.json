@@ -1,0 +1,46 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist",
+      "url": ["http://localhost/"],
+      "numberOfRuns": 3,
+      "settings": {
+        "onlyCategories": ["performance", "accessibility"],
+        "skipAudits": []
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": [
+          "error",
+          {
+            "minScore": 0.9,
+            "aggregationMethod": "pessimistic"
+          }
+        ],
+        "categories:accessibility": [
+          "error",
+          {
+            "minScore": 1,
+            "aggregationMethod": "pessimistic"
+          }
+        ],
+        "largest-contentful-paint": [
+          "error",
+          {
+            "maxNumericValue": 2500,
+            "aggregationMethod": "pessimistic"
+          }
+        ]
+      }
+    }
+  },
+  "notes": {
+    "purpose": "Production-build Lighthouse CI contract for the quality-gate-app dashboard.",
+    "route": "Audit exactly http://localhost/ from the compiled ./dist directory.",
+    "runs": "Collect three comparable runs and score the worst case, never an average or median.",
+    "categories": "Measure categories:performance and categories:accessibility only; do not skip audits.",
+    "lcp": "largest-contentful-paint must stay at or below the protected millisecond budget.",
+    "aggregation": "Every assertion uses error severity and pessimistic aggregation so one bad run fails the gate."
+  }
+}
