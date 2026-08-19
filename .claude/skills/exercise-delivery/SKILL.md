@@ -7,7 +7,25 @@ description: Deliver one competency exercise from this agentic-engineering exerc
 
 One exercise per branch, per PR. The exercise's own README and verifier outrank this skill wherever they are more specific.
 
-This file is self-contained. Claude Code loads it as a skill; any other agent can be pointed at the path and read it directly as its working instructions — nothing here depends on skill auto-discovery. The frontmatter above is metadata for tools that use it and can be ignored by tools that do not.
+## This file works for any agent
+
+Nothing here is specific to one tool. Claude Code loads it as a skill; opencode, Cursor, Codex, Copilot, Aider, or anything else can be pointed at the path and read it as plain working instructions. The YAML frontmatter above is metadata for tools that consume it and is safely ignorable by tools that do not. There is no auto-discovery, no plugin, and no MCP dependency.
+
+What it does assume you can do — all of it ordinary:
+
+| Capability | Used for |
+|---|---|
+| Read and write files | Everything |
+| Run shell commands and see the **exit code** | Every gate; exit codes are the evidence |
+| Run `git` (branch, worktree, commit, push) | Phases 1, 6, 8 |
+| Run `npm` inside the exercise app | Every gate |
+
+Two things are optional, and the file tells you what to do without them:
+
+- **Subagents / parallel sessions.** Phase 3 uses them for independent review lanes. If your tool has none, run the same lanes yourself sequentially as separate, deliberately adversarial passes, and say in `evidence/specialists/ownership.md` that the lanes were serial rather than parallel. Never claim a parallel review you did not run.
+- **Skills / rules / persistent instructions.** If your tool supports them, install this file as one so you do not re-read it every session. Keep it outside the exercise directories. If not, just keep it in context for the session.
+
+If you are the first run of your tool here, you have no `LEARNINGS-<you>.md` yet. That is expected — read the other agents' files, follow this one, and create yours in Phase 8. Nothing in the pipeline is gated on your tool being one that has run before.
 
 ## Phase 0 — Who you are, and what the previous runs learned
 
@@ -136,6 +154,7 @@ Present a short brief and then work autonomously. The brief covers, in this orde
 4. Every ordering, ancestry, or hash-binding constraint you found **by reading the verifier scripts** — not by reading the README.
 5. The unsatisfiability probe results, including the clean ones. Anything the harness makes impossible.
 6. Your specialist lane plan, each lane's scope and its ownership boundary.
+7. **The evidence file list you are going to commit, `evidence/guardrails.md` included, written out by name.** Declaring it here is what stops it being forgotten at the end. If `evidence/guardrails.md` is not in the list you type, the brief is incomplete.
 
 ## Phase 3 — Specialist subagents
 
@@ -159,7 +178,9 @@ Where an exercise instead wants parallel *implementation* lanes (e.g. worktree s
 **The evidence bar:**
 
 - Every claim carries `file:line` (or `path:line` at a named SHA). Every cited line must survive independent re-derivation — off-by-one citations are defects, and fixing them belongs before the evidence commit, not after (`run-rollout-tests.mjs:27` was actually `:26`).
+- **Name the artifact your line numbers refer to, and re-derive them against that artifact — not against whatever file is open.** An exercise may pin expected lines to a protected fixture, a Git bundle, or a specific SHA whose formatting differs from the checked-in working tree. In 9.1 the same sink sat at line 28 in the app you read and line 31 in the bundle the verifier compares against; `review-expectations.json` demanded 31. Find out which tree is authoritative *before* writing citations, then check every one against it.
 - Every **dismissed** claim gets its own evidence, written down with the reasoning. A review round where everything was accepted, or where nothing was recorded as rejected, is a review that did not happen.
+- **Re-derive every count you write in prose** — test cases, findings, states, scenarios. Counting from memory is how "13 assertions" ends up in a file describing 12 test cases (9.1's `comparison.md`). If you state a number, you counted it that minute.
 
 ## Phase 4 — Evidence
 
@@ -233,7 +254,36 @@ git diff HEAD                # still empty
 
 Quote the path and use a `read` loop — `git checkout upstream/main -- $(cat paths.txt)` word-splits on the spaces in `08 Evidence-led PRs` and silently restores the wrong things. Restore only paths actually listed in `challenge-integrity.json`; files you were *supposed* to edit are not protected and must not be "restored" (8.2's `invoicePreview.mjs` is not in the list).
 
-Record for both guardrails: the exact commands, the exit codes, and the before/after output — in `evidence/guardrails.md`, committed. Both the 8.1 and 8.2 audits failed on exactly this: the checks were run correctly and reported in chat, and that was not enough.
+Record for both guardrails: the exact commands, the exit codes, and the before/after output — in `evidence/guardrails.md`, committed. The 8.1, 8.2, and 9.1 audits all failed on exactly this: the checks were run correctly and reported in chat, and that was not enough. In 9.1 the run even described hitting a shell bug *while running the restore loop*, and still shipped without the file.
+
+### Independent recheck: run the tool against the fixed state too
+
+When an exercise hands you a scanner, linter, audit, or capture tool, running it on the broken state proves the finding. Running it again on the **fixed** state is what proves the fix — and it is the step most often skipped, because the fix already looks obvious. Do both, and put both outputs in the evidence.
+
+Where the broken state is genuinely immutable (a protected bundle, a pinned commit), run the tool against your fixed working tree instead and say plainly which tree each run covered. 9.1 skipped this: it had semgrep installed and scanned only the vulnerable bundle head, so nothing in the evidence shows the scanner dropping from 2 findings to 1 — the exact proof that the true positive died and the deliberate false positive survived.
+
+### Before the evidence commit, paste this checklist with real answers
+
+Not a formality. Each line is a check that has failed a real submission. Fill it in, in your own output, before the final commit:
+
+```
+[ ] Every gate in package.json ran individually; exit codes recorded     -> evidence/verification.md
+[ ] verify:exercise re-run AFTER the final commit                        -> exit ?
+[ ] Guardrail 1, porcelain unchanged, before/after captured              -> evidence/guardrails.md
+[ ] Guardrail 2, all <N> protected paths restored, still exit 0          -> evidence/guardrails.md
+[ ] Tool run against the BROKEN state                                    -> evidence/<file>
+[ ] Tool run against the FIXED state                                     -> evidence/<file>
+[ ] Every finding's file:line re-derived against the artifact the
+    verifier compares to (working tree? bundle? pinned SHA? — name it)
+[ ] Model slug recorded for me and every subagent                        -> evidence/before.md, after.md
+[ ] Counts in prose re-derived (test cases, findings, states) — no
+    number written from memory
+[ ] git diff --name-only <sourceSha> lists only evidence/
+[ ] Diff scoped to this one exercise directory
+[ ] Nothing staged from .claude/, .DS_Store, node_modules, build output
+```
+
+If a line does not apply to this exercise, write "n/a" and why. Do not silently drop it.
 
 ## Phase 6 — Commit and push
 
@@ -273,6 +323,10 @@ PR title:      Exercise <S>.<N>: <concise outcome>
 
 Then a concise description with only the sections that apply: **Summary** (what was completed and how specialists contributed) · **What Changed** (short subsections) · **Specialist Review Evidence** (scope, findings, disposition per lane) · **Integration** (how findings were prioritised, implemented, rejected, deferred) · **Verification** (only checks that actually passed) · **Notes** (base branch, base SHA, exercise branch, final commit, exercise scope, protected-input status, confirmation that unrelated files were excluded).
 
+Then paste the **completed Phase 5 checklist** with its real answers, and list the evidence files you committed. If any line came back "n/a", it says so there. A finished report that does not contain the checklist is not finished.
+
+Anything you found that is wrong with the *exercise itself* — an input that cannot run, expected values that do not match the shipped files, a gate that contradicts the README — goes in a short **Exercise defects** section. Those are worth more to the user than the submission is: every future learner hits them.
+
 ## Phase 8 — Close the loop: write your learnings
 
 A required deliverable, not a nicety. It is the mechanism by which the next run — yours or another agent's — starts ahead of where you started.
@@ -300,6 +354,15 @@ git add .claude/skills/exercise-delivery/LEARNINGS-<you>.md
 git commit -m "learnings(<you>): exercise <S>.<N>"
 git push origin chore/agentic-exercise-delivery-skill
 ```
+
+Then clean up, or you break the next agent:
+
+```bash
+cd -                                      # back out of the worktree first
+git worktree remove /tmp/skill-branch
+```
+
+**Do not skip this.** A left-behind registration makes the next session's `git worktree add` fail with `fatal: 'chore/agentic-exercise-delivery-skill' is already used by worktree at /tmp/skill-branch` — a real failure that has already happened. If you hit it, the previous run forgot: check whether that path is clean, use it if it is, and remove it when you are done. Same applies to the before/after worktrees from Phase 4 — remove them, then `git worktree prune`.
 
 Use a worktree so the exercise branch's tree stays clean — `.claude/` must never enter an exercise commit. If the push is rejected, `git pull --rebase` first: another agent may have landed its own learnings since you fetched. Your file and theirs never conflict.
 
