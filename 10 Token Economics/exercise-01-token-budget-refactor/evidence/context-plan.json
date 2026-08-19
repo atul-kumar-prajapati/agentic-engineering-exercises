@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "task": {
+    "tags": ["adapter", "session"],
+    "questionTags": ["errors"]
+  },
+  "openQuestions": [
+    "What error type, codes, and exact public messages does adaptSession throw, and in what validation order?"
+  ],
+  "maximumBytes": 1700,
+  "mandatoryIds": ["repository-rules"],
+  "expectedSelectedIds": [
+    "repository-rules",
+    "current-adapter-contract",
+    "current-error-contract"
+  ],
+  "expectedSkipIds": [
+    "legacy-migration-notes",
+    "ui-style-guide",
+    "audit-retention"
+  ],
+  "selectionOrder": "mandatory current sources first, then relevant current sources by priority descending and stable id ascending",
+  "expectedTotalBytes": 1562
+}
