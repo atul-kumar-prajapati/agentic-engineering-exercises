@@ -28,3 +28,18 @@ What stays here: per-exercise specifics, and anything still too fresh or too Cur
 ## What was not a stop on 8.2
 
 `runReproduction` writes capture/drill output to `os.tmpdir()`, not tracked `evidence/`. `verify:exercise` includes `build` but `dist/` is gitignored. Generated JSON recording `sourceSha` does not create a 7.2-style cycle. No required gate needed a protected-file edit.
+
+## 8.3-specific
+
+- **Editable surface is tiny.** Almost all of `quality-gate-app/src/` is protected. The seeded defects live only in `src/main.tsx` (3200ms busy-wait) and `src/App.tsx` (unnamed icon button). Do not "restore" those two; they are not in `challenge-integrity.json`.
+- **`quality-summary.json` must deep-equal `expectedSummary`.** Import `readLighthouseReports`, `readAxeEvidence`, and `expectedSummary` from the protected `quality-verification.mjs`. Do not add a boolean `passed` key; `submission-contract.json`'s `"passed"` substring is satisfied by `releaseDecision: "passed"`. Write the file, then set `process.exitCode`.
+- **Capture once, from the implementation SHA.** `capture-browser-evidence.mjs:52` refuses to overwrite `evidence/raw/lighthouse`, `axe.json`, `quality-summary.json`, or `comparison.md`. Commit `main.tsx`, `App.tsx`, `lighthouserc.json`, and `scripts/quality-gate.mjs` first; that tip is `sourceSha`; then `npm run quality:capture -- --sha <that tip>`. `comparison.md` must be the generator output, byte-identical to `renderComparison`.
+- **`git diff --name-only sourceSha` is vs the working tree.** Same 8.1 shape. Final `verify:exercise` needs a clean tree. Untracked evidence files do not appear in that diff (they also cannot satisfy `git show sourceSha:…` if omitted from the source commit). After the evidence commit, the name-only list must be only `…/evidence/**`.
+- **Too-good before attempt.** The unstructured session already removed the delay, named the button, wrote a gate, and captured three production runs at performance 1.00 / accessibility 1.00 / LCP 1353 ms / axe 0. Negative controls returned 1. `quality:verify` still exited 1 because `--sha` was the starting commit, which does not contain the UI fix. Do not degrade that baseline. The independent variable is Git binding, not measured quality.
+- **After patch is not the submitted blobs.** Integration `main.tsx` matched the after blob (`15a96a08`). `App.tsx` label (`Download dashboard` vs `Download evidence`) and the `lighthouserc.json` / `quality-gate.mjs` blobs diverged. Leave `after.patch` as the unaided attempt.
+- **Chrome channel, not Playwright Chromium.** Capture uses `chromium.launch({ channel: "chrome" })`. System Google Chrome was present. Lighthouse 13 + axe major must match (this run: 151). `skipAudits: []` does not trip `quality-verification.mjs:127`.
+- **Specialists.** Three read-only lanes: performance, accessibility, evidence integrity. Re-ran the 0.89 Lighthouse mutation and axe injection on the captured reports before accepting clean verdicts. Dismissed `workflowApi.ts` `wait(220)` (async, unused by `App.tsx`). Deferred malformed `violations` throwing before write — off the required controls.
+
+## What was not a stop on 8.3
+
+No hash cycle: summary digests hash raw report bytes and take `sourceSha` as an argument. Thresholds, capture script, and fixtures are protected and did not need edits. `lighthouserc.json` `staticDistDir` / `http://localhost/` are the contract; capture actually audits the Vite preview at `http://127.0.0.1:4173/` and the verifier only checks `finalUrl` pathname `/`. This run: parent Cursor Grok 4.6; first-attempt and specialist subagents `cursor-grok-4.6-high`.
