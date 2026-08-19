@@ -14,7 +14,7 @@ export default function App() {
           <h1>{labContract.title}</h1>
           <p>{labContract.domain}</p>
         </div>
-        <button className="icon-only-action" type="button">
+        <button aria-label="Download dashboard" className="icon-only-action" type="button">
           <svg aria-hidden="true" viewBox="0 0 24 24">
             <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" />
           </svg>
