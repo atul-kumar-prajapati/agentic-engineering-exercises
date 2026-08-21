@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "title": "Export-only design-system variant migration",
+  "requestedBehavior": "buttonVariantFor(\"export\") must return ds-secondary. checkout stays legacy-primary, delete stays legacy-danger, and every other legacy action including unknown and empty continues to return legacy-primary.",
+  "maximumFiles": 2,
+  "maximumChangedLines": 40,
+  "allowedSourceFiles": [
+    "minimal-diff-app/src/migration/exportButton.mjs",
+    "minimal-diff-app/tests/export-button.test.mjs"
+  ],
+  "excludedPaths": [
+    "src/components",
+    "src/styles.css",
+    "package.json",
+    "src/App.tsx",
+    "src/skillWorkflow.ts",
+    "src/labContract.ts",
+    "src/types.ts",
+    "package-lock.json"
+  ],
+  "baselineCommand": "node scripts/run-migration-tests.mjs",
+  "whySharedCleanupIsUnnecessary": "The helper already isolates variant selection. Checkout, destructive delete, and the unknown fallback are a single default branch plus one delete guard. Mapping export onto ds-secondary is one additional equality check. Shared components, styles, and package files do not participate in that mapping, so rewriting them would expand review surface and token cost without changing the production request."
+}
