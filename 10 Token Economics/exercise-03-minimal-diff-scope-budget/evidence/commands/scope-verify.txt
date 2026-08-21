@@ -1,0 +1,11 @@
+
+> minimal-diff-app@0.1.0 test:scope
+> node ./scripts/verify-scope-submission.mjs
+
+Plan SHA: c035329dd23f040f3afd55e1ffd56e9c3904729b
+Source SHA: 71703feac67672c41321f517effd752ef60d0493
+Actual scope: 2 files, 40 changed lines
+PASS scope budget was committed before implementation
+PASS actual Git numstat matches the final ledger and protected budget
+PASS source commit contains only export helper and learner test
+PASS later history contains evidence only

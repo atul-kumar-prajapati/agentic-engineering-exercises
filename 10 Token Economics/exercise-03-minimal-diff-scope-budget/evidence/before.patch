@@ -1,0 +1,27 @@
+diff --git a/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs
+index aa82d11..bac642d 100644
+--- a/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs	
++++ b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs	
+@@ -1,5 +1,6 @@
+-/** Seeded implementation: export has not yet crossed the design-system boundary. */
++/** Maps toolbar actions to design-system or legacy button variants. */
+ export function buttonVariantFor(action) {
++  if (action === "export") return "ds-secondary";
+   if (action === "delete") return "legacy-danger";
+   return "legacy-primary";
+ }
+diff --git a/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/tests/export-button.test.mjs b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/tests/export-button.test.mjs
+new file mode 100644
+index 0000000..fdd35a0
+--- /dev/null
++++ b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/tests/export-button.test.mjs	
+@@ -0,0 +1,9 @@
++import assert from "node:assert/strict";
++import { buttonVariantFor } from "../src/migration/exportButton.mjs";
++
++assert.equal(buttonVariantFor("export"), "ds-secondary");
++assert.equal(buttonVariantFor("checkout"), "legacy-primary");
++assert.equal(buttonVariantFor("delete"), "legacy-danger");
++assert.equal(buttonVariantFor("unknown"), "legacy-primary");
++
++console.log("PASS export-button variants");

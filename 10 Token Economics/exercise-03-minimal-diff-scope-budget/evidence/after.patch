@@ -1,0 +1,55 @@
+diff --git a/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs
+index aa82d11..f2da70a 100644
+--- a/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs	
++++ b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs	
+@@ -1,5 +1,5 @@
+-/** Seeded implementation: export has not yet crossed the design-system boundary. */
+ export function buttonVariantFor(action) {
++  if (action === "export") return "ds-secondary";
+   if (action === "delete") return "legacy-danger";
+   return "legacy-primary";
+ }
+diff --git a/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/tests/export-button.test.mjs b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/tests/export-button.test.mjs
+new file mode 100644
+index 0000000..5eec6fb
+--- /dev/null
++++ b/10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/tests/export-button.test.mjs	
+@@ -0,0 +1,38 @@
++import assert from "node:assert/strict";
++import { buttonVariantFor } from "../src/migration/exportButton.mjs";
++function givenExportAction_whenButtonVariantIsResolved_thenReturnsDsSecondary() {
++  // Arrange
++  const action = "export";
++  // Act
++  const variant = buttonVariantFor(action);
++  // Assert
++  assert.equal(variant, "ds-secondary");
++}
++function givenCheckoutAction_whenButtonVariantIsResolved_thenReturnsLegacyPrimary() {
++  // Arrange
++  const action = "checkout";
++  // Act
++  const variant = buttonVariantFor(action);
++  // Assert
++  assert.equal(variant, "legacy-primary");
++}
++function givenDeleteAction_whenButtonVariantIsResolved_thenReturnsLegacyDanger() {
++  // Arrange
++  const action = "delete";
++  // Act
++  const variant = buttonVariantFor(action);
++  // Assert
++  assert.equal(variant, "legacy-danger");
++}
++function givenUnknownAction_whenButtonVariantIsResolved_thenReturnsLegacyPrimary() {
++  // Arrange
++  const action = "unknown";
++  // Act
++  const variant = buttonVariantFor(action);
++  // Assert
++  assert.equal(variant, "legacy-primary");
++}
++givenExportAction_whenButtonVariantIsResolved_thenReturnsDsSecondary();
++givenCheckoutAction_whenButtonVariantIsResolved_thenReturnsLegacyPrimary();
++givenDeleteAction_whenButtonVariantIsResolved_thenReturnsLegacyDanger();
++givenUnknownAction_whenButtonVariantIsResolved_thenReturnsLegacyPrimary();

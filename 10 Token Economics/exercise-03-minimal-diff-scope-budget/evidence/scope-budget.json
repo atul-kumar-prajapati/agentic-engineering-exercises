@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "title": "Export variant migration Git numstat ledger",
+  "planSha": "c035329dd23f040f3afd55e1ffd56e9c3904729b",
+  "sourceSha": "71703feac67672c41321f517effd752ef60d0493",
+  "measurement": "Counts come from `git show --format= --numstat 71703feac67672c41321f517effd752ef60d0493` while HEAD equals that commit, not from a working-tree estimate.",
+  "planned": {
+    "files": 2,
+    "changedLines": 40,
+    "allowedSourceFiles": [
+      "minimal-diff-app/src/migration/exportButton.mjs",
+      "minimal-diff-app/tests/export-button.test.mjs"
+    ]
+  },
+  "actual": {
+    "files": 2,
+    "additions": 39,
+    "deletions": 1,
+    "changedLines": 40,
+    "rows": [
+      {
+        "file": "10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/exportButton.mjs",
+        "additions": 1,
+        "deletions": 1
+      },
+      {
+        "file": "10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/tests/export-button.test.mjs",
+        "additions": 38,
+        "deletions": 0
+      }
+    ]
+  },
+  "verificationCommands": [
+    "git merge-base --is-ancestor c035329dd23f040f3afd55e1ffd56e9c3904729b 71703feac67672c41321f517effd752ef60d0493",
+    "git diff-tree --no-commit-id --name-only -r 71703feac67672c41321f517effd752ef60d0493",
+    "git show --format= --numstat 71703feac67672c41321f517effd752ef60d0493",
+    "npm run test:migration",
+    "npm run test:scope"
+  ]
+}
