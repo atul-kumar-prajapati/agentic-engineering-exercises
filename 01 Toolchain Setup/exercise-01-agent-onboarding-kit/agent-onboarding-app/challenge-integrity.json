@@ -1,13 +1,16 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
+    "../../../scripts/run-clean-verification.mjs": "9b17cbb8865a642a7789113c145be88c6bb965bc2d8c024b82202e8ae85bf368",
+    "../../../scripts/run-vite-build.mjs": "b7901ed4f770e6537e80f864392c8c1de841b5c97fa8993246c5df7a86d5d415",
+    "../../../scripts/verify-protected-inputs.mjs": "d99346d9a84651bcb654d07d1b5d131d39d5f3b703ee9614db4eafc86cb4d96c",
     "../README.md": "22f65e1ead4a935f5ea4fde13a4c2e41d58b6930ba2802468fce9056bc80a872",
     "../docs/evidence-template.md": "1030640b6783d67fe918600902ddd499701dba48b6a93710f9de382292e5796f",
     "docs/support-notes.md": "36895297d46a5095f90f5ee3926996384eae46596518ba3afc544d9c256dbba4",
     "index.html": "3e48958cdd517883addd6dd4296923a53cb49dd1f19526bf662b1ad958594747",
     "lab-contract.json": "23e7fc015db94293a3b2ae8d19596e6b8314d80dc2cd49f0dc130c7cd2c2912e",
     "package-lock.json": "67e0434a6c3d9155be555fac301d2016acc299506011ed6b0714a8db2d3b6d03",
-    "package.json": "3b4a192649aa4be7b188be8fce5125c92d8ef5c4130063adcb61340da285cbda",
+    "package.json": "66aca7c47faa793d81a20da585c4ad9a44e663c75d7dd3feb9f332b49514d3be",
     "scripts/agent-check.mjs": "df25afb1d834ef532aa6fe3be5febf9ae3ad2646615a266b68016b91c64322d6",
     "scripts/format-check.mjs": "2b404502159a61cc97468297e9d7b18e7fca5101fae7126ed4ac271395aada30",
     "scripts/lint-check.mjs": "743ce103805e4ef78ebb2f36a10abca0cc75d98400bb32aca764a1f1f2b8c237",

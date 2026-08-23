@@ -3,7 +3,7 @@
   "competency": "09. Code Review - independent risk review and evidence-based triage",
   "domain": "Browser cache persistence in a workflow queue",
   "mission": "Use a fresh agent session to review the protected caching diff, verify its findings, and fix only supported merge blockers.",
-  "outcome": "The cache survives save, filter, reload, malformed data, and read-only evidence scenarios without mutating shared fixtures.",
+  "outcome": "The reviewed cache change is accepted only after every supported blocker is fixed and replayed.",
   "entities": [
     "protected review range",
     "fresh reviewer session",
@@ -11,10 +11,10 @@
     "structured findings"
   ],
   "seededDefects": [
-    "filter changes delete saved state",
-    "cached JSON is trusted",
-    "default sorting mutates fixtures",
-    "evidence collection writes stale state"
+    "persistence lifecycle risk",
+    "untrusted cache data",
+    "shared-state mutation risk",
+    "reviewer-noise claim"
   ],
   "verificationGates": [
     "protected fixture verification",

@@ -12,20 +12,31 @@ function json(file, label) { try { return JSON.parse(fs.readFileSync(file, "utf8
 const plan = json(path.join(evidenceRoot, "scope-plan.json"), "scope plan");
 const ledger = json(path.join(evidenceRoot, "scope-budget.json"), "scope budget");
 if (plan?.schemaVersion !== 1 || ledger?.schemaVersion !== 1) failures.push("plan and ledger schemaVersion must be 1");
-if (plan?.maximumFiles !== 2 || plan?.maximumChangedLines !== 40) failures.push("pre-change plan must declare two files and 40 changed lines");
+if (plan?.maximumFiles !== 2 || plan?.maximumChangedLines !== 30) failures.push("pre-change plan must declare two files and 30 changed lines");
 const allowed = ["minimal-diff-app/src/migration/exportButton.mjs", "minimal-diff-app/tests/export-button.test.mjs"].sort();
 if (JSON.stringify([...(plan?.allowedSourceFiles ?? [])].sort()) !== JSON.stringify(allowed)) failures.push("plan allowedSourceFiles do not match the scope contract");
 if (!Array.isArray(plan?.excludedPaths) || !["src/components", "src/styles.css", "package.json"].every((value) => plan.excludedPaths.includes(value))) failures.push("plan must explicitly exclude components, styles, and package changes");
-if (ledger?.planned?.files !== 2 || ledger?.planned?.changedLines !== 40) failures.push("final ledger must preserve planned budget");
+if (ledger?.planned?.files !== 2 || ledger?.planned?.changedLines !== 30) failures.push("final ledger must preserve planned budget");
 for (const field of ["planSha", "sourceSha"]) if (!/^[a-f0-9]{40}$/.test(ledger?.[field] ?? "")) failures.push(`${field} must be a full commit SHA`);
 if (ledger?.planSha && ledger?.sourceSha) failures.push(...verifyScopeHistory({ repositoryRoot, exerciseRoot, planSha: ledger.planSha, sourceSha: ledger.sourceSha, ledger }));
 for (const [file, terms] of [
-  ["scope-plan.md", ["before", "two", "40", "exportButton.mjs", "export-button.test.mjs", "excluded"]],
+  ["scope-plan.md", ["before", "two", "30", "exportButton.mjs", "export-button.test.mjs", "excluded"]],
   ["avoided-work.md", ["checkout", "destructive", "shared", "styles", "cleanup", "reason"]],
   ["verification.md", ["export", "checkout", "delete", "unknown", "pass", "exit code: 0"]],
 ]) {
   const text = fs.existsSync(path.join(evidenceRoot, file)) ? fs.readFileSync(path.join(evidenceRoot, file), "utf8").toLowerCase() : "";
   for (const term of terms) if (!text.includes(term.toLowerCase())) failures.push(`${file} is missing ${term}`);
+}
+const avoided = json(path.join(evidenceRoot, "avoided-work.json"), "avoided work ledger");
+const expectedAvoided = ["minimal-diff-app/src/migration/actionButtons.mjs", "minimal-diff-app/src/components", "minimal-diff-app/src/styles.css", "minimal-diff-app/package.json"];
+if (!Array.isArray(avoided?.entries)) failures.push("avoided-work.json must contain entries");
+else for (const expectedPath of expectedAvoided) {
+  const entry = avoided.entries.find((item) => item.path === expectedPath);
+  if (!entry || entry.status !== "unchanged" || typeof entry.temptation !== "string" || entry.temptation.length < 20 || typeof entry.reason !== "string" || entry.reason.length < 35) failures.push(`avoided-work.json needs a substantive unchanged entry for ${expectedPath}`);
+  try {
+    const changed = execFileSync("git", ["diff-tree", "--no-commit-id", "--name-only", "-r", ledger?.sourceSha ?? ""], { cwd: repositoryRoot, encoding: "utf8" }).split(/\r?\n/);
+    if (changed.some((file) => file.endsWith(expectedPath))) failures.push(`avoided-work.json claims unchanged but source commit changed ${expectedPath}`);
+  } catch { /* history verifier reports the invalid source SHA */ }
 }
 if (failures.length) {
   console.error(`Scope submission verification failed:\n${[...new Set(failures)].map((failure) => `- ${failure}`).join("\n")}`);

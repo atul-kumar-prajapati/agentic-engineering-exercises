@@ -28,7 +28,7 @@ The duration for this challenge is 45 min or less.
 
 6. Create Mermaid dependency and fallback-sequence diagrams. Map DEP-01 through DEP-06 to generated call edges and exact call-site lines. Record every rejected stale claim and why it is unsupported.
 
-7. Commit the implementation and diagrams, generate final graph evidence from that source SHA, save the after and comparison evidence, and raise the PR from the second branch.
+7. Commit the implementation and diagrams, generate final graph evidence from that source SHA, save the after and comparison evidence, and raise the PR from the second branch. Final verification rebuilds the graph in a temporary path and must not change the committed artifact.
 
 ## Evidence
 
@@ -54,4 +54,5 @@ The challenge is complete when:
 - The generated graph matches the committed source and is not copied or hand-written from the stale snapshot.
 - Push, consented SMS, email fallback, and durable queue behavior pass protected tests.
 - Both diagrams parse and every required relationship maps to one generated edge and exact source line.
+- Final verification reproduces the graph without changing tracked or untracked repository state.
 - `npm run verify:exercise` passes and the final graph, diagrams, source SHA, hashes, and proof agree.

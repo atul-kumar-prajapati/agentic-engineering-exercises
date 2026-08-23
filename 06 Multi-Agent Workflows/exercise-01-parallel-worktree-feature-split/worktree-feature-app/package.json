@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc -b && vite build",
+    "build": "node ../../../scripts/run-vite-build.mjs",
     "preview": "vite preview --host 127.0.0.1",
-    "typecheck": "tsc -b --pretty false",
+    "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit --pretty false --incremental false",
     "test": "node ./scripts/test-worktree-verifier.mjs && node ./scripts/agent-check.mjs",
     "test:lane-a": "vitest run acceptance/lane-a.saved-filters.test.tsx tests/lane-a",
     "test:lane-b": "vitest run acceptance/lane-b.sla-risk.test.tsx tests/lane-b",
@@ -21,7 +21,8 @@
     "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
     "verify:implementation": "npm run test:integrated",
     "verify:submission": "npm run test:submission",
-    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
+    "verify:exercise:core": "npm run agent:check && npm run verify:implementation && npm run verify:submission",
+    "verify:exercise": "node ../../../scripts/run-clean-verification.mjs"
   },
   "engines": {
     "node": ">=22.12.0 <25"

@@ -55,5 +55,6 @@ The challenge is complete when:
 - Both diagram sessions use matching conditions and genuine first-attempt artifacts.
 - All Mermaid files parse and show only implemented states, routes, conditions, and actors.
 - Every required edge maps to a valid exact source line and evidence hashes match the submitted files.
+- Verification fails when a workflow source change makes any submitted edge or source citation stale.
 - Legacy retry, security-route, rollback-ownership, and UI-progress contradictions are recorded instead of copied as fact.
 - `npm run verify:exercise` passes and the final PR contains all required diagrams and proof.

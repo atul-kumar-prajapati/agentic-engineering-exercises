@@ -7,18 +7,20 @@ const appRoot = process.cwd();
 const exerciseRoot = path.resolve(appRoot, "..");
 const evidenceRoot = path.join(exerciseRoot, "evidence");
 const cases = JSON.parse(fs.readFileSync(path.join(exerciseRoot, "evals", "routing-cases.json"), "utf8"));
+const packText = fs.readFileSync(path.join(exerciseRoot, "evals", "recorded-runs.json"), "utf8");
 const inputs = {
   cases,
   pricing: JSON.parse(fs.readFileSync(path.join(exerciseRoot, "evals", "pricing.json"), "utf8")),
-  runs: JSON.parse(fs.readFileSync(path.join(evidenceRoot, "raw-runs.json"), "utf8")),
-  responses: JSON.parse(fs.readFileSync(path.join(evidenceRoot, "raw-responses.json"), "utf8")),
-  metadata: JSON.parse(fs.readFileSync(path.join(evidenceRoot, "run-metadata.json"), "utf8")),
+  pack: JSON.parse(packText),
+  packText,
+  measurements: JSON.parse(fs.readFileSync(path.join(evidenceRoot, "routing-measurements.json"), "utf8")),
+  metadata: JSON.parse(fs.readFileSync(path.join(evidenceRoot, "measurement-run.json"), "utf8")),
   decisions: cases.map((item) => ({ id: item.id, route: routeTask(item) })),
 };
 const { failures, scorecard } = buildRoutingScorecard(inputs);
 fs.writeFileSync(path.join(evidenceRoot, "cost-model.json"), `${JSON.stringify(scorecard, null, 2)}\n`);
 if (failures.length) {
-  console.error(`Routing scoring failed:\n${[...new Set(failures)].map((failure) => `- ${failure}`).join("\n")}`);
+  console.error(`Routing scoring failed:\n${failures.map((failure) => `- ${failure}`).join("\n")}`);
   process.exit(1);
 }
 console.log(JSON.stringify(scorecard.totals, null, 2));

@@ -47,7 +47,7 @@ else {
   const dynamicSha = /^[a-f0-9]{40}$/.test(sourceSha) ? sourceSha : execFileSync("git", ["rev-parse", "HEAD"], { cwd: repositoryRoot, encoding: "utf8" }).trim();
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), "pr-evidence-verification-"));
   try {
-    for (const fixture of ["check-results.json", "check-results-pass.json"]) {
+    for (const fixture of ["check-results.json", "check-results-pass.json", "check-results-multiple-failures.json"]) {
       const result = runGeneratorCase({ generator, fixturePath: path.join(exerciseRoot, "fixtures", fixture), sourceSha: dynamicSha, outputRoot: path.join(temporary, fixture.replace(".json", "")) });
       for (const failure of result.failures) failures.push(`${fixture}: ${failure}`);
     }
@@ -58,6 +58,7 @@ else {
     const invalidFixtures = {
       "path-escape.json": { schemaVersion: 1, checks: [{ name: "escape", command: "read outside", exitCode: 0, result: "passed", outputPath: "../outside.txt", risk: "high", reviewerAction: "reject", rollback: "revert" }] },
       "result-mismatch.json": { schemaVersion: 1, checks: [{ name: "mismatch", command: "fail", exitCode: 2, result: "passed", outputPath: "artifacts/result.txt", risk: "high", reviewerAction: "reject", rollback: "revert" }] },
+      "missing-artifact.json": { schemaVersion: 1, checks: [{ name: "missing", command: "read missing", exitCode: 1, result: "failed", outputPath: "artifacts/not-created.txt", risk: "high", reviewerAction: "reject", rollback: "revert" }] },
     };
     for (const [name, fixture] of Object.entries(invalidFixtures)) {
       const fixtureFile = path.join(invalidRoot, name);
@@ -75,8 +76,8 @@ if (failures.length) {
 
 console.log(`Source SHA: ${sourceSha}`);
 console.log(`PASS submitted failing pack preserves all fixture results and artifact bytes`);
-console.log(`PASS generator preserves exit 1 for mixed results and exit 0 for all-passing results`);
-console.log(`PASS generator rejects path traversal and inconsistent result fixtures without writing a pack`);
+console.log(`PASS generator preserves the first failing exit code for single and multiple failures, and exit 0 for all-passing results`);
+console.log(`PASS generator rejects missing artifacts, path traversal, and inconsistent result fixtures without writing a pack`);
 console.log(`PASS ${WORKFLOW} uses pull_request, read-only permissions, pinned actions, stable paths, always-run verification and upload, and no failure masking`);
 console.log(`PASS Git history contains the generator and workflow at source SHA; later changes are evidence only`);
 console.log(`PASS verified evidence contract for ${EXERCISE}`);

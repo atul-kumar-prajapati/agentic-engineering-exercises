@@ -5,15 +5,15 @@ export interface LabContract {
 }
 
 export const labContract: LabContract = {
-  title: "Code Review Regression Gate",
-  competency: "09. Code Review - measured recall and precision",
-  domain: "Real-model prompt regression testing over bad and clean diffs",
-  mission: "Improve a review prompt using repeated real-model evidence without adding false merge blockers or benchmark answers.",
-  outcome: "The candidate clears protected recall, precision, and no-regression thresholds across 18 uncached samples.",
-  entities: ["baseline prompt", "candidate prompt", "protected cases", "response judgments", "scorecard"],
-  seededDefects: ["overcautious candidate invites false blockers", "case IDs previously leaked meaning", "candidate-only evaluation hid regression", "unbound prose scores could be fabricated"],
-  verificationGates: ["answer-leak check", "real-provider sample gate", "response hash binding", "deterministic metric scorer", "prompt-only source commit"],
-  agentWorkflow: ["Run baseline and starter candidate against all cases.", "Label responses against the protected catalog.", "Improve only the candidate from measured misses and false blockers.", "Rerun all samples and adopt only if every gate passes."],
-  workingDeliverables: ["Final prompt.", "Raw outputs and run metadata.", "Response-bound judgments and scorecard.", "Review report and verifier output."],
-  masterySignals: ["Recall and clean precision are both measured.", "Repeated samples expose variance.", "The provider does not encode answers.", "The adoption decision follows every threshold."],
+  title: "Code Review Skill Hardening",
+  competency: "09. Code Review - reusable review workflow evaluation",
+  domain: "Agent-neutral skill improvement over defective and clean diffs",
+  mission: "Improve a reusable code-review skill and prove it raises review quality without false blockers.",
+  outcome: "Six fresh-session artifacts pass a deterministic local scorer without an API key.",
+  entities: ["starter skill", "review cases", "fresh sessions", "transcripts", "scorecard"],
+  seededDefects: ["shallow starter review workflow", "missed cross-boundary regressions", "unsupported merge blockers"],
+  verificationGates: ["skill answer-leak check", "protected-runner and transcript hash binding", "security and historical coverage", "clean-control precision gate", "focused skill commit"],
+  agentWorkflow: ["Run each case without the skill.", "Improve the skill from observed misses.", "Run each case in new sessions with the skill.", "Score and adopt only when every gate passes."],
+  workingDeliverables: ["Improved skill.", "Six run documents and transcripts.", "Before and after patches.", "Scorecard and report."],
+  masterySignals: ["The skill generalizes beyond protected cases.", "Findings state behavior and evidence.", "A safe change is not blocked."],
 };

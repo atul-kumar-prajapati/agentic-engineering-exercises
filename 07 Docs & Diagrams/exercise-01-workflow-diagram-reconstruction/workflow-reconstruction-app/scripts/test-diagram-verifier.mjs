@@ -190,10 +190,17 @@ Source SHA: ${sourceSha}. Mermaid parser passed all files. Semantic verifier mat
   git(repositoryRoot, ["commit", "-m", "evidence: verify workflow diagrams"]);
 
   assert.deepEqual(await verifyDiagramSubmission({ repositoryRoot, appRoot, exerciseRoot }), []);
+  const originalTrace = fs.readFileSync(traceFile, "utf8");
   const trace = JSON.parse(fs.readFileSync(traceFile, "utf8"));
   trace.edges[0].to = "provisioned";
   fs.writeFileSync(traceFile, JSON.stringify(trace));
   assert.ok((await verifyDiagramSubmission({ repositoryRoot, appRoot, exerciseRoot })).some((failure) => failure.includes("transition or actor differs")));
+  fs.writeFileSync(traceFile, originalTrace);
+
+  fs.appendFileSync(path.join(appRoot, "src/workflow.tsx"), "// later workflow change invalidates the submitted diagrams\n");
+  git(repositoryRoot, ["add", "."]);
+  git(repositoryRoot, ["commit", "-m", "test: change workflow after diagram source"]);
+  assert.ok((await verifyDiagramSubmission({ repositoryRoot, appRoot, exerciseRoot })).some((failure) => failure.includes("protected workflow sources changed after source_sha")));
   console.log("workflow diagram verifier self-test passed");
 } finally {
   fs.rmSync(temporaryRoot, { recursive: true, force: true });

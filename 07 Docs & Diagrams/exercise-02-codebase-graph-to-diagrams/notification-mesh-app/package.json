@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "node ./node_modules/vite/bin/vite.js --host 127.0.0.1",
-    "build": "node ./node_modules/typescript/bin/tsc -b && node ./node_modules/vite/bin/vite.js build",
+    "build": "node ../../../scripts/run-vite-build.mjs",
     "preview": "node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1",
-    "typecheck": "node ./node_modules/typescript/bin/tsc -b --pretty false",
+    "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit --pretty false --incremental false",
     "test": "node ./scripts/test-code-graph.mjs && node ./scripts/test-graph-verifier.mjs && node ./scripts/agent-check.mjs",
     "test:routing": "node ./scripts/run-routing-tests.mjs",
     "graph:build": "node ./scripts/build-code-graph.mjs",
+    "graph:build:check": "node ./scripts/verify-code-graph-build.mjs",
     "graph:query": "node ./scripts/query-code-graph.mjs",
     "graph:path": "node ./scripts/find-graph-path.mjs",
     "diagrams:parse": "node ./scripts/parse-diagrams.mjs",
@@ -20,9 +21,10 @@
     "format": "node ./scripts/format-check.mjs",
     "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
     "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
-    "verify:implementation": "npm run test:routing && npm run graph:build && npm run diagrams:parse",
+    "verify:implementation": "npm run test:routing && npm run graph:build:check && npm run diagrams:parse",
     "verify:submission": "npm run test:submission",
-    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
+    "verify:exercise:core": "npm run agent:check && npm run verify:implementation && npm run verify:submission",
+    "verify:exercise": "node ../../../scripts/run-clean-verification.mjs"
   },
   "dependencies": {
     "react": "^19.2.0",

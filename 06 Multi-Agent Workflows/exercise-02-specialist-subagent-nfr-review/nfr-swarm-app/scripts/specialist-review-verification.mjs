@@ -33,6 +33,8 @@ const REQUIRED_CHANGED_PATHS = [
   "src/utils/accessReviewRisk.ts",
 ];
 
+const SUPPLIED_FINDING_ID = "CLAIM-01";
+
 function git(root, args) {
   return execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim();
 }
@@ -235,12 +237,25 @@ export function verifySpecialistSubmission({ repositoryRoot, appRoot, exerciseRo
   if (!Array.isArray(decisions.decisions)) failures.push("decision-log decisions must be an array");
   else {
     const decisionIds = decisions.decisions.map((item) => item.finding_id);
-    if (JSON.stringify([...decisionIds].sort()) !== JSON.stringify([...findingIds].sort())) failures.push("decision-log must triage every baseline finding exactly once");
+    const requiredDecisionIds = [...findingIds, SUPPLIED_FINDING_ID].sort();
+    if (JSON.stringify([...decisionIds].sort()) !== JSON.stringify(requiredDecisionIds)) failures.push("decision-log must triage every baseline finding and CLAIM-01 exactly once");
     for (const decision of decisions.decisions) {
       if (!["fix", "defer", "dismiss"].includes(decision.decision)) failures.push(`${decision.finding_id} has an invalid decision`);
       if (Object.values(RULES).some((rule) => Object.hasOwn(rule.required, decision.finding_id)) && decision.decision !== "fix") failures.push(`${decision.finding_id} is a required blocker and must be fixed`);
       for (const field of ["owner", "rationale", "verification", "residual_risk"]) if (typeof decision[field] !== "string" || decision[field].trim().length < 8) failures.push(`${decision.finding_id} ${field} is incomplete`);
     }
+    const suppliedDecision = decisions.decisions.find((item) => item.finding_id === SUPPLIED_FINDING_ID);
+    if (suppliedDecision?.decision !== "dismiss") failures.push("CLAIM-01 must be dismissed after source-backed review");
+    if (typeof suppliedDecision?.verification !== "string" || !/service|boundary|actor/i.test(suppliedDecision.verification)) failures.push("CLAIM-01 dismissal must cite service-boundary or actor evidence");
+  }
+
+  if (!Array.isArray(decisions.interactions) || decisions.interactions.length !== 1) failures.push("decision-log must contain one cross-specialist interaction");
+  else {
+    const interaction = decisions.interactions[0];
+    if (JSON.stringify([...(interaction.finding_ids ?? [])].sort()) !== JSON.stringify(["SEC-02", "TEST-01"])) failures.push("interaction must connect SEC-02 and TEST-01");
+    if (interaction.shared_path !== "src/services/accessReviewApi.ts") failures.push("SEC-02 and TEST-01 interaction must name their shared service path");
+    if (!Array.isArray(interaction.verification_commands) || !["npm run review:security", "npm run review:testability"].every((command) => interaction.verification_commands.includes(command))) failures.push("interaction must include both security and testability verification commands");
+    for (const field of ["resolution", "residual_risk"]) if (typeof interaction[field] !== "string" || interaction[field].trim().length < 15) failures.push(`interaction ${field} needs concrete detail`);
   }
 
   verifyPerformance(exerciseRoot, baselineSha, remediationSha, cycle.performance, failures);

@@ -25,14 +25,24 @@ export function verifyContextHistory({ repositoryRoot, exerciseRoot, planSha, so
   try {
     git(repositoryRoot, ["merge-base", "--is-ancestor", planSha, sourceSha]);
     git(repositoryRoot, ["merge-base", "--is-ancestor", sourceSha, "HEAD"]);
+    if (git(repositoryRoot, ["rev-parse", `${sourceSha}^`]) !== planSha) failures.push("sourceSha must be the direct child of planSha with no intermediate implementation commits");
     const prefix = path.relative(repositoryRoot, exerciseRoot).split(path.sep).join("/");
     const planFiles = [`${prefix}/evidence/context-plan.json`, `${prefix}/evidence/context-plan.md`].sort();
     const actualPlanFiles = git(repositoryRoot, ["diff-tree", "--no-commit-id", "--name-only", "-r", planSha]).split(/\r?\n/).filter(Boolean).sort();
     if (JSON.stringify(planFiles) !== JSON.stringify(actualPlanFiles)) failures.push("planSha must contain only the two pre-change context plan files");
-    for (const file of planFiles) git(repositoryRoot, ["show", `${planSha}:${file}`]);
-    const sourceFiles = [`${prefix}/token-budget-app/src/budget/selectContext.mjs`, `${prefix}/token-budget-app/tests/context-selector.test.mjs`].sort();
+    for (const file of planFiles) {
+      const committed = execFileSync("git", ["show", `${planSha}:${file}`], { cwd: repositoryRoot });
+      const current = fs.readFileSync(path.join(repositoryRoot, file));
+      if (!committed.equals(current)) failures.push(`current plan differs from the pre-change plan commit: ${file}`);
+    }
+    const sourceFiles = [
+      `${prefix}/token-budget-app/src/budget/selectContext.mjs`,
+      `${prefix}/token-budget-app/src/session/adaptSession.mjs`,
+      `${prefix}/token-budget-app/tests/context-selector.test.mjs`,
+      `${prefix}/token-budget-app/tests/session-adapter.test.mjs`,
+    ].sort();
     const actualSourceFiles = git(repositoryRoot, ["diff-tree", "--no-commit-id", "--name-only", "-r", sourceSha]).split(/\r?\n/).filter(Boolean).sort();
-    if (JSON.stringify(sourceFiles) !== JSON.stringify(actualSourceFiles)) failures.push("sourceSha must contain only the selector and learner regression test");
+    if (JSON.stringify(sourceFiles) !== JSON.stringify(actualSourceFiles)) failures.push("sourceSha must contain only both implementations and their two learner regression tests");
     const later = git(repositoryRoot, ["diff", "--name-only", sourceSha, "HEAD"]).split(/\r?\n/).filter(Boolean);
     for (const file of later) if (!file.startsWith(`${prefix}/evidence/`)) failures.push(`commit after sourceSha changes non-evidence file ${file}`);
   } catch { failures.push("planSha must precede an ancestor sourceSha with the required focused history"); }

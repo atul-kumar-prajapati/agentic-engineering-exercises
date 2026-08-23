@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "checks": [
+    {
+      "name": "checkout-smoke",
+      "command": "npm run test:smoke",
+      "exitCode": 7,
+      "result": "failed",
+      "outputPath": "artifacts/checkout-smoke.txt",
+      "risk": "High: checkout cannot complete.",
+      "reviewerAction": "Block merge.",
+      "rollback": "Do not deploy."
+    },
+    {
+      "name": "build",
+      "command": "npm run build",
+      "exitCode": 3,
+      "result": "failed",
+      "outputPath": "artifacts/build.txt",
+      "risk": "High: the release build failed.",
+      "reviewerAction": "Block merge and inspect the build output.",
+      "rollback": "Revert the candidate."
+    }
+  ]
+}

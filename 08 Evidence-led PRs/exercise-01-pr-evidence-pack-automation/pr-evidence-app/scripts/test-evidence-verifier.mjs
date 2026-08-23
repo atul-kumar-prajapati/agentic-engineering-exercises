@@ -77,9 +77,26 @@ jobs:
   write(exerciseRoot, "evidence/README.md", `Source SHA is recorded in evidence/generated/summary.md. smoke failed with exit code 3. Risk: high. Reviewer action: block. Rollback: do not deploy. Reproduce with generator. Artifact: evidence/generated/artifacts/smoke.txt.\n`);
   git(repositoryRoot, ["add", "."]); git(repositoryRoot, ["commit", "-m", "evidence"]);
   assert.deepEqual(verifyWorkflow(path.join(repositoryRoot, WORKFLOW)), []);
+  const validWorkflow = fs.readFileSync(path.join(repositoryRoot, WORKFLOW), "utf8");
+  const maskedWorkflow = validWorkflow
+    .replace('npm run evidence:generate -- --sha "${{ github.sha }}"', 'npm run evidence:generate -- --sha "${{ github.sha }}" || true')
+    .replace("working-directory: " + APP, "continue-on-error: ${{ true }}\n        working-directory: " + APP);
+  const maskedPath = write(repositoryRoot, "masked-workflow.yml", maskedWorkflow);
+  const maskedFailures = verifyWorkflow(maskedPath);
+  assert.ok(maskedFailures.some((failure) => failure.includes("continue-on-error")));
+  assert.ok(maskedFailures.some((failure) => failure.includes("use exactly")));
+  const skippedPath = write(repositoryRoot, "skipped-workflow.yml", validWorkflow.replace(
+    '      - run: npm run evidence:generate -- --sha "${{ github.sha }}"',
+    '      - if: ${{ false }}\n        run: npm run evidence:generate -- --sha "${{ github.sha }}"',
+  ));
+  assert.ok(verifyWorkflow(skippedPath).some((failure) => failure.includes("must not be conditional")));
   assert.deepEqual(verifyEvidencePack({ fixturePath: fixture, outputRoot, expectedSha: sourceSha }), []);
   assert.deepEqual(verifyGitBinding({ repositoryRoot, exerciseRoot, sourceSha }), []);
   const pack = JSON.parse(fs.readFileSync(path.join(outputRoot, "pr-evidence.json"), "utf8")); pack.checks[1].exitCode = 0; fs.writeFileSync(path.join(outputRoot, "pr-evidence.json"), JSON.stringify(pack));
   assert.ok(verifyEvidencePack({ fixturePath: fixture, outputRoot, expectedSha: sourceSha }).some((failure) => failure.includes("changed exitCode")));
+  fs.writeFileSync(path.join(outputRoot, "artifacts", "smoke.txt"), "CORRUPTED\n");
+  assert.ok(verifyEvidencePack({ fixturePath: fixture, outputRoot, expectedSha: sourceSha }).some((failure) => failure.includes("artifact")));
+  fs.rmSync(path.join(outputRoot, "artifacts", "unit.txt"));
+  assert.ok(verifyEvidencePack({ fixturePath: fixture, outputRoot, expectedSha: sourceSha }).some((failure) => failure.includes("copied artifact is missing")));
   console.log("PR evidence verifier self-test passed");
 } finally { fs.rmSync(temporary, { recursive: true, force: true }); }

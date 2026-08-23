@@ -8,7 +8,7 @@ The webhook reconciler records duplicate capture events and accepts unknown gate
 
 Compare a brief-led visualization with a source-and-incident-led result, then prove every important relationship from exact source lines.
 
-The duration for this challenge is 45 min or less.
+The duration for this challenge is 75 min or less.
 
 ## Project
 

@@ -1,7 +1,7 @@
 [
   { "id": "repository-rules", "path": "docs/context-sources/AGENTS.md", "bytes": 489, "tags": ["mandatory"], "authority": "current", "priority": 1000, "mandatory": true },
-  { "id": "current-adapter-contract", "path": "docs/context-sources/current-adapter-contract.md", "bytes": 647, "tags": ["adapter", "session", "api"], "authority": "current", "priority": 100 },
-  { "id": "current-error-contract", "path": "docs/context-sources/current-error-contract.md", "bytes": 426, "tags": ["errors", "validation"], "authority": "current", "priority": 90 },
+  { "id": "current-adapter-contract", "path": "docs/context-sources/current-adapter-contract.md", "bytes": 838, "tags": ["adapter", "session", "api"], "authority": "current", "priority": 100 },
+  { "id": "current-error-contract", "path": "docs/context-sources/current-error-contract.md", "bytes": 540, "tags": ["errors", "validation"], "authority": "current", "priority": 90 },
   { "id": "legacy-migration-notes", "path": "docs/context-sources/legacy-migration-notes.md", "bytes": 412, "tags": ["adapter", "session", "api"], "authority": "stale", "priority": 200 },
   { "id": "ui-style-guide", "path": "docs/context-sources/ui-style-guide.md", "bytes": 310, "tags": ["ui", "css", "accessibility"], "authority": "current", "priority": 80 },
   { "id": "audit-retention", "path": "docs/context-sources/audit-retention.md", "bytes": 296, "tags": ["audit", "retention", "privacy"], "authority": "current", "priority": 70 }

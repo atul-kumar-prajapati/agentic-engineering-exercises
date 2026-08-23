@@ -39,6 +39,18 @@ Add lanes B and C using their exact branches, paths, commands, and shared reques
 
 Record the integration branch, base SHA, merge order, three merge commit SHAs, `shared_commit_sha`, `product_head`, and the integrated command output path, hash, and exit code. `product_head` must equal the shared-type commit because later commits may contain only exercise evidence.
 
+Also record this review of the supplied handoff:
+
+```json
+"untrusted_handoff_review": {
+  "handoff_id": "UNTRUSTED-01",
+  "resolved_commit_sha": "recorded base SHA",
+  "decision": "reject",
+  "detected_issues": ["commit-parent", "changed-paths", "verification-output"],
+  "proof": "Git commands and results that demonstrate each mismatch"
+}
+```
+
 ## Worktree captures
 
 Save `git worktree list --porcelain` while all three linked worktrees exist to `worktree-list-before.txt`. After final verification, remove the linked worktrees and save the command again to `worktree-list-after.txt`.

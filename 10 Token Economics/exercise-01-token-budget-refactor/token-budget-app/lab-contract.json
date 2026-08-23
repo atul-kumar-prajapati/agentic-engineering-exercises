@@ -3,12 +3,13 @@
   "competency": "10. Token Economics - minimum sufficient authoritative context",
   "domain": "Session-adapter refactor context selection",
   "mission": "Select current task context under an exact byte budget without dropping mandatory rules or primary contracts.",
-  "outcome": "Selection is deterministic, progressive, fully accounted, and correct under normal and tight budgets.",
+  "outcome": "A real adapter refactor passes the same acceptance checks with full and selected context while selection remains deterministic and fully accounted.",
   "entities": [
     "real context source",
     "protected catalog",
     "pre-change plan",
     "selector ledger"
+    ,"session adapter"
   ],
   "seededDefects": [
     "all sources are loaded",
@@ -18,7 +19,8 @@
   ],
   "verificationGates": [
     "real byte check",
-    "selector acceptance suite",
+    "selector and adapter acceptance suites",
+    "before-and-after patch replay",
     "pre-change history gate",
     "ledger recomputation",
     "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."

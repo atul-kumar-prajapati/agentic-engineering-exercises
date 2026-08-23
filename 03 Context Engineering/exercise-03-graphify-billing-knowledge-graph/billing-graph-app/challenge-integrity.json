@@ -1,6 +1,9 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
+    "../../../scripts/run-clean-verification.mjs": "9b17cbb8865a642a7789113c145be88c6bb965bc2d8c024b82202e8ae85bf368",
+    "../../../scripts/run-vite-build.mjs": "b7901ed4f770e6537e80f864392c8c1de841b5c97fa8993246c5df7a86d5d415",
+    "../../../scripts/verify-protected-inputs.mjs": "d99346d9a84651bcb654d07d1b5d131d39d5f3b703ee9614db4eafc86cb4d96c",
     "../README.md": "c283fb1f1a4f0e78a1d25f5cf7dcdc1c7144f496e292f3fe5832dd938bbf9e93",
     "../docs/current-metric-contract.md": "b95bec46ee644998883b909e5abf55aa8e72f725709b01c9e2adb764c9c44112",
     "../docs/evidence-template.md": "a4da9ccb6332507dc99bcb5328c06e1ff157e0a67e552912b8805b0c5f13b7c9",
@@ -13,7 +16,7 @@
     "index.html": "4c1e0650afe34edc5947a42d1c4993afa768d23420e48c9a4f7ef035ba650356",
     "lab-contract.json": "4662721325c52017bc2f1d8edb1583252d49b2ae69628b728a2a8200d0f44f89",
     "package-lock.json": "312428e801608f9e6d52c9d5735cf8c88179adb6338cfef02784744e84691f9d",
-    "package.json": "1e5dbfb754689132f044c81de5dfedce7c8165b0a341e33f2d929fa65a1c5e74",
+    "package.json": "01d1ea5d04a2adcaf63a6f8ad1d2dbe0840ffc251b737d2f0c6c25c4510ce05f",
     "scripts/agent-check.mjs": "292e10a8bd5acd3a3824ea82d9805d078b5d9f4341b49c486a8a16d24d5bca8b",
     "scripts/format-check.mjs": "8b2792ba15f266068dc2fdd040e1530f71e7411e77f7f1e393c0a53c3349cb9e",
     "scripts/lint-check.mjs": "0b9ce2d831b5f7127907b966424339ac6bbef8967d2cc4cb93739b406547706e",

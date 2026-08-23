@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import { selectContext } from "../src/budget/selectContext.mjs";
+import "./run-adapter-acceptance.mjs";
 
 const exerciseRoot = path.resolve(import.meta.dirname, "..", "..");
 const catalog = JSON.parse(fs.readFileSync(path.join(exerciseRoot, "docs", "context-catalog.json"), "utf8"));
@@ -12,26 +13,26 @@ for (const item of catalog) {
   assert.equal(item.bytes, actual, `${item.id} catalog cost must equal real UTF-8 bytes`);
 }
 
-const initial = selectContext(catalog, { tags: ["session", "adapter"] }, 1700);
+const initial = selectContext(catalog, { tags: ["session", "adapter"] }, 2000);
 assert.deepEqual(ids(initial), ["repository-rules", "current-adapter-contract"]);
-assert.equal(initial.totalBytes, 1136);
-assert.equal(initial.remainingBytes, 564);
+assert.equal(initial.totalBytes, 1327);
+assert.equal(initial.remainingBytes, 673);
 assert.ok(!ids(initial).includes("legacy-migration-notes"), "stale source must never displace current authority");
 assert.equal(initial.skipped.find((item) => item.id === "ui-style-guide")?.reason, "irrelevant");
 
-const expanded = selectContext(catalog, { tags: ["session", "adapter"], questions: ["errors"] }, 1700);
+const expanded = selectContext(catalog, { tags: ["session", "adapter"], questions: ["errors"] }, 2000);
 assert.deepEqual(ids(expanded), ["repository-rules", "current-adapter-contract", "current-error-contract"]);
-assert.equal(expanded.totalBytes, 1562);
+assert.equal(expanded.totalBytes, 1867);
 
-const tight = selectContext(catalog, { tags: ["session", "adapter"] }, 1000);
+const tight = selectContext(catalog, { tags: ["session", "adapter"] }, 1200);
 assert.deepEqual(ids(tight), ["repository-rules"]);
 assert.equal(tight.skipped.find((item) => item.id === "current-adapter-contract")?.reason, "budget");
 assert.deepEqual(tight.unresolvedTags, ["adapter", "session"]);
 
-const reversed = selectContext([...catalog].reverse(), { tags: ["adapter", "session"], questions: ["errors"] }, 1700);
+const reversed = selectContext([...catalog].reverse(), { tags: ["adapter", "session"], questions: ["errors"] }, 2000);
 assert.deepEqual(reversed, expanded, "selection must not depend on catalog order");
 assert.throws(() => selectContext(catalog, { tags: ["adapter"] }, 488), /mandatory context/i);
-assert.throws(() => selectContext([...catalog, catalog[0]], { tags: [] }, 1700), /duplicate context id/i);
+assert.throws(() => selectContext([...catalog, catalog[0]], { tags: [] }, 2000), /duplicate context id/i);
 assert.throws(() => selectContext(catalog, { tags: [] }, 0), /positive integer/i);
 assert.equal(new Set([...initial.selected, ...initial.skipped].map((item) => item.id)).size, catalog.length);
 assert.equal(initial.totalBytes, initial.selected.reduce((total, item) => total + item.bytes, 0));

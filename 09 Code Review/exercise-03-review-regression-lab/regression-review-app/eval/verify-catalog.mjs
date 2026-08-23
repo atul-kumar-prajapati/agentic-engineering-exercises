@@ -2,13 +2,16 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 const cases = JSON.parse(await readFile(new URL("./cases.json", import.meta.url), "utf8"));
-const candidate = await readFile(new URL("./review-prompt-candidate.md", import.meta.url), "utf8");
-assert.deepEqual(cases.map((item) => item.expectedFindingIds.length), [5, 2, 0]);
+const skill = await readFile(new URL("../skills/regression-review/SKILL.md", import.meta.url), "utf8");
+assert.deepEqual(cases.map((item) => item.acceptanceRules.length), [5, 2, 1]);
+assert.deepEqual(cases.map((item) => item.expectation), ["regressions", "regressions", "conforms"]);
+assert.ok(cases.every((item) => !("expectedFindingIds" in item)), "catalog must not publish answer IDs");
+assert.ok(cases.every((item) => !("minimumBlockingFindings" in item) && !("expectedDecision" in item)), "catalog must express acceptance rules rather than answer counts");
 assert.equal(new Set(cases.map((item) => item.id)).size, 3);
-assert.ok(candidate.trim().length >= 180 && candidate.trim().length <= 1400, "Candidate prompt must be 180-1400 characters");
-for (const phrase of ["HIST-", "MULTI-", "startsWith", "JSON.parse", "authorization bypass", "slice(0", "Blocked summary"]) {
-  assert.ok(!candidate.toLowerCase().includes(phrase.toLowerCase()), `Candidate prompt encodes expected finding: ${phrase}`);
+assert.match(skill, /^---\s*\nname:\s*regression-review\s*\ndescription:\s*.+\n---/m, "SKILL.md needs valid name and description frontmatter");
+assert.ok(skill.trim().length >= 250 && skill.trim().length <= 5000, "SKILL.md must stay concise");
+for (const phrase of ["historical-regression", "security-regression", "clean-control", "HIST-", "MULTI-", "startsWith", "JSON.parse", "slice(0"]) {
+  assert.ok(!skill.toLowerCase().includes(phrase.toLowerCase()), `SKILL.md encodes protected case detail: ${phrase}`);
 }
-console.log("PASS protected catalog contains five-bug, two-bug, and clean-control cases");
-console.log("PASS candidate prompt length and answer-leak checks");
-console.log("PASS reviewer receives neutral acceptance context rather than case IDs or kinds");
+console.log("PASS catalog contains two defect cases and one clean control");
+console.log("PASS starter skill has valid frontmatter and contains no protected case answers");

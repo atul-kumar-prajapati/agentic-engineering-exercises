@@ -12,6 +12,7 @@ Record only the first attempt from each agent session. Use full Git SHAs, exact 
 - Human hints: 0
 - Retries: 0
 - Patch: `evidence/before.patch` or `evidence/after.patch`
+- Patch SHA-256:
 
 | Proof | Result |
 |---|---|
@@ -26,3 +27,5 @@ Record only the first attempt from each agent session. Use full Git SHAs, exact 
 ## `evidence/comparison.md`
 
 Confirm matching run conditions. Compare omitted checks, changed results, missing artifacts, digest coverage, failure exit status, reviewer guidance, workflow behavior, and changed files. Support the conclusion with generated files and both patches.
+
+Include the exact phrases `Same conditions`, `Before`, `After`, `Proof`, and `Conclusion`. Commit each untouched attempt and generate its patch with `git diff --binary --full-index <starting-commit> <that-attempt-implementation-commit>` so verification can reproduce both.

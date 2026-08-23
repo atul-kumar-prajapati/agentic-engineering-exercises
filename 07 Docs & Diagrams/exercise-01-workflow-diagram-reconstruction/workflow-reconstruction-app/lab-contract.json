@@ -21,6 +21,7 @@
     "Every Mermaid file parses.",
     "Required states, actors, routes, and conditions match protected source traces.",
     "Every required edge maps to an exact valid source line.",
+    "A post-source workflow change is rejected before stale diagrams can pass.",
     "Evidence hashes match the declared source SHA and diagram files.",
     "npm run verify:exercise checks implementation quality and submission evidence."
   ],

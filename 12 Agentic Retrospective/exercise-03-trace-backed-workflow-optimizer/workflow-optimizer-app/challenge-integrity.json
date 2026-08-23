@@ -1,21 +1,24 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
+    "../../../scripts/run-clean-verification.mjs": "9b17cbb8865a642a7789113c145be88c6bb965bc2d8c024b82202e8ae85bf368",
+    "../../../scripts/run-vite-build.mjs": "b7901ed4f770e6537e80f864392c8c1de841b5c97fa8993246c5df7a86d5d415",
+    "../../../scripts/verify-protected-inputs.mjs": "d99346d9a84651bcb654d07d1b5d131d39d5f3b703ee9614db4eafc86cb4d96c",
     "../README.md": "48d9d9b170f208d2022c72f895cd7b3938d42d9a1bc587a3cb988f22b1c966f0",
-    "../docs/failure-traces.json": "6e2abe0a89af82e91b06b823a18df49b1e1c42464b8d7a8945e1b615df61a1a5",
     "../docs/benchmark-contract.md": "6d062248396ddc18b7c04b7eb2abbd083bb4da25b9066ce2d5b7a261431088cf",
+    "../docs/failure-traces.json": "6e2abe0a89af82e91b06b823a18df49b1e1c42464b8d7a8945e1b615df61a1a5",
     "../docs/trace-analysis-contract.md": "f196112fb2c60b472ea01aa8266bac549445d176e8d50b1b24d8600223814199",
     "evals/replay-cases.json": "4066aa896bcc84d22c40b1fbe391f425a36b27c18cbba15a87251afefcfd99b1",
     "fixtures/workflow-baseline.md": "6c658a7783f11ef16d047b7edc79682a3df0f6e77b05bdd2f8da2877f0d1030e",
-    "package.json": "2c626612a6ab0329885e6444dacc60c4c6bb6f8cead3dca6e4b08dd71784e8a0",
     "lab-contract.json": "3f95fa1e8de6fd9f150b4b4d15a29e4bcd8bdc6cd600a46b7e5bfaf91c8ed552",
-    "src/labContract.ts": "c1b83a30c72894f03990665c87d687cd8b5d69504d42f65973d22a96b8e6aaa4",
-    "scripts/validate-replay-fixtures.mjs": "91d0467ab1191fea1e09ab8c6fe338aa73e8ac8e6d89881eb913df48227d8757",
-    "scripts/workflow-grading.mjs": "cb21fdda4e77daff881b42b423361dff46d97d40964051d60f475750fe8068fe",
-    "scripts/workflow-submission-verification.mjs": "4cb948456f5d1215f152c0ab9e3478ece8abcb6e2c92210542ab4a75adfbc191",
+    "package.json": "1cafe47eb4983d672f96266c45c6a142cd929bd513d0b05bafe232e48b13b892",
     "scripts/score-workflow-results.mjs": "fb23d6237cce9083ea38fe7a55e6f7098ff9f9e8071e73573daf1fa9ce2949d7",
     "scripts/test-workflow-verifier.mjs": "efa5182a9fd9f8e1e0f640ada362342ed3d0199f1b10c69496ad312ce3d9dd49",
+    "scripts/validate-replay-fixtures.mjs": "91d0467ab1191fea1e09ab8c6fe338aa73e8ac8e6d89881eb913df48227d8757",
     "scripts/verify-workflow-results.mjs": "6d5dfaedc0118acbe73f70a18bb5260fc4b58e0d9f03e606080ab70ff506236f",
+    "scripts/workflow-grading.mjs": "cb21fdda4e77daff881b42b423361dff46d97d40964051d60f475750fe8068fe",
+    "scripts/workflow-submission-verification.mjs": "4cb948456f5d1215f152c0ab9e3478ece8abcb6e2c92210542ab4a75adfbc191",
+    "src/labContract.ts": "c1b83a30c72894f03990665c87d687cd8b5d69504d42f65973d22a96b8e6aaa4",
     "submission-contract.json": "f881782badcbcd5296f8dd39df170da74d68150ce5e39a5463b248011904ba90"
   }
 }

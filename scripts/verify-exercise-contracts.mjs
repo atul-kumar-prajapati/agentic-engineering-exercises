@@ -196,6 +196,7 @@ const requiredArtifacts = [
   "07 Docs & Diagrams/exercise-03-feature-visualization/payment-workflow-app/scripts/test-visualization-verifier.mjs",
   "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/fixtures/check-results.json",
   "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/fixtures/check-results-pass.json",
+  "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/fixtures/check-results-multiple-failures.json",
   "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/fixtures/artifacts/checkout-smoke.txt",
   "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/fixtures/artifacts/checkout.svg",
   "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/docs/evidence-contract.md",
@@ -221,40 +222,52 @@ const requiredArtifacts = [
   "08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/scripts/quality-verification.mjs",
   "08 Evidence-led PRs/exercise-03-performance-and-a11y-evidence-gate/quality-gate-app/scripts/test-quality-verifier.mjs",
   "09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/submission-contract.json",
-  "09 Code Review/exercise-01-security-and-a11y-review-gauntlet/fixtures/review-expectations.json",
   "09 Code Review/exercise-01-security-and-a11y-review-gauntlet/docs/finding-contract.md",
-  "09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/scripts/run-review-component-tests.mjs",
+  "09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/scripts/review-component-behavior.test.tsx",
+  "09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/scripts/run-protected-semgrep.mjs",
   "09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/scripts/review-verification.mjs",
   "09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/scripts/test-review-verifier.mjs",
+  "09 Code Review/exercise-01-security-and-a11y-review-gauntlet/review-gauntlet-app/scripts/replay-regression-tests.mjs",
   "09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/submission-contract.json",
   "09 Code Review/exercise-02-diff-triage-with-fresh-agent/docs/review-brief.md",
   "09 Code Review/exercise-02-diff-triage-with-fresh-agent/docs/finding-contract.md",
-  "09 Code Review/exercise-02-diff-triage-with-fresh-agent/fixtures/review-expectations.json",
   "09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/src/services/workflowApi.acceptance.test.ts",
   "09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/scripts/triage-verification.mjs",
   "09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/scripts/test-triage-verifier.mjs",
+  "09 Code Review/exercise-02-diff-triage-with-fresh-agent/fresh-review-app/scripts/replay-regression-tests.mjs",
   "09 Code Review/exercise-03-review-regression-lab/regression-review-app/submission-contract.json",
-  "09 Code Review/exercise-03-review-regression-lab/docs/judgment-contract.md",
+  "09 Code Review/exercise-03-review-regression-lab/docs/skill-contract.md",
+  "09 Code Review/exercise-03-review-regression-lab/docs/evaluation-contract.md",
+  "09 Code Review/exercise-03-review-regression-lab/regression-review-app/skills/regression-review/SKILL.md",
   "09 Code Review/exercise-03-review-regression-lab/regression-review-app/scripts/review-eval-verification.mjs",
   "09 Code Review/exercise-03-review-regression-lab/regression-review-app/scripts/score-review-eval.mjs",
   "09 Code Review/exercise-03-review-regression-lab/regression-review-app/scripts/test-review-eval-verifier.mjs",
   "09 Code Review/exercise-03-review-regression-lab/regression-review-app/scripts/verify-review-eval-submission.mjs",
+  "09 Code Review/exercise-03-review-regression-lab/regression-review-app/scripts/run-review-session.mjs",
   "10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/scripts/run-context-tests.mjs",
+  "10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/scripts/run-adapter-acceptance.mjs",
+  "10 Token Economics/exercise-01-token-budget-refactor/docs/adapter-refactor-request.md",
   "10 Token Economics/exercise-01-token-budget-refactor/docs/ledger-contract.md",
   "10 Token Economics/exercise-01-token-budget-refactor/docs/context-sources/AGENTS.md",
   "10 Token Economics/exercise-01-token-budget-refactor/docs/context-sources/current-adapter-contract.md",
   "10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/scripts/context-verification.mjs",
   "10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/scripts/test-context-verifier.mjs",
   "10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/scripts/verify-context-submission.mjs",
+  "10 Token Economics/exercise-01-token-budget-refactor/token-budget-app/src/session/adaptSession.mjs",
   "10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/evals/routing-cases.json",
+  "10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/evals/recorded-runs.json",
+  "10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/docs/routing-policy-contract.md",
   "10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/docs/measurement-contract.md",
   "10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/model-routing-app/scripts/routing-verification.mjs",
   "10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/model-routing-app/scripts/score-routing-eval.mjs",
   "10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/model-routing-app/scripts/test-routing-verifier.mjs",
   "10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/model-routing-app/scripts/verify-routing-submission.mjs",
+  "10 Token Economics/exercise-02-risk-based-model-routing-cost-gate/model-routing-app/src/routing/dispatchTasks.mjs",
   "10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/scripts/run-migration-tests.mjs",
   "10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/scripts/scope-verification.mjs",
   "10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/scripts/test-scope-verifier.mjs",
+  "10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/src/migration/actionButtons.mjs",
+  "10 Token Economics/exercise-03-minimal-diff-scope-budget/minimal-diff-app/scripts/replay-before-scope.mjs",
   "11 Agentic Refactoring/exercise-01-characterization-test-refactor/docs/renewal-golden-cases.json",
   "11 Agentic Refactoring/exercise-01-characterization-test-refactor/rules-refactor-app/scripts/refactor-verification.mjs",
   "11 Agentic Refactoring/exercise-01-characterization-test-refactor/rules-refactor-app/scripts/test-refactor-verifier.mjs",
@@ -319,10 +332,12 @@ for (const relative of exercisePackages) {
   assert.ok(manifest.scripts?.["agent:check"]?.startsWith("npm run test:integrity"), `${relative} must run integrity first`);
   assert.ok(manifest.scripts?.["verify:implementation"], `${relative} is missing verify:implementation`);
   assert.ok(manifest.scripts?.["verify:submission"], `${relative} is missing verify:submission`);
+  assert.ok(manifest.scripts?.["verify:exercise:core"], `${relative} is missing verify:exercise:core`);
   assert.ok(manifest.scripts?.["verify:exercise"], `${relative} is missing verify:exercise`);
-  assert.ok(manifest.scripts["verify:exercise"].includes("agent:check"), `${relative} verify:exercise must run agent:check`);
-  assert.ok(manifest.scripts["verify:exercise"].includes("verify:implementation"), `${relative} verify:exercise must run verify:implementation`);
-  assert.ok(manifest.scripts["verify:exercise"].includes("verify:submission"), `${relative} verify:exercise must run verify:submission`);
+  assert.ok(manifest.scripts["verify:exercise:core"].includes("agent:check"), `${relative} verify:exercise:core must run agent:check`);
+  assert.ok(manifest.scripts["verify:exercise:core"].includes("verify:implementation"), `${relative} verify:exercise:core must run verify:implementation`);
+  assert.ok(manifest.scripts["verify:exercise:core"].includes("verify:submission"), `${relative} verify:exercise:core must run verify:submission`);
+  assert.equal(manifest.scripts["verify:exercise"], "node ../../../scripts/run-clean-verification.mjs", `${relative} verify:exercise must use the shared clean-verification guard`);
 }
 assert.equal(readFileSync(path.join(root, ".nvmrc"), "utf8").trim(), "22.12.0", "Unexpected Node version");
 assert.equal(readFileSync(path.join(root, ".java-version"), "utf8").trim(), "21", "Unexpected Java version");

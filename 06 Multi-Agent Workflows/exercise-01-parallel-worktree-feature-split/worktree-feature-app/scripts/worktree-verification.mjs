@@ -93,6 +93,34 @@ function equalArrays(left, right) {
   return left.length === right.length && left.every((item, index) => item === right[index]);
 }
 
+function verifyUntrustedHandoff(repositoryRoot, appPrefix, exerciseRoot, baseSha, review, failures) {
+  const fixture = readJson(path.join(exerciseRoot, "docs", "untrusted-handoff.json"), failures, "docs/untrusted-handoff.json");
+  if (!fixture) return;
+  if (!review || typeof review !== "object") {
+    failures.push("integration.json must record untrusted_handoff_review");
+    return;
+  }
+  if (review.handoff_id !== fixture.handoff_id) failures.push(`untrusted handoff review must target ${fixture.handoff_id}`);
+  if (fixture.commit_ref !== "BASE_SHA" || review.resolved_commit_sha !== baseSha) failures.push("untrusted handoff must resolve BASE_SHA to the recorded base SHA");
+  if (review.decision !== "reject") failures.push("the invalid supplied handoff must be rejected");
+  const expectedIssues = ["changed-paths", "commit-parent", "verification-output"];
+  const actualIssues = [...(review.detected_issues ?? [])].sort();
+  if (!equalArrays(actualIssues, expectedIssues)) failures.push("untrusted handoff review must identify commit-parent, changed-paths, and verification-output mismatches");
+  if (typeof review.proof !== "string" || review.proof.trim().length < 80 || !review.proof.includes(baseSha)) failures.push("untrusted handoff review needs Git-backed proof naming the resolved base SHA");
+
+  const parents = commitParents(repositoryRoot, baseSha);
+  if (parents.length === 1) {
+    const actualPaths = changedRepositoryPaths(repositoryRoot, parents[0], baseSha)
+      .filter((item) => item.startsWith(appPrefix))
+      .map((item) => item.slice(appPrefix.length))
+      .sort();
+    if (equalArrays(actualPaths, [...fixture.claimed_changed_paths].sort())) failures.push("protected untrusted handoff no longer contains a changed-path mismatch");
+  }
+  if (parents.includes(baseSha)) failures.push("protected untrusted handoff no longer contains a parent mismatch");
+  const claimedOutput = resolveInside(exerciseRoot, fixture.verification?.output_path ?? "", failures, "untrusted handoff output");
+  if (claimedOutput && fs.existsSync(claimedOutput)) failures.push("do not create output for the rejected supplied handoff");
+}
+
 function pathAllowed(candidate, allowed) {
   return allowed.some((entry) => entry.endsWith("/") ? candidate.startsWith(entry) : candidate === entry);
 }
@@ -199,6 +227,7 @@ function verifyIntegration(repositoryRoot, appPrefix, exerciseRoot, baseSha, han
     return;
   }
   if (integration.schema_version !== 1) failures.push("integration.json schema_version must be 1");
+  verifyUntrustedHandoff(repositoryRoot, appPrefix, exerciseRoot, baseSha, integration.untrusted_handoff_review, failures);
   if (integration.base_sha !== baseSha) failures.push("integration base SHA differs from lane base");
   if (integration.integration_branch !== "integration/parallel-features") failures.push("integration branch must be integration/parallel-features");
   if (!equalArrays(integration.merge_order ?? [], ["B", "A", "C"])) failures.push("integration merge order must be B, A, C");
@@ -296,7 +325,7 @@ export function verifyLaneSubmission({ repositoryRoot, appRoot, exerciseRoot }) 
   if (!fs.existsSync(integrationReport)) failures.push("missing evidence/integration.md");
   else {
     const report = fs.readFileSync(integrationReport, "utf8").toLowerCase();
-    for (const term of ["lane review", "shared request", "merge order", "conflict", "shared-type", "final check", "cleanup", "risk", "rollback"]) if (!report.includes(term)) failures.push(`evidence/integration.md is missing ${term}`);
+    for (const term of ["untrusted handoff", "lane review", "shared request", "merge order", "conflict", "shared-type", "final check", "cleanup", "risk", "rollback"]) if (!report.includes(term)) failures.push(`evidence/integration.md is missing ${term}`);
   }
   return [...new Set(failures)];
 }

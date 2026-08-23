@@ -13,6 +13,7 @@ Record only the first attempt from each agent session. Use full Git SHAs, exact 
 - Retries: 0
 - Context source:
 - Patch: `evidence/before.patch` or `evidence/after.patch`
+- Patch SHA-256:
 
 | Metric | Result |
 |---|---|
@@ -27,3 +28,5 @@ Record only the first attempt from each agent session. Use full Git SHAs, exact 
 ## `evidence/comparison.md`
 
 Confirm matching run conditions. Compare context bytes, sources, missed rules, stale context, open questions, implementation checks, and changed files. Support the conclusion with both patches and the final ledger.
+
+Include the exact phrases `Same conditions`, `Before`, `After`, `Proof`, and `Conclusion`. Both patches must contain the adapter refactor and pass `npm run test:adapter`. Generate `after.patch` with `git diff --binary --full-index <starting-commit> <implementation-commit>`.

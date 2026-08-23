@@ -2,13 +2,18 @@
   "name": "Independent Diff Triage",
   "root": "..",
   "requiredFiles": [
-    { "path": "fresh-review-app/tests/cache-regressions.test.ts", "minCharacters": 1000, "includeAll": ["malformed", "filter", "save", "evidence", "fixture"] },
+    { "path": "evidence/before.md", "minCharacters": 250, "includeAll": ["Starting commit", "Implementation commit", "Agent and model", "Tools and permissions", "Time limit", "Human hints: 0", "Retries: 0", "Patch SHA-256"] },
+    { "path": "evidence/before.patch", "minCharacters": 80, "includeAll": ["diff --git"] },
+    { "path": "evidence/after.md", "minCharacters": 280, "includeAll": ["Starting commit", "Implementation commit", "Agent and model", "Tools and permissions", "Time limit", "Human hints: 0", "Retries: 0", "Patch SHA-256"] },
+    { "path": "evidence/after.patch", "minCharacters": 80, "includeAll": ["diff --git"] },
+    { "path": "evidence/comparison.md", "minCharacters": 500, "includeAll": ["Before", "After", "Same conditions", "Proof", "Conclusion"] },
+    { "path": "fresh-review-app/tests/cache-regressions.test.ts", "minCharacters": 1000, "includeAll": ["describe", "it", "expect"] },
     { "path": "evidence/reviewer-session.json", "minCharacters": 350, "validJson": true, "includeAll": ["fresh", "providedFiles", "excludedContext", "promptSha256"] },
-    { "path": "evidence/fresh-review-prompt.md", "minCharacters": 300, "excludeAll": ["implementer-notes", "CACHE-001", "expected finding"] },
-    { "path": "evidence/review.json", "minCharacters": 2600, "validJson": true, "includeAll": ["CACHE-001", "CACHE-002", "CACHE-003", "CACHE-004", "CLAIM-001", "request-changes", "sourceSha"] },
-    { "path": "evidence/review.md", "minCharacters": 2000, "includeAll": ["CACHE-001", "CACHE-002", "CACHE-003", "CACHE-004", "CLAIM-001", "Request changes"] },
+    { "path": "evidence/fresh-review-prompt.md", "minCharacters": 300, "excludeAll": ["instructor answer", "CACHE-001", "expected finding"] },
+    { "path": "evidence/review.json", "minCharacters": 2400, "validJson": true, "includeAll": ["request-changes", "sourceSha", "classification", "confidence", "anchor", "scenario", "impact", "evidence", "testPath", "dismissalProof"] },
+    { "path": "evidence/review.md", "minCharacters": 1800, "includeAll": ["Request changes", "Confirmed", "Dismissed", "Regression"] },
     { "path": "evidence/fixture-verification.txt", "minCharacters": 80, "includeAll": ["review-base..review-head"] },
-    { "path": "evidence/focused-tests.txt", "minCharacters": 250, "includeAll": ["protected cache acceptance", "cache-regressions.test.ts", "filter changes do not clear", "exit code: 0"] },
-    { "path": "evidence/commands/triage-verify.txt", "minCharacters": 250, "includeAll": ["Source SHA", "fresh reviewer context", "four cache blockers", "evidence only"] }
+    { "path": "evidence/focused-tests.txt", "minCharacters": 250, "includeAll": ["npm run test:cache", "cache-regressions.test.ts", "exit code: 0", "Source SHA"] },
+    { "path": "evidence/commands/triage-verify.txt", "minCharacters": 250, "includeAll": ["Source SHA", "fresh reviewer context", "supported blockers", "evidence only"] }
   ]
 }

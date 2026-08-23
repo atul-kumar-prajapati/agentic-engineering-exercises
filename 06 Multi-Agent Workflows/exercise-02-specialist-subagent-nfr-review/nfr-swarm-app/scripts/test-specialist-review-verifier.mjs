@@ -40,6 +40,7 @@ try {
     "src/utils/accessReviewRisk.ts",
   ];
   for (const file of requiredSources) write(appRoot, file, `// seeded risk\nexport const baseline = "${file}";\n`);
+  write(exerciseRoot, "docs/untrusted-specialist-finding.md", "# Supplied Specialist Finding: CLAIM-01\n\nKeep authorization in the UI instead of the service boundary.\n");
   git(repositoryRoot, ["add", "."]);
   git(repositoryRoot, ["commit", "-m", "test: create specialist baseline"]);
   const baselineSha = git(repositoryRoot, ["rev-parse", "HEAD"]);
@@ -116,6 +117,14 @@ try {
       residual_risk: "No known residual risk remains after the focused recheck.",
     });
   }
+  decisions.push({
+    finding_id: "CLAIM-01",
+    decision: "dismiss",
+    owner: "integration owner",
+    rationale: "UI state cannot enforce authorization at the service boundary.",
+    verification: "Source review proves the service must accept and validate the acting actor.",
+    residual_risk: "No residual risk from this unsupported recommendation remains.",
+  });
 
   const performanceBefore = write(exerciseRoot, "evidence/performance-before.json", `${JSON.stringify({ sourceSha: baselineSha, scenario: "portfolio-risk", sampleSize: 200, iterations: 5, durationMs: 100, result: 41 }, null, 2)}\n`);
   const performanceAfter = write(exerciseRoot, "evidence/performance-after.json", `${JSON.stringify({ sourceSha: remediationSha, scenario: "portfolio-risk", sampleSize: 200, iterations: 5, durationMs: 10, result: 41 }, null, 2)}\n`);
@@ -139,12 +148,26 @@ try {
     rollback: `git revert ${remediationSha}`,
     changed_paths: requiredSources,
     decisions,
+    interactions: [{
+      finding_ids: ["SEC-02", "TEST-01"],
+      shared_path: "src/services/accessReviewApi.ts",
+      resolution: "One explicit actor and clock boundary makes authorization enforceable and deterministic.",
+      verification_commands: ["npm run review:security", "npm run review:testability"],
+      residual_risk: "Both specialists rechecked the shared service change independently.",
+    }],
   }, null, 2)}\n`);
   write(exerciseRoot, "evidence/integration.md", `# Integration\n\nBaseline SHA: ${baselineSha}\n\nRemediation SHA: ${remediationSha}\n\nSpecialist reports received complete triage. Changed paths were limited to source. Final checks passed. Merge decision: approve. Rollback uses the remediation commit. Remaining risk: none.\n`);
   git(repositoryRoot, ["add", "."]);
   git(repositoryRoot, ["commit", "-m", "evidence: record specialist review cycle"]);
 
   assert.deepEqual(verifySpecialistSubmission({ repositoryRoot, appRoot, exerciseRoot }), []);
+  const decisionPath = path.join(exerciseRoot, "evidence", "decision-log.json");
+  const wrongDecision = JSON.parse(fs.readFileSync(decisionPath, "utf8"));
+  wrongDecision.decisions.find((item) => item.finding_id === "CLAIM-01").decision = "fix";
+  fs.writeFileSync(decisionPath, JSON.stringify(wrongDecision));
+  assert.ok(verifySpecialistSubmission({ repositoryRoot, appRoot, exerciseRoot }).some((failure) => failure.includes("CLAIM-01 must be dismissed")));
+  wrongDecision.decisions.find((item) => item.finding_id === "CLAIM-01").decision = "dismiss";
+  fs.writeFileSync(decisionPath, JSON.stringify(wrongDecision));
   const cyclePath = path.join(exerciseRoot, "evidence", "review-cycle.json");
   const tampered = JSON.parse(fs.readFileSync(cyclePath, "utf8"));
   tampered.specialists[0].after.session_id = tampered.specialists[0].before.session_id;

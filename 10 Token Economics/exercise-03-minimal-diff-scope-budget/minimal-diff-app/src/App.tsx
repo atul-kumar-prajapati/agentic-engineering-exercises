@@ -3,12 +3,14 @@ import { EvidenceLedger } from "./components/EvidenceLedger";
 import { SkillPatternBoard } from "./components/SkillPatternBoard";
 import { labContract } from "./labContract";
 import { evidenceStatus, readinessScore, riskSummary } from "./skillWorkflow";
+import { checkoutButton, deleteButton, exportButton, legacyActionButton } from "./migration/actionButtons.mjs";
 import "./styles.css";
 
 export default function App() {
   const score = readinessScore(labContract);
   const risks = riskSummary(labContract.backlog);
   const evidence = evidenceStatus(labContract.evidence);
+  const migrationActions = [exportButton(), checkoutButton(), deleteButton(), legacyActionButton("archive", "Archive record")];
 
   return (
     <main className="app-shell">
@@ -55,6 +57,16 @@ export default function App() {
         <ul className="signal-list">
           {labContract.masterySignals.map((signal) => (
             <li key={signal}>{signal}</li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="panel wide">
+        <p className="kicker">Live Migration Consumers</p>
+        <h2>Shared action variants</h2>
+        <ul className="signal-list">
+          {migrationActions.map((action) => (
+            <li key={action.action}>{action.label}: {action.variant}</li>
           ))}
         </ul>
       </section>

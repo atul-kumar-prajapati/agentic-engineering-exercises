@@ -3,7 +3,7 @@
   "competency": "09. Code Review",
   "domain": "Evidence-backed review of an exact access-approval PR containing scanner signal, scanner noise, and manual behavior defects.",
   "mission": "Classify the protected PR findings, repair confirmed blockers at the correct boundary, and prove them with regression tests.",
-  "outcome": "A reviewer can distinguish exploitability from pattern matches and prevent security, keyboard, validation, and policy regressions from merging.",
+  "outcome": "A reviewer can distinguish reproducible impact from pattern matches and prevent cross-boundary regressions from merging.",
   "entities": [
     "protected Git range",
     "scanner finding",
@@ -13,15 +13,13 @@
     "merge decision"
   ],
   "seededDefects": [
-    "Reviewer-controlled notes enter a dynamic HTML sink.",
-    "Queue actions lose native button and keyboard behavior.",
-    "Client note validation and explicit button type are removed.",
-    "Approval wording bypasses note validation and protected server transitions.",
-    "A safe static HTML sink resembles the real vulnerability."
+    "scanner signal mixed with scanner noise",
+    "manual interaction risk",
+    "cross-boundary policy risk"
   ],
   "verificationGates": [
     "Bundle SHAs and generated diff match the protected manifest.",
-    "All five required findings have correct severity, source, and decision.",
+    "Every submitted finding is anchored, classified, and proved.",
     "Protected component and server tests prove the repaired behavior.",
     "Learner regression tests cover each confirmed blocker.",
     "Git history binds fixes and tests to the submitted evidence.",
@@ -35,7 +33,7 @@
     "Capture comparable before and after results using the conditions defined in the exercise README."
   ],
   "workingDeliverables": [
-    "Fixed rendering, keyboard, validation, and server policy code.",
+    "Focused application fixes at the affected boundaries.",
     "Learner regression test suite.",
     "Structured and Markdown review reports.",
     "Raw scanner, fixture, and final verification output.",
@@ -46,7 +44,7 @@
   "masterySignals": [
     "Scanner output is reproduced and classified rather than copied.",
     "Important manual findings are identified despite no scanner warning.",
-    "Authorization remains enforced at the server boundary.",
+    "Trusted-boundary conclusions are supported by direct reproduction.",
     "Every blocker maps to a focused regression test and exact evidence."
   ]
 }

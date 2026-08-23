@@ -1,12 +1,12 @@
 # Review Eval Report
 
-- Provider and model:
-- Temperature and configuration:
-- Candidate prompt source SHA:
-- Samples per prompt/case:
-- Raw results and scorecard SHA-256:
+- Agent and model:
+- Adapter SHA-256:
+- Starting and skill source SHAs:
+- Time limit and permissions:
+- Runner, raw results, and scorecard SHA-256:
 
-| Prompt | Historical recall | Multi-bug recall | Clean precision | Per-run range |
+| Lane | Historical coverage | Security coverage | Precision | Clean control |
 |---|---:|---:|---:|---:|
 
 ## Analysis

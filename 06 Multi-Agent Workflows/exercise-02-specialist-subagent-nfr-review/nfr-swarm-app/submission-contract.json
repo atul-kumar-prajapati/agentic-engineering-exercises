@@ -3,7 +3,7 @@
   "root": "..",
   "requiredFiles": [
     { "path": "evidence/review-cycle.json", "validJson": true, "includeAll": ["baseline_sha", "remediation_sha", "session_id", "findings", "output_sha256"] },
-    { "path": "evidence/decision-log.json", "validJson": true, "includeAll": ["merge_decision", "changed_paths", "rollback", "residual_risk"] },
+    { "path": "evidence/decision-log.json", "validJson": true, "includeAll": ["CLAIM-01", "dismiss", "interactions", "SEC-02", "TEST-01", "merge_decision", "changed_paths", "rollback", "residual_risk"] },
     { "path": "evidence/specialists/security-before.md", "minCharacters": 250, "includeAll": ["SEC-01", "SEC-02", "reproduction", "impact"] },
     { "path": "evidence/specialists/security-after.md", "minCharacters": 180, "includeAll": ["SHA", "recheck", "pass"] },
     { "path": "evidence/specialists/accessibility-before.md", "minCharacters": 250, "includeAll": ["A11Y-01", "keyboard", "impact"] },

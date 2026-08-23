@@ -2,14 +2,20 @@
 
 Use full Git SHAs, exact prompts, commands, exit codes, finding IDs, and source locations.
 
-## `evidence/before.md`
+## `evidence/before.md` and `evidence/after.md`
 
-Record review base and head SHAs, reviewer agent and model, tools, permissions, time limit, context provided, baseline command results, and `evidence/before.patch`.
+- Starting commit:
+- Implementation commit:
+- Agent and model:
+- Tools and permissions:
+- Time limit:
+- Human hints: 0
+- Retries: 0
+- Patch: `evidence/before.patch` or `evidence/after.patch`
+- Patch SHA-256:
 
-## `evidence/after.md`
-
-Record remediation SHA, recheck agent and model, `npm run test:cache`, `npm run triage:verify`, and `npm run agent:check` exit codes, fixed finding IDs, dismissed claim, files changed, lines added and removed, and `evidence/after.patch`.
+Record the provided context, command exit codes, fixed findings, dismissed claims, files changed, and lines added and removed. In `after.md`, include `npm run test:regression-proof`.
 
 ## `evidence/comparison.md`
 
-Compare reproduced blockers, unsupported claims, scope, regression tests, and command results. Link each decision to an exact source location or test.
+Compare reproduced blockers, unsupported claims, scope, regression tests, and command results. Link each decision to a code anchor or test. Include `Same conditions`, `Before`, `After`, `Proof`, and `Conclusion`.

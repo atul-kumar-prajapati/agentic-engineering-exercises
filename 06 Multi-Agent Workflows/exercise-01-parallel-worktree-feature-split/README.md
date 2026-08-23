@@ -8,11 +8,11 @@ Each lane must remain independently testable and request shared changes instead 
 
 Use real Git worktrees and prove the parallel workflow from base commit to final integration.
 
-The duration for this challenge is 60 min or less.
+The duration for this challenge is 75 min or less.
 
 ## Project
 
-[worktree-feature-app](./worktree-feature-app) contains the application and protected acceptance tests. The [task board](./docs/task-board.md), [ownership map](./docs/file-ownership-map.md), and [integration contract](./docs/integration-contract.md) define the three fixed lanes.
+[worktree-feature-app](./worktree-feature-app) contains the application and protected acceptance tests. The [task board](./docs/task-board.md), [ownership map](./docs/file-ownership-map.md), and [integration contract](./docs/integration-contract.md) define the three fixed lanes. The supplied [untrusted handoff](./docs/untrusted-handoff.json) is an external claim that must be checked, not accepted as fact.
 
 ## How To Go About It
 
@@ -24,7 +24,7 @@ The duration for this challenge is 60 min or less.
 
 4. Keep the lane branches and worktrees available for review. Capture `git worktree list --porcelain` while all three are linked.
 
-5. As integration owner, verify every handoff against its commit. Merge lanes B, A, and C with `--no-ff`, then create one separate commit that adds the shared types and updates imports.
+5. As integration owner, verify the supplied untrusted handoff and every agent handoff against Git. Record why the untrusted handoff is accepted or rejected. Merge only valid handoffs in B, A, and C order with `--no-ff`, then create one separate commit that adds the shared types and updates imports.
 
 6. Run the complete acceptance and repository checks. Record the final history and metrics in `evidence/after.md` and `evidence/after.patch`, then remove the linked worktrees and capture the final worktree list.
 
@@ -51,6 +51,7 @@ For the required before and after files, follow the [evidence instructions and t
 The challenge is complete when:
 
 - All lane commits share the recorded base parent, remain inspectable, match their handoffs, and change only owned paths.
+- The supplied untrusted handoff is rejected with proof of its parent, changed-path, and missing-output mismatches.
 - Every lane includes tests and passes its focused command without editing `src/types.ts`.
 - Three `--no-ff` merges preserve B, A, C order and one later commit owns all shared-type changes.
 - Worktree and command evidence match the Git repository, and linked worktrees are cleaned up only after verification.

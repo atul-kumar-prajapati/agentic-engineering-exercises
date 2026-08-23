@@ -1,14 +1,22 @@
 {
-  "name": "Code Review Regression Gate",
+  "name": "Code Review Skill Hardening",
   "root": "..",
   "requiredFiles": [
-    { "path": "regression-review-app/eval/review-prompt-candidate.md", "minCharacters": 180, "excludeAll": ["HIST-", "MULTI-", "startsWith", "JSON.parse", "authorization bypass", "slice(0"] },
-    { "path": "evidence/raw-results.json", "minCharacters": 5000, "validJson": true, "includeAll": ["baseline", "candidate", "provider", "response"] },
-    { "path": "evidence/run.json", "minCharacters": 500, "validJson": true, "includeAll": ["candidatePromptSourceSha", "rawResultsSha256", "sampleCountPerPromptCase", "cacheDisabled"] },
-    { "path": "evidence/judgments.json", "minCharacters": 6000, "validJson": true, "includeAll": ["sampleKey", "responseSha256", "foundFindingIds", "falseBlocker", "rationale"] },
-    { "path": "evidence/scorecard.json", "minCharacters": 1800, "validJson": true, "includeAll": ["historicalRecall", "multiBugRecall", "cleanPrecision", "regressionLimit", "adopt"] },
-    { "path": "evidence/review-eval.md", "minCharacters": 1800, "includeAll": ["provider", "sample", "historical", "multi-bug", "clean", "variance", "false blocker", "limitation", "adopt"] },
-    { "path": "evidence/commands/eval-verify.txt", "minCharacters": 300, "includeAll": ["18 uncached", "response judgments", "adoption thresholds", "evidence-only history"] },
-    { "path": "evidence/commands/agent-check.txt", "minCharacters": 200, "includeAll": ["agent-check", "exit code: 0"] }
-  ]
+    { "path": "evidence/before.md", "minCharacters": 250, "includeAll": ["Starting commit", "Implementation commit", "Agent and model", "Tools and permissions", "Time limit", "Human hints: 0", "Retries: 0", "Patch SHA-256"] },
+    { "path": "evidence/before.patch", "minCharacters": 80, "includeAll": ["diff --git"] },
+    { "path": "evidence/after.md", "minCharacters": 280, "includeAll": ["Starting commit", "Implementation commit", "Agent and model", "Tools and permissions", "Time limit", "Human hints: 0", "Retries: 0", "Patch SHA-256"] },
+    { "path": "evidence/after.patch", "minCharacters": 80, "includeAll": ["diff --git"] },
+    { "path": "evidence/comparison.md", "minCharacters": 600, "includeAll": ["Before", "After", "Same conditions", "Proof", "Conclusion"] },
+    { "path": "regression-review-app/skills/regression-review/SKILL.md", "minCharacters": 500, "includeAll": ["name:", "description:", "reproduce", "severity", "code anchor", "dismiss"] },
+    { "path": "evidence/runs/before/historical-regression.json", "validJson": true, "minCharacters": 850, "includeAll": ["schemaVersion", "before", "sessionId", "runNonce", "runnerSha256", "adapterSha256", "promptSha256", "diffSha256", "transcriptSha256", "findings"] },
+    { "path": "evidence/runs/before/security-regression.json", "validJson": true, "minCharacters": 850, "includeAll": ["schemaVersion", "before", "sessionId", "runNonce", "runnerSha256", "adapterSha256", "promptSha256", "diffSha256", "transcriptSha256", "findings"] },
+    { "path": "evidence/runs/before/clean-control.json", "validJson": true, "minCharacters": 650, "includeAll": ["schemaVersion", "before", "sessionId", "runNonce", "runnerSha256", "adapterSha256", "promptSha256", "diffSha256", "transcriptSha256", "findings"] },
+    { "path": "evidence/runs/after/historical-regression.json", "validJson": true, "minCharacters": 850, "includeAll": ["schemaVersion", "after", "sessionId", "runNonce", "runnerSha256", "adapterSha256", "promptSha256", "diffSha256", "transcriptSha256", "skillSha256", "findings"] },
+    { "path": "evidence/runs/after/security-regression.json", "validJson": true, "minCharacters": 850, "includeAll": ["schemaVersion", "after", "sessionId", "runNonce", "runnerSha256", "adapterSha256", "promptSha256", "diffSha256", "transcriptSha256", "skillSha256", "findings"] },
+    { "path": "evidence/runs/after/clean-control.json", "validJson": true, "minCharacters": 650, "includeAll": ["schemaVersion", "after", "sessionId", "runNonce", "runnerSha256", "adapterSha256", "promptSha256", "diffSha256", "transcriptSha256", "skillSha256", "findings"] },
+    { "path": "evidence/scorecard.json", "validJson": true, "minCharacters": 1200, "includeAll": ["historicalCoverage", "securityCoverage", "precision", "cleanControl", "noRegression", "adopt"] },
+    { "path": "evidence/review-eval.md", "minCharacters": 900, "includeAll": ["Baseline", "Skill-assisted", "Coverage", "Precision", "Clean control", "Decision"] },
+    { "path": "evidence/commands/eval-verify.txt", "minCharacters": 250, "includeAll": ["six runner-captured review sessions", "prompt", "transcript", "skill contains no case answers", "Decision"] }
+  ],
+  "requiredDirectories": ["evidence", "evidence/prompts", "evidence/runs", "evidence/runs/before", "evidence/runs/after", "evidence/transcripts", "evidence/commands"]
 }

@@ -5,20 +5,22 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc -b && vite build",
+    "build": "node ../../../scripts/run-vite-build.mjs",
     "preview": "vite preview --host 127.0.0.1",
-    "typecheck": "tsc -b --pretty false",
+    "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit --pretty false --incremental false",
     "test": "node ./scripts/test-triage-verifier.mjs && node ./scripts/agent-check.mjs",
-    "test:cache": "vitest run src/services/workflowApi.acceptance.test.ts tests/cache-regressions.test.ts && node ./scripts/run-app-cache-checks.mjs",
+    "test:cache": "vitest run src/services/workflowApi.acceptance.test.ts scripts/app-cache-behavior.test.tsx tests/cache-regressions.test.ts",
+    "test:regression-proof": "node ./scripts/replay-regression-tests.mjs",
     "triage:verify": "node ./scripts/verify-triage-submission.mjs",
-    "test:submission": "npm run test:cache && npm run triage:verify && node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json",
+    "test:submission": "npm run test:cache && npm run test:regression-proof && npm run triage:verify && node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json",
     "lint": "node ./scripts/lint-check.mjs",
     "format": "node ./scripts/format-check.mjs",
     "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
     "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
     "verify:implementation": "npm run test:cache",
-    "verify:submission": "npm run test:submission",
-    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
+    "verify:submission": "node ../../../scripts/comparable-evidence.mjs .. && npm run test:submission",
+    "verify:exercise:core": "npm run agent:check && npm run verify:implementation && npm run verify:submission",
+    "verify:exercise": "node ../../../scripts/run-clean-verification.mjs"
   },
   "engines": {
     "node": ">=22.12.0 <25"
@@ -28,9 +30,11 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
+    "@testing-library/react": "^16.3.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.0.4",
+    "jsdom": "^26.1.0",
     "typescript": "^5.9.3",
     "vite": "^7.1.12",
     "vitest": "^3.2.4"

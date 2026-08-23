@@ -22,12 +22,25 @@ Run the starter smoke or integrity command before timing the challenge. Use the 
 | Exercise type | Prepare before timing |
 |---|---|
 | Browser and accessibility | Playwright Chromium and any named browser or MCP integration. Use the local setup check when supplied. |
+| Semgrep review | Python 3 and Semgrep installed with `python -m pip install semgrep`; confirm with `semgrep --version`. |
 | Java or full-stack provider | A supported JDK. Use the committed Maven wrapper rather than a separate Maven installation. |
 | Multi-agent worktrees | Git worktree support and enough disk space for parallel working directories. |
 | Diagram or knowledge-graph tools | The named service and its authentication when the tool is the competency being tested. |
 | Model evaluation and benchmarking | Access to one fixed model/runtime, permission to record run metadata, and enough quota for every first-attempt run. |
 
 A named tool is mandatory when the exercise compares behavior with and without that tool or skill. When the README asks only for an outcome and does not name a comparison variable, an equivalent tool is acceptable.
+
+## Required Agent Sessions
+
+Prepare the full session count before starting a multi-agent exercise. These are separate coding-agent sessions, not hidden API calls:
+
+| Exercise | Minimum fresh sessions |
+|---|---:|
+| 6.1 Parallel Worktree Conflict Rescue | 3 implementation sessions, one per lane |
+| 6.2 Specialist Review Merge Gate | 8 review-only sessions: 4 baseline reviews and 4 fresh rechecks |
+| 9.3 Code Review Skill Hardening | 6 review sessions: 3 without the skill and 3 fresh sessions with the skill |
+
+The integration owner checks and combines the outputs. Do not reuse one session across required lanes, specialists, or rechecks.
 
 ## Repeated Model Runs
 
@@ -39,10 +52,10 @@ Provider queue and response time is not part of the active challenge target. Rec
 |---|---:|
 | 5.2 Skill Trigger Boundary Evals | 120 decisions: 20 requests x 3 runs x before and after |
 | 5.3 Skill Benchmark and Package Gate | 36 runs: 4 tasks x 3 lanes x 3 runs |
-| 9.3 Code Review Regression Gate | 54 samples: 6 cases x 3 runs x baseline, unchanged candidate, and improved candidate |
-| 10.2 Risk-Based Model Routing Cost Gate | 36 runs across the 12 eligible case-tier lanes |
 | 12.3 Trace-Backed Workflow Optimizer | 48 runs: 8 cases x 3 runs x baseline and candidate |
 
 Estimate cost before starting from the provider's current input and output token rates. Use the largest allowed response and the full run count as the approval ceiling. The repository does not publish a fixed currency estimate because model prices and prompt sizes change.
 
 Do not silently replace failed provider calls, selectively rerun weak results, or mix models. If the provider fails, record the failed run and restart the complete comparable set under one environment.
+
+Exercises 9.3 and 10.2 do not make provider API calls during verification. Exercise 9.3 uses six interactive coding-agent sessions, and Exercise 10.2 uses a protected offline pack of 36 recorded measurements.

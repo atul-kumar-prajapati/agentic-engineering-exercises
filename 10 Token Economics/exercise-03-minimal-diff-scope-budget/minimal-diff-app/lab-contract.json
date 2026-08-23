@@ -21,7 +21,9 @@
     "protected behavior test",
     "plan-before-source history",
     "allowed-path check",
-    "two-file 40-line numstat gate",
+    "two-file 30-line numstat gate",
+    "unconstrained patch replay",
+    "structured avoided-work proof",
     "npm run verify:exercise checks protected inputs, implementation quality, and required submission evidence."
   ],
   "agentWorkflow": [

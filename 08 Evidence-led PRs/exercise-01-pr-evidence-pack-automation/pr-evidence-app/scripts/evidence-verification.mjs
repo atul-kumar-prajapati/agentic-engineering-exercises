@@ -111,7 +111,7 @@ export function verifyWorkflow(workflowPath) {
   try { workflow = YAML.parse(source); }
   catch { return ["workflow is invalid YAML"]; }
   if (/pull_request_target/.test(source)) failures.push("workflow must not use pull_request_target");
-  if (/continue-on-error\s*:\s*true/i.test(source)) failures.push("workflow must not use continue-on-error");
+  if (/continue-on-error\s*:/i.test(source)) failures.push("workflow must not use continue-on-error on any step");
   if (/secrets\./i.test(source)) failures.push("workflow must not use repository secrets");
   const trigger = workflow?.on?.pull_request;
   if (!trigger) failures.push("workflow must trigger on pull_request");
@@ -122,6 +122,8 @@ export function verifyWorkflow(workflowPath) {
   const jobs = Object.values(workflow?.jobs ?? {});
   if (jobs.length !== 1) failures.push("workflow must use one evidence job");
   const job = jobs[0] ?? {};
+  if (workflow?.defaults || job?.defaults) failures.push("workflow must not override the shell used by evidence commands");
+  if (job?.if !== undefined) failures.push("evidence job must not be conditional or skippable");
   if (job["runs-on"] !== "ubuntu-24.04") failures.push("evidence job must use ubuntu-24.04");
   if (!Number.isInteger(job["timeout-minutes"]) || job["timeout-minutes"] > 10) failures.push("evidence job timeout-minutes must be 10 or less");
   const steps = allSteps(workflow);
@@ -133,9 +135,11 @@ export function verifyWorkflow(workflowPath) {
   if (setup?.with?.["node-version-file"] !== ".nvmrc" || setup?.with?.cache !== "npm" || setup?.with?.["cache-dependency-path"] !== `${APP}/package-lock.json`) failures.push("setup-node must use .nvmrc and the exercise lockfile cache");
   const install = steps.find((step) => typeof step.run === "string" && /^npm ci\s*$/m.test(step.run));
   if (!install || install["working-directory"] !== APP) failures.push("workflow must run npm ci in pr-evidence-app");
-  const generate = steps.find((step) => typeof step.run === "string" && step.run.includes("npm run evidence:generate"));
-  if (!generate || generate["working-directory"] !== APP || !generate.run.includes("github.sha")) failures.push("workflow must generate evidence in the app with github.sha");
-  const verify = steps.find((step) => typeof step.run === "string" && step.run.includes("npm run evidence:verify"));
+  const generateCommand = /^npm run evidence:generate -- --sha\s+["']?\$\{\{\s*github\.sha\s*\}\}["']?$/;
+  const generate = steps.find((step) => typeof step.run === "string" && generateCommand.test(step.run.trim()));
+  if (!generate || generate["working-directory"] !== APP) failures.push("workflow must use exactly: npm run evidence:generate -- --sha \"${{ github.sha }}\"");
+  if (generate?.if !== undefined || generate?.shell !== undefined) failures.push("evidence generation must not be conditional or use a custom shell");
+  const verify = steps.find((step) => typeof step.run === "string" && step.run.trim() === "npm run evidence:verify");
   if (!verify || verify["working-directory"] !== APP || !String(verify.if ?? "").includes("always()")) failures.push("evidence verification must run with if: always()");
   const upload = steps.find((step) => step.uses?.startsWith("actions/upload-artifact@"));
   if (!actionPinned(upload, "upload-artifact")) failures.push("actions/upload-artifact must be pinned to a full commit SHA");

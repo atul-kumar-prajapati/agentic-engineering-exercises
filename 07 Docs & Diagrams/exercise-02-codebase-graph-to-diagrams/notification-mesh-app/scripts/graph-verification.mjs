@@ -55,6 +55,21 @@ function markerCount(source, id) {
   return source.match(new RegExp(`%%\\s*EDGE:\\s*${id}\\b`, "g"))?.length ?? 0;
 }
 
+function statementAfterMarker(source, id) {
+  const lines = source.replaceAll("\r\n", "\n").split("\n");
+  const index = lines.findIndex((line) => new RegExp(`^\\s*%%\\s*EDGE:\\s*${id}\\s*$`).test(line));
+  return index === -1 ? "" : (lines[index + 1] ?? "").trim();
+}
+
+const SEQUENCE_MESSAGES = {
+  "DEP-01": /^ChannelRouter\s*-+>>\s*ProviderStatus\s*:\s*.*push/i,
+  "DEP-02": /^ChannelRouter\s*-+>>\s*ProviderStatus\s*:\s*.*sms/i,
+  "DEP-03": /^ChannelRouter\s*-+>>\s*ConsentPolicy\s*:\s*.*(?:sms|consent)/i,
+  "DEP-04": /^ChannelRouter\s*-+>>\s*ProviderStatus\s*:\s*.*email/i,
+  "DEP-05": /^ChannelRouter\s*-+>>\s*RouteResult\s*:\s*.*email.*selected/i,
+  "DEP-06": /^ChannelRouter\s*-+>>\s*RouteResult\s*:\s*.*durable.*queue.*selected/i,
+};
+
 async function verifyDiagrams(exerciseRoot, failures) {
   const sources = {};
   for (const [name, spec] of Object.entries(DIAGRAMS)) {
@@ -66,17 +81,20 @@ async function verifyDiagrams(exerciseRoot, failures) {
       const result = await parseMermaid(source);
       if (result.diagramType !== spec.type) failures.push(`${spec.path} must parse as ${spec.type}`);
     } catch (error) { failures.push(`${spec.path} does not parse: ${error.message}`); }
-    for (const id of Object.keys(REQUIRED)) if (markerCount(source, id) !== 1) failures.push(`${spec.path} must contain one %% EDGE: ${id} marker`);
   }
   const dependency = sources.dependency ?? "";
   for (const term of ["ChannelRouter", "ProviderStatus", "ConsentPolicy", "ImmediateRoute", "DurableQueue"]) if (!dependency.includes(term)) failures.push(`dependency diagram is missing ${term}`);
-  const declared = [...dependency.matchAll(/^\s*(\w+)\s*-->\s*(\w+)\s*$/gm)].map((match) => `${match[1]}->${match[2]}`);
+  const declared = [...dependency.matchAll(/^\s*(\w+)\s*-->\s*(?:\|[^|]+\|\s*)?(\w+)\s*$/gm)].map((match) => `${match[1]}->${match[2]}`);
   const allowed = new Set(["ChannelRouter->ProviderStatus", "ChannelRouter->ConsentPolicy", "ChannelRouter->ImmediateRoute", "ChannelRouter->DurableQueue"]);
   for (const relation of declared) if (!allowed.has(relation)) failures.push(`dependency diagram contains unsupported relationship ${relation}`);
-  for (const relation of allowed) if (!declared.includes(relation)) failures.push(`dependency diagram is missing ${relation}`);
+  for (const relation of allowed) if (declared.filter((item) => item === relation).length !== 1) failures.push(`dependency diagram must contain ${relation} exactly once`);
   const sequence = sources.sequence ?? "";
   for (const actor of ["Client", "ChannelRouter", "ProviderStatus", "ConsentPolicy", "RouteResult"]) if (!new RegExp(`(?:participant|actor)\\s+${actor}\\b`).test(sequence)) failures.push(`sequence diagram is missing ${actor}`);
   for (const term of ["sms not consented", "email selected", "email unavailable", "durable queue selected"]) if (!sequence.toLowerCase().includes(term)) failures.push(`sequence diagram is missing ${term}`);
+  for (const [id, expectedMessage] of Object.entries(SEQUENCE_MESSAGES)) {
+    if (markerCount(sequence, id) !== 1) failures.push(`${DIAGRAMS.sequence.path} must contain one %% EDGE: ${id} marker`);
+    else if (!expectedMessage.test(statementAfterMarker(sequence, id))) failures.push(`${id} marker must immediately precede its exact sequence message`);
+  }
 }
 
 function verifyTrace(repositoryRoot, appRoot, graph, trace, failures) {
