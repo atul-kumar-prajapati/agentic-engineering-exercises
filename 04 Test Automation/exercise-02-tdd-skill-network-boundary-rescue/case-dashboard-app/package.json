@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc -b && vite build",
+    "build": "node ../../../scripts/run-vite-build.mjs",
     "preview": "vite preview --host 127.0.0.1",
-    "typecheck": "tsc -b --pretty false",
+    "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit --pretty false --incremental false",
     "test": "node ./scripts/agent-check.mjs",
     "test:component": "vitest run --pool=forks --maxWorkers=1",
     "test:smoke": "vitest run src/App.weak.test.tsx --pool=forks --maxWorkers=1",
@@ -22,7 +22,8 @@
     "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
     "verify:implementation": "npm run test:acceptance && npm run test:network",
     "verify:submission": "npm run test:tdd",
-    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
+    "verify:exercise:core": "npm run agent:check && npm run verify:implementation && npm run verify:submission",
+    "verify:exercise": "node ../../../scripts/run-clean-verification.mjs"
   },
   "engines": {
     "node": ">=22.12.0 <25"

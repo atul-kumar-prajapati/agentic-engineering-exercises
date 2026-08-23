@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "verify:contracts": "node ./scripts/verify-exercise-contracts.mjs"
+    "test:verification-guard": "node ./scripts/test-clean-verification-guard.mjs",
+    "test:comparable-evidence": "node ./scripts/test-comparable-evidence.mjs",
+    "verify:contracts": "npm run test:verification-guard && npm run test:comparable-evidence && node ./scripts/verify-exercise-contracts.mjs"
   },
   "engines": {
     "node": ">=22.12.0 <25"

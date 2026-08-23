@@ -1,11 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
-import { execFileSync } from "node:child_process";
+import os from "node:os";
+import { execFileSync, spawnSync } from "node:child_process";
 import {
   expectedSummary,
   readAxeEvidence,
   readLighthouseReports,
   renderComparison,
+  verifyCaptureManifest,
   verifyGateControls,
   verifyGitBinding,
   verifyLighthouseConfig,
@@ -20,6 +22,8 @@ const lighthouseDir = path.join(evidenceRoot, "raw", "lighthouse");
 const axePath = path.join(evidenceRoot, "raw", "axe.json");
 const summaryPath = path.join(evidenceRoot, "quality-summary.json");
 const comparisonPath = path.join(evidenceRoot, "comparison.md");
+const manifestPath = path.join(evidenceRoot, "capture-manifest.json");
+const markerPath = path.join(evidenceRoot, "capture-complete.json");
 const contractPath = path.join(exerciseRoot, "fixtures", "quality-thresholds.json");
 const baselineLighthouse = JSON.parse(fs.readFileSync(path.join(exerciseRoot, "fixtures", "lighthouse-before.json"), "utf8"));
 const baselineAxe = JSON.parse(fs.readFileSync(path.join(exerciseRoot, "fixtures", "a11y-before.json"), "utf8"));
@@ -31,6 +35,13 @@ try { config = JSON.parse(fs.readFileSync(path.join(appRoot, "lighthouserc.json"
 catch { failures.push("missing or invalid lighthouserc.json"); }
 if (config) failures.push(...verifyLighthouseConfig(config, contract));
 
+let manifest;
+try { manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8")); }
+catch { failures.push("missing or invalid evidence/capture-manifest.json"); }
+let completionMarker;
+try { completionMarker = JSON.parse(fs.readFileSync(markerPath, "utf8")); }
+catch { failures.push("missing or invalid evidence/capture-complete.json"); }
+
 let summary;
 try { summary = JSON.parse(fs.readFileSync(summaryPath, "utf8")); }
 catch { failures.push("missing or invalid evidence/quality-summary.json"); }
@@ -41,6 +52,22 @@ failures.push(...lighthouse.failures);
 const lighthouseMajor = lighthouse.runs[0]?.environment?.browserMajor;
 const axe = readAxeEvidence(axePath, sourceSha, contract, lighthouseMajor);
 failures.push(...axe.failures);
+const buildRoot = fs.mkdtempSync(path.join(os.tmpdir(), "quality-verify-build-"));
+const productionBuild = path.join(buildRoot, "dist");
+if (manifest && config) {
+  const viteCli = path.join(appRoot, "node_modules", "vite", "bin", "vite.js");
+  const build = spawnSync(process.execPath, [viteCli, "build", "--outDir", productionBuild, "--emptyOutDir"], { cwd: appRoot, encoding: "utf8" });
+  if (build.status !== 0) failures.push(`could not reproduce the production build: ${build.stderr || build.stdout}`);
+  else failures.push(...verifyCaptureManifest({
+    manifest,
+    sourceSha,
+    configPath: path.join(appRoot, "lighthouserc.json"),
+    productionBuild,
+    evidenceRoot,
+    contract,
+    completionMarker,
+  }));
+}
 let expected;
 if (lighthouse.runs.length === contract.lighthouseRuns && axe.axe && /^[a-f0-9]{40}$/.test(sourceSha)) {
   expected = expectedSummary({ sourceSha, contract, runs: lighthouse.runs, axe: axe.axe });
@@ -65,12 +92,15 @@ if (/^[a-f0-9]{40}$/.test(sourceSha)) {
 }
 
 if (failures.length) {
+  fs.rmSync(buildRoot, { recursive: true, force: true });
   console.error(`Quality evidence verification failed:\n${[...new Set(failures)].map((failure) => `- ${failure}`).join("\n")}`);
   process.exit(1);
 }
+fs.rmSync(buildRoot, { recursive: true, force: true });
 console.log(`Source SHA: ${sourceSha}`);
 console.log("PASS three raw Lighthouse reports use one route and Chrome environment");
 console.log("PASS pessimistic performance, accessibility, LCP, and axe thresholds met");
 console.log("PASS raw artifact SHA-256 digests and generated comparison verified");
+console.log("PASS capture manifest binds configuration, production build, browser, and every raw report");
 console.log("PASS performance and axe negative controls return non-zero with failed decisions");
 console.log("PASS Git source binding and evidence-only follow-up history verified");

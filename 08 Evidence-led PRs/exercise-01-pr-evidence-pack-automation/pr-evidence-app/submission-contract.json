@@ -2,6 +2,11 @@
   "name": "Failure-Preserving PR Evidence Pack",
   "root": "../../..",
   "requiredFiles": [
+    { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/before.md", "minCharacters": 250, "includeAll": ["Starting commit", "Implementation commit", "Agent and model", "Tools and permissions", "Time limit", "Human hints: 0", "Retries: 0", "Patch SHA-256"] },
+    { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/before.patch", "minCharacters": 80, "includeAll": ["diff --git"] },
+    { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/after.md", "minCharacters": 280, "includeAll": ["Starting commit", "Implementation commit", "Agent and model", "Tools and permissions", "Time limit", "Human hints: 0", "Retries: 0", "Patch SHA-256"] },
+    { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/after.patch", "minCharacters": 80, "includeAll": ["diff --git"] },
+    { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/comparison.md", "minCharacters": 350, "includeAll": ["Before", "After", "Same conditions", "Proof", "Conclusion"] },
     { "path": ".github/workflows/evidence-led-pr-01.yml", "minCharacters": 900, "includeAll": ["pull_request:", "permissions:", "contents: read", "ubuntu-24.04", "persist-credentials: false", "npm ci", "github.sha", "always()", "actions/upload-artifact@", "if-no-files-found: error", "retention-days:"] },
     { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/pr-evidence-app/scripts/generate-pr-evidence.mjs", "minCharacters": 1200, "includeAll": ["--fixture", "--sha", "--output", "sha256", "process.exitCode"] },
     { "path": "08 Evidence-led PRs/exercise-01-pr-evidence-pack-automation/evidence/generated/pr-evidence.json", "validJson": true, "minCharacters": 1500, "includeAll": ["schemaVersion", "sourceSha", "fixtureSha256", "overallResult", "overallExitCode", "checkout-smoke", "artifact", "sha256", "reviewerAction", "rollback"] },

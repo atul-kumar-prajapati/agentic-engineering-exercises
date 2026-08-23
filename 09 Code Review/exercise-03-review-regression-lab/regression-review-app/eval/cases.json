@@ -2,22 +2,30 @@
   {
     "id": "historical-regression",
     "diff": "../../pr/review-target.diff",
-    "kind": "historical-bad",
-    "publicContext": "Search is substring-based across all user-visible work-item text. All status includes every status. Risk and summary metrics preserve blocked and due-today behavior. The queue shows all matching items unless pagination is explicitly introduced.",
-    "expectedFindingIds": ["HIST-SEARCH", "HIST-STATUS", "HIST-RISK", "HIST-METRIC", "HIST-LIMIT"]
+    "expectation": "regressions",
+    "acceptanceRules": [
+      "Search matches partial queries across every user-visible work-item field.",
+      "The All status selection includes every workflow status.",
+      "Risk scoring preserves due-today urgency and blocked-item weighting.",
+      "Summary metrics count both blocked and escalated work.",
+      "The queue shows every matching item unless pagination is explicitly introduced."
+    ]
   },
   {
     "id": "security-regression",
     "diff": "./diffs/multi-bug.diff",
-    "kind": "multi-bug",
-    "publicContext": "Stored sessions must tolerate missing or damaged browser state. Approval requires an approver role and complete evidence; note text is not authorization.",
-    "expectedFindingIds": ["MULTI-PARSE", "MULTI-AUTH"]
+    "expectation": "regressions",
+    "acceptanceRules": [
+      "Stored sessions tolerate missing or damaged browser state.",
+      "Approval requires an approver role and complete evidence; note text is not authorization."
+    ]
   },
   {
     "id": "clean-control",
     "diff": "./diffs/clean-control.diff",
-    "kind": "clean-control",
-    "publicContext": "The helper must return due-date order without mutating its input array.",
-    "expectedFindingIds": []
+    "expectation": "conforms",
+    "acceptanceRules": [
+      "The helper returns due-date order without mutating its input array."
+    ]
   }
 ]

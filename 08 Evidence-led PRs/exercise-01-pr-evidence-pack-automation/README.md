@@ -8,7 +8,7 @@ The protected fixture contains passing tests, a failed checkout smoke check, and
 
 Compare an unstructured evidence attempt with an automated, failure-preserving result and prove the original exit status is never hidden.
 
-The duration for this challenge is 45 min or less.
+The duration for this challenge is 60 min or less.
 
 ## Project
 
@@ -16,7 +16,7 @@ The duration for this challenge is 45 min or less.
 
 ## How To Go About It
 
-1. Create two branches from the same starting commit. In the first branch, ask a fresh coding agent to produce a PR evidence pack from the fixture without extra guidance. Do not correct or retry it. Save `evidence/before.md` and `evidence/before.patch`.
+1. Create two branches from the same starting commit. In the first branch, ask a fresh coding agent to produce a PR evidence pack from the fixture without extra guidance. Do not correct or retry it. Commit that untouched attempt, keep the commit available in local Git history, and save `evidence/before.md` and `evidence/before.patch` from it.
 
 2. Review which commands, failures, artifacts, digests, risks, or rollback details were lost or rewritten.
 
@@ -28,7 +28,7 @@ The duration for this challenge is 45 min or less.
 
 6. Start a fresh agent session in the second branch under the same agent, model, tools, permissions, prompt, time limit, and first-attempt conditions. Keep its implementation without correction or retry.
 
-7. Commit the generator and workflow, generate evidence from that source SHA, save `evidence/after.md`, `evidence/after.patch`, and `evidence/comparison.md`, then raise the final PR from the second branch.
+7. Commit the generator and workflow as the implementation commit. Generate evidence from that exact SHA, then add the evidence in a separate evidence-only commit. Raise the final PR from the second branch.
 
 ## Evidence
 
@@ -51,6 +51,6 @@ The challenge is complete when:
 
 - Both agent attempts use matching conditions and genuine first-attempt patches.
 - Generated evidence preserves every command, result, exit code, artifact digest, risk, reviewer action, and rollback.
-- The generator passes the protected failing and all-passing cases and returns the original overall status.
+- The generator passes all-passing, single-failure, multiple-failure, missing-artifact, and corrupt-artifact checks while preserving the first failing exit code.
 - The workflow is read-only, uses immutable actions, uploads evidence after failure, and does not turn the failed job green.
 - `npm run verify:exercise` passes and all submitted evidence matches one source SHA and unchanged fixtures.

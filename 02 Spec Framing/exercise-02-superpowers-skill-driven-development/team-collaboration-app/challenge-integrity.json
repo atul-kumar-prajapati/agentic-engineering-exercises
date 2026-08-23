@@ -1,6 +1,9 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
+    "../../../scripts/run-clean-verification.mjs": "9b17cbb8865a642a7789113c145be88c6bb965bc2d8c024b82202e8ae85bf368",
+    "../../../scripts/run-vite-build.mjs": "b7901ed4f770e6537e80f864392c8c1de841b5c97fa8993246c5df7a86d5d415",
+    "../../../scripts/verify-protected-inputs.mjs": "d99346d9a84651bcb654d07d1b5d131d39d5f3b703ee9614db4eafc86cb4d96c",
     "../README.md": "c9e23b57da38d79ed2bfda8c7b0f0d28e6cc49e98f453c3fbc23067d998d33f9",
     "../docs/evidence-template.md": "9902b569d525fad144c3eddcb913984de140d8bdbe159d330273d7830b153fab",
     "../docs/invitation-contract.md": "b6135dc848f9b2d9fc3fa4fbe3293c7faad05dee8b9736aec1f150a2c3f19b17",
@@ -8,7 +11,7 @@
     "docs/support-incidents.md": "13c30da8ef3778fece02ee23a8590721cbccd010c18bb81b51165ce781758f3c",
     "lab-contract.json": "1a60cd59178495832adc0c72fc8ac17a16ee7c3501d7613ca152dfd0f772f06d",
     "package-lock.json": "fabf62c92eeb2d81e8f15b2812569d1ce9f9e7438dd209d230a4b7a383610592",
-    "package.json": "a5eef9409deac4781221287771cae3b8d3c8bd09941e7aa3f0ca7738538203f1",
+    "package.json": "c235d5cf6f2862e42c5293b0088c351a82f6db7518102ce6e7299bec29a256ce",
     "scripts/agent-check.mjs": "683f6570b1575042320d5b4fad13415587b7870f10ae56f5e47506f5b9ccdd48",
     "scripts/format-check.mjs": "d6380a0b108d5b6625c159321abbc2481eacb8ff8a3bcbd9c67d6c4b53b6c886",
     "scripts/lint-check.mjs": "07e61dd995625bf59b3a32fc60a3fc523529a29748286987e699175f3e6bcea2",

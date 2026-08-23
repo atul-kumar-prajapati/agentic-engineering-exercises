@@ -14,10 +14,12 @@
   "seededDefects": [
     "saved-filter and evidence-export work both need new shared types but do not own src/types.ts",
     "due-today risk, saved filters, and evidence export are absent from the starter application",
+    "a supplied ready-to-merge handoff makes claims that do not match its resolved commit or evidence",
     "declared lane evidence can drift from the actual Git parents, paths, branches, and output files"
   ],
   "verificationGates": [
     "protected focused acceptance test for each lane",
+    "mandatory rejection of the supplied invalid handoff with Git-backed proof",
     "Git history, branch, ownership, trailer, handoff, output-hash, and worktree audit",
     "ordered B, A, C no-ff merge audit with lane blob preservation",
     "single shared-type commit and complete integrated acceptance suite",
@@ -27,7 +29,7 @@
   "agentWorkflow": [
     "Record one clean base SHA and create the three required lane branches in linked worktrees.",
     "Give each lane agent only its task, owned paths, shared request, and focused verification command.",
-    "Review one independently tested commit and evidence-backed handoff from every lane.",
+    "Reject the supplied invalid handoff, then review one independently tested commit and evidence-backed handoff from every lane.",
     "Merge B, A, and C with no-ff, then promote both shared contracts in one integration commit.",
     "Run integrated checks, verify the submission against Git, and remove the linked worktrees.",
     "Capture comparable before and after results using the conditions defined in the exercise README."

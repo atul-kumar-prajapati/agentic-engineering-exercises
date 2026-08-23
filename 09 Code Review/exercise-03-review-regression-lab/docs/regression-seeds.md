@@ -1,5 +1,5 @@
-# Protected Regression Catalog
+# Review Case Summary
 
-The historical diff contains five observable regressions across search, status filtering, risk scoring, summary metrics, and queue completeness. The security diff contains independent cache-parse and authorization failures. The clean control replaces `slice().sort()` with an equivalent spread-copy sort.
+The catalog contains two defect-bearing diffs and one behavior-preserving control. Cases vary in breadth and boundary depth so the skill must inspect both local changes and downstream consequences.
 
-These outcomes belong in the evaluator and human judgment process, not in the candidate prompt. A prompt that names these cases, finding IDs, exact APIs, or diff tokens has memorized the benchmark and is rejected.
+These summaries define coverage only. Discover findings from the context and diff; do not copy evaluator IDs into the skill.

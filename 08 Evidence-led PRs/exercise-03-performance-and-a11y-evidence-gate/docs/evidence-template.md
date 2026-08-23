@@ -12,6 +12,7 @@ Record only the first attempt from each agent session. Use full Git SHAs, exact 
 - Human hints: 0
 - Retries: 0
 - Patch: `evidence/before.patch` or `evidence/after.patch`
+- Patch SHA-256:
 
 | Proof | Run 1 | Run 2 | Run 3 | Gate value |
 |---|---:|---:|---:|---:|
@@ -24,3 +25,5 @@ Record axe violations, accessible-name result, production build SHA, browser env
 ## `evidence/comparison.md`
 
 Confirm matching run conditions. Compare visual correctness, accessible naming, measured performance, worst-run decision, axe results, failure controls, and changed files. Support the conclusion with raw reports and both patches.
+
+Include the exact phrases `Same conditions`, `Before`, `After`, `Proof`, and `Conclusion`. Commit each untouched attempt and generate its patch with `git diff --binary --full-index <starting-commit> <that-attempt-implementation-commit>`.

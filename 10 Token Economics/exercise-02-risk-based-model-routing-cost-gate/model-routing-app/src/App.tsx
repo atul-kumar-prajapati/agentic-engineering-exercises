@@ -1,10 +1,24 @@
+import { useEffect, useState } from "react";
 import { calculateReadiness, groupByRisk } from "./domainReadiness";
+import { dispatchTasks } from "./routing/dispatchTasks.mjs";
 import { labContract } from "./labContract";
 import "./styles.css";
 
 export default function App() {
   const readiness = calculateReadiness(labContract);
   const groupedRisks = groupByRisk(labContract.seededDefects);
+  const [routingPreview, setRoutingPreview] = useState<Array<{ id: string; route: string }>>([]);
+
+  useEffect(() => {
+    void dispatchTasks([
+      { id: "documentation-fix", risk: "low", ambiguity: "low", scope: "one-file" },
+      { id: "authorization-change", risk: "high", ambiguity: "low", scope: "cross-boundary" },
+      { id: "missing-assessment", risk: "unknown", ambiguity: "high", scope: "unknown" },
+    ], {
+      execute: async () => "queued",
+      clarify: async () => "needs-details",
+    }).then((results) => setRoutingPreview(results.map(({ id, route }) => ({ id, route }))));
+  }, []);
 
   return (
     <main className="app-shell">
@@ -67,6 +81,13 @@ export default function App() {
               <strong>{risk}</strong>: {items.length}
             </p>
           ))}
+        </article>
+
+        <article className="panel">
+          <h2>Application Routing Preview</h2>
+          <ul>
+            {routingPreview.map((item) => <li key={item.id}>{item.id}: {item.route}</li>)}
+          </ul>
         </article>
       </section>
     </main>

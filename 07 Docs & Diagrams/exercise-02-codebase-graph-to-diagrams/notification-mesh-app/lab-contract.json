@@ -19,6 +19,7 @@
   ],
   "verificationGates": [
     "The generated graph exactly matches source call relationships.",
+    "Final graph regeneration writes to a scratch path and leaves the committed artifact unchanged.",
     "Both Mermaid diagrams parse and contain only supported edges.",
     "Protected routing tests prove every required fallback.",
     "Traceability and hashes bind all evidence to one source SHA.",

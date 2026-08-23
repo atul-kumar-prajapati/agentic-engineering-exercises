@@ -61,7 +61,21 @@ Add accessibility, performance, and testability using their exact commands and p
 
 ## decision-log.json
 
-Record one decision per unique baseline finding with `finding_id`, `decision`, `owner`, `rationale`, `verification`, and `residual_risk`. Also record `merge_decision`, `rollback`, the two SHAs, and the exact remediation paths relative to `nfr-swarm-app`.
+Record one decision per unique baseline finding and supplied `CLAIM-01` with `finding_id`, `decision`, `owner`, `rationale`, `verification`, and `residual_risk`. Also record `merge_decision`, `rollback`, the two SHAs, and the exact remediation paths relative to `nfr-swarm-app`.
+
+Record the shared security-testability boundary in this form:
+
+```json
+"interactions": [
+  {
+    "finding_ids": ["SEC-02", "TEST-01"],
+    "shared_path": "src/services/accessReviewApi.ts",
+    "resolution": "how one boundary change addresses both findings",
+    "verification_commands": ["npm run review:security", "npm run review:testability"],
+    "residual_risk": "remaining interaction risk or none"
+  }
+]
+```
 
 ## Performance
 

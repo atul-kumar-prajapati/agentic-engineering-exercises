@@ -42,6 +42,16 @@ try {
     "src/types.ts",
   ];
   for (const file of starterFiles) write(appRoot, file, `// starter ${file}\n`);
+  write(exerciseRoot, "docs/untrusted-handoff.json", `${JSON.stringify({
+    schema_version: 1,
+    handoff_id: "UNTRUSTED-01",
+    lane: "A",
+    status: "ready",
+    commit_ref: "BASE_SHA",
+    claimed_parent_ref: "BASE_SHA",
+    claimed_changed_paths: ["src/components/FilterBar.tsx", "src/utils/filters.ts", "tests/lane-a/claimed-but-absent.test.ts"],
+    verification: { command: "npm run test:lane-a", exit_code: 0, output_path: "evidence/commands/untrusted-lane-a.txt" },
+  }, null, 2)}\n`);
   run(repositoryRoot, ["add", "."]);
   run(repositoryRoot, ["commit", "-m", "test: create base"]);
   const baseSha = run(repositoryRoot, ["rev-parse", "HEAD"]);
@@ -144,6 +154,13 @@ try {
     schema_version: 1,
     base_sha: baseSha,
     integration_branch: "integration/parallel-features",
+    untrusted_handoff_review: {
+      handoff_id: "UNTRUSTED-01",
+      resolved_commit_sha: baseSha,
+      decision: "reject",
+      detected_issues: ["commit-parent", "changed-paths", "verification-output"],
+      proof: `git show and git diff at ${baseSha} prove the parent and changed paths differ, while the claimed output is absent.`,
+    },
     merge_order: ["B", "A", "C"],
     merge_commits: mergeCommits,
     shared_commit_sha: productHead,
@@ -155,12 +172,18 @@ try {
       output_sha256: hash(integrationOutput),
     },
   }, null, 2));
-  write(exerciseRoot, "evidence/integration.md", "# Integration\n\nLane review completed. Shared request handling followed merge order B, A, C. No conflict was hidden. The shared-type commit resolved promotion. Final check passed. Cleanup removed worktrees. Remaining risk is none. Rollback reverses shared-type and merge commits.\n");
+  write(exerciseRoot, "evidence/integration.md", "# Integration\n\nThe untrusted handoff was rejected after Git proof exposed its mismatches. Lane review completed. Shared request handling followed merge order B, A, C. No conflict was hidden. The shared-type commit resolved promotion. Final check passed. Cleanup removed worktrees. Remaining risk is none. Rollback reverses shared-type and merge commits.\n");
   run(repositoryRoot, ["add", "."]);
   run(repositoryRoot, ["commit", "-m", "evidence: record parallel integration"]);
 
   const failures = verifyLaneSubmission({ repositoryRoot, appRoot, exerciseRoot });
   assert.deepEqual(failures, []);
+  const integrationPath = path.join(evidenceRoot, "integration.json");
+  const invalidReview = JSON.parse(fs.readFileSync(integrationPath, "utf8"));
+  invalidReview.untrusted_handoff_review.decision = "accept";
+  fs.writeFileSync(integrationPath, JSON.stringify(invalidReview));
+  assert.ok(verifyLaneSubmission({ repositoryRoot, appRoot, exerciseRoot }).some((failure) => failure.includes("must be rejected")));
+  fs.writeFileSync(integrationPath, JSON.stringify({ ...invalidReview, untrusted_handoff_review: { ...invalidReview.untrusted_handoff_review, decision: "reject" } }, null, 2));
   const tampered = JSON.parse(fs.readFileSync(path.join(evidenceRoot, "lane-handoffs.json"), "utf8"));
   tampered.lanes[0].changed_paths.push("src/types.ts");
   fs.writeFileSync(path.join(evidenceRoot, "lane-handoffs.json"), JSON.stringify(tampered));

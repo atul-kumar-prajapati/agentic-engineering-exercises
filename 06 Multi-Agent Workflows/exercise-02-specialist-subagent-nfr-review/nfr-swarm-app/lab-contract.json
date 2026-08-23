@@ -16,11 +16,13 @@
     "privileged approval trusts the UI instead of enforcing authorization and evidence at the service boundary",
     "clickable div rows prevent keyboard-native review selection",
     "portfolio risk repeats an expensive calculation on every render",
-    "approval behavior depends on window and real time, making boundary tests unreliable"
+    "approval behavior depends on window and real time, making boundary tests unreliable",
+    "a supplied specialist claim incorrectly recommends keeping authorization in the UI"
   ],
   "verificationGates": [
     "four distinct before sessions reviewing the same baseline SHA",
     "complete finding triage with required blockers fixed",
+    "source-backed dismissal of the supplied incorrect finding and explicit security-testability interaction review",
     "protected security, accessibility, performance, and testability checks",
     "four fresh after sessions reviewing the same remediation SHA",
     "Git-scoped remediation and comparable before-after performance evidence",
@@ -29,7 +31,7 @@
   "agentWorkflow": [
     "Record the clean baseline SHA and run four read-only specialist agents in parallel.",
     "Require each specialist to produce source-located findings and captured command output.",
-    "Triage every unique finding as integration owner and implement only approved remediation work.",
+    "Triage every unique and supplied finding, reject unsupported advice, and identify cross-specialist interactions.",
     "Commit the application remediation before adding evidence.",
     "Run four fresh specialist rechecks and verify the complete evidence against Git.",
     "Capture comparable before and after results using the conditions defined in the exercise README."
@@ -48,6 +50,7 @@
     "Specialists remain independent, read-only, scoped, and synchronized to one code version.",
     "Findings contain enough evidence for the integration owner to reproduce and decide them.",
     "Required cross-cutting risks are fixed at the correct boundaries.",
+    "The integration owner rejects a confident but unsupported specialist recommendation with proof.",
     "Fresh rechecks validate the code that is actually proposed for merge.",
     "Automated verification rejects stale SHAs, duplicated sessions, incomplete triage, and unverifiable performance claims."
   ]

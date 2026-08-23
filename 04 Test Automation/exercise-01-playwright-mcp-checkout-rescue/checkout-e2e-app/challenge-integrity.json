@@ -1,6 +1,9 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
+    "../../../scripts/run-clean-verification.mjs": "9b17cbb8865a642a7789113c145be88c6bb965bc2d8c024b82202e8ae85bf368",
+    "../../../scripts/run-vite-build.mjs": "b7901ed4f770e6537e80f864392c8c1de841b5c97fa8993246c5df7a86d5d415",
+    "../../../scripts/verify-protected-inputs.mjs": "d99346d9a84651bcb654d07d1b5d131d39d5f3b703ee9614db4eafc86cb4d96c",
     "../README.md": "a65a30660d04e3dcfe0501d4f93a556dd30cf7946b7f361877b3ed8eab5e1c6c",
     "../docs/checkout-contract.md": "ba5fabd527105610b7412969d7ae618a39a6051733eea43d3c2a8ffeae6179bb",
     "../docs/evidence-template.md": "a1c79d0f857ea5fd90a876485049f2be720613962ac5f5eeefa4f5ac9794ae01",
@@ -8,7 +11,7 @@
     "index.html": "81111f8450a6a60eeaec3899840fd32523847e60512de9de1750936d34d6547a",
     "lab-contract.json": "d542a5fec85a74b248d3d3237396f2f43d27e5a55e20702bea69c2edff41bde2",
     "package-lock.json": "2bc673a924393b5c0eaee9c408008d72344dd431dd1f2ed5dc9d7e55ccdf6c7f",
-    "package.json": "aaf19aa125a203d0c11750dbdba00bccb05dc016d169bf5f652630f8ade2ce79",
+    "package.json": "73c258be9afee8703af4a0bf9cc920c4bec91c0f8c9a737400f7e145d1b47185",
     "playwright.config.ts": "eb512df6eab8e7a12601961b93d9d055f14ab5d86dab56cf48317c920309af9b",
     "scripts/agent-check.mjs": "9e24824c7ef20743505fb1787d83608278c7a8e4e81c568f56f57bbf24dbe125",
     "scripts/check-playwright-setup.mjs": "641a26261e30d9ee6eddd7442350f2b977f51e602d595c2cadb1fe5a118ecd7d",

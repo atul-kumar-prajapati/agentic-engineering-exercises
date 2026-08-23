@@ -1,6 +1,9 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
+    "../../../scripts/run-clean-verification.mjs": "9b17cbb8865a642a7789113c145be88c6bb965bc2d8c024b82202e8ae85bf368",
+    "../../../scripts/run-vite-build.mjs": "b7901ed4f770e6537e80f864392c8c1de841b5c97fa8993246c5df7a86d5d415",
+    "../../../scripts/verify-protected-inputs.mjs": "d99346d9a84651bcb654d07d1b5d131d39d5f3b703ee9614db4eafc86cb4d96c",
     "../README.md": "4856a36e33c5c43779b8d189b46eb4187b0b9f0f22bb1ec41236251e10e9dd2b",
     "../docs/evidence-template.md": "5f49737c2f07cc20179997a69977808be5f0b30fea7cf3d5bd7fae7519356af5",
     "../docs/guardrail-contract.md": "422e2c736cf03bdfa0ab9d3ca797bfb0ca6370f136839633620c3c99bc482a67",
@@ -12,7 +15,7 @@
     "lab-contract.json": "804ef65d064f3db3fcf099db10b27b66fe4b1292747d8aa65a3107e28d4fa7ae",
     "legacy/release-runner.md": "e8e79ad0eb5fca5f92c4589baa94e1452033ec584d3c77298b340a4be040434e",
     "package-lock.json": "23a03f05ed558318a46466193a41b0d2422099616662aa9786107832a2f2f92d",
-    "package.json": "bbf6a21694624efabab38884b893e6349a6ac8e379aae0d4f1265876f7429e35",
+    "package.json": "0bf154a2a5fb89dde3a6fb3f80adfa9d28b6b1b89f67407abbe51014bc1d1c38",
     "scripts/agent-check.mjs": "59e9e27acceb603175dd03bfe2381c903663afc0b2105ffb96c36958caf9b229",
     "scripts/check-submission.mjs": "1a986445b9062b3d096d55e3c3b5a2b45f93608d0154ede828d42fb28d23de7e",
     "scripts/format-check.mjs": "a2668ed5b488aa15500cd405de2c7c885f9a47734ef785895c07f9e3aa026611",

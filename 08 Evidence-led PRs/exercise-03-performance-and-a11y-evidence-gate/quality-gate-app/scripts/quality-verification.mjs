@@ -5,8 +5,88 @@ import { execFileSync, spawnSync } from "node:child_process";
 import os from "node:os";
 import { isDeepStrictEqual } from "node:util";
 
+const CAPTURE_TARGETS = ["raw", "capture-manifest.json", "quality-summary.json", "comparison.md"];
+
+export function prepareCaptureDestination(evidenceRoot) {
+  const completionMarker = path.join(evidenceRoot, "capture-complete.json");
+  if (fs.existsSync(completionMarker)) throw new Error(`refusing to overwrite completed evidence: ${completionMarker}`);
+  const removed = [];
+  for (const relative of CAPTURE_TARGETS) {
+    const target = path.join(evidenceRoot, relative);
+    if (!fs.existsSync(target)) continue;
+    fs.rmSync(target, { recursive: true, force: true });
+    removed.push(relative);
+  }
+  return removed;
+}
+
 export function sha256File(file) {
   return crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+}
+
+export function sha256Tree(directory) {
+  const hash = crypto.createHash("sha256");
+  const visit = (current) => {
+    for (const entry of fs.readdirSync(current, { withFileTypes: true }).sort((left, right) => left.name.localeCompare(right.name))) {
+      const absolute = path.join(current, entry.name);
+      const relative = path.relative(directory, absolute).split(path.sep).join("/");
+      if (entry.isDirectory()) visit(absolute);
+      else if (entry.isFile()) {
+        hash.update(`${relative}\0`);
+        hash.update(fs.readFileSync(absolute));
+        hash.update("\0");
+      }
+    }
+  };
+  visit(directory);
+  return hash.digest("hex");
+}
+
+export function verifyCaptureManifest({ manifest, sourceSha, configPath, productionBuild, evidenceRoot, contract, completionMarker }) {
+  const failures = [];
+  if (manifest?.schemaVersion !== 1 || manifest?.sourceSha !== sourceSha) failures.push("capture manifest identity or source SHA is incorrect");
+  if (!/^[0-9a-f-]{36}$/.test(manifest?.captureSession ?? "")) failures.push("capture manifest session ID is invalid");
+  if (typeof manifest?.capturedAt !== "string" || Number.isNaN(Date.parse(manifest.capturedAt))) failures.push("capture manifest time is invalid");
+  if (manifest?.configSha256 !== sha256File(configPath)) failures.push("capture manifest does not match lighthouserc.json");
+  if (manifest?.productionBuildSha256 !== sha256Tree(productionBuild)) failures.push("capture manifest does not match the current production build");
+  if (manifest?.route !== contract.route || manifest?.numberOfRuns !== contract.lighthouseRuns) failures.push("capture manifest route or run count differs from the protected contract");
+  if (!manifest?.browser?.channel || !manifest?.browser?.version) failures.push("capture manifest browser is missing");
+  if (!isDeepStrictEqual(manifest?.captureEnvironment, contract.captureEnvironment)) failures.push("capture manifest does not bind the protected browser and screen settings");
+  const expectedReports = Array.from({ length: contract.lighthouseRuns }, (_, index) => `raw/lighthouse/run-${index + 1}.json`);
+  const manifestReports = Array.isArray(manifest?.lighthouseReports) ? manifest.lighthouseReports.map((report) => report?.path) : [];
+  if (!isDeepStrictEqual(manifestReports, expectedReports)) failures.push("capture manifest must bind each Lighthouse report exactly once in run order");
+  if (!Array.isArray(manifest?.lighthouseReports) || manifest.lighthouseReports.length !== contract.lighthouseRuns) failures.push("capture manifest must bind every Lighthouse report");
+  else for (const report of manifest.lighthouseReports) {
+    const absolute = path.resolve(evidenceRoot, report.path ?? "");
+    if (!absolute.startsWith(`${path.resolve(evidenceRoot)}${path.sep}`) || !fs.existsSync(absolute)) failures.push(`capture manifest report is missing: ${report.path}`);
+    else {
+      if (report.sha256 !== sha256File(absolute)) failures.push(`capture manifest report digest differs: ${report.path}`);
+      try {
+        const lighthouse = JSON.parse(fs.readFileSync(absolute, "utf8"));
+        if (browserMajor(lighthouse?.environment?.networkUserAgent) !== String(manifest?.browser?.version ?? "").split(".")[0]) failures.push(`capture manifest browser differs from ${report.path}`);
+      } catch { failures.push(`capture manifest report is invalid JSON: ${report.path}`); }
+    }
+  }
+  const axePath = path.resolve(evidenceRoot, manifest?.axeReport?.path ?? "");
+  if (!axePath.startsWith(`${path.resolve(evidenceRoot)}${path.sep}`) || !fs.existsSync(axePath)) failures.push("capture manifest axe report is missing");
+  else {
+    if (manifest?.axeReport?.path !== "raw/axe.json" || manifest?.axeReport?.sha256 !== sha256File(axePath)) failures.push("capture manifest axe digest or path differs");
+    try {
+      const axe = JSON.parse(fs.readFileSync(axePath, "utf8"));
+      if (axe?.browser?.name !== manifest?.browser?.channel || axe?.browser?.version !== manifest?.browser?.version) failures.push("capture manifest browser differs from axe evidence");
+      if (!isDeepStrictEqual(axe?.captureEnvironment, manifest?.captureEnvironment)) failures.push("capture manifest device differs from axe evidence");
+    } catch { failures.push("capture manifest axe report is invalid JSON"); }
+  }
+  if (
+    !completionMarker
+    || completionMarker.schemaVersion !== 1
+    || completionMarker.sourceSha !== sourceSha
+    || completionMarker.captureSession !== manifest?.captureSession
+    || completionMarker.manifestSha256 !== sha256File(path.join(evidenceRoot, "capture-manifest.json"))
+    || typeof completionMarker.completedAt !== "string"
+    || Number.isNaN(Date.parse(completionMarker.completedAt))
+  ) failures.push("capture completion marker does not bind the source SHA and published manifest");
+  return failures;
 }
 
 function browserMajor(userAgent) {
@@ -36,12 +116,14 @@ export function readLighthouseReports(directory, contract) {
       browserMajor: browserMajor(report?.environment?.networkUserAgent),
       formFactor: report?.configSettings?.formFactor,
       throttlingMethod: report?.configSettings?.throttlingMethod,
+      screenEmulation: report?.configSettings?.screenEmulation,
     };
     if (typeof report?.lighthouseVersion !== "string" || !report.lighthouseVersion) failures.push(`${file} is not a raw Lighthouse report`);
     if (typeof report?.fetchTime !== "string" || Number.isNaN(Date.parse(report.fetchTime))) failures.push(`${file} fetchTime is invalid`);
     if (![performance, accessibility].every((value) => typeof value === "number") || typeof largestContentfulPaintMs !== "number") failures.push(`${file} is missing required metrics`);
     if (route !== contract.route) failures.push(`${file} audited route ${route ?? "unknown"} instead of ${contract.route}`);
     if (!environment.hostUserAgent || !environment.networkUserAgent || !environment.browserMajor || !environment.formFactor || !environment.throttlingMethod) failures.push(`${file} environment is incomplete`);
+    if (!isDeepStrictEqual({ formFactor: environment.formFactor, throttlingMethod: environment.throttlingMethod, screenEmulation: environment.screenEmulation }, contract.captureEnvironment)) failures.push(`${file} did not use the protected browser and screen settings`);
     if (report?.runtimeError) failures.push(`${file} contains a Lighthouse runtime error`);
     runs.push({
       file,
@@ -74,6 +156,7 @@ export function readAxeEvidence(file, sourceSha, contract, lighthouseBrowserMajo
   if (typeof document.testedUrl !== "string" || typeof document.generatedAt !== "string" || Number.isNaN(Date.parse(document.generatedAt))) failures.push("axe URL or capture time is invalid");
   if (!Array.isArray(document.violations)) failures.push("axe violations must be an array");
   if (!document.browser?.name || !document.browser?.version) failures.push("axe browser environment is missing");
+  if (!isDeepStrictEqual(document.captureEnvironment, contract.captureEnvironment)) failures.push("axe evidence did not use the protected browser and screen settings");
   const axeBrowserMajor = String(document.browser?.version ?? "").split(".")[0];
   if (lighthouseBrowserMajor && axeBrowserMajor !== lighthouseBrowserMajor) failures.push("axe and Lighthouse use different Chrome major versions");
   return {
@@ -85,6 +168,7 @@ export function readAxeEvidence(file, sourceSha, contract, lighthouseBrowserMajo
       route: document.route,
       generatedAt: document.generatedAt,
       browser: document.browser,
+      captureEnvironment: document.captureEnvironment,
       violations: document.violations,
     },
   };
@@ -124,6 +208,7 @@ export function verifyLighthouseConfig(config, contract) {
   if (!isDeepStrictEqual(collect?.url, ["http://localhost/"])) failures.push("Lighthouse must audit only http://localhost/");
   if (collect?.numberOfRuns !== contract.lighthouseRuns) failures.push(`Lighthouse must run exactly ${contract.lighthouseRuns} times`);
   if (!isDeepStrictEqual([...(collect?.settings?.onlyCategories ?? [])].sort(), ["accessibility", "performance"])) failures.push("Lighthouse must collect performance and accessibility categories");
+  if (!isDeepStrictEqual({ formFactor: collect?.settings?.formFactor, throttlingMethod: collect?.settings?.throttlingMethod, screenEmulation: collect?.settings?.screenEmulation }, contract.captureEnvironment)) failures.push("Lighthouse must use the protected mobile browser and screen settings");
   if (collect?.settings?.skipAudits?.length) failures.push("Lighthouse audits must not be skipped");
   const expected = {
     "categories:performance": contract.thresholds.minimumPerformance,
@@ -146,7 +231,7 @@ export function renderComparison(summary, baselineLighthouse, baselineAxe) {
   const after = summary.worstCase;
   const environment = summary.lighthouseRuns[0].environment;
   const artifactRows = summary.lighthouseRuns.map((run) => `| ${run.file} | ${run.sha256} | ${run.performance.toFixed(2)} | ${run.accessibility.toFixed(2)} | ${Math.round(run.largestContentfulPaintMs)} ms |`).join("\n");
-  return `# Performance and Accessibility Evidence\n\nSource SHA: ${summary.sourceSha}\n\nRoute: ${summary.route}\n\nRelease decision: ${summary.releaseDecision.toUpperCase()}\n\n## Before and after\n\n| Metric | Protected baseline | After, pessimistic | Required |\n| --- | ---: | ---: | ---: |\n| Performance | ${baselineLighthouse.worstCase.performance.toFixed(2)} | ${after.performance.toFixed(2)} | >= ${summary.thresholds.minimumPerformance.toFixed(2)} |\n| Accessibility | ${baselineLighthouse.worstCase.accessibility.toFixed(2)} | ${after.accessibility.toFixed(2)} | = ${summary.thresholds.minimumAccessibility.toFixed(2)} |\n| LCP | ${baselineLighthouse.worstCase.largestContentfulPaintMs} ms | ${Math.round(after.largestContentfulPaintMs)} ms | <= ${summary.thresholds.maximumLargestContentfulPaintMs} ms |\n| Axe violations | ${baselineAxe.violations.length} | ${after.axeViolations} | = ${summary.thresholds.maximumAxeViolations} |\n\n## Comparable environment\n\n- Lighthouse runs: ${summary.lighthouseRuns.length}\n- Aggregation: ${summary.aggregation}\n- Chrome major: ${environment.browserMajor}\n- Form factor: ${environment.formFactor}\n- Throttling: ${environment.throttlingMethod}\n- Axe browser: ${summary.axe.browser.name} ${summary.axe.browser.version}\n- Production route: ${summary.route}\n\n## Raw artifact trace\n\n| Artifact | SHA-256 | Performance | Accessibility | LCP |\n| --- | --- | ---: | ---: | ---: |\n${artifactRows}\n\nAxe artifact SHA-256: ${summary.axe.sha256}\n\n## Failure-path proof\n\nThe protected verifier changes one Lighthouse run below the performance threshold and injects one axe violation. The submitted gate must write a failed decision and return non-zero for both cases.\n\n## Residual risk\n\nLighthouse results can vary across hardware even with pessimistic aggregation. Automated axe checks do not replace keyboard, screen-reader, zoom, or usability review. Re-run this gate in the review environment and complete focused manual accessibility checks before release.\n`;
+  return `# Performance and Accessibility Evidence\n\nSource SHA: ${summary.sourceSha}\n\nRoute: ${summary.route}\n\nRelease decision: ${summary.releaseDecision.toUpperCase()}\n\n## Before and after\n\nSame conditions were used for the Before and After runs. The raw reports below are the Proof for the release decision.\n\n| Metric | Protected baseline | After, pessimistic | Required |\n| --- | ---: | ---: | ---: |\n| Performance | ${baselineLighthouse.worstCase.performance.toFixed(2)} | ${after.performance.toFixed(2)} | >= ${summary.thresholds.minimumPerformance.toFixed(2)} |\n| Accessibility | ${baselineLighthouse.worstCase.accessibility.toFixed(2)} | ${after.accessibility.toFixed(2)} | = ${summary.thresholds.minimumAccessibility.toFixed(2)} |\n| LCP | ${baselineLighthouse.worstCase.largestContentfulPaintMs} ms | ${Math.round(after.largestContentfulPaintMs)} ms | <= ${summary.thresholds.maximumLargestContentfulPaintMs} ms |\n| Axe violations | ${baselineAxe.violations.length} | ${after.axeViolations} | = ${summary.thresholds.maximumAxeViolations} |\n\n## Comparable environment\n\n- Lighthouse runs: ${summary.lighthouseRuns.length}\n- Aggregation: ${summary.aggregation}\n- Chrome major: ${environment.browserMajor}\n- Form factor: ${environment.formFactor}\n- Throttling: ${environment.throttlingMethod}\n- Axe browser: ${summary.axe.browser.name} ${summary.axe.browser.version}\n- Production route: ${summary.route}\n\n## Raw artifact trace\n\n| Artifact | SHA-256 | Performance | Accessibility | LCP |\n| --- | --- | ---: | ---: | ---: |\n${artifactRows}\n\nAxe artifact SHA-256: ${summary.axe.sha256}\n\n## Failure-path proof\n\nThe protected verifier changes one Lighthouse run below the performance threshold and injects one axe violation. The submitted gate must write a failed decision and return non-zero for both cases.\n\n## Residual risk\n\nLighthouse results can vary across hardware even with pessimistic aggregation. Automated axe checks do not replace keyboard, screen-reader, zoom, or usability review. Re-run this gate in the review environment and complete focused manual accessibility checks before release.\n\n## Conclusion\n\nThe After run passes the protected pessimistic gate; the Before baseline does not.\n`;
 }
 
 function git(root, args) {

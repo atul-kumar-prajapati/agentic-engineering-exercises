@@ -4,11 +4,9 @@
 
 Your team needs an independent review of a caching PR, but the implementer's assumptions and a plausible reviewer claim can bias the result. Your mission is to review the exact diff in a fresh session, prove or dismiss every finding, and fix only confirmed blockers.
 
-The PR can lose saved work, fail on damaged browser data, mutate shared fixtures, and write stale state during a read-only action. One seeded claim sounds credible but is wrong.
-
 Keep implementation context out of the reviewer session and make the final triage reproducible.
 
-The duration for this challenge is 45 min or less.
+The duration for this challenge is 60 min or less.
 
 ## Project
 
@@ -22,13 +20,13 @@ The duration for this challenge is 45 min or less.
 
 3. Preserve the exact prompt and session metadata. Reproduce every finding against the mounted head before assigning severity or recommending a fix.
 
-4. Explicitly evaluate the claim in [reviewer noise](./docs/reviewer-noise.md). Dismiss it if the code evidence does not support it, even if it resembles a real nearby bug.
+4. Explicitly evaluate the claim in [reviewer noise](./docs/reviewer-noise.md). Accept or dismiss it only after a focused reproduction.
 
 5. Fix only supported blockers with the smallest change and add focused cache regression tests under `tests/`. Avoid unrelated refactoring.
 
-6. Run a fresh recheck of the remediation commit and verify malformed cache recovery, immutable defaults, save persistence, read-only evidence collection, and filter changes.
+6. Add learner regression tests for every confirmed blocker. The protected replay mounts the same tests on the risky head and the remediation; they must fail before and pass after.
 
-7. Save `evidence/after.md`, `evidence/after.patch`, reviewer session data, review reports, command proof, and comparison. Raise the focused PR.
+7. Commit the focused fixes and tests first. Run a fresh recheck of that exact commit, then add reviewer session data, review reports, patches, command proof, and comparison in an evidence-only commit.
 
 ## Evidence
 
@@ -50,7 +48,8 @@ For the required before and after files, follow the [evidence instructions and t
 The challenge is complete when:
 
 - The fresh reviewer receives no implementation context, expected findings, or earlier review.
-- Four cache blockers are reproduced, fixed, and covered by focused tests.
-- The claim that `saveAction` mutates the shared fixture is dismissed with exact code evidence.
+- Every confirmed blocker is reproduced, fixed, and covered by a focused test.
+- The supplied reviewer claim is accepted or dismissed with direct code and reproduction evidence.
+- The same learner regression tests fail on the protected head and pass after remediation.
 - The remediation commit contains only focused fixes and learner tests.
 - `npm run verify:exercise` passes and every finding, dismissal, change, and check is traceable.

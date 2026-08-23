@@ -5,20 +5,22 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc -b && vite build",
+    "build": "node ../../../scripts/run-vite-build.mjs",
     "preview": "vite preview --host 127.0.0.1",
-    "typecheck": "tsc -b --pretty false",
+    "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit --pretty false --incremental false",
     "test": "node ./scripts/test-scope-verifier.mjs && node ./scripts/agent-check.mjs",
     "test:migration": "node ./scripts/run-migration-tests.mjs && node ./tests/export-button.test.mjs",
     "test:scope": "node ./scripts/verify-scope-submission.mjs",
-    "test:submission": "node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json && npm run test:scope",
+    "test:before": "node ./scripts/replay-before-scope.mjs",
+    "test:submission": "node ../../../scripts/verify-submission-contract.mjs ./submission-contract.json && npm run test:before && npm run test:scope",
     "lint": "node ./scripts/lint-check.mjs",
     "format": "node ./scripts/format-check.mjs",
     "agent:check": "npm run test:integrity && npm run lint && npm run test && npm run format && npm run typecheck && npm run build",
     "test:integrity": "node ../../../scripts/verify-protected-inputs.mjs ./challenge-integrity.json",
     "verify:implementation": "npm run test:migration",
-    "verify:submission": "npm run test:submission",
-    "verify:exercise": "npm run agent:check && npm run verify:implementation && npm run verify:submission"
+    "verify:submission": "node ../../../scripts/comparable-evidence.mjs .. && npm run test:submission",
+    "verify:exercise:core": "npm run agent:check && npm run verify:implementation && npm run verify:submission",
+    "verify:exercise": "node ../../../scripts/run-clean-verification.mjs"
   },
   "dependencies": {
     "react": "^19.2.0",

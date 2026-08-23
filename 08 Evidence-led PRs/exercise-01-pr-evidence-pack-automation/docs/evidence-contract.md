@@ -29,3 +29,5 @@ Each check entry contains the exact `name`, `command`, `exitCode`, `result`, `ri
 Artifact paths are relative to the output directory, use `/`, and cannot contain `..` or absolute paths. Exit only after the complete pack has been written, using `overallExitCode` as the process exit code.
 
 Also write `<output>/summary.md`. It must contain the source SHA, overall result and exit code, and every check's name, result, exit code, artifact path, artifact SHA-256, risk, reviewer action, and rollback. Write both files and all artifacts before exiting.
+
+Fixtures can contain more than one failure. Do not replace the first failing exit code with the last failure, a generic `1`, or a successful status. Reject the fixture before writing a pack when any source artifact is missing, unreadable, or outside the fixture directory.

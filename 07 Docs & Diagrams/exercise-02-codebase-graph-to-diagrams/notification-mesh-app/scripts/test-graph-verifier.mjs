@@ -22,7 +22,7 @@ try {
   write(appRoot, "src/notification/consent.mjs", `export function hasSmsConsent(i) { return i.consent; }\n`);
   write(appRoot, "src/notification/results.mjs", `export function immediateRoute(c) { return { channel: c }; }\nexport function durableQueueRoute() { return { channel: "queue" }; }\n`);
   write(appRoot, "src/notification/routeNotification.mjs", `import { pushAvailable, smsAvailable, emailAvailable } from "./providers.mjs";\nimport { hasSmsConsent } from "./consent.mjs";\nimport { immediateRoute, durableQueueRoute } from "./results.mjs";\nexport function selectNotificationRoute(i) {\n if (pushAvailable(i)) return immediateRoute("push");\n if (smsAvailable(i) && hasSmsConsent(i)) return immediateRoute("sms");\n if (emailAvailable(i)) return immediateRoute("email");\n return durableQueueRoute();\n}\n`);
-  const dep = write(exerciseRoot, "diagrams/notification-dependencies.mmd", `flowchart LR\n%% EDGE: DEP-01\nChannelRouter --> ProviderStatus\n%% EDGE: DEP-02\n%% EDGE: DEP-03\nChannelRouter --> ConsentPolicy\n%% EDGE: DEP-04\n%% EDGE: DEP-05\nChannelRouter --> ImmediateRoute\n%% EDGE: DEP-06\nChannelRouter --> DurableQueue\n`);
+  const dep = write(exerciseRoot, "diagrams/notification-dependencies.mmd", `flowchart LR\nChannelRouter --> ProviderStatus\nChannelRouter --> ConsentPolicy\nChannelRouter --> ImmediateRoute\nChannelRouter --> DurableQueue\n`);
   const seq = write(exerciseRoot, "diagrams/fallback-sequence.mmd", `sequenceDiagram\nactor Client\nparticipant ChannelRouter\nparticipant ProviderStatus\nparticipant ConsentPolicy\nparticipant RouteResult\nClient->>ChannelRouter: route\n%% EDGE: DEP-01\nChannelRouter->>ProviderStatus: push unavailable\n%% EDGE: DEP-02\nChannelRouter->>ProviderStatus: sms available\n%% EDGE: DEP-03\nChannelRouter->>ConsentPolicy: sms not consented\n%% EDGE: DEP-04\nChannelRouter->>ProviderStatus: email available\n%% EDGE: DEP-05\nChannelRouter->>RouteResult: email selected\nClient->>ChannelRouter: route again\nChannelRouter->>ProviderStatus: email unavailable\n%% EDGE: DEP-06\nChannelRouter->>RouteResult: durable queue selected\n`);
   git(repositoryRoot, ["add", "."]); git(repositoryRoot, ["commit", "-m", "source"]); const sourceSha = git(repositoryRoot, ["rev-parse", "HEAD"]);
   const graphFile = write(exerciseRoot, "artifacts/code-graph.json", `${JSON.stringify(buildCodeGraph(appRoot, sourceSha), null, 2)}\n`);
@@ -41,6 +41,10 @@ try {
   write(exerciseRoot, "evidence/verification.md", `Source SHA ${sourceSha}. Graph regeneration passed. Mermaid parser passed. Semantic edge checks passed. Routing test passed. Stale claim review completed. Remaining uncertainty: none. Final conclusion: approved.\n`);
   git(repositoryRoot, ["add", "."]); git(repositoryRoot, ["commit", "-m", "evidence"]);
   assert.deepEqual(await verifyGraphSubmission({ repositoryRoot, appRoot, exerciseRoot }), []);
+  const originalSequence = fs.readFileSync(seq, "utf8");
+  fs.writeFileSync(seq, originalSequence.replace("ChannelRouter->>ConsentPolicy: sms not consented", "ChannelRouter->>RouteResult: sms not consented"));
+  assert.ok((await verifyGraphSubmission({ repositoryRoot, appRoot, exerciseRoot })).some((failure) => failure.includes("DEP-03 marker must immediately precede")));
+  fs.writeFileSync(seq, originalSequence);
   const tampered = JSON.parse(fs.readFileSync(traceFile, "utf8")); tampered.edges[0].callee = "durableQueueRoute"; fs.writeFileSync(traceFile, JSON.stringify(tampered));
   assert.ok((await verifyGraphSubmission({ repositoryRoot, appRoot, exerciseRoot })).some((failure) => failure.includes("caller or callee")));
   console.log("code graph verifier self-test passed");

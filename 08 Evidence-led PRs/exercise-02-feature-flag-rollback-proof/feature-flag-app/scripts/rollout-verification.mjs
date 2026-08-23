@@ -75,6 +75,11 @@ export function verifyRollbackDocument(document, sourceSha, originalConfig, orig
   if (!exactObject(document?.behaviorAfter?.outcome, { experience: "legacy", reason: "flag-disabled" }) || !exactObject(document?.behaviorAfter?.apiCalls, []) || !exactObject(document?.behaviorAfter?.telemetry, [])) failures.push("rollback after behavior has preview side effects");
   if (!document?.command?.includes("rollback-invoice-preview.mjs") || !document?.command?.includes("<temporary-config>")) failures.push("rollback command is missing or exposes an unstable path");
   if (!exactObject(document?.invalidInputCheck, { rejected: true, configUnchanged: true })) failures.push("rollback invalid-input safety check is missing");
+  const expectedInterruptedProtocol = { rejected: true, configUnchanged: true, temporaryFilesRemaining: 0, exclusiveLockObserved: true, revisionRecheckObserved: true, temporaryWriteObserved: true, renameObserved: false };
+  if (!exactObject(document?.interruptionCheck, expectedInterruptedProtocol)) failures.push("rollback interruption safety check or runtime operation trace is missing");
+  const expectedAtomicProtocol = { exclusiveLockObserved: true, revisionRecheckObserved: true, temporaryWriteObserved: true, renameObserved: true };
+  if (!exactObject(document?.atomicProtocol, expectedAtomicProtocol)) failures.push("rollback atomic replacement trace is missing");
+  if (document?.concurrencyCheck?.successfulCommands !== 1 || document?.concurrencyCheck?.rejectedCommands !== 1 || document?.concurrencyCheck?.validConfig !== true || !Array.isArray(document?.concurrencyCheck?.exitCodes) || document.concurrencyCheck.exitCodes.filter((code) => code === 0).length !== 1 || document.concurrencyCheck.exitCodes.filter((code) => code !== 0).length !== 1) failures.push("rollback concurrency safety check and command exit codes are missing");
   if (typeof document?.remainingCleanup !== "string" || document.remainingCleanup.length < 30) failures.push("rollback remaining cleanup is missing");
   return failures;
 }
@@ -87,6 +92,7 @@ export function verifyRollbackMarkdown(source, document) {
     "Flag: disabled", "Target allowlist: empty", "Experience: legacy", "API calls: 0", "Telemetry events: 0",
     document.configBefore.revision, document.configAfter.revision, "Result: PASS", "Remaining cleanup", document.remainingCleanup,
     "Invalid-input check: PASS",
+    "Interrupted update: PASS", "Concurrent rollback: PASS",
   ]) if (!source.includes(String(value))) failures.push(`rollback-drill.md is missing ${value}`);
   return failures;
 }
@@ -97,6 +103,9 @@ export function verifyRollbackScriptSource(source) {
   if (!/(?:writeFileSync|writeFile)\s*\(/.test(source)) failures.push("rollback command must write formatted JSON to a temporary file");
   if (!/(?:dirname|path\.parse)\s*\(/.test(source) && !/(?:\.tmp|temporary)/i.test(source)) failures.push("rollback temporary file must be created in the target directory");
   if (!source.includes("previousRevision") || !source.includes("lastRollback")) failures.push("rollback command must preserve audit history");
+  if (!source.includes("--expected-revision")) failures.push("rollback command must reject a stale expected revision");
+  if (!source.includes("ROLLBACK_TEST_FAIL_BEFORE_RENAME")) failures.push("rollback command must expose the protected interruption point only in test mode");
+  if (!/(?:wx|O_EXCL)/.test(source)) failures.push("rollback command must acquire an exclusive lock for concurrent attempts");
   return failures;
 }
 

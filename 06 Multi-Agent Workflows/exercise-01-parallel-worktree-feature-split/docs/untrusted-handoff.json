@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "handoff_id": "UNTRUSTED-01",
+  "lane": "A",
+  "status": "ready",
+  "commit_ref": "BASE_SHA",
+  "claimed_parent_ref": "BASE_SHA",
+  "claimed_changed_paths": [
+    "src/components/FilterBar.tsx",
+    "src/utils/filters.ts",
+    "tests/lane-a/claimed-but-absent.test.ts"
+  ],
+  "verification": {
+    "command": "npm run test:lane-a",
+    "exit_code": 0,
+    "output_path": "evidence/commands/untrusted-lane-a.txt"
+  },
+  "summary": "Saved filters are complete and ready to merge. The commit has the common base as its only parent and changes only Lane A paths."
+}

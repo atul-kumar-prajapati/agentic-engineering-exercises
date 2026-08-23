@@ -12,21 +12,23 @@ const failures = [];
 function json(file, label) { try { return JSON.parse(fs.readFileSync(file, "utf8")); } catch { failures.push(`missing or invalid ${label}`); return null; } }
 const cases = json(path.join(exerciseRoot, "evals", "routing-cases.json"), "cases") ?? [];
 const pricing = json(path.join(exerciseRoot, "evals", "pricing.json"), "pricing") ?? {};
-const metadata = json(path.join(evidenceRoot, "run-metadata.json"), "run metadata");
+const packPath = path.join(exerciseRoot, "evals", "recorded-runs.json");
+const packText = fs.readFileSync(packPath, "utf8");
+const pack = JSON.parse(packText);
+const metadata = json(path.join(evidenceRoot, "measurement-run.json"), "measurement metadata");
 const built = buildRoutingScorecard({
-  cases, pricing,
-  runs: json(path.join(evidenceRoot, "raw-runs.json"), "raw runs") ?? [],
-  responses: json(path.join(evidenceRoot, "raw-responses.json"), "raw responses") ?? {},
+  cases, pricing, pack, packText,
+  measurements: json(path.join(evidenceRoot, "routing-measurements.json"), "routing measurements") ?? [],
   metadata,
   decisions: cases.map((item) => ({ id: item.id, route: routeTask(item) })),
 });
 failures.push(...built.failures);
 const stored = json(path.join(evidenceRoot, "cost-model.json"), "generated cost model");
-if (stored && JSON.stringify(stored) !== JSON.stringify(built.scorecard)) failures.push("cost-model.json does not match recomputed measurements");
+if (stored && JSON.stringify(stored) !== JSON.stringify(built.scorecard)) failures.push("cost-model.json does not match protected runs and submitted measurements");
 if (built.scorecard.adoption !== "adopt") failures.push("not every routing adoption gate passes");
 for (const [file, terms] of [
-  ["routing-policy.md", ["fast", "balanced", "reasoning", "clarify", "escalation", "field"]],
-  ["adoption.md", ["quality", "safety", "cost", "latency", "variance", "three", "held-out", "adopt", `${built.scorecard.totals.savingsPercent}`]],
+  ["routing-policy.md", ["precedence", "tie-break", "fast", "balanced", "reasoning", "clarify", "single retry", "field"]],
+  ["adoption.md", ["quality", "safety", "cost", "latency", "variance", "benchmark", "held-out", "adopt", `${built.scorecard.totals.savingsPercent}`]],
 ]) {
   const text = fs.existsSync(path.join(evidenceRoot, file)) ? fs.readFileSync(path.join(evidenceRoot, file), "utf8").toLowerCase() : "";
   for (const term of terms) if (!text.includes(term.toLowerCase())) failures.push(`${file} is missing ${term}`);
@@ -37,8 +39,8 @@ if (failures.length) {
   process.exit(1);
 }
 console.log(`Source SHA: ${metadata.sourceSha}`);
-console.log("PASS 36 response-bound real-model measurements verified");
+console.log("PASS 36 protected offline measurements and response hashes verified");
 console.log("PASS selected-route quality, safety, latency, and variance recomputed");
-console.log("PASS retry and escalation costs reconcile to protected pricing");
+console.log("PASS single-retry escalation costs reconcile to protected tokens and pricing");
 console.log("PASS policy savings beat the all-reasoning baseline threshold");
-console.log("PASS focused router source and evidence-only history verified");
+console.log("PASS focused router source and evidence-only history verified without an API key");

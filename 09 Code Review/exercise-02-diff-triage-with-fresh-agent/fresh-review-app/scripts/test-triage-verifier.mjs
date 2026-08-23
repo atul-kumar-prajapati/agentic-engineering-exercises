@@ -9,23 +9,23 @@ try {
   fs.mkdirSync(path.join(temporary, "fresh-review-app", "tests"), { recursive: true });
   fs.writeFileSync(path.join(temporary, "fresh-review-app", "tests", "cache-regressions.test.ts"), "test");
   const manifest = { baseSha: "a".repeat(40), headSha: "b".repeat(40), comparison: "review-base..review-head" };
-  const expectations = { findings: [
-    { id: "CACHE-001", classification: "blocker", severity: "high", decision: "fix", file: "src/App.tsx", line: 41, testTerms: ["filter"] },
-    { id: "CLAIM-001", classification: "unsupported", severity: "info", decision: "dismiss", file: "src/api.ts", line: 22, testTerms: ["new object"] },
-  ] };
   const context = ["docs/review-brief.md", "fixtures/manifest.json", "pr/review-target.diff"];
-  const session = { schemaVersion: 1, sessionId: "fresh-session-01", tool: "review-agent", startedAt: "2026-01-01T10:00:00Z", contextMode: "fresh", providedFiles: context, excludedContext: ["docs/implementer-notes.md", "earlier reviews", "expected finding IDs", "implementation chat"], promptSha256: "c".repeat(64) };
-  const text = "This concrete filter scenario proves impact and evidence because the function returns a new object and does not mutate shared state.";
+  const session = { schemaVersion: 1, sessionId: "fresh-session-01", tool: "review-agent", startedAt: "2026-01-01T10:00:00Z", contextMode: "fresh", providedFiles: context, excludedContext: ["instructor answer key", "earlier reviews", "expected finding IDs", "implementation chat"], promptSha256: "c".repeat(64) };
+  const diff = "diff --git a/src/view.ts b/src/view.ts\n+changeLifecycle()\ndiff --git a/src/store.ts b/src/store.ts\n+trustStoredValue()\n+mutateSharedValue()\n+writeDuringRead()\n returnFreshCopy()\n";
+  const text = "This concrete scenario explains the user impact and provides independently reproduced code evidence.";
   const document = { schemaVersion: 1, ...manifest, sourceSha: "d".repeat(40), reviewerSessionId: session.sessionId, mergeDecision: "request-changes", findings: [
-    { ...expectations.findings[0], confidence: "high", scenario: text, impact: text, evidence: text, fix: "Remove the destructive filter side effect.", testPath: "tests/cache-regressions.test.ts" },
-    { ...expectations.findings[1], confidence: "high", scenario: text, impact: text, evidence: text },
+    { id: "LIFECYCLE-1", classification: "blocker", severity: "high", decision: "fix", confidence: "high", file: "src/view.ts", anchor: "changeLifecycle()", scenario: text, impact: text, evidence: text, fix: "Restore the required lifecycle behavior.", testPath: "tests/cache-regressions.test.ts" },
+    { id: "STORE-1", classification: "blocker", severity: "high", decision: "fix", confidence: "high", file: "src/store.ts", anchor: "trustStoredValue()", scenario: text, impact: text, evidence: text, fix: "Validate values at the storage boundary.", testPath: "tests/cache-regressions.test.ts" },
+    { id: "STATE-1", classification: "blocker", severity: "medium", decision: "fix", confidence: "medium", file: "src/store.ts", anchor: "mutateSharedValue()", scenario: text, impact: text, evidence: text, fix: "Preserve the shared value during transformation.", testPath: "tests/cache-regressions.test.ts" },
+    { id: "READ-1", classification: "blocker", severity: "high", decision: "fix", confidence: "high", file: "src/store.ts", anchor: "writeDuringRead()", scenario: text, impact: text, evidence: text, fix: "Keep the read operation free of writes.", testPath: "tests/cache-regressions.test.ts" },
+    { id: "CLAIM-1", classification: "unsupported", severity: "info", decision: "dismiss", confidence: "high", file: "src/store.ts", anchor: "returnFreshCopy()", scenario: text, impact: text, evidence: text, dismissalProof: "A focused reproduction shows a fresh value is returned and the shared input remains unchanged." },
   ] };
-  assert.deepEqual(verifyTriageDocument(document, session, manifest, expectations, temporary), []);
+  assert.deepEqual(verifyTriageDocument(document, session, manifest, temporary, diff), []);
   const leaked = structuredClone(session);
-  leaked.providedFiles.push("docs/implementer-notes.md");
-  assert.ok(verifyTriageDocument(document, leaked, manifest, expectations, temporary).some((failure) => failure.includes("exactly")));
+  leaked.providedFiles.push("instructor-answer-key.md");
+  assert.ok(verifyTriageDocument(document, leaked, manifest, temporary, diff).some((failure) => failure.includes("exactly")));
   const noisy = structuredClone(document);
-  noisy.findings[1].decision = "fix";
-  assert.ok(verifyTriageDocument(noisy, session, manifest, expectations, temporary).some((failure) => failure.includes("decision")));
+  noisy.findings[4].decision = "fix";
+  assert.ok(verifyTriageDocument(noisy, session, manifest, temporary, diff).some((failure) => failure.includes("blocker")));
   console.log("fresh triage verifier self-test passed");
 } finally { fs.rmSync(temporary, { recursive: true, force: true }); }

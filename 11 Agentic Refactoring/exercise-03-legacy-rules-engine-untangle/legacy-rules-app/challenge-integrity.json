@@ -1,21 +1,24 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
+    "../../../scripts/run-clean-verification.mjs": "9b17cbb8865a642a7789113c145be88c6bb965bc2d8c024b82202e8ae85bf368",
+    "../../../scripts/run-vite-build.mjs": "b7901ed4f770e6537e80f864392c8c1de841b5c97fa8993246c5df7a86d5d415",
+    "../../../scripts/verify-protected-inputs.mjs": "d99346d9a84651bcb654d07d1b5d131d39d5f3b703ee9614db4eafc86cb4d96c",
     "../README.md": "53bdd94fedd399b6df2d9deb6a50e29d6d27a07a832b10a7eae9475d7b894a11",
-    "../docs/rules-contract.md": "a900b9e22e8b84867ade9e714ec8d50e82227b8ec03ddf4eeebfc88dfcc06524",
-    "../docs/legacy-case-table.md": "a8a12996ca3ea5c734bba338bab1cab9e4e0f9454d985c1fa117ca4b7c18792b",
     "../docs/contract-observations.json": "a38f597ef8f78f1d929bda35d12422652c050f39dfdab829dc25b9a894560dc2",
-    "../legacy-rules-api/src/test/java/dev/agentic/exercise/workflow/WorkflowContractCharacterizationTest.java": "108166839da87a61ff22432bf976579ee9dabaabba8499aaaac1201d61a7abed",
+    "../docs/legacy-case-table.md": "a8a12996ca3ea5c734bba338bab1cab9e4e0f9454d985c1fa117ca4b7c18792b",
+    "../docs/rules-contract.md": "a900b9e22e8b84867ade9e714ec8d50e82227b8ec03ddf4eeebfc88dfcc06524",
     "../legacy-rules-api/src/test/java/dev/agentic/exercise/workflow/WorkflowApiContractTest.java": "0eeb13946609c00432d8b179133e27b4f01dbe5eabdfaf59b5f109140bc8e2b7",
-    "src/services/workflowDecisionContract.mjs": "d34bfad818262f88c81857ad40ed0345ea7b6b4af0cc5a870af7e4a61e4b9cd1",
-    "package.json": "8000a71317a9ce4d14866eb18d1e45b471642321127f89a9c6daccd7b1e3ae9e",
+    "../legacy-rules-api/src/test/java/dev/agentic/exercise/workflow/WorkflowContractCharacterizationTest.java": "108166839da87a61ff22432bf976579ee9dabaabba8499aaaac1201d61a7abed",
     "lab-contract.json": "b5c9254de7f009b94967a8b5da89e283d040e7432134f0fffe0aa335606f90f5",
-    "src/labContract.ts": "a0911f5ead7177517417ec4b810eedf968b5319651112360ea94bb1d3d49b15b",
+    "package.json": "3e19cc3a3348e7fb81751b25b6ab6df95d75e9bff5b5fb47373af881612e41cc",
+    "scripts/rules-refactor-verification.mjs": "6b3fe5975aa7215370674cc9c1a1410eca00bb92a79d2c00e4942dba27a5069e",
     "scripts/run-client-contract.mjs": "5acf36e2b378dc20ace4941410da8a70ddcee8773a42e926cfc5e802c4408e35",
     "scripts/run-rules-contract.mjs": "3dbfb743516d9b95eb1c9f602ca5965944d279c7386bb704efbef41e7825996e",
-    "scripts/rules-refactor-verification.mjs": "6b3fe5975aa7215370674cc9c1a1410eca00bb92a79d2c00e4942dba27a5069e",
     "scripts/test-rules-verifier.mjs": "41b50e1201f162086955c5acdb54d7802a50c2ca5dfdd19a0329fab3839c84a8",
     "scripts/verify-rules-submission.mjs": "15f1ae669129f9ae5a0afd8430c8865cd799048cead548074a09ef89e82049d5",
+    "src/labContract.ts": "a0911f5ead7177517417ec4b810eedf968b5319651112360ea94bb1d3d49b15b",
+    "src/services/workflowDecisionContract.mjs": "d34bfad818262f88c81857ad40ed0345ea7b6b4af0cc5a870af7e4a61e4b9cd1",
     "submission-contract.json": "83b211bbda2550b30c18a51617a25ccce1eafe9eb6cbe8d704b74fd5d0449f9d"
   }
 }

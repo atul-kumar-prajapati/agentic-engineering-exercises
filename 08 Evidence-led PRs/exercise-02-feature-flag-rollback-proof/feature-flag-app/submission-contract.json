@@ -2,12 +2,17 @@
   "name": "Feature Flag Kill-Switch Proof",
   "root": "..",
   "requiredFiles": [
-    { "path": "feature-flag-app/scripts/rollback-invoice-preview.mjs", "minCharacters": 900, "includeAll": ["--config", "--actor", "--reason", "--timestamp", "invoice-preview-v2", "previousRevision", "writeFile", "rename"] },
+    { "path": "evidence/before.md", "minCharacters": 250, "includeAll": ["Starting commit", "Implementation commit", "Agent and model", "Tools and permissions", "Time limit", "Human hints: 0", "Retries: 0", "Patch SHA-256"] },
+    { "path": "evidence/before.patch", "minCharacters": 80, "includeAll": ["diff --git"] },
+    { "path": "evidence/after.md", "minCharacters": 280, "includeAll": ["Starting commit", "Implementation commit", "Agent and model", "Tools and permissions", "Time limit", "Human hints: 0", "Retries: 0", "Patch SHA-256"] },
+    { "path": "evidence/after.patch", "minCharacters": 80, "includeAll": ["diff --git"] },
+    { "path": "evidence/comparison.md", "minCharacters": 350, "includeAll": ["Before", "After", "Same conditions", "Proof", "Conclusion"] },
+    { "path": "feature-flag-app/scripts/rollback-invoice-preview.mjs", "minCharacters": 1300, "includeAll": ["--config", "--actor", "--reason", "--timestamp", "--expected-revision", "invoice-preview-v2", "previousRevision", "ROLLBACK_TEST_FAIL_BEFORE_RENAME", "writeFile", "rename"] },
     { "path": "evidence/enabled.json", "validJson": true, "minCharacters": 700, "includeAll": ["schemaVersion", "sourceSha", "enabled", "invoice-preview-v2", "defaultValue", "targetingKey", "accountId", "apiCalls", "invoice_preview_viewed", "passed"] },
     { "path": "evidence/disabled.json", "validJson": true, "minCharacters": 500, "includeAll": ["schemaVersion", "sourceSha", "disabled", "flag-disabled", "defaultValue", "apiCalls", "telemetry", "passed"] },
     { "path": "evidence/provider-error.json", "validJson": true, "minCharacters": 500, "includeAll": ["schemaVersion", "sourceSha", "provider-error", "flag-evaluation-error", "defaultValue", "apiCalls", "telemetry", "passed"] },
-    { "path": "evidence/rollback-drill.json", "validJson": true, "minCharacters": 1800, "includeAll": ["schemaVersion", "sourceSha", "startTime", "endTime", "elapsedMs", "configBeforeSha256", "configAfterSha256", "lastRollback", "previousRevision", "behaviorBefore", "behaviorAfter", "remainingCleanup", "passed"] },
-    { "path": "evidence/rollback-drill.md", "minCharacters": 750, "includeAll": ["Source SHA", "Command", "Start time", "End time", "Elapsed", "Before rollback", "After rollback", "Target allowlist: empty", "API calls: 0", "Telemetry events: 0", "Result: PASS", "Remaining cleanup"] },
+    { "path": "evidence/rollback-drill.json", "validJson": true, "minCharacters": 2000, "includeAll": ["schemaVersion", "sourceSha", "startTime", "endTime", "elapsedMs", "configBeforeSha256", "configAfterSha256", "lastRollback", "previousRevision", "behaviorBefore", "behaviorAfter", "atomicProtocol", "interruptionCheck", "concurrencyCheck", "exitCodes", "remainingCleanup", "passed"] },
+    { "path": "evidence/rollback-drill.md", "minCharacters": 850, "includeAll": ["Source SHA", "Command", "Start time", "End time", "Elapsed", "Before rollback", "After rollback", "Interrupted update: PASS", "Concurrent rollback: PASS", "Target allowlist: empty", "API calls: 0", "Telemetry events: 0", "Result: PASS", "Remaining cleanup"] },
     { "path": "evidence/commands/rollout-verify.txt", "minCharacters": 450, "includeAll": ["Source SHA", "PASS enabled evidence", "PASS disabled and provider-error", "PASS rollback drill", "PASS protected scenarios", "PASS Git source binding"] }
   ],
   "requiredDirectories": ["evidence", "evidence/commands"]

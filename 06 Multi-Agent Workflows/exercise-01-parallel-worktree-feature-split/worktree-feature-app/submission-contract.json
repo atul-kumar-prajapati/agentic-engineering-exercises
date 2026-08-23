@@ -3,8 +3,8 @@
   "root": "..",
   "requiredFiles": [
     { "path": "evidence/lane-handoffs.json", "validJson": true, "includeAll": ["schema_version", "base_sha", "commit_sha", "shared_requests", "output_sha256"] },
-    { "path": "evidence/integration.json", "validJson": true, "includeAll": ["merge_order", "merge_commits", "shared_commit_sha", "product_head"] },
-    { "path": "evidence/integration.md", "minCharacters": 300, "includeAll": ["lane review", "shared request", "merge order", "shared-type", "final check", "cleanup", "rollback"] },
+    { "path": "evidence/integration.json", "validJson": true, "includeAll": ["untrusted_handoff_review", "UNTRUSTED-01", "detected_issues", "merge_order", "merge_commits", "shared_commit_sha", "product_head"] },
+    { "path": "evidence/integration.md", "minCharacters": 300, "includeAll": ["untrusted handoff", "lane review", "shared request", "merge order", "shared-type", "final check", "cleanup", "rollback"] },
     { "path": "evidence/worktree-list-before.txt", "minCharacters": 300, "includeAll": ["lane/saved-filters", "lane/sla-risk", "lane/evidence-export"] },
     { "path": "evidence/worktree-list-after.txt", "minCharacters": 80, "excludeAll": ["lane/saved-filters", "lane/sla-risk", "lane/evidence-export"] },
     { "path": "evidence/commands/lane-a.txt", "minCharacters": 80, "includeAll": ["pass"] },

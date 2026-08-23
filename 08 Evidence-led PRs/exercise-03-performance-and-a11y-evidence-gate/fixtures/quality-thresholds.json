@@ -3,6 +3,17 @@
   "route": "/",
   "lighthouseRuns": 3,
   "aggregation": "pessimistic",
+  "captureEnvironment": {
+    "formFactor": "mobile",
+    "throttlingMethod": "simulate",
+    "screenEmulation": {
+      "mobile": true,
+      "width": 412,
+      "height": 823,
+      "deviceScaleFactor": 1.75,
+      "disabled": false
+    }
+  },
   "thresholds": {
     "minimumPerformance": 0.9,
     "minimumAccessibility": 1,

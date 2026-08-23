@@ -17,3 +17,5 @@ Write `quality-summary.json` before exiting. It must contain:
 - `worstCase`, `failures`, and `releaseDecision`.
 
 Use the minimum performance and accessibility scores and maximum LCP across all runs. Return `0` only for `releaseDecision: "passed"`. Return non-zero after writing the summary for invalid or failing evidence.
+
+The Lighthouse configuration must explicitly use mobile form factor, simulated throttling, and this screen emulation: width `412`, height `823`, device scale factor `1.75`, mobile `true`, and disabled `false`. This keeps the audited device consistent across machines.

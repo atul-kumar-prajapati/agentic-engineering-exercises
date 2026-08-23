@@ -1,56 +1,52 @@
-# Exercise 03 : Code Review Regression Gate
+# Exercise 03 : Code Review Skill Hardening
 
 ## Your Mission
 
-Your team wants a stronger code-review prompt, but an overcautious reviewer can appear thorough while creating false merge blockers. Your mission is to improve review recall without sacrificing clean-control precision.
+Your team gets inconsistent code reviews. Fresh agents miss important regressions, raise false blockers, and produce findings that cannot be reproduced.
 
-The protected catalog contains a historical five-bug diff, a two-bug security diff, and a clean look-alike. The starter candidate is deliberately noisy.
+Your mission is to improve a reusable code-review skill and prove that it helps fresh agents find real defects without blocking a safe change.
 
-Run a repeated real-model baseline and candidate evaluation, improve only from measured training failures, and make an evidence-based adoption decision.
+The challenge runs with any coding agent and does not require an API key or paid model call.
 
 The duration for this challenge is 60 min or less.
 
 ## Project
 
-[regression-review-app](./regression-review-app) contains protected cases, Promptfoo configuration, scorer, and evidence verifier. [Adoption thresholds](./docs/adoption-thresholds.md) and the [judgment contract](./docs/judgment-contract.md) define the gate.
+[regression-review-app](./regression-review-app) contains three protected review cases, a starter skill, a local scorer, and the verification harness. The [skill contract](./docs/skill-contract.md) defines the reusable workflow and the [evaluation contract](./docs/evaluation-contract.md) defines comparable runs.
 
 ## How To Go About It
 
-1. Record the starting commit and baseline prompt in `evidence/before.md` and `evidence/before.patch`. Set `REVIEW_EVAL_MODEL` to a real remote model provider.
+1. Create two branches from the same starting commit. On the first branch, run one fresh agent session per case without exposing the skill. Use `npm run eval:run` with a small adapter for your agent so the protected runner supplies the exact prompt and captures the uncorrected response.
 
-2. Run the protected catalog check, then evaluate the baseline and unchanged candidate without cache, three times per case under identical provider settings.
+2. Review the baseline misses and false blockers. Improve `regression-review-app/skills/regression-review/SKILL.md`. Add references or scripts only when they make the workflow reusable; do not add case IDs, expected answers, file hints, or exact diff text.
 
-3. Bind every judgment to its raw response hash and score against protected finding IDs. Do not replace the provider with deterministic code or expose case IDs, expected findings, file hints, or diff tokens to the candidate.
+3. Commit the skill as a focused implementation commit. On the second branch, run new sessions through the same adapter with the skill available. Use the same agent, model, tools, permissions, and time limit as the baseline.
 
-4. Improve only `eval/review-prompt-candidate.md` from training failures. Do not tune against held-out results.
+4. The runner writes one prompt, structured run, and nonce-bound transcript per case under `evidence/`. Do not edit, correct, retry, or selectively replace a weak run.
 
-5. Rerun all 18 candidate samples with the same model, temperature, cases, repository state, and first-attempt conditions. Do not selectively rerun weak responses.
+5. Run `npm run eval:score`. Inspect historical coverage, security coverage, precision, clean-control behavior, and regressions. Adopt the skill only when every protected gate passes.
 
-6. Generate the scorecard and compare recall, precision, false blockers, variance, and regression limits. Use the thresholds to adopt or reject the candidate.
-
-7. Save `evidence/after.md`, `evidence/after.patch`, raw results, judgments, scorecard, report, and comparison. Raise a focused PR containing only the candidate and evidence.
+6. Add `before.md`, `before.patch`, `after.md`, `after.patch`, comparison, scorecard, and command proof in an evidence-only commit. Raise the final PR from the skill branch.
 
 ## Evidence
 
 Submit:
 
-- The final candidate prompt and its focused source commit.
+- The improved `SKILL.md` and any supporting files inside the skill folder.
 - `evidence/before.md`, `evidence/before.patch`, `evidence/after.md`, and `evidence/after.patch`.
-- Raw Promptfoo output, run metadata, response-bound judgments, and generated scorecard.
-- `evidence/review-eval.md` and `evidence/comparison.md`.
+- Six runner-generated prompts, run JSON files, and nonce-bound transcripts.
+- `evidence/scorecard.json`, `evidence/review-eval.md`, and `evidence/comparison.md`.
 - Output from `npm run verify:exercise`.
-- A focused pull request containing only this exercise.
+- A focused pull request containing only the skill and evidence.
 
-Run `npm run verify:exercise` before raising the PR. It checks protected inputs, real-model metadata, uncached sample completeness, response-bound judgments, generated scores, thresholds, prompt leakage, and required proof.
-
-For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and the repository [submission standard](../../docs/SUBMISSION_STANDARD.md).
+For the required before and after files, follow the [evidence instructions and template](./docs/evidence-template.md) and repository [submission standard](../../docs/SUBMISSION_STANDARD.md). No external model provider, network call, Promptfoo installation, or API key is part of verification.
 
 ## Completion Criteria
 
 The challenge is complete when:
 
-- Both prompt lanes use the same real provider, model, temperature, cases, and three uncached samples per case.
-- Historical and multi-bug recall each reach 80 percent and clean-control precision reaches 90 percent.
-- No metric regresses by more than five percentage points and the prompt contains no fixture answers.
-- Every judgment matches a raw response hash and the report matches the generated scorecard.
-- `npm run verify:exercise` passes and the adoption decision follows the measured gate.
+- Baseline and skill-assisted runs come from the protected runner with matching conditions, unique nonces, and baseline sessions captured at the recorded starting commit.
+- Every raw finding is bound to a transcript and protected diff digest.
+- The skill covers every violated acceptance rule in the seeded diffs, keeps precision, and does not create a blocker for the conforming control.
+- The skill contains a reusable review method, not benchmark answers.
+- `npm run verify:exercise` passes, and a reviewer can test the unchanged skill on a different diff.

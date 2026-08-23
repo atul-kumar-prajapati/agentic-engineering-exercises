@@ -1,19 +1,22 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
+    "../../../scripts/run-clean-verification.mjs": "9b17cbb8865a642a7789113c145be88c6bb965bc2d8c024b82202e8ae85bf368",
+    "../../../scripts/run-vite-build.mjs": "b7901ed4f770e6537e80f864392c8c1de841b5c97fa8993246c5df7a86d5d415",
+    "../../../scripts/verify-protected-inputs.mjs": "d99346d9a84651bcb654d07d1b5d131d39d5f3b703ee9614db4eafc86cb4d96c",
     "../README.md": "9d498983bed64f3ae52040aab311c20795f2128cb02421ed652ddf3a8d62656f",
+    "../docs/metric-contract.md": "0cff7ebac16edff5e13b8b2ace72c724766f3844f439da1406c7850211d4fb89",
+    "../docs/preflight-contract.md": "57c61b6d717b810e3a1cfeecc2cab5938ae55bb346937edba8590fb6c1c6c7a1",
+    "../docs/replay-contract.md": "d9589fc0e1690335f32f85272fc270ba577062d815daba0c57e70e01223e9553",
     "../docs/session-events.json": "1a9196d0bd6e3821f4cb712617f9aac1aac8cce2582474db70a3bf143b6386b7",
     "../docs/session-metadata.json": "f2d0209f7881b1bf605507ebe5ecedbf4d30b7de44270ec0e55e652bb76c326b",
-    "../docs/metric-contract.md": "0cff7ebac16edff5e13b8b2ace72c724766f3844f439da1406c7850211d4fb89",
-    "../docs/replay-contract.md": "d9589fc0e1690335f32f85272fc270ba577062d815daba0c57e70e01223e9553",
-    "../docs/preflight-contract.md": "57c61b6d717b810e3a1cfeecc2cab5938ae55bb346937edba8590fb6c1c6c7a1",
-    "package.json": "a1da848682a38fed85b6edf880aa9064f0f08cd5c4ddec1497da5294ba3e2187",
     "lab-contract.json": "9cd962148fc50b7b9d5093797ea159215026b9f3d47bdc4d8e2e0e502dba853f",
-    "src/labContract.ts": "19051658901d702855a76bc5bbeb8d9587b336fdde07deb10a464b71c38ce915",
-    "scripts/run-analysis-tests.mjs": "b3a228216448b82818d3fa531e5fa41c05c75f910c333b8d60a818c53bb5ab47",
+    "package.json": "c2260174ee01419a4c26e2b1f0b63754083e31c622d665b60b37f85d205945cd",
     "scripts/retro-verification.mjs": "632daa79ffc5f680811ffb02effde05b67663fad448912b4683d0ca00653328c",
+    "scripts/run-analysis-tests.mjs": "b3a228216448b82818d3fa531e5fa41c05c75f910c333b8d60a818c53bb5ab47",
     "scripts/test-retro-verifier.mjs": "ec1535807b53e23b6231c142feccaa18d791161b11ea0761e65dff73e808387e",
     "scripts/verify-retro-submission.mjs": "f78818edc941406f40fd0d1cc812b0cd86ee1908a12f74419f642c8848919b9e",
+    "src/labContract.ts": "19051658901d702855a76bc5bbeb8d9587b336fdde07deb10a464b71c38ce915",
     "submission-contract.json": "3e1e128d52d75bb0dfdae9869287a306517fc130bb157f1823e81670593c4d35"
   }
 }

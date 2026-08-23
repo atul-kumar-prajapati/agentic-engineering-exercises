@@ -1,6 +1,9 @@
 {
   "algorithm": "sha256-normalized-lf",
   "protectedFiles": {
+    "../../../scripts/run-clean-verification.mjs": "9b17cbb8865a642a7789113c145be88c6bb965bc2d8c024b82202e8ae85bf368",
+    "../../../scripts/run-vite-build.mjs": "b7901ed4f770e6537e80f864392c8c1de841b5c97fa8993246c5df7a86d5d415",
+    "../../../scripts/verify-protected-inputs.mjs": "d99346d9a84651bcb654d07d1b5d131d39d5f3b703ee9614db4eafc86cb4d96c",
     "../README.md": "848eb805d5f90e506f0d081ce2160840963d712b9aa8fe37dfa779998f5fac57",
     "../docs/evidence-template.md": "72fe1a1eda959e69726392d15a5d2a0dbebf72407961cf9aef158d686bf5db4c",
     "../docs/specification-contract.md": "4f28dcc8966c649d1e6a86c8346d8ad50a14723f83d0dcea9ce548d194365725",
@@ -10,7 +13,7 @@
     "index.html": "1320ea3734911731c8b334c391ec5788c3d0eb91807f492697c3bade4caa4f60",
     "lab-contract.json": "d55db184cbaa094a0c4b233dc640146bb62876d2107a93242ce007aef0f930ab",
     "package-lock.json": "d5f552275ce0d1ec273c4ff402ac8291c0c8c295b251bc98d0cdab44936cd5e8",
-    "package.json": "4baa3946eda79d044f4441fedf1d66300a0bdefbfc8dbcfcab1cc93154ded491",
+    "package.json": "78abc353b7bf54acff3f94a891f6db73e28d7059d9e7bc953c7cc70ac1230b5e",
     "scripts/agent-check.mjs": "d6707ccc5e5f07975ee9a835c623263718c5fe8561655b08efcaa75dd710942a",
     "scripts/format-check.mjs": "2b404502159a61cc97468297e9d7b18e7fca5101fae7126ed4ac271395aada30",
     "scripts/lint-check.mjs": "07e61dd995625bf59b3a32fc60a3fc523529a29748286987e699175f3e6bcea2",
