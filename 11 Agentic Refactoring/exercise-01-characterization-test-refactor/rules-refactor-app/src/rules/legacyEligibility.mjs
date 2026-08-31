@@ -1,25 +1,37 @@
+const RENEWAL_DECISIONS = [
+  {
+    when: (account) => account.supportOverride === true,
+    status: "eligible",
+    discountPercent: 0,
+    reason: "legacy-support-override",
+  },
+  {
+    when: (account) => account.tier === "enterprise" && account.monthsActive >= 12 && account.latePayments < 2,
+    status: "eligible",
+    discountPercent: 15,
+    reason: "enterprise-tenure",
+  },
+  {
+    when: (account) => account.tier === "enterprise" && account.monthsActive >= 12,
+    status: "manual-review",
+    discountPercent: 0,
+    reason: "payment-history",
+  },
+  {
+    when: (account) => account.tier === "pro" && account.monthsActive >= 6 && account.latePayments === 0,
+    status: "eligible",
+    discountPercent: 10,
+    reason: "pro-tenure",
+  },
+];
+
+const PLAN_NOT_SUPPORTED = { status: "ineligible", discountPercent: 0, reason: "plan-not-supported" };
+
 export function evaluateRenewalEligibility(account) {
-  let status = "ineligible";
-  let discountPercent = 0;
-  let reason = "plan-not-supported";
-  if (account.supportOverride === true) {
-    status = "eligible";
-    reason = "legacy-support-override";
-  } else if (account.tier === "enterprise") {
-    if (account.monthsActive >= 12) {
-      if (account.latePayments < 2) {
-        status = "eligible";
-        discountPercent = 15;
-        reason = "enterprise-tenure";
-      } else {
-        status = "manual-review";
-        reason = "payment-history";
-      }
+  for (const decision of RENEWAL_DECISIONS) {
+    if (decision.when(account)) {
+      return { status: decision.status, discountPercent: decision.discountPercent, reason: decision.reason };
     }
-  } else if (account.tier === "pro" && account.monthsActive >= 6 && account.latePayments === 0) {
-    status = "eligible";
-    discountPercent = 10;
-    reason = "pro-tenure";
   }
-  return { status, discountPercent, reason };
+  return { ...PLAN_NOT_SUPPORTED };
 }
