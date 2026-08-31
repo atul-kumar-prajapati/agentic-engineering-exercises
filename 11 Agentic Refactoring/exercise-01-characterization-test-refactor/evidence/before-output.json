@@ -1,0 +1,142 @@
+[
+  {
+    "name": "enterprise boundary with one late payment",
+    "input": {
+      "tier": "enterprise",
+      "monthsActive": 12,
+      "latePayments": 1,
+      "supportOverride": false
+    },
+    "output": {
+      "status": "eligible",
+      "discountPercent": 15,
+      "reason": "enterprise-tenure"
+    }
+  },
+  {
+    "name": "enterprise boundary with two late payments",
+    "input": {
+      "tier": "enterprise",
+      "monthsActive": 12,
+      "latePayments": 2,
+      "supportOverride": false
+    },
+    "output": {
+      "status": "manual-review",
+      "discountPercent": 0,
+      "reason": "payment-history"
+    }
+  },
+  {
+    "name": "enterprise below tenure boundary",
+    "input": {
+      "tier": "enterprise",
+      "monthsActive": 11,
+      "latePayments": 0,
+      "supportOverride": false
+    },
+    "output": {
+      "status": "ineligible",
+      "discountPercent": 0,
+      "reason": "plan-not-supported"
+    }
+  },
+  {
+    "name": "enterprise accepts negative late payments",
+    "input": {
+      "tier": "enterprise",
+      "monthsActive": 12,
+      "latePayments": -1,
+      "supportOverride": false
+    },
+    "output": {
+      "status": "eligible",
+      "discountPercent": 15,
+      "reason": "enterprise-tenure"
+    }
+  },
+  {
+    "name": "pro exact tenure clean account",
+    "input": {
+      "tier": "pro",
+      "monthsActive": 6,
+      "latePayments": 0,
+      "supportOverride": false
+    },
+    "output": {
+      "status": "eligible",
+      "discountPercent": 10,
+      "reason": "pro-tenure"
+    }
+  },
+  {
+    "name": "pro below tenure boundary",
+    "input": {
+      "tier": "pro",
+      "monthsActive": 5,
+      "latePayments": 0,
+      "supportOverride": false
+    },
+    "output": {
+      "status": "ineligible",
+      "discountPercent": 0,
+      "reason": "plan-not-supported"
+    }
+  },
+  {
+    "name": "mature pro with one late payment",
+    "input": {
+      "tier": "pro",
+      "monthsActive": 36,
+      "latePayments": 1,
+      "supportOverride": false
+    },
+    "output": {
+      "status": "ineligible",
+      "discountPercent": 0,
+      "reason": "plan-not-supported"
+    }
+  },
+  {
+    "name": "support override wins on new starter",
+    "input": {
+      "tier": "starter",
+      "monthsActive": 0,
+      "latePayments": 4,
+      "supportOverride": true
+    },
+    "output": {
+      "status": "eligible",
+      "discountPercent": 0,
+      "reason": "legacy-support-override"
+    }
+  },
+  {
+    "name": "support override wins on enterprise arrears",
+    "input": {
+      "tier": "enterprise",
+      "monthsActive": 24,
+      "latePayments": 8,
+      "supportOverride": true
+    },
+    "output": {
+      "status": "eligible",
+      "discountPercent": 0,
+      "reason": "legacy-support-override"
+    }
+  },
+  {
+    "name": "ordinary starter remains unsupported",
+    "input": {
+      "tier": "starter",
+      "monthsActive": 18,
+      "latePayments": 0,
+      "supportOverride": false
+    },
+    "output": {
+      "status": "ineligible",
+      "discountPercent": 0,
+      "reason": "plan-not-supported"
+    }
+  }
+]
