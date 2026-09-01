@@ -1,0 +1,6 @@
+{
+  "sourceSha": "9904a0a9a23333b8da2d4417a1febe79daf53359",
+  "startingCommit": "52090edddf032d026ece16ef90feb627bf8e67ac",
+  "beforeImplementationSha": "fdee18deb71a347f1da7df8d478a9ae5d3a3efb6",
+  "note": "sourceSha diff-tree is analyzer, participant test, and preflight only; later commits are evidence/"
+}

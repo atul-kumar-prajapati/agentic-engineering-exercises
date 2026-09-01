@@ -1,0 +1,9 @@
+{
+  "totalEvents": 10,
+  "duplicateReads": 0,
+  "unchangedFailureRetries": 0,
+  "oversizedContextLoads": 1,
+  "preventableCalls": 1,
+  "finalVerificationRuns": 1,
+  "correctnessPassed": true
+}

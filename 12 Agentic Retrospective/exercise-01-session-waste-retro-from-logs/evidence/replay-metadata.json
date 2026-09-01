@@ -1,0 +1,13 @@
+{
+  "taskId": "POLICY-217",
+  "sessionId": "replay-policy-217",
+  "agent": "coding-agent",
+  "model": "standard-reasoning",
+  "promptHash": "sha256:4d9d67b790d3ed36a6044c4b39ac2cb16e03db8bbcd4998f8af820e32d749ec1",
+  "timeLimitMinutes": 20,
+  "sourceRevision": "starter-v1",
+  "tools": ["read", "write", "command", "diagnosis"],
+  "permissions": "workspace-local npm",
+  "preflight": "evaluateCommandAttempt before each command",
+  "note": "Fresh POLICY-217 session. Same agent, model, promptHash, and time limit as docs/session-metadata.json. sessionId differs from baseline-policy-217."
+}

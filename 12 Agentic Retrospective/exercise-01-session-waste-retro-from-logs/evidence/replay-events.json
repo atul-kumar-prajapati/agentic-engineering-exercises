@@ -1,0 +1,81 @@
+[
+  {
+    "sequence": 1,
+    "type": "context",
+    "target": "src/",
+    "workspaceRevision": 1,
+    "bytes": 14240,
+    "result": "ok"
+  },
+  {
+    "sequence": 2,
+    "type": "read",
+    "target": "src/policy.ts",
+    "contentVersion": "v1",
+    "workspaceRevision": 1,
+    "result": "ok"
+  },
+  {
+    "sequence": 3,
+    "type": "read",
+    "target": "src/policy.test.ts",
+    "contentVersion": "v1",
+    "workspaceRevision": 1,
+    "result": "ok"
+  },
+  {
+    "sequence": 4,
+    "type": "read",
+    "target": "src/policy.types.ts",
+    "contentVersion": "v1",
+    "workspaceRevision": 1,
+    "result": "ok"
+  },
+  {
+    "sequence": 5,
+    "type": "read",
+    "target": "package.json",
+    "contentVersion": "v1",
+    "workspaceRevision": 1,
+    "result": "ok"
+  },
+  {
+    "sequence": 6,
+    "type": "command",
+    "target": "npm test -- src/policy.test.ts",
+    "workspaceRevision": 1,
+    "phase": "focused-test",
+    "result": "failed"
+  },
+  {
+    "sequence": 7,
+    "type": "diagnosis",
+    "target": "evaluatePolicy returns allow for unregistered actions; POLICY-217 focused tests require deny-by-default for unknown action tokens",
+    "workspaceRevision": 1,
+    "result": "ok"
+  },
+  {
+    "sequence": 8,
+    "type": "write",
+    "target": "src/policy.ts",
+    "contentVersion": "v2",
+    "workspaceRevision": 2,
+    "result": "ok"
+  },
+  {
+    "sequence": 9,
+    "type": "command",
+    "target": "npm test -- src/policy.test.ts",
+    "workspaceRevision": 2,
+    "phase": "focused-test",
+    "result": "passed"
+  },
+  {
+    "sequence": 10,
+    "type": "command",
+    "target": "npm run verify",
+    "workspaceRevision": 2,
+    "phase": "final-verification",
+    "result": "passed"
+  }
+]

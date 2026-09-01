@@ -1,0 +1,274 @@
+diff --git a/12 Agentic Retrospective/exercise-01-session-waste-retro-from-logs/session-waste-app/src/retro/analyzeSession.mjs b/12 Agentic Retrospective/exercise-01-session-waste-retro-from-logs/session-waste-app/src/retro/analyzeSession.mjs
+index ebc4f10d46cb295b9ba8c65217858ff70dbb0f19..06b533cd1eaaaa44cc04ffa1532544a8a914f617 100644
+--- a/12 Agentic Retrospective/exercise-01-session-waste-retro-from-logs/session-waste-app/src/retro/analyzeSession.mjs	
++++ b/12 Agentic Retrospective/exercise-01-session-waste-retro-from-logs/session-waste-app/src/retro/analyzeSession.mjs	
+@@ -1,14 +1,106 @@
+-/** Seeded analyzer: it counts every read and failed command as waste. */
++const OVERSIZED_CONTEXT_BYTES = 8000;
++
++function assertOrderedEvents(events) {
++  if (!Array.isArray(events)) {
++    throw new Error("events must be an ordered array of raw session events");
++  }
++
++  let previousSequence = Number.NEGATIVE_INFINITY;
++  for (const event of events) {
++    if (event == null || typeof event !== "object") {
++      throw new Error("malformed event: each item must be an object with required fields");
++    }
++    if (typeof event.sequence !== "number" || !Number.isFinite(event.sequence)) {
++      throw new Error("malformed event: sequence must be a finite number");
++    }
++    if (event.sequence <= previousSequence) {
++      throw new Error("duplicate or non-increasing sequence numbers are not allowed");
++    }
++    previousSequence = event.sequence;
++    if (typeof event.type !== "string" || event.type.length === 0) {
++      throw new Error("malformed event: type is a required field");
++    }
++    if (event.type === "context" && (typeof event.bytes !== "number" || !Number.isFinite(event.bytes))) {
++      throw new Error("malformed context event: bytes is required and must be a finite number");
++    }
++  }
++}
++
++function readIdentity(event) {
++  return `${event.target}::${event.contentVersion}`;
++}
++
++function commandIdentity(event) {
++  return `${event.target}::${event.workspaceRevision}`;
++}
++
+ export function analyzeSession(events) {
+-  const duplicateReads = events.filter((event) => event.type === "read").length;
+-  const unchangedFailureRetries = events.filter((event) => event.type === "command" && event.result === "failed").length;
++  assertOrderedEvents(events);
++
++  let duplicateReads = 0;
++  let unchangedFailureRetries = 0;
++  let oversizedContextLoads = 0;
++  const seenReads = new Set();
++  const failedCommandsSinceReset = new Set();
++  let lastWriteSequence = Number.NEGATIVE_INFINITY;
++
++  for (const event of events) {
++    if (event.type === "diagnosis") {
++      failedCommandsSinceReset.clear();
++      continue;
++    }
++
++    if (event.type === "read") {
++      const identity = readIdentity(event);
++      if (seenReads.has(identity)) {
++        duplicateReads += 1;
++      } else {
++        seenReads.add(identity);
++      }
++      continue;
++    }
++
++    if (event.type === "context") {
++      if (event.bytes > OVERSIZED_CONTEXT_BYTES) {
++        oversizedContextLoads += 1;
++      }
++      continue;
++    }
++
++    if (event.type === "write") {
++      lastWriteSequence = event.sequence;
++      continue;
++    }
++
++    if (event.type === "command" && event.result === "failed") {
++      const identity = commandIdentity(event);
++      if (failedCommandsSinceReset.has(identity)) {
++        unchangedFailureRetries += 1;
++      } else {
++        failedCommandsSinceReset.add(identity);
++      }
++    }
++  }
++
++  let finalVerificationRuns = 0;
++  for (const event of events) {
++    if (
++      event.type === "command" &&
++      event.phase === "final-verification" &&
++      event.result === "passed" &&
++      event.sequence > lastWriteSequence
++    ) {
++      finalVerificationRuns += 1;
++    }
++  }
++
+   return {
+     totalEvents: events.length,
+     duplicateReads,
+     unchangedFailureRetries,
+-    oversizedContextLoads: 0,
+-    preventableCalls: duplicateReads + unchangedFailureRetries,
+-    finalVerificationRuns: 0,
+-    correctnessPassed: false,
++    oversizedContextLoads,
++    preventableCalls: duplicateReads + unchangedFailureRetries + oversizedContextLoads,
++    finalVerificationRuns,
++    correctnessPassed: finalVerificationRuns > 0,
+   };
+ }
+diff --git a/12 Agentic Retrospective/exercise-01-session-waste-retro-from-logs/session-waste-app/src/retro/analyzeSession.test.mjs b/12 Agentic Retrospective/exercise-01-session-waste-retro-from-logs/session-waste-app/src/retro/analyzeSession.test.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..f872eec8fa4ded9df3caec13cfdc350a9dc490fb
+--- /dev/null
++++ b/12 Agentic Retrospective/exercise-01-session-waste-retro-from-logs/session-waste-app/src/retro/analyzeSession.test.mjs	
+@@ -0,0 +1,89 @@
++import assert from "node:assert/strict";
++import { analyzeSession } from "./analyzeSession.mjs";
++import { evaluateCommandAttempt } from "./preflightPolicy.mjs";
++
++function givenSameTargetAndVersionAlreadyRead_whenSessionIsAnalyzed_thenDuplicateReadsIncrementsOnce() {
++  // Arrange
++  const events = [
++    { sequence: 1, type: "read", target: "policy.ts", contentVersion: "v1", workspaceRevision: 1, result: "ok" },
++    { sequence: 2, type: "read", target: "policy.ts", contentVersion: "v1", workspaceRevision: 1, result: "ok" },
++    { sequence: 3, type: "read", target: "policy.ts", contentVersion: "v2", workspaceRevision: 2, result: "ok" },
++  ];
++
++  // Act
++  const metrics = analyzeSession(events);
++
++  // Assert
++  assert.equal(metrics.duplicateReads, 1);
++  assert.equal(metrics.preventableCalls, 1);
++}
++
++function givenIdenticalFailedCommandsAtSameRevision_whenSessionIsAnalyzed_thenUnchangedFailureRetriesCountLaterAttempts() {
++  // Arrange
++  const events = [
++    { sequence: 1, type: "command", target: "npm test", workspaceRevision: 3, phase: "focused-test", result: "failed" },
++    { sequence: 2, type: "command", target: "npm test", workspaceRevision: 3, phase: "focused-test", result: "failed" },
++    { sequence: 3, type: "command", target: "npm test", workspaceRevision: 3, phase: "focused-test", result: "failed" },
++    { sequence: 4, type: "diagnosis", target: "missing fixture", workspaceRevision: 3, result: "ok" },
++    { sequence: 5, type: "command", target: "npm test", workspaceRevision: 3, phase: "focused-test", result: "passed" },
++  ];
++
++  // Act
++  const metrics = analyzeSession(events);
++
++  // Assert
++  assert.equal(metrics.unchangedFailureRetries, 2);
++  assert.equal(metrics.duplicateReads, 0);
++}
++
++function givenPassedFinalVerificationAfterLastWrite_whenSessionIsAnalyzed_thenFinalVerificationRunsAndCorrectnessPass() {
++  // Arrange
++  const events = [
++    { sequence: 1, type: "write", target: "a.ts", contentVersion: "v2", workspaceRevision: 2, result: "ok" },
++    { sequence: 2, type: "command", target: "npm test", workspaceRevision: 2, phase: "focused-test", result: "passed" },
++    { sequence: 3, type: "command", target: "npm verify", workspaceRevision: 2, phase: "final-verification", result: "passed" },
++  ];
++
++  // Act
++  const metrics = analyzeSession(events);
++
++  // Assert
++  assert.equal(metrics.finalVerificationRuns, 1);
++  assert.equal(metrics.correctnessPassed, true);
++}
++
++function givenClaimAfterWriteWithoutFinalVerification_whenSessionIsAnalyzed_thenCorrectnessDoesNotPass() {
++  // Arrange
++  const events = [
++    { sequence: 1, type: "write", target: "a.ts", contentVersion: "v2", workspaceRevision: 2, result: "ok" },
++    { sequence: 2, type: "claim", target: "task complete", workspaceRevision: 2, result: "ok" },
++  ];
++
++  // Act
++  const metrics = analyzeSession(events);
++
++  // Assert
++  assert.equal(metrics.finalVerificationRuns, 0);
++  assert.equal(metrics.correctnessPassed, false);
++}
++
++function givenFailedCommandAtRevision_whenPreflightEvaluatesSameCommand_thenDiagnosisOrChangeIsRequired() {
++  // Arrange
++  const events = [
++    { sequence: 1, type: "command", target: "npm test", workspaceRevision: 4, phase: "focused-test", result: "failed" },
++  ];
++
++  // Act
++  const decision = evaluateCommandAttempt({ command: "npm test", workspaceRevision: 4, events });
++
++  // Assert
++  assert.deepEqual(decision, { allowed: false, reason: "DIAGNOSIS_OR_CHANGE_REQUIRED" });
++}
++
++givenSameTargetAndVersionAlreadyRead_whenSessionIsAnalyzed_thenDuplicateReadsIncrementsOnce();
++givenIdenticalFailedCommandsAtSameRevision_whenSessionIsAnalyzed_thenUnchangedFailureRetriesCountLaterAttempts();
++givenPassedFinalVerificationAfterLastWrite_whenSessionIsAnalyzed_thenFinalVerificationRunsAndCorrectnessPass();
++givenClaimAfterWriteWithoutFinalVerification_whenSessionIsAnalyzed_thenCorrectnessDoesNotPass();
++givenFailedCommandAtRevision_whenPreflightEvaluatesSameCommand_thenDiagnosisOrChangeIsRequired();
++
++console.log("PASS participant analyzeSession tests");
+diff --git a/12 Agentic Retrospective/exercise-01-session-waste-retro-from-logs/session-waste-app/src/retro/preflightPolicy.mjs b/12 Agentic Retrospective/exercise-01-session-waste-retro-from-logs/session-waste-app/src/retro/preflightPolicy.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..9e2fa837a55b518cea5b25d420f42dc67384bbef
+--- /dev/null
++++ b/12 Agentic Retrospective/exercise-01-session-waste-retro-from-logs/session-waste-app/src/retro/preflightPolicy.mjs	
+@@ -0,0 +1,55 @@
++const DIAGNOSIS_OR_CHANGE_REQUIRED = "DIAGNOSIS_OR_CHANGE_REQUIRED";
++const FIRST_OR_INFORMED_ATTEMPT = "FIRST_OR_INFORMED_ATTEMPT";
++
++function denyUninformedRetry() {
++  return { allowed: false, reason: DIAGNOSIS_OR_CHANGE_REQUIRED };
++}
++
++function allowFirstOrInformedAttempt() {
++  return { allowed: true, reason: FIRST_OR_INFORMED_ATTEMPT };
++}
++
++function isMatchingCommand(event, command, workspaceRevision) {
++  return event?.type === "command"
++    && event.target === command
++    && event.workspaceRevision === workspaceRevision;
++}
++
++function latestMatchingCommand(events, command, workspaceRevision) {
++  let latest = null;
++  for (const event of events) {
++    if (!isMatchingCommand(event, command, workspaceRevision)) {
++      continue;
++    }
++    if (latest == null || event.sequence > latest.sequence) {
++      latest = event;
++    }
++  }
++  return latest;
++}
++
++function hasLaterDiagnosis(events, afterSequence) {
++  return events.some((event) => event?.type === "diagnosis" && event.sequence > afterSequence);
++}
++
++/**
++ * Decide whether a command may run before it executes.
++ * Command identity is event.target; revision is event.workspaceRevision.
++ * Inspect the latest matching command at that revision and deny only when
++ * it failed and no later diagnosis event exists. Does not rewrite traces.
++ */
++export function evaluateCommandAttempt({ command, workspaceRevision, events }) {
++  const history = Array.isArray(events) ? events : [];
++  const latest = latestMatchingCommand(history, command, workspaceRevision);
++
++  if (latest == null) {
++    return allowFirstOrInformedAttempt();
++  }
++  if (latest.result !== "failed") {
++    return allowFirstOrInformedAttempt();
++  }
++  if (hasLaterDiagnosis(history, latest.sequence)) {
++    return allowFirstOrInformedAttempt();
++  }
++  return denyUninformedRetry();
++}
