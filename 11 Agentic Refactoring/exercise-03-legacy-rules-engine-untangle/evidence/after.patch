@@ -1,0 +1,177 @@
+diff --git a/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/evidence/contract-before.json b/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/evidence/contract-before.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..a0b72c7f758ea32292b72b6db2bf170b09f40e8a
+--- /dev/null
++++ b/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/evidence/contract-before.json	
+@@ -0,0 +1,6 @@
++[
++  { "case": "ready-note-length-11", "outcome": "rejected", "type": "InvalidWorkflowDecisionException", "message": "Ready decisions require a longer evidence note", "saveCount": 0 },
++  { "case": "ready-note-length-12", "outcome": "accepted", "result": { "id": "wf-101", "customer": "Atlas Co", "status": "Ready", "score": 91, "owner": "Asha", "note": "123456789012" }, "saveCount": 1 },
++  { "case": "missing-id-precedes-policy", "outcome": "rejected", "type": "WorkflowNotFoundException", "message": "Workflow item not found: missing", "saveCount": 0 },
++  { "case": "unknown-status-gap", "outcome": "accepted", "result": { "id": "wf-102", "customer": "Brightline", "status": "Escalated Later", "score": 74, "owner": "Rina", "note": "Legacy accepts this status" }, "saveCount": 1 }
++]
+diff --git a/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/DecisionPolicy.java b/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/DecisionPolicy.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..88bcb9ebf76d61ce8b7e048958c7d7036d70de8d
+--- /dev/null
++++ b/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/DecisionPolicy.java	
+@@ -0,0 +1,14 @@
++package dev.agentic.exercise.workflow;
++
++import org.springframework.stereotype.Component;
++
++@Component
++public class DecisionPolicy {
++  public void validate(WorkflowItem item, WorkflowDecision decision) {
++    boolean readyNoteTooShort =
++        "Ready".equals(decision.status()) && decision.evidenceNote().length() < 12;
++    if (readyNoteTooShort) {
++      throw new InvalidWorkflowDecisionException("Ready decisions require a longer evidence note");
++    }
++  }
++}
+diff --git a/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowService.java b/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowService.java
+index 57f8a6dfa976e27b0cb93e7c97789a4b4f1631d0..4b99010891aa2b02c1b024d59bedc7c5b250dc5b 100644
+--- a/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowService.java	
++++ b/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowService.java	
+@@ -1,14 +1,22 @@
+ package dev.agentic.exercise.workflow;
+ 
+ import java.util.Collection;
++import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.stereotype.Service;
+ 
+ @Service
+ public class WorkflowService {
+   private final WorkflowRepository repository;
++  private final DecisionPolicy decisionPolicy;
+ 
+   public WorkflowService(WorkflowRepository repository) {
++    this(repository, new DecisionPolicy());
++  }
++
++  @Autowired
++  public WorkflowService(WorkflowRepository repository, DecisionPolicy decisionPolicy) {
+     this.repository = repository;
++    this.decisionPolicy = decisionPolicy;
+   }
+ 
+   public Collection<WorkflowItem> list() {
+@@ -19,9 +27,7 @@ public class WorkflowService {
+     WorkflowItem item = repository.findById(id)
+         .orElseThrow(() -> new WorkflowNotFoundException(id));
+ 
+-    if ("Ready".equals(decision.status()) && decision.evidenceNote().length() < 12) {
+-      throw new InvalidWorkflowDecisionException("Ready decisions require a longer evidence note");
+-    }
++    decisionPolicy.validate(item, decision);
+ 
+     return repository.save(new WorkflowItem(
+         item.id(),
+diff --git a/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/test/java/dev/agentic/exercise/workflow/WorkflowPolicyCharacterizationTest.java b/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/test/java/dev/agentic/exercise/workflow/WorkflowPolicyCharacterizationTest.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..c42562d7d287286d7b4e6b7ee540c56af1ee6411
+--- /dev/null
++++ b/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/test/java/dev/agentic/exercise/workflow/WorkflowPolicyCharacterizationTest.java	
+@@ -0,0 +1,101 @@
++package dev.agentic.exercise.workflow;
++
++import static org.assertj.core.api.Assertions.assertThat;
++import static org.assertj.core.api.Assertions.assertThatThrownBy;
++
++import org.junit.jupiter.api.Test;
++
++class WorkflowPolicyCharacterizationTest {
++  static final class RecordingRepository extends WorkflowRepository {
++    int saves;
++
++    @Override
++    public WorkflowItem save(WorkflowItem item) {
++      saves += 1;
++      return super.save(item);
++    }
++  }
++
++  @Test
++  void givenMissingIdAndInvalidReadyNote_whenDecideIsCalled_thenThrowsWorkflowNotFoundExceptionAndSavesNothing() {
++    // Arrange
++    RecordingRepository repository = new RecordingRepository();
++    WorkflowService service = new WorkflowService(repository);
++    WorkflowDecision invalidReady = new WorkflowDecision("Ready", "Asha", "short");
++
++    // Act / Assert
++    assertThatThrownBy(() -> service.decide("missing", invalidReady))
++        .isInstanceOf(WorkflowNotFoundException.class)
++        .hasMessage("Workflow item not found: missing");
++    assertThat(repository.saves).isZero();
++  }
++
++  @Test
++  void givenReadyNoteLengthEleven_whenDecideIsCalled_thenThrowsExactInvalidDecisionMessageZeroSavesAndItemUnchanged() {
++    // Arrange
++    RecordingRepository repository = new RecordingRepository();
++    WorkflowService service = new WorkflowService(repository);
++    WorkflowItem before = repository.findById("wf-101").orElseThrow();
++    WorkflowDecision shortReady = new WorkflowDecision("Ready", "Asha", "12345678901");
++
++    // Act / Assert
++    assertThatThrownBy(() -> service.decide("wf-101", shortReady))
++        .isInstanceOf(InvalidWorkflowDecisionException.class)
++        .hasMessage("Ready decisions require a longer evidence note");
++    assertThat(repository.findById("wf-101").orElseThrow()).isEqualTo(before);
++    assertThat(repository.saves).isZero();
++  }
++
++  @Test
++  void givenReadyNoteLengthTwelve_whenDecideIsCalled_thenAcceptsDecisionAndSavesOnce() {
++    // Arrange
++    RecordingRepository repository = new RecordingRepository();
++    WorkflowService service = new WorkflowService(repository);
++    WorkflowDecision boundaryReady = new WorkflowDecision("Ready", "Asha", "123456789012");
++
++    // Act
++    WorkflowItem item = service.decide("wf-101", boundaryReady);
++
++    // Assert
++    assertThat(item).isEqualTo(new WorkflowItem("wf-101", "Atlas Co", "Ready", 91, "Asha", "123456789012"));
++    assertThat(repository.saves).isEqualTo(1);
++  }
++
++  @Test
++  void givenUnknownNonReadyStatus_whenDecideIsCalled_thenAcceptsEscalatedLaterAndSavesOnce() {
++    // Arrange
++    RecordingRepository repository = new RecordingRepository();
++    WorkflowService service = new WorkflowService(repository);
++    WorkflowDecision unknownStatus = new WorkflowDecision(
++        "Escalated Later", "Rina", "Legacy accepts this status");
++
++    // Act
++    WorkflowItem item = service.decide("wf-102", unknownStatus);
++
++    // Assert
++    assertThat(item).isEqualTo(new WorkflowItem(
++        "wf-102", "Brightline", "Escalated Later", 74, "Rina", "Legacy accepts this status"));
++    assertThat(repository.saves).isEqualTo(1);
++  }
++
++  @Test
++  void givenValidBlockedDecision_whenDecideIsCalled_thenPreservesIdCustomerScoreReplacesStatusOwnerNoteAndSavesOnce() {
++    // Arrange
++    RecordingRepository repository = new RecordingRepository();
++    WorkflowService service = new WorkflowService(repository);
++    WorkflowItem before = repository.findById("wf-102").orElseThrow();
++    WorkflowDecision blocked = new WorkflowDecision("Blocked", "Rina", "Waiting for signed approval");
++
++    // Act
++    WorkflowItem item = service.decide("wf-102", blocked);
++
++    // Assert
++    assertThat(item.id()).isEqualTo(before.id());
++    assertThat(item.customer()).isEqualTo(before.customer());
++    assertThat(item.score()).isEqualTo(before.score());
++    assertThat(item.status()).isEqualTo("Blocked");
++    assertThat(item.owner()).isEqualTo("Rina");
++    assertThat(item.note()).isEqualTo("Waiting for signed approval");
++    assertThat(repository.saves).isEqualTo(1);
++  }
++}

@@ -1,0 +1,11 @@
+command: npm run refactor:verify
+cwd: /tmp/ex-11-03/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-app
+JAVA_HOME: /Users/codewalnut/Library/Java/JavaVirtualMachines/ms-25.0.4/Contents/Home
+
+> legacy-rules-app@0.1.0 refactor:verify
+> node ./scripts/verify-rules-submission.mjs
+
+Characterization SHA: e73626090569a3107739dbb599ec5f19ced369e4
+Refactor SHA: 45238cc3d7c484720c5d9bbece5cbb31cb593bd0
+PASS identical contract snapshots and test-first focused history
+exit code: 0

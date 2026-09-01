@@ -1,0 +1,46 @@
+diff --git a/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/DecisionPolicy.java b/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/DecisionPolicy.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..9a5488187e2200eb30a18a2b0034027e10ead5a0
+--- /dev/null
++++ b/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/DecisionPolicy.java	
+@@ -0,0 +1,12 @@
++package dev.agentic.exercise.workflow;
++
++import org.springframework.stereotype.Component;
++
++@Component
++public class DecisionPolicy {
++  public void validate(WorkflowDecision decision) {
++    if ("Ready".equals(decision.status()) && decision.evidenceNote().length() < 12) {
++      throw new InvalidWorkflowDecisionException("Ready decisions require a longer evidence note");
++    }
++  }
++}
+diff --git a/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowService.java b/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowService.java
+index 57f8a6dfa976e27b0cb93e7c97789a4b4f1631d0..505c1c15a0f6f355e7eb006897c91745a5875d83 100644
+--- a/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowService.java	
++++ b/11 Agentic Refactoring/exercise-03-legacy-rules-engine-untangle/legacy-rules-api/src/main/java/dev/agentic/exercise/workflow/WorkflowService.java	
+@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
+ @Service
+ public class WorkflowService {
+   private final WorkflowRepository repository;
++  private final DecisionPolicy decisionPolicy;
+ 
+-  public WorkflowService(WorkflowRepository repository) {
++  public WorkflowService(WorkflowRepository repository, DecisionPolicy decisionPolicy) {
+     this.repository = repository;
++    this.decisionPolicy = decisionPolicy;
+   }
+ 
+   public Collection<WorkflowItem> list() {
+@@ -19,9 +21,7 @@ public class WorkflowService {
+     WorkflowItem item = repository.findById(id)
+         .orElseThrow(() -> new WorkflowNotFoundException(id));
+ 
+-    if ("Ready".equals(decision.status()) && decision.evidenceNote().length() < 12) {
+-      throw new InvalidWorkflowDecisionException("Ready decisions require a longer evidence note");
+-    }
++    decisionPolicy.validate(decision);
+ 
+     return repository.save(new WorkflowItem(
+         item.id(),

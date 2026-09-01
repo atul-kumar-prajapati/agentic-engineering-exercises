@@ -1,0 +1,7 @@
+{
+  "startingCommit": "52090edddf032d026ece16ef90feb627bf8e67ac",
+  "characterizationSha": "e73626090569a3107739dbb599ec5f19ced369e4",
+  "refactorSha": "45238cc3d7c484720c5d9bbece5cbb31cb593bd0",
+  "beforeImplementationSha": "ab44994189b813ebcfc7ae25399541ec5d5851e2",
+  "note": "characterizationSha is an ancestor of refactorSha; commits after refactorSha are evidence only"
+}
