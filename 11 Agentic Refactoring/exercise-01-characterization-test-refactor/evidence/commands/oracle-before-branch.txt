@@ -1,0 +1,20 @@
+command: cd "/tmp/ex-11-01-before/11 Agentic Refactoring/exercise-01-characterization-test-refactor/rules-refactor-app" && node ./scripts/run-characterization-oracle.mjs
+cwd: before-attempt worktree (branch codex/exercise-11-01-characterization-test-refactor-before at bf7b280)
+output:
+PASS enterprise boundary with one late payment
+PASS enterprise boundary with two late payments
+PASS enterprise below tenure boundary
+PASS enterprise accepts negative late payments
+PASS pro exact tenure clean account
+PASS pro below tenure boundary
+PASS mature pro with one late payment
+PASS support override wins on new starter
+PASS support override wins on enterprise arrears
+PASS ordinary starter remains unsupported
+PASS 10 protected public-behavior observations
+exit code: 0
+
+command: node ./scripts/run-characterization-oracle.mjs --json | shasum -a 256
+output:
+5ce2adedc6dcb063b8ba99dbb1a2bbd49755e3e92437548b806dcea56aa98bab  -
+exit code: 0

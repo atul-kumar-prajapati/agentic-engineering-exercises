@@ -1,0 +1,19 @@
+command: node /tmp/parity/stateful-repro.mjs (integration-owner re-derivation of the stateful-accessor divergence class found by the review lanes; compares original at 52090ed, before attempt at bf7b280, after attempt at 550e1a2)
+cwd: /tmp/parity
+output:
+stateful tier getter (enterprise on read 1, pro afterwards), monthsActive 6, latePayments 0:
+  original: {"status":"ineligible","discountPercent":0,"reason":"plan-not-supported"}
+  before  : {"status":"eligible","discountPercent":10,"reason":"pro-tenure"}
+  after   : {"status":"eligible","discountPercent":10,"reason":"pro-tenure"}
+stateful monthsActive getter (11 then 40), tier enterprise, latePayments 5:
+  original: {"status":"ineligible","discountPercent":0,"reason":"plan-not-supported"}
+  before  : {"status":"manual-review","discountPercent":0,"reason":"payment-history"}
+  after   : {"status":"manual-review","discountPercent":0,"reason":"payment-history"}
+read-once proxy, original: {"status":"ineligible","discountPercent":0,"reason":"plan-not-supported"}
+read-once proxy, before: THROWS second read of tier
+read-once proxy, after: THROWS second read of tier
+plain-data control (enterprise, 6 months, 0 late):
+  original: {"status":"ineligible","discountPercent":0,"reason":"plan-not-supported"}
+  before  : {"status":"ineligible","discountPercent":0,"reason":"plan-not-supported"}
+  after   : {"status":"ineligible","discountPercent":0,"reason":"plan-not-supported"}
+exit code: 0

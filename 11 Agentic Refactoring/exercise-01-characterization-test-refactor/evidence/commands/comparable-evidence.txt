@@ -1,0 +1,6 @@
+PASS before and after runs use matching conditions and valid Git patches
+PASS both patches match their recorded implementation commits
+PASS protected manifests and inputs match the starting commit
+
+command: cd rules-refactor-app && node ../../../scripts/comparable-evidence.mjs ..
+exit code: 0

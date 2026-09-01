@@ -1,0 +1,10 @@
+command: node /tmp/parity/sweep.mjs (independent parity sweep of original vs before-attempt and after-attempt modules over 49392 input variations)
+cwd: /tmp/parity
+output:
+parity sweep: 49392 input variations
+before-attempt divergences from original: 0
+after-attempt divergences from original: 0
+PARITY PROOF: both refactors preserve every output across the full sweep
+exit code: 0
+
+scope note: every input in this sweep is a stable-property object (getters, if any, return the same value on every read). Inputs whose property access is stateful or side-effecting are covered separately in stateful-accessor-parity.txt, where both refactors diverge from the original.

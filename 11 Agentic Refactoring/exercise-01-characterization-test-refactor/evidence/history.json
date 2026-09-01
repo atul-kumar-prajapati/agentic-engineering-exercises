@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "startingCommit": "52090edddf032d026ece16ef90feb627bf8e67ac",
+  "characterizationSha": "af05bfacf17d1b37ba99e50996cc5686f2772683",
+  "refactorSha": "550e1a2e4f5254375fe6360771ad260d9c4d34c2",
+  "note": "characterizationSha adds only the public characterization test and the before-output baseline; refactorSha changes only src/rules/legacyEligibility.mjs; every commit after refactorSha touches evidence files only."
+}
