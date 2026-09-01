@@ -1,0 +1,8 @@
+
+> checkout-strangler-app@0.1.0 strangler:verify
+> node ./scripts/verify-strangler-submission.mjs
+
+Source SHA: 58878e4215a164c7a445bd4399118625e894d5e3
+PASS route, comparison, rollback, and focused-history evidence
+
+exit code: 0

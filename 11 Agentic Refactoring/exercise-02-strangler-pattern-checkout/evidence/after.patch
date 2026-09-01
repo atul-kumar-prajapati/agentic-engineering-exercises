@@ -1,0 +1,280 @@
+diff --git a/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/cardCheckout.mjs b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/cardCheckout.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..b2b87bf54c6bb5efe15e8d4e03eafc302ba352ea
+--- /dev/null
++++ b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/cardCheckout.mjs	
+@@ -0,0 +1,32 @@
++const BASIS_POINTS_PER_UNIT = 10000;
++
++function taxCentsFromSubtotal(subtotalCents, taxRateBps) {
++  return Math.round((subtotalCents * taxRateBps) / BASIS_POINTS_PER_UNIT);
++}
++
++function amountCentsFromRequest(request) {
++  return request.subtotalCents + taxCentsFromSubtotal(request.subtotalCents, request.taxRateBps);
++}
++
++function mapAuthorizationToPublicResult(orderId, amountCents, authorization) {
++  if (authorization != null && authorization.approved === true) {
++    return { orderId, status: "paid", totalCents: amountCents, errorCode: null };
++  }
++  return { orderId, status: "failed", totalCents: amountCents, errorCode: "PAYMENT_DECLINED" };
++}
++
++export function createCardCheckout({ authorize }) {
++  if (typeof authorize !== "function") {
++    throw new TypeError("createCardCheckout requires an injectable authorize function");
++  }
++
++  return async function cardCheckout(request) {
++    const amountCents = amountCentsFromRequest(request);
++    const authorization = await authorize({
++      orderId: request.orderId,
++      amountCents,
++      paymentToken: request.paymentToken,
++    });
++    return mapAuthorizationToPublicResult(request.orderId, amountCents, authorization);
++  };
++}
+diff --git a/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.mjs b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.mjs
+index 010f28c5293510316f9704cf6c7e3c866a0fa1fb..b350b5e8c4b362593ae2d14c4c448140376b49cb 100644
+--- a/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.mjs	
++++ b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.mjs	
+@@ -1,4 +1,43 @@
+-/** Seeded router: all payment types still flow through the legacy implementation. */
++function totalCents(request) {
++  return request.subtotalCents + Math.round(request.subtotalCents * request.taxRateBps / 10000);
++}
++
++function usesEnabledCardSlice(request, implementations) {
++  return request.paymentType === "card" && implementations.cardSliceEnabled === true;
++}
++
++function isValidPublicResult(result) {
++  return result != null
++    && typeof result === "object"
++    && "orderId" in result
++    && "status" in result
++    && "totalCents" in result
++    && "errorCode" in result;
++}
++
++function unknownPaymentState(request) {
++  return {
++    orderId: request.orderId,
++    status: "failed",
++    totalCents: totalCents(request),
++    errorCode: "PAYMENT_STATE_UNKNOWN",
++  };
++}
++
+ export async function routeCheckout(request, implementations) {
+-  return implementations.legacy(request);
++  if (!usesEnabledCardSlice(request, implementations)) {
++    return implementations.legacy(request);
++  }
++
++  try {
++    return await implementations.card(request);
++  } catch (error) {
++    if (error != null && error.authorizationCreated === false) {
++      return implementations.legacy(request);
++    }
++    if (isValidPublicResult(error?.result)) {
++      return error.result;
++    }
++    return unknownPaymentState(request);
++  }
+ }
+diff --git a/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.test.mjs b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.test.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..1597cc9488931e73076c02250ce6fcbb5b1a9d2e
+--- /dev/null
++++ b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.test.mjs	
+@@ -0,0 +1,186 @@
++import assert from "node:assert/strict";
++import { createCardCheckout } from "./cardCheckout.mjs";
++import { routeCheckout } from "./checkoutRouter.mjs";
++
++const cardRequest = {
++  orderId: "ord-route",
++  paymentType: "card",
++  subtotalCents: 1001,
++  taxRateBps: 825,
++  paymentToken: "tok",
++};
++
++function trackingImplementations({
++  cardSliceEnabled = true,
++  card = async (request) => ({
++    orderId: request.orderId,
++    status: "paid",
++    totalCents: 1084,
++    errorCode: null,
++  }),
++} = {}) {
++  const calls = { legacy: [], card: [] };
++  return {
++    calls,
++    implementations: {
++      legacy: async (request) => {
++        calls.legacy.push(request.paymentType);
++        return { orderId: request.orderId, status: "paid", totalCents: 1084, errorCode: null };
++      },
++      card: async (request) => {
++        calls.card.push(request.paymentType);
++        return card(request);
++      },
++      cardSliceEnabled,
++    },
++  };
++}
++
++async function givenEnabledCard_whenRouted_thenUsesNewSliceWithZeroLegacyCalls() {
++  // Arrange
++  const authorizeCalls = [];
++  const card = createCardCheckout({
++    authorize: async (payload) => {
++      authorizeCalls.push(payload);
++      return { approved: true };
++    },
++  });
++  const { calls, implementations } = trackingImplementations({
++    cardSliceEnabled: true,
++    card,
++  });
++
++  // Act
++  const result = await routeCheckout(cardRequest, implementations);
++
++  // Assert
++  assert.deepEqual(result, { orderId: "ord-route", status: "paid", totalCents: 1084, errorCode: null });
++  assert.deepEqual(calls, { legacy: [], card: ["card"] });
++  assert.equal(authorizeCalls.length, 1);
++}
++
++async function givenGiftCard_whenRouted_thenStaysOnLegacy() {
++  // Arrange
++  const { calls, implementations } = trackingImplementations({ cardSliceEnabled: true });
++
++  // Act
++  await routeCheckout({ ...cardRequest, paymentType: "gift-card" }, implementations);
++
++  // Assert
++  assert.deepEqual(calls, { legacy: ["gift-card"], card: [] });
++}
++
++async function givenInvoice_whenRouted_thenStaysOnLegacy() {
++  // Arrange
++  const { calls, implementations } = trackingImplementations({ cardSliceEnabled: true });
++
++  // Act
++  await routeCheckout({ ...cardRequest, paymentType: "invoice" }, implementations);
++
++  // Assert
++  assert.deepEqual(calls, { legacy: ["invoice"], card: [] });
++}
++
++async function givenUnknownPaymentType_whenRouted_thenStaysOnLegacy() {
++  // Arrange
++  const { calls, implementations } = trackingImplementations({ cardSliceEnabled: true });
++
++  // Act
++  await routeCheckout({ ...cardRequest, paymentType: "crypto" }, implementations);
++
++  // Assert
++  assert.deepEqual(calls, { legacy: ["crypto"], card: [] });
++}
++
++async function givenCardSliceDisabled_whenCardRouted_thenUsesLegacyOnly() {
++  // Arrange
++  const { calls, implementations } = trackingImplementations({ cardSliceEnabled: false });
++
++  // Act
++  await routeCheckout(cardRequest, implementations);
++
++  // Assert
++  assert.deepEqual(calls, { legacy: ["card"], card: [] });
++}
++
++async function givenPreAuthorizationFailure_whenCardThrows_thenFallsBackToLegacyOnce() {
++  // Arrange
++  const { calls, implementations } = trackingImplementations({
++    card: async () => {
++      throw { authorizationCreated: false };
++    },
++  });
++
++  // Act
++  await routeCheckout(cardRequest, implementations);
++
++  // Assert
++  assert.deepEqual(calls, { legacy: ["card"], card: ["card"] });
++}
++
++async function givenAuthorizationCreatedTrue_whenCardThrows_thenNeverCallsLegacy() {
++  // Arrange
++  const publicResult = { orderId: "ord-route", status: "failed", totalCents: 1084, errorCode: "PAYMENT_STATE_UNKNOWN" };
++  const { calls, implementations } = trackingImplementations({
++    card: async () => {
++      throw { authorizationCreated: true, result: publicResult };
++    },
++  });
++
++  // Act
++  const result = await routeCheckout(cardRequest, implementations);
++
++  // Assert
++  assert.deepEqual(calls, { legacy: [], card: ["card"] });
++  assert.deepEqual(result, publicResult);
++}
++
++async function givenMissingAuthorizationCreated_whenCardThrows_thenNeverCallsLegacy() {
++  // Arrange
++  const publicResult = { orderId: "ord-route", status: "failed", totalCents: 1084, errorCode: "PAYMENT_STATE_UNKNOWN" };
++  const { calls, implementations } = trackingImplementations({
++    card: async () => {
++      throw { result: publicResult };
++    },
++  });
++
++  // Act
++  const result = await routeCheckout(cardRequest, implementations);
++
++  // Assert
++  assert.deepEqual(calls, { legacy: [], card: ["card"] });
++  assert.deepEqual(result, publicResult);
++}
++
++async function givenAmbiguousError_whenCardThrows_thenNeverCallsLegacy() {
++  // Arrange
++  const { calls, implementations } = trackingImplementations({
++    card: async () => {
++      throw new Error("gateway outcome unknown");
++    },
++  });
++
++  // Act
++  const result = await routeCheckout(cardRequest, implementations);
++
++  // Assert
++  assert.deepEqual(calls, { legacy: [], card: ["card"] });
++  assert.deepEqual(result, {
++    orderId: "ord-route",
++    status: "failed",
++    totalCents: 1084,
++    errorCode: "PAYMENT_STATE_UNKNOWN",
++  });
++}
++
++await givenEnabledCard_whenRouted_thenUsesNewSliceWithZeroLegacyCalls();
++await givenGiftCard_whenRouted_thenStaysOnLegacy();
++await givenInvoice_whenRouted_thenStaysOnLegacy();
++await givenUnknownPaymentType_whenRouted_thenStaysOnLegacy();
++await givenCardSliceDisabled_whenCardRouted_thenUsesLegacyOnly();
++await givenPreAuthorizationFailure_whenCardThrows_thenFallsBackToLegacyOnce();
++await givenAuthorizationCreatedTrue_whenCardThrows_thenNeverCallsLegacy();
++await givenMissingAuthorizationCreated_whenCardThrows_thenNeverCallsLegacy();
++await givenAmbiguousError_whenCardThrows_thenNeverCallsLegacy();
++
++console.log("PASS participant strangler route tests");

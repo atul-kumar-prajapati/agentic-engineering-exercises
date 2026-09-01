@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "startingCommit": "52090edddf032d026ece16ef90feb627bf8e67ac",
+  "sourceSha": "58878e4215a164c7a445bd4399118625e894d5e3",
+  "beforeImplementationSha": "f2f3646c5f104576294b0513538381ba1a75736f",
+  "note": "sourceSha is the focused three-file implementation commit; this file is recorded in a later evidence-only commit"
+}

@@ -1,0 +1,6 @@
+> checkout-strangler-app@0.1.0 test:checkout
+> node ./scripts/run-checkout-tests.mjs && node ./src/checkout/checkoutRouter.test.mjs
+
+Error: Create src/checkout/cardCheckout.mjs and export createCardCheckout
+    at .../scripts/run-checkout-tests.mjs:10:9
+exit code: 1

@@ -1,0 +1,8 @@
+
+> checkout-strangler-app@0.1.0 test:checkout
+> node ./scripts/run-checkout-tests.mjs && node ./src/checkout/checkoutRouter.test.mjs
+
+PASS 2 legacy comparisons and 8 protected strangler route checks
+PASS participant strangler route tests
+
+exit code: 0

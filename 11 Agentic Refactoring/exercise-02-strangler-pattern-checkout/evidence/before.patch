@@ -1,0 +1,196 @@
+diff --git a/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/cardCheckout.mjs b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/cardCheckout.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..3c6644087da63ee12d5e698d329f5e1039e79f96
+--- /dev/null
++++ b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/cardCheckout.mjs	
+@@ -0,0 +1,61 @@
++function totalCents(request) {
++  return request.subtotalCents + Math.round(request.subtotalCents * request.taxRateBps / 10000);
++}
++
++function publicResult(request, total, status, errorCode) {
++  return {
++    orderId: request.orderId,
++    status,
++    totalCents: total,
++    errorCode,
++  };
++}
++
++function paidResult(request, total) {
++  return publicResult(request, total, "paid", null);
++}
++
++function declinedResult(request, total) {
++  return publicResult(request, total, "failed", "PAYMENT_DECLINED");
++}
++
++function unknownResult(request, total) {
++  return publicResult(request, total, "failed", "PAYMENT_STATE_UNKNOWN");
++}
++
++function attachAuthorizationSafety(failure, authorizationCreated, request, total) {
++  if (failure && typeof failure === "object") {
++    if (authorizationCreated && !("authorizationCreated" in failure)) {
++      failure.authorizationCreated = true;
++    }
++    if (failure.result == null) {
++      failure.result = unknownResult(request, total);
++    }
++    return failure;
++  }
++  return {
++    authorizationCreated,
++    result: unknownResult(request, total),
++    cause: failure,
++  };
++}
++
++export function createCardCheckout({ authorize }) {
++  return async function cardCheckout(request) {
++    const total = totalCents(request);
++    let authorizationCreated = false;
++    try {
++      const authorization = await authorize({
++        orderId: request.orderId,
++        amountCents: total,
++        paymentToken: request.paymentToken,
++      });
++      authorizationCreated = true;
++      return authorization.approved
++        ? paidResult(request, total)
++        : declinedResult(request, total);
++    } catch (failure) {
++      throw attachAuthorizationSafety(failure, authorizationCreated, request, total);
++    }
++  };
++}
+diff --git a/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.mjs b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.mjs
+index 010f28c5293510316f9704cf6c7e3c866a0fa1fb..63bdd90ada4e50182e74ca65a55c5c616295adba 100644
+--- a/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.mjs	
++++ b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.mjs	
+@@ -1,4 +1,40 @@
+-/** Seeded router: all payment types still flow through the legacy implementation. */
++function totalCents(request) {
++  return request.subtotalCents + Math.round(request.subtotalCents * request.taxRateBps / 10000);
++}
++
++function unknownPaymentState(request) {
++  return {
++    orderId: request.orderId,
++    status: "failed",
++    totalCents: totalCents(request),
++    errorCode: "PAYMENT_STATE_UNKNOWN",
++  };
++}
++
++function shouldUseCardSlice(request, implementations) {
++  return request.paymentType === "card"
++    && implementations.cardSliceEnabled === true
++    && typeof implementations.card === "function";
++}
++
++function canFallbackToLegacy(failure) {
++  return Boolean(failure) && failure.authorizationCreated === false;
++}
++
+ export async function routeCheckout(request, implementations) {
+-  return implementations.legacy(request);
++  if (!shouldUseCardSlice(request, implementations)) {
++    return implementations.legacy(request);
++  }
++
++  try {
++    return await implementations.card(request);
++  } catch (failure) {
++    if (canFallbackToLegacy(failure)) {
++      return implementations.legacy(request);
++    }
++    if (failure && failure.result) {
++      return failure.result;
++    }
++    return unknownPaymentState(request);
++  }
+ }
+diff --git a/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.test.mjs b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.test.mjs
+new file mode 100644
+index 0000000000000000000000000000000000000000..5107f9867dfc36c1abed99b1e970cb59fde70a44
+--- /dev/null
++++ b/11 Agentic Refactoring/exercise-02-strangler-pattern-checkout/checkout-strangler-app/src/checkout/checkoutRouter.test.mjs	
+@@ -0,0 +1,76 @@
++import assert from "node:assert/strict";
++import { createCardCheckout } from "./cardCheckout.mjs";
++import { createLegacyCheckout } from "./legacyCheckout.mjs";
++import { routeCheckout } from "./checkoutRouter.mjs";
++
++function totalCents(request) {
++  return request.subtotalCents + Math.round(request.subtotalCents * request.taxRateBps / 10000);
++}
++
++function routingBag(cardBehavior) {
++  const calls = { legacy: [], card: [] };
++  return {
++    calls,
++    implementations: {
++      legacy: async (request) => {
++        calls.legacy.push(request.paymentType);
++        return { orderId: request.orderId, status: "paid", totalCents: totalCents(request), errorCode: null };
++      },
++      card: async (request) => {
++        calls.card.push(request.paymentType);
++        return cardBehavior(request);
++      },
++      cardSliceEnabled: true,
++    },
++  };
++}
++
++const approvedCard = {
++  orderId: "ord-card-ok",
++  paymentType: "card",
++  subtotalCents: 1001,
++  taxRateBps: 825,
++  paymentToken: "tok-ok",
++};
++
++const paidCardResult = { orderId: "ord-card-ok", status: "paid", totalCents: 1084, errorCode: null };
++
++const enabled = routingBag(async () => paidCardResult);
++assert.deepEqual(await routeCheckout(approvedCard, enabled.implementations), paidCardResult);
++assert.deepEqual(enabled.calls, { legacy: [], card: ["card"] });
++
++for (const paymentType of ["gift-card", "invoice", "crypto"]) {
++  const current = routingBag(async () => paidCardResult);
++  await routeCheckout({ ...approvedCard, paymentType }, current.implementations);
++  assert.deepEqual(current.calls, { legacy: [paymentType], card: [] }, `${paymentType} stays on legacy`);
++}
++
++const disabled = routingBag(async () => paidCardResult);
++disabled.implementations.cardSliceEnabled = false;
++await routeCheckout(approvedCard, disabled.implementations);
++assert.deepEqual(disabled.calls, { legacy: ["card"], card: [] }, "flag-off card must use legacy only");
++
++const preAuth = routingBag(async () => { throw { authorizationCreated: false }; });
++await routeCheckout(approvedCard, preAuth.implementations);
++assert.deepEqual(preAuth.calls, { legacy: ["card"], card: ["card"] }, "pre-authorization failure may fall back once");
++
++const uncertainResult = { orderId: "ord-card-ok", status: "failed", totalCents: 1084, errorCode: "PAYMENT_STATE_UNKNOWN" };
++for (const failure of [
++  { authorizationCreated: true, result: uncertainResult },
++  { result: uncertainResult },
++  new Error("gateway outcome unknown"),
++]) {
++  const unsafe = routingBag(async () => { throw failure; });
++  const result = await routeCheckout(approvedCard, unsafe.implementations);
++  assert.deepEqual(unsafe.calls, { legacy: [], card: ["card"] }, "unsafe failure must never retry legacy");
++  assert.deepEqual(result, uncertainResult);
++}
++
++const declinedAuthorize = async () => ({ approved: false });
++const card = createCardCheckout({ authorize: declinedAuthorize });
++const legacy = createLegacyCheckout({ authorize: declinedAuthorize });
++const declinedRequest = { orderId: "ord-card-no", paymentType: "card", subtotalCents: 4200, taxRateBps: 500, paymentToken: "tok-no" };
++assert.deepEqual(await card(declinedRequest), await legacy(declinedRequest));
++assert.equal((await card(declinedRequest)).errorCode, "PAYMENT_DECLINED");
++
++console.log("PASS checkoutRouter participant checks");
