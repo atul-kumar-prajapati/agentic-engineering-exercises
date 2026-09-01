@@ -57,3 +57,19 @@ No hash cycle: summary digests hash raw report bytes and take `sourceSha` as an 
 ## What was not a stop on 10.3
 
 No hash cycle, no protected-file edit, no missing input. `tests/export-button.test.mjs` is created by the learner (not in the starter tree). `tsconfig` includes only `src`, so the `.mjs` test does not typecheck. Parent Cursor Grok 4.6; first-attempt and specialist subagents `cursor-grok-4.6-high`.
+
+## 11.2-specific
+
+- **Path is Agentic Refactoring, not Token Economics.** `exercise-02-strangler-pattern-checkout` lives under `11 Agentic Refactoring/`. Confirm the directory before branching; a “11 Token Economics/exercise-02” prompt is 10.2.
+- **Three-file `sourceSha`, 7.1 shape.** `diff-tree -r sourceSha` must be exactly `cardCheckout.mjs`, `checkoutRouter.mjs`, and `checkoutRouter.test.mjs`. Later `git diff --name-only sourceSha HEAD` is commit-to-commit and may only list `…/evidence/`. Fast-forward the after first-attempt commit onto the exercise branch so `sourceSha` and the after implementation SHA are the same object; then `after.patch` matches `git diff --binary --full-index <start> <sourceSha>` without a cherry-pick SHA change.
+- **`comparable-evidence.mjs` is not in this app’s `verify:submission`.** README still wants `before.md` / `after.md` / patches / `comparison.md`. Produce them in the standard field shape anyway. This exercise’s integrity manifest does not pin `comparable-evidence.mjs` (the 10.x stale-hash trap does not apply here). Integrity on a clean `upstream/main` was 16/16.
+- **Protected log says “8”; the file has 9 routing behaviors.** `run-checkout-tests.mjs:76` prints “8 protected strangler route checks”. Re-count: 2 fixture characterizations (`:13-30`) plus enabled card, gift-card, invoice, crypto, flag-off, safe fallback, and three unsafe throws (`:45-73`). Cite the file, not the log string.
+- **Citation tree: no bundle.** Learner `file:line` is the source-commit blob / working tree. Protected lines are checked-in `run-checkout-tests.mjs`, `legacyCheckout.mjs`, `docs/checkout-cases.json`, `docs/checkout-contract.md` (identical to `upstream/main`). Rounding fixtures: `1001/825 → 1084` (`checkout-cases.json:2`), `4200/500 → 4410` (`:3`).
+- **Too-good before attempt.** Unconstrained `cursor-grok-4.6-high` already passed `test:checkout` with the same seven named routes. Do not degrade it. Independent variable is the route contract as extra input plus Git-bound `sourceSha`, not routing quality. Real delta: before’s `cardCheckout` wraps a non-object `authorize` throw as `{ authorizationCreated: false }`, which can call legacy after `authorize` already ran. After leaves untagged throws fail-closed (`PAYMENT_STATE_UNKNOWN`, zero legacy).
+- **Do not restore `checkoutRouter.mjs`.** It is not in `challenge-integrity.json`. `legacyCheckout.mjs` is. Guardrail 2 quoted `git checkout upstream/main -- "$p"` over 16 paths; `verify:exercise` still 0; `git diff HEAD` empty.
+- **`strangler-verify.txt` must contain the literal `exit code: 0`.** The script prints `Source SHA` and `PASS` but not the exit line — append it when capturing.
+- **Isolation.** Main checkout was on 8.2; 11.01 worktrees were live. Used `/tmp/ex-11-02{,-before,-after}` before the first commit. Parent Cursor Grok 4.6; first-attempt and specialist subagents `cursor-grok-4.6-high`.
+
+## What was not a stop on 11.2
+
+No hash cycle (`history.json` records `sourceSha` after the three-file commit). No protected-file edit. `test:integrity` passed on `52090ed`. `verify:submission` does not run `comparable-evidence.mjs`; the README artifacts are still required. Starting tree `test:checkout` exits 1 at `run-checkout-tests.mjs:10` until `createCardCheckout` exists.
