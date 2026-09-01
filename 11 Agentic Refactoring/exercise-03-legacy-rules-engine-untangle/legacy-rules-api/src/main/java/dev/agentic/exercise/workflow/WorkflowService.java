@@ -1,14 +1,22 @@
 package dev.agentic.exercise.workflow;
 
 import java.util.Collection;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class WorkflowService {
   private final WorkflowRepository repository;
+  private final DecisionPolicy decisionPolicy;
 
   public WorkflowService(WorkflowRepository repository) {
+    this(repository, new DecisionPolicy());
+  }
+
+  @Autowired
+  public WorkflowService(WorkflowRepository repository, DecisionPolicy decisionPolicy) {
     this.repository = repository;
+    this.decisionPolicy = decisionPolicy;
   }
 
   public Collection<WorkflowItem> list() {
@@ -19,9 +27,7 @@ public class WorkflowService {
     WorkflowItem item = repository.findById(id)
         .orElseThrow(() -> new WorkflowNotFoundException(id));
 
-    if ("Ready".equals(decision.status()) && decision.evidenceNote().length() < 12) {
-      throw new InvalidWorkflowDecisionException("Ready decisions require a longer evidence note");
-    }
+    decisionPolicy.validate(item, decision);
 
     return repository.save(new WorkflowItem(
         item.id(),
